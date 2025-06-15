@@ -4,6 +4,9 @@
   box-shadow: 0 4px 12px var(--shadow-color);
   position: relative;
   border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
 }
 
 .question-header {
@@ -45,6 +48,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
 
 .question-image-container {
@@ -68,4 +72,14 @@
   text-align: center;
   font-style: italic;
   line-height: 1.4;
+}
+
+.question-category {
+  margin-top: 1rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  text-align: right;
 } 

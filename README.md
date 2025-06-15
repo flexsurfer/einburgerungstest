@@ -3,7 +3,7 @@ This is a free, open-source and user-friendly test app for the **"Leben in Deuts
 It works offline after the first load and requires no servers.  
 Created by a foreigner on a voluntary basis.  
 If you like it — please give it a ⭐ star!  
-https://github.com/flexsurfer/einburgerungstest
+[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
 
 **Disclaimer:** The author takes no responsibility for any mistakes or inaccuracies.  
 Pull requests and issues are welcome.  
@@ -17,7 +17,7 @@ Dies ist ein kostenloser, quelloffener und benutzerfreundlicher Test zur Vorbere
 Funktioniert offline nach dem ersten Laden und benötigt keine Server.  
 Erstellt von einem Ausländer auf freiwilliger Basis.  
 Wenn dir das Projekt gefällt — bitte gib einen ⭐ Stern!  
-https://github.com/flexsurfer/einburgerungstest
+[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
 
 **Haftungsausschluss:** Der Autor übernimmt keine Verantwortung für Fehler oder Ungenauigkeiten.  
 Pull Requests und Issues sind willkommen.  
@@ -31,7 +31,7 @@ Bu, **"Leben in Deutschland"** ve **Einbürgerungstest** için hazırlanmış ü
 İlk yüklemeden sonra çevrimdışı çalışır ve sunucuya ihtiyaç duymaz.  
 Bir yabancı tarafından gönüllü olarak geliştirilmiştir.  
 Beğendiyseniz ⭐ yıldız vermeyi unutmayın!  
-https://github.com/flexsurfer/einburgerungstest
+[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
 
 **Sorumluluk reddi:** Yazar, hata veya yanlışlıklardan sorumlu değildir.  
 Pull request’ler ve issue’lar memnuniyetle karşılanır.  
@@ -45,7 +45,7 @@ Sorular şu kaynağa dayanmaktadır:
 يعمل بدون إنترنت بعد التحميل الأول ولا يحتاج إلى خوادم.  
 تم تطويره من قبل أجنبي بشكل تطوعي.  
 إذا أعجبك المشروع — ضع نجمة ⭐ من فضلك.  
-https://github.com/flexsurfer/einburgerungstest
+[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
 
 **تنبيه:** المؤلف لا يتحمل أي مسؤولية عن الأخطاء أو عدم الدقة.  
 طلبات السحب (PR) والمشكلات (issues) مرحب بها.  
@@ -59,7 +59,7 @@ https://github.com/flexsurfer/einburgerungstest
 Работает оффлайн после первой загрузки, не требует серверов.  
 Сделан иностранцем на волонтёрской основе.  
 Если нравится — поставьте ⭐ звёздочку!  
-https://github.com/flexsurfer/einburgerungstest
+[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
 
 **Отказ от ответственности:** Автор не несёт никакой ответственности за ошибки или неточности.  
 Pull request’ы и issue приветствуются.  

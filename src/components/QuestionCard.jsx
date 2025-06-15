@@ -60,6 +60,9 @@ export const QuestionCard = memo(function QuestionCard({
       <div className="answers-container">
         {answerButtons}
       </div>
+      <div className="question-category">
+        {question.category}
+      </div>
     </div>
   )
 }, (prevProps, nextProps) => {
