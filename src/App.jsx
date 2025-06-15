@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Header } from './components/Header'
 import { QuestionCard } from './components/QuestionCard'
+import { Welcome } from './components/Welcome'
 import './App.css'
 
 function App() {
   // Core application state
+  const [showWelcome, setShowWelcome] = useState(true)
   const [questions, setQuestions] = useState([])
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null)
@@ -141,6 +143,10 @@ function App() {
       favoriteCount={favorites.length}
     />
   ), [questions, categories, selectedCategory, mode, handleModeChange, favorites.length])
+
+  if (showWelcome) {
+    return <Welcome onStart={() => setShowWelcome(false)} />
+  }
 
   return (
     <div className="app-container">
