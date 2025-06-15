@@ -1,0 +1,59 @@
+.star-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.star-button:hover {
+  transform: scale(1.1);
+}
+
+.star-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.star-button.favorite {
+  color: var(--accent-color);
+}
+
+/* When used in category button */
+.star-button.category-star {
+  padding: 0;
+  margin-right: 4px;
+  pointer-events: none;
+}
+
+.star-button.category-star svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* When used in the header */
+.star-button.header-star {
+  font-size: 1rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-button.header-star::after {
+  content: 'Favorites';
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.star-button.header-star.active {
+  color: var(--accent-color);
+  background-color: var(--accent-light);
+} 

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+body {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+:root {
+  /* Colors */
+  --accent-color: #F1C40F;
+  --accent-light: rgba(241, 196, 15, 0.1);
+  --accent-medium: rgba(241, 196, 15, 0.2);
+  --success-color: #28a745;
+  --success-light: rgba(40, 167, 69, 0.1);
+  --error-color: #E74C3C;
+  --error-light: rgba(220, 53, 69, 0.1);
+  --text-color: #2C3E50;
+  --border-color: #E8E8E8;
+  --shadow-color: rgba(44, 62, 80, 0.08);
+
+  /* Typography */
+  font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+body {
+  min-height: 100vh;
+  background-color: white;
+}
+
+button {
+  border: 1px solid var(--border-color);
+  background-color: white;
+}
+
+/* Category buttons specific styles */
+button[style*="categoryButton"] {
+  border: 1px solid var(--border-color) !important;
+  background-color: var(--card-background) !important;
+}
+
+/* Selected category style */
+button[style*="backgroundColor: #007bff"] {
+  background-color: var(--accent-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* Answer button styles */
+button[style*="answerButton"] {
+  border: 1px solid var(--border-color) !important;
+  background-color: var(--card-background) !important;
+}
+
+/* Correct answer highlight */
+button[style*="backgroundColor: #d4edda"] {
+  background-color: var(--success-light) !important;
+  color: var(--success-color) !important;
+  border-color: var(--success-color) !important;
+  }
+
+@media (max-width: 768px) {
+  div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
