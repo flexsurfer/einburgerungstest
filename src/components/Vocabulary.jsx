@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, memo } from 'react'
 import '../styles/Vocabulary.css'
 
 const AVAILABLE_LANGUAGES = [
@@ -8,13 +8,22 @@ const AVAILABLE_LANGUAGES = [
   { id: 'tr', label: 'Türkçe' }
 ]
 
-export function Vocabulary() {
+// Cache for vocabulary data
+let vocabularyDataCache = null
+
+export const Vocabulary = memo(function Vocabulary() {
   const [selectedLanguage, setSelectedLanguage] = useState('en')
-  const [vocabularyData, setVocabularyData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [vocabularyData, setVocabularyData] = useState(vocabularyDataCache)
+  const [loading, setLoading] = useState(!vocabularyDataCache)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (vocabularyDataCache) {
+      setVocabularyData(vocabularyDataCache)
+      setLoading(false)
+      return
+    }
+
     const fetchVocabulary = async () => {
       setLoading(true)
       setError(null)
@@ -22,6 +31,7 @@ export function Vocabulary() {
         const response = await fetch('/vocabulary_multilang.json')
         if (!response.ok) throw new Error('Failed to fetch vocabulary')
         const data = await response.json()
+        vocabularyDataCache = data
         setVocabularyData(data)
       } catch (err) {
         setError('Error loading vocabulary')
@@ -48,22 +58,26 @@ export function Vocabulary() {
     return items
   }, [vocabularyData, selectedLanguage])
 
+  const languageButtons = useMemo(() => (
+    AVAILABLE_LANGUAGES.map(lang => (
+      <button
+        key={lang.id}
+        onClick={() => setSelectedLanguage(lang.id)}
+        className={`lang-button ${selectedLanguage === lang.id ? 'active' : ''}`}
+        lang={lang.id}
+      >
+        {lang.label}
+      </button>
+    ))
+  ), [selectedLanguage])
+
   if (loading) return <div className="vocabulary-container">Loading vocabulary...</div>
   if (error) return <div className="vocabulary-container">{error}</div>
 
   return (
     <div className="vocabulary-container">
       <div className="language-switcher">
-        {AVAILABLE_LANGUAGES.map(lang => (
-          <button
-            key={lang.id}
-            onClick={() => setSelectedLanguage(lang.id)}
-            className={`lang-button ${selectedLanguage === lang.id ? 'active' : ''}`}
-            lang={lang.id}
-          >
-            {lang.label}
-          </button>
-        ))}
+        {languageButtons}
       </div>
       <div className="vocabulary-list">
         {vocabularyItems.map((item, index) => (
@@ -78,4 +92,4 @@ export function Vocabulary() {
       </div>
     </div>
   )
-} 
+}) 

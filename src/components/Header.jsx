@@ -82,11 +82,13 @@ export const Header = memo(function Header({
       </div>
 
       {/* Categories */}
-      <div className="categories-container">
-        <div className="categories-row">
-          {categoryButtons}
+      {currentMode !== 'vocabulary' && (
+        <div className="categories-container">
+          <div className="categories-row">
+            {categoryButtons}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }) 
