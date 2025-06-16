@@ -3,8 +3,9 @@ import { StarButton } from './StarButton'
 import '../styles/Header.css'
 
 const MODES = [
-  { id: 'testing', label: 'Testing' },
+  { id: 'testing', label: 'Questions' },
   { id: 'review', label: 'Answers' },
+  { id: 'vocabulary', label: 'Vocabulary' },
   // Add more modes here in the future
 ]
 

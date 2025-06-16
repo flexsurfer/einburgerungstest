@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Header } from './components/Header'
 import { QuestionCard } from './components/QuestionCard'
 import { Welcome } from './components/Welcome'
+import { Vocabulary } from './components/Vocabulary'
 import './App.css'
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   const [lastScrollY, setLastScrollY] = useState(0)
   const [mode, setMode] = useState('testing')
   const [userAnswers, setUserAnswers] = useState({})
-  
+
   // Initialize favorites from localStorage or empty array if not found
   const [favorites, setFavorites] = useState(() => {
     const savedFavorites = localStorage.getItem('favorites')
@@ -27,30 +28,30 @@ function App() {
       try {
         const response = await fetch('data.json')
         const data = await response.json()
-        
+
         // Add index to each question
         const questionsWithIndex = data.map((question, index) => ({
           ...question,
           globalIndex: index + 1
         }))
         setQuestions(questionsWithIndex)
-        
+
         // Extract unique categories and count questions
         const categoryCount = questionsWithIndex.reduce((acc, question) => {
           acc[question.category] = (acc[question.category] || 0) + 1
           return acc
         }, {})
-        
+
         // Convert to array and sort by count in descending order
         const sortedCategories = Object.entries(categoryCount)
           .sort((a, b) => b[1] - a[1])
-        
+
         setCategories(sortedCategories)
       } catch (error) {
         console.error('Error loading questions:', error)
       }
     }
-    
+
     fetchData()
   }, [])
 
@@ -133,7 +134,7 @@ function App() {
   // Memo: Generate header component
   // Updates when questions, categories, selected category, mode, or favorites change
   const headerMemo = useMemo(() => (
-    <Header 
+    <Header
       questions={questions}
       categories={categories}
       selectedCategory={selectedCategory}
@@ -151,9 +152,13 @@ function App() {
   return (
     <div className="app-container">
       {headerMemo}
-      <div className="questions-grid">
-        {questionCards}
-      </div>
+      {mode === 'vocabulary' ? (
+        <Vocabulary />
+      ) : (
+        <div className="questions-grid">
+          {questionCards}
+        </div>
+      )}
     </div>
   )
 }
