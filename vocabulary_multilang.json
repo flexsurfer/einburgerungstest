@@ -1,0 +1,441 @@
+{
+  "Staat und Politik": [
+    {
+      "de": "Regierung",
+      "en": "government",
+      "ru": "правительство",
+      "ar": "الحكومة",
+      "tr": "hükümet"
+    },
+    {
+      "de": "Bundesregierung",
+      "en": "federal government",
+      "ru": "федеральное правительство",
+      "ar": "الحكومة الفيدرالية",
+      "tr": "federal hükümet"
+    },
+    {
+      "de": "Staat",
+      "en": "state",
+      "ru": "государство",
+      "ar": "الدولة",
+      "tr": "devlet"
+    },
+    {
+      "de": "Verfassung",
+      "en": "constitution",
+      "ru": "конституция",
+      "ar": "الدستور",
+      "tr": "anayasa"
+    },
+    {
+      "de": "Grundgesetz",
+      "en": "basic law",
+      "ru": "основной закон",
+      "ar": "القانون الأساسي",
+      "tr": "temel yasa"
+    },
+    {
+      "de": "Gewalt",
+      "en": "power / authority",
+      "ru": "власть",
+      "ar": "السلطة",
+      "tr": "yetki"
+    },
+    {
+      "de": "Macht",
+      "en": "power",
+      "ru": "власть",
+      "ar": "القوة",
+      "tr": "güç"
+    },
+    {
+      "de": "Staatsoberhaupt",
+      "en": "head of state",
+      "ru": "глава государства",
+      "ar": "رئيس الدولة",
+      "tr": "devlet başkanı"
+    },
+    {
+      "de": "das Oberhaupt",
+      "en": "head / leader",
+      "ru": "глава",
+      "ar": "الزعيم",
+      "tr": "lider"
+    },
+    {
+      "de": "die Abgeordneten",
+      "en": "members of parliament",
+      "ru": "депутаты",
+      "ar": "أعضاء البرلمان",
+      "tr": "milletvekilleri"
+    },
+    {
+      "de": "Abgeordnete",
+      "en": "member of parliament",
+      "ru": "депутат",
+      "ar": "نائب",
+      "tr": "milletvekili"
+    },
+    {
+      "de": "Wahlhelferinnen",
+      "en": "election assistants",
+      "ru": "работники изб. комиссий",
+      "ar": "مساعدو الانتخابات",
+      "tr": "seçim görevlileri"
+    },
+    {
+      "de": "Mitglied",
+      "en": "member",
+      "ru": "член",
+      "ar": "عضو",
+      "tr": "üye"
+    },
+    {
+      "de": "Mitglieder",
+      "en": "members",
+      "ru": "члены",
+      "ar": "أعضاء",
+      "tr": "üyeler"
+    },
+    {
+      "de": "Mehrheit",
+      "en": "majority",
+      "ru": "большинство",
+      "ar": "الأغلبية",
+      "tr": "çoğunluk"
+    },
+    {
+      "de": "beachten",
+      "en": "to consider / to observe",
+      "ru": "учитывать",
+      "ar": "يراعي / يلاحظ",
+      "tr": "dikkate almak"
+    }
+  ],
+  "Recht und Justiz": [
+    {
+      "de": "Recht",
+      "en": "law",
+      "ru": "право",
+      "ar": "القانون",
+      "tr": "hukuk"
+    },
+    {
+      "de": "Die Gerichte",
+      "en": "the courts",
+      "ru": "суды",
+      "ar": "المحاكم",
+      "tr": "mahkemeler"
+    },
+    {
+      "de": "Gesetz",
+      "en": "law / act",
+      "ru": "закон",
+      "ar": "القانون",
+      "tr": "kanun"
+    },
+    {
+      "de": "Straftat",
+      "en": "criminal offense",
+      "ru": "преступление",
+      "ar": "جريمة",
+      "tr": "suç"
+    },
+    {
+      "de": "Schöffin",
+      "en": "lay judge (female)",
+      "ru": "непрофессиональный судья",
+      "ar": "قاضية غير محترفة",
+      "tr": "halk hâkimi (kadın)"
+    },
+    {
+      "de": "Rechtsanwalt",
+      "en": "lawyer",
+      "ru": "юрист",
+      "ar": "محام",
+      "tr": "avukat"
+    },
+    {
+      "de": "Richters",
+      "en": "judges",
+      "ru": "судьи",
+      "ar": "القضاة",
+      "tr": "hâkimler"
+    },
+    {
+      "de": "verfassungswidrig",
+      "en": "unconstitutional",
+      "ru": "неконституционно",
+      "ar": "غير دستوري",
+      "tr": "anayasa dışı"
+    },
+    {
+      "de": "Widerspruch",
+      "en": "objection",
+      "ru": "возражение",
+      "ar": "اعتراض",
+      "tr": "itiraz"
+    }
+  ],
+  "Verwaltung und Behörden": [
+    {
+      "de": "Behörde",
+      "en": "authority / agency",
+      "ru": "ведомство, учреждение",
+      "ar": "سلطة / هيئة",
+      "tr": "resmi kurum"
+    },
+    {
+      "de": "die Verwaltung",
+      "en": "administration",
+      "ru": "администрация",
+      "ar": "الإدارة",
+      "tr": "yönetim"
+    },
+    {
+      "de": "Gemeindeverwaltung",
+      "en": "municipal administration",
+      "ru": "муниципальная администрация",
+      "ar": "إدارة البلدية",
+      "tr": "belediye yönetimi"
+    },
+    {
+      "de": "Gemeinde",
+      "en": "municipality",
+      "ru": "муниципалитет",
+      "ar": "البلدية",
+      "tr": "belediye"
+    },
+    {
+      "de": "Bürgermeister",
+      "en": "mayor",
+      "ru": "мэр",
+      "ar": "رئيس البلدية",
+      "tr": "belediye başkanı"
+    },
+    {
+      "de": "Ansprechpartnerin",
+      "en": "contact person (female)",
+      "ru": "контактное лицо",
+      "ar": "جهة اتصال (أنثى)",
+      "tr": "irtibat kişisi (kadın)"
+    },
+    {
+      "de": "Vertreter",
+      "en": "representative",
+      "ru": "представитель",
+      "ar": "ممثل",
+      "tr": "temsilci"
+    },
+    {
+      "de": "Landkreis",
+      "en": "district / county",
+      "ru": "округ",
+      "ar": "المقاطعة",
+      "tr": "ilçe"
+    }
+  ],
+  "Grundrechte": [
+    {
+      "de": "Grundrechte",
+      "en": "fundamental rights",
+      "ru": "основные права",
+      "ar": "الحقوق الأساسية",
+      "tr": "temel haklar"
+    },
+    {
+      "de": "Gewissensfreiheit",
+      "en": "freedom of conscience",
+      "ru": "свобода совести",
+      "ar": "حرية الضمير",
+      "tr": "vicdan özgürlüğü"
+    },
+    {
+      "de": "Freizügigkeit",
+      "en": "freedom of movement",
+      "ru": "свобода передвижения",
+      "ar": "حرية التنقل",
+      "tr": "seyahat özgürlüğü"
+    },
+    {
+      "de": "eingeschränkt",
+      "en": "restricted",
+      "ru": "ограниченный",
+      "ar": "مقيد",
+      "tr": "sınırlı"
+    }
+  ],
+  "Wirtschaft und Arbeit": [
+    {
+      "de": "Wirtschaft",
+      "en": "economy",
+      "ru": "экономика",
+      "ar": "الاقتصاد",
+      "tr": "ekonomi"
+    },
+    {
+      "de": "Zwangsarbeit",
+      "en": "forced labor",
+      "ru": "принудительные работы",
+      "ar": "العمل القسري",
+      "tr": "zorla çalıştırma"
+    },
+    {
+      "de": "Erwerbstätigen",
+      "en": "employed persons",
+      "ru": "занятые",
+      "ar": "العمال",
+      "tr": "çalışanlar"
+    },
+    {
+      "de": "Arbeitsverhältnis",
+      "en": "employment relationship",
+      "ru": "трудовые отношения",
+      "ar": "علاقة عمل",
+      "tr": "çalışma ilişkisi"
+    },
+    {
+      "de": "Gewerkschaften",
+      "en": "trade unions",
+      "ru": "профсоюзы",
+      "ar": "النقابات",
+      "tr": "sendikalar"
+    },
+    {
+      "de": "reklamieren",
+      "en": "to complain / to claim",
+      "ru": "жаловаться",
+      "ar": "يشتكي",
+      "tr": "şikayet etmek"
+    },
+    {
+      "de": "Pflicht",
+      "en": "duty / obligation",
+      "ru": "обязанность",
+      "ar": "واجب",
+      "tr": "görev"
+    },
+    {
+      "de": "wechseln",
+      "en": "to change",
+      "ru": "менять",
+      "ar": "يغير",
+      "tr": "değiştirmek"
+    }
+  ],
+  "Gesellschaft und Kultur": [
+    {
+      "de": "Gesellschaft",
+      "en": "society",
+      "ru": "общество",
+      "ar": "المجتمع",
+      "tr": "toplum"
+    },
+    {
+      "de": "Kindererziehung",
+      "en": "raising children",
+      "ru": "воспитание детей",
+      "ar": "تربية الأطفال",
+      "tr": "çocuk eğitimi"
+    },
+    {
+      "de": "Erzeugung",
+      "en": "upbringing / generation",
+      "ru": "воспитание / порождение",
+      "ar": "تنشئة / إنتاج",
+      "tr": "yetiştirme / üretim"
+    },
+    {
+      "de": "Ehepaar",
+      "en": "married couple",
+      "ru": "супруги",
+      "ar": "زوجان",
+      "tr": "evli çift"
+    },
+    {
+      "de": "Ehe",
+      "en": "marriage",
+      "ru": "брак",
+      "ar": "الزواج",
+      "tr": "evlilik"
+    },
+    {
+      "de": "Scheidung",
+      "en": "divorce",
+      "ru": "развод",
+      "ar": "الطلاق",
+      "tr": "boşanma"
+    },
+    {
+      "de": "volljährig",
+      "en": "of age / adult",
+      "ru": "совершеннолетний",
+      "ar": "بالغ",
+      "tr": "reşit"
+    },
+    {
+      "de": "Standesamt",
+      "en": "registry office",
+      "ru": "ЗАГС",
+      "ar": "مكتب الأحوال المدنية",
+      "tr": "nüfus dairesi"
+    },
+    {
+      "de": "Brauch",
+      "en": "custom / tradition",
+      "ru": "обычай",
+      "ar": "عادة",
+      "tr": "gelenek"
+    },
+    {
+      "de": "schmücken",
+      "en": "to decorate",
+      "ru": "украшать",
+      "ar": "يزين",
+      "tr": "süslemek"
+    },
+    {
+      "de": "ehrenamtlich",
+      "en": "voluntary",
+      "ru": "добровольный",
+      "ar": "تطوعي",
+      "tr": "gönüllü"
+    },
+    {
+      "de": "Ehrenamt",
+      "en": "voluntary work",
+      "ru": "волонтёрство",
+      "ar": "عمل تطوعي",
+      "tr": "gönüllü çalışma"
+    },
+    {
+      "de": "Grundsatz",
+      "en": "principle",
+      "ru": "принцип",
+      "ar": "مبدأ",
+      "tr": "ilke"
+    },
+    {
+      "de": "Merkmal",
+      "en": "feature / characteristic",
+      "ru": "примета, особенность",
+      "ar": "سمة",
+      "tr": "özellik"
+    },
+    {
+      "de": "leugnen",
+      "en": "to deny",
+      "ru": "отрицать",
+      "ar": "ينكر",
+      "tr": "inkâr etmek"
+    },
+    {
+      "de": "Pfingsten",
+      "en": "Pentecost",
+      "ru": "Троица",
+      "ar": "عيد العنصرة",
+      "tr": "Pentekost"
+    }
+  ]
+}
