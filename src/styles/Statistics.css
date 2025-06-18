@@ -1,0 +1,128 @@
+.statistics-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, white 60%, transparent);
+    z-index: 10;
+    padding: 0.2rem
+}
+
+.statistics-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.3rem;
+    box-shadow: 0 2px 8px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.statistics-content {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    min-width: fit-content;
+}
+
+.stat-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+.correct .stat-icon {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.incorrect .stat-icon {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.accuracy .stat-icon {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
+
+.stat-number {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    line-height: 1;
+}
+
+.statistics-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.progress-bar {
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.7rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+.clear-button {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    margin-left: auto;
+}
+
+.clear-button:hover {
+    background: var(--accent-light);
+    color: var(--accent-color);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .statistics-container {
+        padding: 0.2rem;
+    }
+
+    .stat-item {
+        padding: 0.3rem;
+        gap: 0.25rem;
+    }
+
+    .stat-number {
+        font-size: 0.9rem;
+    }
+}

@@ -3,6 +3,7 @@ import { Header } from './components/Header'
 import { QuestionCard } from './components/QuestionCard'
 import { Welcome } from './components/Welcome'
 import { Vocabulary } from './components/Vocabulary'
+import { Statistics } from './components/Statistics'
 import './App.css'
 
 function App() {
@@ -13,7 +14,12 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [mode, setMode] = useState('testing')
-  const [userAnswers, setUserAnswers] = useState({})
+
+  // Initialize user answers from localStorage or empty object if not found
+  const [userAnswers, setUserAnswers] = useState(() => {
+    const savedAnswers = localStorage.getItem('userAnswers')
+    return savedAnswers ? JSON.parse(savedAnswers) : {}
+  })
 
   // Initialize favorites from localStorage or empty array if not found
   const [favorites, setFavorites] = useState(() => {
@@ -76,6 +82,12 @@ function App() {
     localStorage.setItem('favorites', JSON.stringify(favorites))
   }, [favorites])
 
+  // Effect: Persist user answers to localStorage
+  // Runs whenever userAnswers state changes
+  useEffect(() => {
+    localStorage.setItem('userAnswers', JSON.stringify(userAnswers))
+  }, [userAnswers])
+
   // Callback: Handle answer selection in testing mode
   // Updates userAnswers state when an answer is selected
   const handleAnswerSelect = useCallback((questionIndex, selectedAnswerIndex) => {
@@ -91,7 +103,6 @@ function App() {
   // Resets user answers when mode changes
   const handleModeChange = useCallback((newMode) => {
     setMode(newMode)
-    setUserAnswers({})
   }, [])
 
   // Callback: Toggle favorite state for a question
@@ -102,6 +113,13 @@ function App() {
         ? prev.filter(i => i !== questionIndex)
         : [...prev, questionIndex]
     )
+  }, [])
+
+  // Callback: Clear all user answers
+  // Resets userAnswers state and removes from localStorage
+  const handleClearAnswers = useCallback(() => {
+    setUserAnswers({})
+    localStorage.removeItem('userAnswers')
   }, [])
 
   // Memo: Filter questions based on selected category
@@ -155,9 +173,18 @@ function App() {
       {mode === 'vocabulary' ? (
         <Vocabulary />
       ) : (
-        <div className="questions-grid">
-          {questionCards}
-        </div>
+        <>
+          <div className="questions-grid">
+            {questionCards}
+          </div>
+          {mode === 'testing' && (
+            <Statistics
+              questions={questions}
+              userAnswers={userAnswers}
+              filteredQuestions={filteredQuestions}
+              onClearAnswers={handleClearAnswers}
+            />)}
+        </>
       )}
     </div>
   )
