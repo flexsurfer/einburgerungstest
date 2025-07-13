@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
-import { StarButton } from './StarButton'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'
+import { Star } from './Star'
 import '../styles/Header.css'
 
 const MODES = [
@@ -9,23 +10,20 @@ const MODES = [
   // Add more modes here in the future
 ]
 
-export const Header = memo(function Header({ 
-  questions, 
-  categories, 
-  selectedCategory, 
-  setSelectedCategory, 
-  currentMode,
-  onModeChange,
-  favoriteCount
-}) {
+export const Header = () => {
+  // Subscribe to store state instead of using props
+  const questions = useSubscription(['questions'])
+  const categories = useSubscription(['categories'])
+  const selectedCategory = useSubscription(['selectedCategory'])
+  const currentMode = useSubscription(['mode'])
+  const favoriteCount = useSubscription(['favoriteCount'])
+
+  const onModeChange = (newMode) => {
+    dispatch(['setMode', newMode])
+  }
   const handleCategoryClick = useCallback((category) => {
-    setSelectedCategory(category)
-    // Smooth scroll to top
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }, [setSelectedCategory])
+    dispatch(['setSelectedCategory', category])
+  }, [])
 
   const categoryButtons = useMemo(() => {
     const allButton = (
@@ -44,11 +42,7 @@ export const Header = memo(function Header({
         onClick={() => handleCategoryClick('favorites')}
         className={`category-button ${selectedCategory === 'favorites' ? 'active' : ''}`}
       >
-        <StarButton
-          isFavorite={true}
-          className="category-star"
-          asSpan={true}
-        />
+        <Star/>
         Favorites ({favoriteCount})
       </button>
     )
@@ -91,4 +85,4 @@ export const Header = memo(function Header({
       )}
     </div>
   )
-}) 
+}

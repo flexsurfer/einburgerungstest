@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, memo } from 'react'
+import { useMemo, useEffect, memo } from 'react'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'  
 import '../styles/Vocabulary.css'
 
 const AVAILABLE_LANGUAGES = [
@@ -8,38 +9,16 @@ const AVAILABLE_LANGUAGES = [
   { id: 'tr', label: 'Türkçe' }
 ]
 
-// Cache for vocabulary data
-let vocabularyDataCache = null
-
 export const Vocabulary = memo(function Vocabulary() {
-  const [selectedLanguage, setSelectedLanguage] = useState('en')
-  const [vocabularyData, setVocabularyData] = useState(vocabularyDataCache)
-  const [loading, setLoading] = useState(!vocabularyDataCache)
-  const [error, setError] = useState(null)
 
+  const selectedLanguage = useSubscription(['selectedLanguage'])
+  const vocabularyData = useSubscription(['vocabularyData'])
+
+  // Fetch vocabulary data on component mount
   useEffect(() => {
-    if (vocabularyDataCache) {
-      setVocabularyData(vocabularyDataCache)
-      setLoading(false)
-      return
+    if (!vocabularyData) {
+      dispatch(['fetchVocabulary'])
     }
-
-    const fetchVocabulary = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const response = await fetch('/vocabulary_multilang.json')
-        if (!response.ok) throw new Error('Failed to fetch vocabulary')
-        const data = await response.json()
-        vocabularyDataCache = data
-        setVocabularyData(data)
-      } catch (err) {
-        setError('Error loading vocabulary')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchVocabulary()
   }, [])
 
   const vocabularyItems = useMemo(() => {
@@ -62,7 +41,7 @@ export const Vocabulary = memo(function Vocabulary() {
     AVAILABLE_LANGUAGES.map(lang => (
       <button
         key={lang.id}
-        onClick={() => setSelectedLanguage(lang.id)}
+        onClick={() => dispatch(['setSelectedLanguage', lang.id])}
         className={`lang-button ${selectedLanguage === lang.id ? 'active' : ''}`}
         lang={lang.id}
       >
@@ -70,9 +49,6 @@ export const Vocabulary = memo(function Vocabulary() {
       </button>
     ))
   ), [selectedLanguage])
-
-  if (loading) return <div className="vocabulary-container">Loading vocabulary...</div>
-  if (error) return <div className="vocabulary-container">{error}</div>
 
   return (
     <div className="vocabulary-container">

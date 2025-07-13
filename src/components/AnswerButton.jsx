@@ -1,19 +1,11 @@
-import { memo, useCallback } from 'react'
+import { useCallback } from 'react'
 import '../styles/AnswerButton.css'
 
-export const AnswerButton = memo(function AnswerButton({
-  answer,
-  index,
-  isCorrect,
-  isSelected,
-  isReviewMode,
-  disabled,
-  onClick,
-  userAnswer
-}) {
+export const AnswerButton = ({ answer, index, isCorrect, isSelected, isReviewMode, disabled, onClick, userAnswer }) => {
+
   const getClassName = useCallback(() => {
     const classes = ['answer-button']
-    
+
     if (isReviewMode) {
       classes.push('review-mode')
       if (isCorrect) {
@@ -27,7 +19,7 @@ export const AnswerButton = memo(function AnswerButton({
         classes.push('correct')
       }
     }
-    
+
     return classes.join(' ')
   }, [isReviewMode, isCorrect, userAnswer, isSelected])
 
@@ -46,15 +38,4 @@ export const AnswerButton = memo(function AnswerButton({
       {answer}
     </button>
   )
-}, (prevProps, nextProps) => {
-  // Custom comparison function for memo
-  return (
-    prevProps.answer === nextProps.answer &&
-    prevProps.index === nextProps.index &&
-    prevProps.isCorrect === nextProps.isCorrect &&
-    prevProps.isSelected === nextProps.isSelected &&
-    prevProps.isReviewMode === nextProps.isReviewMode &&
-    prevProps.disabled === nextProps.disabled &&
-    prevProps.userAnswer === nextProps.userAnswer
-  )
-}) 
+}

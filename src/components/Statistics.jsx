@@ -1,35 +1,17 @@
-import { useMemo } from 'react'
+import { useCallback } from 'react'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import '../styles/Statistics.css'
 
-export function Statistics({ questions, userAnswers, filteredQuestions, onClearAnswers }) {
-    const stats = useMemo(() => {
-        // Only count questions that the user has answered and are currently visible
-        const answeredQuestions = filteredQuestions.filter(q =>
-            userAnswers[q.globalIndex] !== undefined
-        )
+export const Statistics = () => {
 
-        const correctAnswers = answeredQuestions.filter(q =>
-            userAnswers[q.globalIndex] === q.correct
-        ).length
+    const stats = useSubscription(['statistics'])
 
-        const incorrectAnswers = answeredQuestions.length - correctAnswers
-        const totalAnswered = answeredQuestions.length
-        const totalVisible = filteredQuestions.length
-
-        return {
-            correct: correctAnswers,
-            incorrect: incorrectAnswers,
-            totalAnswered,
-            totalVisible
-        }
-    }, [filteredQuestions, userAnswers])
+    const handleClearAnswers = useCallback(() => { dispatch(['clearAnswers']) }, [])
 
     // Don't show statistics if no questions are answered
     if (stats.totalAnswered === 0) {
         return null
     }
-
-    const accuracy = stats.totalAnswered > 0 ? (stats.correct / stats.totalAnswered * 100).toFixed(1) : 0
 
     return (
         <div className="statistics-container">
@@ -45,9 +27,9 @@ export function Statistics({ questions, userAnswers, filteredQuestions, onClearA
                     </div>
                     <div className="stat-item accuracy">
                         <div className="stat-icon">%</div>
-                        <span className="stat-number">{accuracy}%</span>
+                        <span className="stat-number">{stats.accuracy}%</span>
                     </div>
-                    <button className="clear-button" onClick={onClearAnswers} title="Clear all answers">
+                    <button className="clear-button" onClick={handleClearAnswers} title="Clear all answers">
                         Clear All
                     </button>
                 </div>
@@ -66,4 +48,4 @@ export function Statistics({ questions, userAnswers, filteredQuestions, onClearA
             </div>
         </div>
     )
-} 
+}

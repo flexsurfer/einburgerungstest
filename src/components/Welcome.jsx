@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
-import './Welcome.css'
+import '../styles/Welcome.css'
 
 export function Welcome({ onStart }) {
   const [readmeContent, setReadmeContent] = useState('')

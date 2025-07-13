@@ -1,31 +1,30 @@
-import { memo } from 'react'
+import { memo, useCallback, useState } from 'react'
+import { dispatch, getSubscriptionValue } from '@flexsurfer/reflex'
 import '../styles/StarButton.css'
 
-export const StarButton = memo(function StarButton({ 
-  isFavorite, 
-  onClick,
-  className = '',
-  asSpan = false
-}) {
-  const Component = asSpan ? 'span' : 'button'
-  
+export const StarButton = memo(function StarButton({ globalIndex }) {
+  const [isFavorite, setIsFavorite] = useState(()=> getSubscriptionValue(['isFavoriteByGlobalIndex', globalIndex]))
+
+  const onClick = useCallback(() => { 
+    setIsFavorite(!isFavorite)
+    dispatch(['toggleFavorite', globalIndex]) 
+  }, [isFavorite])
+
   return (
-    <Component 
-      className={`star-button ${isFavorite ? 'favorite' : ''} ${className}`}
+    <button
+      className={`star-button ${isFavorite ? 'favorite' : ''}`}
       onClick={onClick}
-      {...(!asSpan && {
-        'aria-label': isFavorite ? 'Remove from favorites' : 'Add to favorites'
-      })}
+      aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
     >
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        viewBox="0 0 24 24" 
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
         fill={isFavorite ? 'currentColor' : 'none'}
-        stroke="currentColor" 
+        stroke="currentColor"
         strokeWidth="2"
       >
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
       </svg>
-    </Component>
+    </button>
   )
 }) 
