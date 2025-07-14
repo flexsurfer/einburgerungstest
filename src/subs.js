@@ -1,23 +1,27 @@
 import { regSub, setupSubsHotReload } from "@flexsurfer/reflex"
+import { SUB_IDS } from './sub-ids.js'
 
 // Root subscriptions
-regSub('showWelcome')
-regSub('mode')
-regSub('selectedCategory')
-regSub('questions')
-regSub('categories')
-regSub('vocabularyData')
-regSub('userAnswers')
-regSub('favorites')
-regSub('selectedLanguage')
+regSub(SUB_IDS.SHOW_WELCOME)
+regSub(SUB_IDS.MODE)
+regSub(SUB_IDS.SELECTED_CATEGORY)
+regSub(SUB_IDS.QUESTIONS)
+regSub(SUB_IDS.QUESTIONS_LOADED)
+regSub(SUB_IDS.CATEGORIES)
+regSub(SUB_IDS.VOCABULARY_DATA)
+regSub(SUB_IDS.USER_ANSWERS)
+regSub(SUB_IDS.FAVORITES)
+regSub(SUB_IDS.SELECTED_LANGUAGE)
+regSub(SUB_IDS.SHOW_VOCABULARY)
+regSub(SUB_IDS.VOCABULARY_RENDER)
 
 // Computed subscriptions
-regSub('favoriteCount',
+regSub(SUB_IDS.FAVORITE_COUNT,
   (favorites) => favorites.length,
-  () => [['favorites']]
+  () => [[SUB_IDS.FAVORITES]]
 )
 
-regSub('filteredQuestions',
+regSub(SUB_IDS.FILTERED_QUESTIONS,
   (questions, selectedCategory, favorites) => {
     if (selectedCategory === 'favorites') {
       return questions.filter(q => favorites.includes(q.globalIndex))
@@ -26,20 +30,20 @@ regSub('filteredQuestions',
       ? questions.filter(q => q.category === selectedCategory)
       : questions
   },
-  () => [['questions'], ['selectedCategory'], ['favorites']]
+  () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES]]
 )
 
-regSub('userAnswerByQuestionIndex',
+regSub(SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX,
   (userAnswers, questionIndex) => userAnswers[questionIndex],
-  () => [['userAnswers']]
+  () => [[SUB_IDS.USER_ANSWERS]]
 )
 
-regSub('isFavoriteByGlobalIndex',
+regSub(SUB_IDS.IS_FAVORITE_BY_GLOBAL_INDEX,
   (favorites, globalIndex) => favorites.includes(globalIndex),
-  () => [['favorites']]
+  () => [[SUB_IDS.FAVORITES]]
 )
 
-regSub('statistics',
+regSub(SUB_IDS.STATISTICS,
   (userAnswers, filteredQuestions) => {
     const correctCount = filteredQuestions.filter(q => userAnswers[q.globalIndex] === q.correct).length
     const totalAnswered = filteredQuestions.filter(q => userAnswers[q.globalIndex] !== undefined).length
@@ -55,7 +59,7 @@ regSub('statistics',
       accuracy
     }
   },
-  () => [['userAnswers'], ['filteredQuestions']]
+  () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.FILTERED_QUESTIONS]]
 )
 
 if (import.meta.hot) {

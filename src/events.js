@@ -1,55 +1,77 @@
 import { regEvent, clearHandlers } from "@flexsurfer/reflex"
 import { current } from "immer"
+import { EVENT_IDS } from './event-ids.js'
+import { EFFECT_IDS } from './effect-ids.js'
 
 // Initialize application, load data from localStorage, fetch questions from data.json
-regEvent('initializeApp',
+regEvent(EVENT_IDS.INITIALIZE_APP,
   ({ draftDb, localStorage }) => {
     draftDb.userAnswers = localStorage.userAnswers || {}
     draftDb.favorites = localStorage.favorites || []
     draftDb.showWelcome = localStorage.showWelcome ?? true
     
     return [
-      ['dispatch', ['fetchQuestions']]
+      ['dispatch', [EVENT_IDS.FETCH_QUESTIONS]]
     ]
   },
-  [['localStorageGet', 'userAnswers'], ['localStorageGet', 'favorites'], ['localStorageGet', 'showWelcome']]
+  [[EFFECT_IDS.LOCAL_STORAGE_GET, 'userAnswers'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'favorites'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'showWelcome']]
 )
 
 // UI Events
-regEvent('setShowWelcome', ({ draftDb }, show) => {
+regEvent(EVENT_IDS.SET_SHOW_WELCOME, ({ draftDb }, show) => {
   draftDb.showWelcome = show
-  return [['localStorageSet', { key: 'showWelcome', value: show }]]
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'showWelcome', value: show }]]
 })
 
-regEvent('setMode', ({ draftDb }, mode) => {
+regEvent(EVENT_IDS.SET_MODE, ({ draftDb }, mode) => {
   draftDb.mode = mode
 })
 
-regEvent('setSelectedCategory', ({ draftDb }, category) => {
-  draftDb.selectedCategory = category
-  //TODO fix bug in reflex, it's should be possible to call effect without parameters
-  return [['scrollToTop', null]]
+regEvent(EVENT_IDS.TOGGLE_VOCABULARY, ({ draftDb }) => {
+  if (draftDb.showVocabulary) {
+    // Start closing
+    draftDb.showVocabulary = false
+  } else {
+    // Open immediately
+    draftDb.showVocabulary = true
+    draftDb.vocabularyRender = true
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden'
+  }
 })
 
-regEvent('setSelectedLanguage', ({ draftDb }, language) => {
+regEvent(EVENT_IDS.VOCABULARY_UNMOUNT, ({ draftDb }) => {
+  draftDb.vocabularyRender = false
+  // Restore body scrolling
+  document.body.style.overflow = 'auto'
+})
+
+regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
+  draftDb.selectedCategory = category
+  //TODO fix bug in reflex, it's should be possible to call effect without parameters
+  return [[EFFECT_IDS.SCROLL_TO_TOP, null]]
+})
+
+regEvent(EVENT_IDS.SET_SELECTED_LANGUAGE, ({ draftDb }, language) => {
   draftDb.selectedLanguage = language
 })
 
 // Data Events
-regEvent('fetchQuestions', ({ draftDb }) => {
+regEvent(EVENT_IDS.FETCH_QUESTIONS, ({ draftDb }) => {
   draftDb.questionsLoading = true
   draftDb.questionsError = null
   return [
-    ['fetch', {
+    [EFFECT_IDS.FETCH, {
       url: 'data.json',
-      onSuccess: ['fetchQuestionsSuccess'],
-      onFailure: ['fetchQuestionsFailure']
+      onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
+      onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
     }]
   ]
 })
 
-regEvent('fetchQuestionsSuccess', ({ draftDb }, data) => {
+regEvent(EVENT_IDS.FETCH_QUESTIONS_SUCCESS, ({ draftDb }, data) => {
   draftDb.questionsLoading = false
+  draftDb.questionsLoaded = true
   draftDb.questionsError = null
 
   // Add index to each question
@@ -72,44 +94,44 @@ regEvent('fetchQuestionsSuccess', ({ draftDb }, data) => {
   draftDb.categories = sortedCategories
 })
 
-regEvent('fetchQuestionsFailure', ({ draftDb }, error) => {
+regEvent(EVENT_IDS.FETCH_QUESTIONS_FAILURE, ({ draftDb }, error) => {
   draftDb.questionsLoading = false
   draftDb.questionsError = error
 })
 
-regEvent('fetchVocabulary', ({ draftDb }) => {
+regEvent(EVENT_IDS.FETCH_VOCABULARY, ({ draftDb }) => {
   draftDb.vocabularyLoading = true
   draftDb.vocabularyError = null
   return [
-    ['fetch', {
+    [EFFECT_IDS.FETCH, {
       url: 'vocabulary_multilang.json',
-      onSuccess: ['fetchVocabularySuccess'],
-      onFailure: ['fetchVocabularyFailure']
+      onSuccess: [EVENT_IDS.FETCH_VOCABULARY_SUCCESS],
+      onFailure: [EVENT_IDS.FETCH_VOCABULARY_FAILURE]
     }]
   ]
 })
 
-regEvent('fetchVocabularySuccess', ({ draftDb }, data) => {
+regEvent(EVENT_IDS.FETCH_VOCABULARY_SUCCESS, ({ draftDb }, data) => {
   draftDb.vocabularyLoading = false
   draftDb.vocabularyError = null
   draftDb.vocabularyData = data
 })
 
-regEvent('fetchVocabularyFailure', ({ draftDb }, error) => {
+regEvent(EVENT_IDS.FETCH_VOCABULARY_FAILURE, ({ draftDb }, error) => {
   draftDb.vocabularyLoading = false
   draftDb.vocabularyError = error
 })
 
 // User Actions Events
-regEvent('answerQuestion', ({ draftDb }, questionIndex, answerIndex) => {
+regEvent(EVENT_IDS.ANSWER_QUESTION, ({ draftDb }, questionIndex, answerIndex) => {
   if (draftDb.mode === 'testing') {
     draftDb.userAnswers[questionIndex] = answerIndex
 
-    return [['localStorageSet', { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
+    return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
   }
 })
 
-regEvent('toggleFavorite', ({ draftDb }, questionIndex) => {
+regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {
   const favorites = draftDb.favorites
   const index = favorites.indexOf(questionIndex)
 
@@ -119,12 +141,12 @@ regEvent('toggleFavorite', ({ draftDb }, questionIndex) => {
     favorites.splice(index, 1)
   }
 
-  return [['localStorageSet', { key: 'favorites', value: current(favorites) }]]
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'favorites', value: current(favorites) }]]
 })
 
-regEvent('clearAnswers', ({ draftDb }) => {
+regEvent(EVENT_IDS.CLEAR_ANSWERS, ({ draftDb }) => {
   draftDb.userAnswers = {}
-  return [['localStorageRemove', { key: 'userAnswers' }]]
+  return [[EFFECT_IDS.LOCAL_STORAGE_REMOVE, { key: 'userAnswers' }]]
 })
 
 // Vite Hot reload

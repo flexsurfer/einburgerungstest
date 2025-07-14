@@ -4,33 +4,36 @@ import { QuestionList } from './components/QuestionList'
 import { Welcome } from './components/Welcome'
 import { Vocabulary } from './components/Vocabulary'
 import { Statistics } from './components/Statistics'
+import { EVENT_IDS } from './event-ids.js'
+import { SUB_IDS } from './sub-ids.js'
 import './styles/App.css'
 
 function App() {
 
-  const showWelcome = useSubscription(['showWelcome'])
-  const mode = useSubscription(['mode'])
-
+  const showWelcome = useSubscription([SUB_IDS.SHOW_WELCOME])
+  const mode = useSubscription([SUB_IDS.MODE])
+  const vocabularyRender = useSubscription([SUB_IDS.VOCABULARY_RENDER])
+  const questionsLoaded = useSubscription([SUB_IDS.QUESTIONS_LOADED])
+  
   if (showWelcome) {
-    return <Welcome onStart={() => dispatch(['setShowWelcome', false])} />
+    return <Welcome onStart={() => dispatch([EVENT_IDS.SET_SHOW_WELCOME, false])} />
   }
 
-  return (
-    <div className="app-container">
-      <Header />
+  if (questionsLoaded) {
+    return (
+      <div className="app-container">
+        <Header />
 
-      {mode === 'vocabulary' &&
-        <Vocabulary />}
+        <QuestionList />
+        {mode === 'testing' &&
+          <Statistics />}
 
-      {mode !== 'vocabulary' && (
-        <>
-          <QuestionList />
-          {mode === 'testing' &&
-            <Statistics />}
-        </>
-      )}
-    </div>
-  )
+        {vocabularyRender && (
+          <Vocabulary />
+        )}
+      </div>
+    )
+  }
 }
 
 export default App

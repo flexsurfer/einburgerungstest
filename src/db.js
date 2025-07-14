@@ -7,6 +7,8 @@ const initialDb = {
     mode: 'testing',
     selectedCategory: null,
     selectedLanguage: 'en',
+    showVocabulary: false,
+    vocabularyRender: false,
 
     // Data state
     questions: [],
@@ -19,6 +21,7 @@ const initialDb = {
 
     // Loading states
     questionsLoading: false,
+    questionsLoaded: false,
     vocabularyLoading: false,
 
     // Error states

@@ -1,12 +1,14 @@
-import { useCallback } from 'react'
+import { useCallback, memo } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
+import { EVENT_IDS } from '../event-ids.js'
+import { SUB_IDS } from '../sub-ids.js'
 import '../styles/Statistics.css'
 
-export const Statistics = () => {
+export const Statistics = memo(() => {
 
-    const stats = useSubscription(['statistics'])
+    const stats = useSubscription([SUB_IDS.STATISTICS])
 
-    const handleClearAnswers = useCallback(() => { dispatch(['clearAnswers']) }, [])
+    const handleClearAnswers = useCallback(() => { dispatch([EVENT_IDS.CLEAR_ANSWERS]) }, [])
 
     // Don't show statistics if no questions are answered
     if (stats.totalAnswered === 0) {
@@ -25,9 +27,9 @@ export const Statistics = () => {
                         <div className="stat-icon">✗</div>
                         <span className="stat-number">{stats.incorrect}</span>
                     </div>
-                    <div className="stat-item accuracy">
-                        <div className="stat-icon">%</div>
-                        <span className="stat-number">{stats.accuracy}%</span>
+                    <div className="stat-item accuracy" title="Точность ответов">
+                        <div className="stat-icon">{stats.accuracy > 51.5 ? '👍' : '😔'}</div>
+                        <span className={`stat-number ${stats.accuracy > 51.5 ? 'stat-number-green' : 'stat-number-red'}`}>{stats.accuracy}%</span>
                     </div>
                     <button className="clear-button" onClick={handleClearAnswers} title="Clear all answers">
                         Clear All
@@ -48,4 +50,4 @@ export const Statistics = () => {
             </div>
         </div>
     )
-}
+})

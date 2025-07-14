@@ -1,9 +1,10 @@
 import { regEffect, regCoeffect, dispatch } from "@flexsurfer/reflex"
+import { EFFECT_IDS } from './effect-ids.js'
 
 // ===== EFFECTS =====
 
 // Local storage effects
-regEffect('localStorageSet', ({ key, value }) => {
+regEffect(EFFECT_IDS.LOCAL_STORAGE_SET, ({ key, value }) => {
     try {
         localStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
@@ -11,7 +12,7 @@ regEffect('localStorageSet', ({ key, value }) => {
     }
 })
 
-regEffect('localStorageRemove', ({ key }) => {
+regEffect(EFFECT_IDS.LOCAL_STORAGE_REMOVE, ({ key }) => {
     try {
         localStorage.removeItem(key)
     } catch (error) {
@@ -20,7 +21,7 @@ regEffect('localStorageRemove', ({ key }) => {
 })
 
 // Fetch effect
-regEffect('fetch', async ({ url, method = 'GET', onSuccess, onFailure }) => {
+regEffect(EFFECT_IDS.FETCH, async ({ url, method = 'GET', onSuccess, onFailure }) => {
     try {
         const response = await fetch(url, { method })
         if (!response.ok) {
@@ -39,8 +40,7 @@ regEffect('fetch', async ({ url, method = 'GET', onSuccess, onFailure }) => {
 })
 
 // Scroll effect
-regEffect('scrollToTop', () => {
-    console.log('scrollToTop')
+regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -50,7 +50,7 @@ regEffect('scrollToTop', () => {
 // ===== CO-EFFECTS =====
 
 // Local storage co-effect
-regCoeffect('localStorageGet', (coeffects, key) => {
+regCoeffect(EFFECT_IDS.LOCAL_STORAGE_GET, (coeffects, key) => {
     coeffects.localStorage = coeffects.localStorage || {}
     try {
         const item = localStorage.getItem(key)

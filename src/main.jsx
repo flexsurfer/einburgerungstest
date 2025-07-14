@@ -10,14 +10,15 @@ import './subs'
 
 import App from './App'
 import { enableTracing, enableTracePrint, dispatch, HotReloadWrapper, setDebugEnabled } from '@flexsurfer/reflex'
+import { EVENT_IDS } from './event-ids.js'
 
 if (import.meta.env.MODE === 'development') {
-  setDebugEnabled(true)
-  enableTracing()
-  enableTracePrint()
+  //setDebugEnabled(true)
+  //enableTracing()
+  //enableTracePrint()
 }
 
-dispatch(['initializeApp'])
+dispatch([EVENT_IDS.INITIALIZE_APP])
 
 const useStrictMode = false
 const Wrapper = useStrictMode ? StrictMode : Fragment;

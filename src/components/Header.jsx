@@ -1,29 +1,27 @@
-import { memo, useCallback, useMemo } from 'react'
+import { useCallback, useMemo, memo } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { Star } from './Star'
+import { FavoritesButton } from './FavoritesButton'
+import { EVENT_IDS } from '../event-ids.js'
+import { SUB_IDS } from '../sub-ids.js'
 import '../styles/Header.css'
 
 const MODES = [
   { id: 'testing', label: 'Questions' },
   { id: 'review', label: 'Answers' },
-  { id: 'vocabulary', label: 'Vocabulary' },
   // Add more modes here in the future
 ]
 
-export const Header = () => {
-  // Subscribe to store state instead of using props
-  const questions = useSubscription(['questions'])
-  const categories = useSubscription(['categories'])
-  const selectedCategory = useSubscription(['selectedCategory'])
-  const currentMode = useSubscription(['mode'])
-  const favoriteCount = useSubscription(['favoriteCount'])
+export const Header = memo(() => {
 
-  const onModeChange = (newMode) => {
-    dispatch(['setMode', newMode])
-  }
-  const handleCategoryClick = useCallback((category) => {
-    dispatch(['setSelectedCategory', category])
-  }, [])
+  const questions = useSubscription([SUB_IDS.QUESTIONS])
+  const categories = useSubscription([SUB_IDS.CATEGORIES])
+  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY])
+  const currentMode = useSubscription([SUB_IDS.MODE])
+  const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY])
+
+  const onModeChange = useCallback((newMode) => {dispatch([EVENT_IDS.SET_MODE, newMode])}, [])
+  const toggleVocabulary = useCallback(() => {dispatch([EVENT_IDS.TOGGLE_VOCABULARY])}, [])
+  const handleCategoryClick = useCallback((category) => {dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category])}, [])
 
   const categoryButtons = useMemo(() => {
     const allButton = (
@@ -37,14 +35,10 @@ export const Header = () => {
     )
 
     const favoritesButton = (
-      <button
+      <FavoritesButton
         key="favorites"
-        onClick={() => handleCategoryClick('favorites')}
-        className={`category-button ${selectedCategory === 'favorites' ? 'active' : ''}`}
-      >
-        <Star/>
-        Favorites ({favoriteCount})
-      </button>
+        onCategoryClick={handleCategoryClick}
+      />
     )
 
     const categoryButtonsList = categories.map(([category, count]) => (
@@ -58,31 +52,37 @@ export const Header = () => {
     ))
 
     return [allButton, favoritesButton, ...categoryButtonsList]
-  }, [categories, questions.length, selectedCategory, handleCategoryClick, favoriteCount])
+  }, [selectedCategory])
 
   return (
     <div className="header">
       {/* Mode Tabs */}
       <div className="tabs-container">
-        {MODES.map(mode => (
-          <button
-            key={mode.id}
-            onClick={() => onModeChange(mode.id)}
-            className={`tab ${currentMode === mode.id ? 'active' : ''}`}
-          >
-            {mode.label}
-          </button>
-        ))}
+        <div className="mode-tabs">
+          {MODES.map(mode => (
+            <button
+              key={mode.id}
+              onClick={() => onModeChange(mode.id)}
+              className={`tab ${currentMode === mode.id ? 'active' : ''}`}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={toggleVocabulary}
+          className={`tab vocabulary-tab ${showVocabulary ? 'active' : ''}`}
+        >
+          Vocabulary
+        </button>
       </div>
 
       {/* Categories */}
-      {currentMode !== 'vocabulary' && (
-        <div className="categories-container">
-          <div className="categories-row">
-            {categoryButtons}
-          </div>
+      <div className="categories-container">
+        <div className="categories-row">
+          {categoryButtons}
         </div>
-      )}
+      </div>
     </div>
   )
-}
+})

@@ -56,8 +56,9 @@
 }
 
 .accuracy .stat-icon {
-    background-color: var(--accent-color);
+    background-color: transparent;
     color: var(--text-color);
+    font-size: 1rem;
 }
 
 .stat-number {
@@ -65,6 +66,14 @@
     font-weight: 600;
     color: var(--text-color);
     line-height: 1;
+}
+
+.stat-number-green {
+    color: var(--success-color);
+}
+
+.stat-number-red {
+    color: var(--error-color);
 }
 
 .statistics-footer {

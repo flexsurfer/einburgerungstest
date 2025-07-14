@@ -1,10 +1,11 @@
 import { useSubscription } from '@flexsurfer/reflex'
 import { QuestionCard } from './QuestionCard'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
+import { SUB_IDS } from '../sub-ids.js'
 
-export const QuestionList = () => {
+export const QuestionList = memo(() => {
     
-    const filteredQuestions = useSubscription(['filteredQuestions'])
+    const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS])
     
     const [visibleCount, setVisibleCount] = useState(20)
     const loadMoreRef = useRef(null)
@@ -41,4 +42,4 @@ export const QuestionList = () => {
             )}
         </div>
     )
-} 
+}) 

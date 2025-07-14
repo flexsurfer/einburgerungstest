@@ -1,7 +1,147 @@
+/* Overlay styles */
+.vocabulary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.vocabulary-overlay.closing {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+/* Prevent background scrolling when overlay is open */
+body:has(.vocabulary-overlay) {
+  overflow: hidden;
+}
+
+/* Fallback for browsers that don't support :has() */
+body.vocabulary-open {
+  overflow: hidden;
+}
+
+.vocabulary-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  touch-action: none;
+}
+
 .vocabulary-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90%;
   max-width: 700px;
-  margin: 0 auto;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+.vocabulary-container.closing {
+  animation: slideOutRight 0.3s ease-in forwards;
+}
+
+.vocabulary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.vocabulary-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: var(--border-color);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .language-switcher {
@@ -36,11 +176,13 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--shadow-color);
-  overflow: hidden;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 0;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .vocabulary-item {
@@ -85,12 +227,21 @@
 /* Responsive design */
 @media (max-width: 600px) {
   .vocabulary-container {
-    padding: 8px;
+    width: 100%;
+    padding: 15px;
   }
   .vocabulary-list {
-    padding: 10px;
+    padding: 15px;
   }
   .vocabulary-item {
     padding: 8px 0;
+  }
+  .vocabulary-header h2 {
+    font-size: 1.3rem;
+  }
+  .close-button {
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
   }
 } 
