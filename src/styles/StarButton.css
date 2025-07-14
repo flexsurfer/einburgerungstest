@@ -35,25 +35,4 @@
   height: 16px;
 }
 
-/* When used in the header */
-.star-button.header-star {
-  font-size: 1rem;
-  padding: 0 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.star-button.header-star::after {
-  content: 'Favorites';
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.star-button.header-star.active {
-  color: var(--accent-color);
-  background-color: var(--accent-light);
-} 
+ 

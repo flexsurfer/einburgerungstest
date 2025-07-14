@@ -19,7 +19,6 @@
 .answer-button.review-mode.correct {
   border-color: var(--success-color);
   color: var(--success-color);
-  font-weight: 600;
   background-color: var(--success-light);
 }
 
@@ -27,13 +26,11 @@
 .answer-button.test-mode.correct {
   border-color: var(--success-color);
   color: var(--success-color);
-  font-weight: 600;
   background-color: var(--success-light);
 }
 
 .answer-button.test-mode.incorrect {
   border-color: var(--error-color);
   color: var(--error-color);
-  font-weight: 600;
   background-color: var(--error-light);
 } 
