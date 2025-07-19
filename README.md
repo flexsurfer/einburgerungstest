@@ -1,69 +1,101 @@
+
+# Einbürgerungstest
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Einbürgerungstest is a free, open-source, and user-friendly application for practicing the **"Leben in Deutschland"** test and the **Einbürgerungstest** (German naturalization test) created by a foreigner on a voluntary basis.
+
 Website: [https://www.ebtest.org/](https://www.ebtest.org/)
 
-This is a free, open-source and user-friendly test app for the **"Leben in Deutschland"** and **Einbürgerungstest** questions.  
-It works offline after the first load and requires no servers.  
-Created by a foreigner on a voluntary basis.  
-If you like it — please give it a ⭐ star!  
-[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
+If you like it, please give it a ⭐ on [GitHub](https://github.com/flexsurfer/einburgerungstest)!
 
-**Disclaimer:** The author takes no responsibility for any mistakes or inaccuracies.  
-Pull requests and issues are welcome.  
+**Disclaimer:** The author takes no responsibility for any mistakes or inaccuracies. Pull requests and issues are welcome.
 
-Questions are based on the official dataset from:  
-[www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
+Questions are based on the official dataset from: [www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
 
----
+The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Reflex](https://github.com/flexsurfer/reflex) library and a monorepo setup using Nx.
 
-Dies ist ein kostenloser, quelloffener und benutzerfreundlicher Test zur Vorbereitung auf den **"Leben in Deutschland"**-Test und den **Einbürgerungstest**.  
-Funktioniert offline nach dem ersten Laden und benötigt keine Server.  
-Erstellt von einem Ausländer auf freiwilliger Basis.  
-Wenn dir das Projekt gefällt — bitte gib einen ⭐ Stern!  
-[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
+## Features
 
-**Haftungsausschluss:** Der Autor übernimmt keine Verantwortung für Fehler oder Ungenauigkeiten.  
-Pull Requests und Issues sind willkommen.  
+- **Practice Questions:** Over 300 questions categorized by topics like Recht, Gesellschaft und Familie, Staat, Politik, etc.
+- **Multiple Modes:** 
+  - Testing mode for practicing with statistics.
+  - Review mode for checking answers.
+- **Favorites:** Mark questions as favorites for quick access.
+- **Vocabulary:** Multilingual vocabulary support (English, Russian, Arabic, Turkish) for key terms.
+- **Offline Support:** Works offline after initial load.
+- **Statistics:** Track correct/incorrect answers and accuracy.
+- **Images:** Some questions include illustrative images.
+- **Categories and Filtering:** Browse questions by category or favorites.
 
-Fragen basieren auf dem offiziellen Katalog von:  
-[www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
+## Tech Stack
 
----
+- **Frontend:** React (Web), React Native (Mobile)
+- **State Management:** [Reflex](https://github.com/flexsurfer/reflex) (custom state management with events, effects, and subscriptions)
+- **Build Tools:** Vite (Web), Metro (Mobile)
+- **Monorepo:** Nx
+- **Package Manager:** pnpm
+- **Testing:** Vitest
 
-Bu, **"Leben in Deutschland"** ve **Einbürgerungstest** için hazırlanmış ücretsiz, açık kaynaklı ve kullanıcı dostu bir test uygulamasıdır.  
-İlk yüklemeden sonra çevrimdışı çalışır ve sunucuya ihtiyaç duymaz.  
-Bir yabancı tarafından gönüllü olarak geliştirilmiştir.  
-Beğendiyseniz ⭐ yıldız vermeyi unutmayın!  
-[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
+## Installation
 
-**Sorumluluk reddi:** Yazar, hata veya yanlışlıklardan sorumlu değildir.  
-Pull request’ler ve issue’lar memnuniyetle karşılanır.  
+### Prerequisites
 
-Sorular şu kaynağa dayanmaktadır:  
-[www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, 07.05.2025 tarihli](https://www.bamf.de)
+- Node.js >= 18
+- pnpm (install globally: `npm install -g pnpm`)
+- For mobile: Android Studio (for Android), Xcode (for iOS), CocoaPods (for iOS)
 
----
+### Setup
 
-هذا اختبار مجاني ومفتوح المصدر وسهل الاستخدام لأسئلة **"العيش في ألمانيا"** و**اختبار التجنيس**.  
-يعمل بدون إنترنت بعد التحميل الأول ولا يحتاج إلى خوادم.  
-تم تطويره من قبل أجنبي بشكل تطوعي.  
-إذا أعجبك المشروع — ضع نجمة ⭐ من فضلك.  
-[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
+1. Clone the repository:
+   ```
+   git clone https://github.com/flexsurfer/einburgerungstest.git
+   cd einburgerungstest
+   ```
 
-**تنبيه:** المؤلف لا يتحمل أي مسؤولية عن الأخطاء أو عدم الدقة.  
-طلبات السحب (PR) والمشكلات (issues) مرحب بها.  
+2. Install dependencies:
+   ```
+   pnpm install
+   ```
 
-الأسئلة مأخوذة من المصدر الرسمي:  
-[www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, بتاريخ 07.05.2025](https://www.bamf.de)
+## Usage
 
----
+### Web App
 
-Это бесплатный, открытый и удобный тест по вопросам из **«Leben in Deutschland»** и **теста на натурализацию (Einbürgerungstest)**.  
-Работает оффлайн после первой загрузки, не требует серверов.  
-Сделан иностранцем на волонтёрской основе.  
-Если нравится — поставьте ⭐ звёздочку!  
-[https://github.com/flexsurfer/einburgerungstest](https://github.com/flexsurfer/einburgerungstest)
+- Development: `pnpm dev:web` (runs on http://localhost:4200)
+- Build: `pnpm build` (includes web build)
+- Test: `pnpm test` (runs all tests, including web)
 
-**Отказ от ответственности:** Автор не несёт никакой ответственности за ошибки или неточности.  
-Pull request’ы и issue приветствуются.  
+### Mobile App
 
-Вопросы взяты из официального источника:  
-[www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, актуально на 07.05.2025](https://www.bamf.de)
+- Start Metro: `pnpm dev:mobile`
+- Run on Android: `pnpm dev:run-android`
+- Run on iOS: `pnpm dev:run-ios`
+- For iOS, ensure Pods are installed: `cd app/mobile/ios && bundle exec pod install`
+- Test: `pnpm test` (includes mobile, web and shared tests)
+
+### Shared Package
+
+The shared package contains common logic, data, events, and subscriptions used by both web and mobile apps.
+
+- Test shared: `pnpm test:shared`
+
+## Development
+
+- Lint: `pnpm lint`
+- Graph dependencies: `pnpm graph`
+- Build all: `pnpm build`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+Please ensure your code passes tests and linting.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
