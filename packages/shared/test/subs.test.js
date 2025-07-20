@@ -141,8 +141,9 @@ describe('Subscription Handlers', () => {
         correct: 1,
         incorrect: 2,
         totalAnswered: 3,
-        totalVisible: 4,
-        accuracy: '33.3'
+        totalVisible: 4,  
+        accuracy: '33.3',
+        passed: false
       })
     })
 
@@ -162,7 +163,8 @@ describe('Subscription Handlers', () => {
         incorrect: 0,
         totalAnswered: 0,
         totalVisible: 2,
-        accuracy: 0
+        accuracy: 0,
+        passed: false
       })
     })
 
@@ -182,7 +184,8 @@ describe('Subscription Handlers', () => {
         incorrect: 0,
         totalAnswered: 2,
         totalVisible: 2,
-        accuracy: '100.0'
+        accuracy: '100.0',
+        passed: true
       })
     })
 
@@ -199,7 +202,8 @@ describe('Subscription Handlers', () => {
         incorrect: 0,
         totalAnswered: 0,
         totalVisible: 0,
-        accuracy: 0
+        accuracy: 0,
+        passed: false
       })
     })
   })

@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import '../styles/AnswerButton.css'
 
-export const AnswerButton = ({ answer, index, isCorrect, isSelected, isReviewMode, disabled, onClick, userAnswer }) => {
+export const AnswerButton = ({ answer, index, isCorrect, isSelected, showAnswers, disabled, onClick, userAnswer }) => {
 
   const getClassName = useCallback(() => {
     const classes = ['answer-button']
 
-    if (isReviewMode) {
+    if (showAnswers) {
       classes.push('review-mode')
       if (isCorrect) {
         classes.push('correct')
@@ -21,13 +21,13 @@ export const AnswerButton = ({ answer, index, isCorrect, isSelected, isReviewMod
     }
 
     return classes.join(' ')
-  }, [isReviewMode, isCorrect, userAnswer, isSelected])
+  }, [showAnswers, isCorrect, userAnswer, isSelected])
 
   const handleClick = useCallback(() => {
-    if (!isReviewMode && userAnswer === undefined) {
+    if (!showAnswers && userAnswer === undefined) {
       onClick(index)
     }
-  }, [isReviewMode, userAnswer, onClick, index])
+  }, [showAnswers, userAnswer, onClick, index])
 
   return (
     <button

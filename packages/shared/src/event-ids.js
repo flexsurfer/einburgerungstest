@@ -7,7 +7,7 @@ export const EVENT_IDS = {
   
   // UI Events
   SET_SHOW_WELCOME: 'setShowWelcome',
-  SET_MODE: 'setMode',
+  TOGGLE_SHOW_ANSWERS: 'toggleShowAnswers',
   TOGGLE_VOCABULARY: 'toggleVocabulary',
   VOCABULARY_UNMOUNT: 'vocabularyUnmount',
   SET_SELECTED_CATEGORY: 'setSelectedCategory',
@@ -24,5 +24,6 @@ export const EVENT_IDS = {
   // User Actions Events
   ANSWER_QUESTION: 'answerQuestion',
   TOGGLE_FAVORITE: 'toggleFavorite',
-  CLEAR_ANSWERS: 'clearAnswers'
+  CLEAR_ANSWERS: 'clearAnswers',
+  REQUEST_CLEAR_ANSWERS: 'requestClearAnswers'
 } 

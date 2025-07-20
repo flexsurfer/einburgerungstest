@@ -6,17 +6,15 @@ import { SUB_IDS } from '/shared/sub-ids'
 
 export const AnswerList = ({question}) => {
     
-    const mode = useSubscription([SUB_IDS.MODE])
+    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS])
 
     const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex])
-
-    const isReviewMode = mode === 'review'
   
     const handleAnswerClick = useCallback((index) => {
-      if (!isReviewMode && userAnswer === undefined) {
+      if (!showAnswers && userAnswer === undefined) {
         dispatch([EVENT_IDS.ANSWER_QUESTION, question.globalIndex, index])
       }
-    }, [isReviewMode, userAnswer, question.globalIndex])
+    }, [showAnswers, userAnswer, question.globalIndex])
 
     return (
         <div className="answers-container">
@@ -27,8 +25,8 @@ export const AnswerList = ({question}) => {
                     index={index}
                     isCorrect={question.correct === index}
                     isSelected={userAnswer === index}
-                    isReviewMode={isReviewMode}
-                    disabled={userAnswer !== undefined || isReviewMode}
+                    showAnswers={showAnswers}
+                    disabled={userAnswer !== undefined || showAnswers}
                     onClick={handleAnswerClick}
                     userAnswer={userAnswer}
                 />

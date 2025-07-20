@@ -1,5 +1,5 @@
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -10,38 +10,20 @@
   background-color: white;
   will-change: transform;
   display: flex;
-  flex-direction: column;
-}
-
-.tabs-container {
-  position: relative;
-  z-index: 101;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
-  padding: 0;
-  width: 100%;
-  height: 40px;
-}
-
-.mode-tabs {
-  display: flex;
-  align-items: center;
-  height: 100%;
+  flex-direction: row;
 }
 
 .tab {
-  height: 100%;
-  padding: 0 1.5rem;
+  height: 40px;
+  padding: 0 0.8rem;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
   position: relative;
   background-color: white;
-  border-bottom: 1px solid var(--border-color);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -51,10 +33,6 @@
 .tab.active {
   color: var(--accent-color);
   border-bottom: 2px solid var(--accent-color);
-}
-
-.vocabulary-tab {
-  margin-left: auto;
 }
 
 .categories-container {
@@ -80,7 +58,7 @@
 
 .categories-row {
   display: inline-flex;
-  gap: 0.5rem;
+  gap: 0.1rem;
   padding: 0 0.2rem;
   height: 100%;
   align-items: center;
@@ -88,7 +66,7 @@
 
 .category-button {
   height: 28px;
-  padding: 0 1rem;
+  padding: 0 0.3rem;
   border-radius: 6px;
   border: none;
   cursor: pointer;

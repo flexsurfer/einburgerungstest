@@ -5,23 +5,15 @@ import { EVENT_IDS } from '/shared/event-ids'
 import { SUB_IDS } from '/shared/sub-ids'
 import '../styles/Header.css'
 
-const MODES = [
-  { id: 'testing', label: 'Questions' },
-  { id: 'review', label: 'Answers' },
-  // Add more modes here in the future
-]
-
 export const Header = memo(() => {
 
   const questions = useSubscription([SUB_IDS.QUESTIONS])
   const categories = useSubscription([SUB_IDS.CATEGORIES])
   const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY])
-  const currentMode = useSubscription([SUB_IDS.MODE])
   const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY])
 
-  const onModeChange = useCallback((newMode) => {dispatch([EVENT_IDS.SET_MODE, newMode])}, [])
-  const toggleVocabulary = useCallback(() => {dispatch([EVENT_IDS.TOGGLE_VOCABULARY])}, [])
-  const handleCategoryClick = useCallback((category) => {dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category])}, [])
+  const toggleVocabulary = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_VOCABULARY]) }, [])
+  const handleCategoryClick = useCallback((category) => { dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category]) }, [])
 
   const categoryButtons = useMemo(() => {
     const allButton = (
@@ -56,26 +48,6 @@ export const Header = memo(() => {
 
   return (
     <div className="header">
-      {/* Mode Tabs */}
-      <div className="tabs-container">
-        <div className="mode-tabs">
-          {MODES.map(mode => (
-            <button
-              key={mode.id}
-              onClick={() => onModeChange(mode.id)}
-              className={`tab ${currentMode === mode.id ? 'active' : ''}`}
-            >
-              {mode.label}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={toggleVocabulary}
-          className={`tab vocabulary-tab ${showVocabulary ? 'active' : ''}`}
-        >
-          Vocabulary
-        </button>
-      </div>
 
       {/* Categories */}
       <div className="categories-container">
@@ -83,6 +55,13 @@ export const Header = memo(() => {
           {categoryButtons}
         </div>
       </div>
+
+      <button
+        onClick={toggleVocabulary}
+        className={`tab vocabulary-tab ${showVocabulary ? 'active' : ''}`}
+      >
+        📖
+      </button>
     </div>
   )
 })

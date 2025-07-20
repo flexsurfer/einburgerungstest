@@ -10,5 +10,6 @@ export const EFFECT_IDS = {
   LOAD_LOCAL_DATA: 'loadLocalData',
   
   // UI effects
-  SCROLL_TO_TOP: 'scrollToTop'
+  SCROLL_TO_TOP: 'scrollToTop',
+  CONFIRM_CLEAR: 'confirmClear'
 } 

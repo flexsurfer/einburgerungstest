@@ -1,5 +1,6 @@
 import { regEffect, regCoeffect, dispatch } from "@flexsurfer/reflex"
 import { EFFECT_IDS } from 'shared/effect-ids'
+import { EVENT_IDS } from 'shared/event-ids'
 
 // ===== EFFECTS =====
 
@@ -45,6 +46,12 @@ regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
         top: 0,
         behavior: 'smooth'
     })
+})
+
+regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
+  if (window.confirm("Are you sure you want to clear answers for all categories?")) {
+    dispatch([EVENT_IDS.CLEAR_ANSWERS])
+  }
 })
 
 // ===== CO-EFFECTS =====

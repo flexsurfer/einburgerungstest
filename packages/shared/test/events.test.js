@@ -28,20 +28,20 @@ describe('Event Handlers', () => {
       expect(result).toEqual([[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'showWelcome', value: false }]])
     })
 
-    it('should handle setMode event', () => {
-      const handler = getHandler('event', EVENT_IDS.SET_MODE)
+    it('should handle toggleShowAnswers event', () => {
+      const handler = getHandler('event', EVENT_IDS.TOGGLE_SHOW_ANSWERS)
       
       const initialState = {
-        mode: 'testing'
+        showAnswers: false
       }
       
       const coeffects = {
         draftDb: initialState
       }
       
-      const result = handler(coeffects, 'learning')
+      const result = handler(coeffects)
       
-      expect(initialState.mode).toBe('learning')
+      expect(initialState.showAnswers).toBe(true)
       expect(result).toBeUndefined()
     })
 
@@ -133,11 +133,10 @@ describe('Event Handlers', () => {
   })
 
   describe('User Actions Events', () => {
-    it('should handle answerQuestion event in testing mode', () => {
+    it('should handle answerQuestion event', () => {
       const handler = getHandler('event', EVENT_IDS.ANSWER_QUESTION)
       
       const initialState = {
-        mode: 'testing',
         userAnswers: { 1: 0 }
       }
       
@@ -151,24 +150,6 @@ describe('Event Handlers', () => {
       
       expect(draftDb.userAnswers[2]).toBe(1)
       expect(result).toEqual([[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: { 1: 0, 2: 1 } }]])
-    })
-
-    it('should handle answerQuestion event in learning mode', () => {
-      const handler = getHandler('event', EVENT_IDS.ANSWER_QUESTION)
-      
-      const initialState = {
-        mode: 'learning',
-        userAnswers: {}
-      }
-      
-      const coeffects = {
-        draftDb: initialState
-      }
-      
-      const result = handler(coeffects, 2, 1)
-      
-      expect(initialState.userAnswers[2]).toBeUndefined()
-      expect(result).toBeUndefined()
     })
 
     it('should handle toggleFavorite event - add to favorites', () => {

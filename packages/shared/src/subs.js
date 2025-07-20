@@ -3,7 +3,7 @@ import { SUB_IDS } from './sub-ids.js'
 
 // Root subscriptions
 regSub(SUB_IDS.SHOW_WELCOME)
-regSub(SUB_IDS.MODE)
+regSub(SUB_IDS.SHOW_ANSWERS)
 regSub(SUB_IDS.SELECTED_CATEGORY)
 regSub(SUB_IDS.QUESTIONS)
 regSub(SUB_IDS.QUESTIONS_LOADED)
@@ -50,13 +50,14 @@ regSub(SUB_IDS.STATISTICS,
     const incorrect = totalAnswered - correctCount
     const totalVisible = filteredQuestions.length
     const accuracy = totalAnswered > 0 ? (correctCount / totalAnswered * 100).toFixed(1) : 0
-    
+    const passed = accuracy > 51.5
     return {
       correct: correctCount,
       incorrect,
       totalAnswered,
       totalVisible,
-      accuracy
+      accuracy,
+      passed
     }
   },
   () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.FILTERED_QUESTIONS]]

@@ -11,7 +11,6 @@ import './styles/App.css'
 function App() {
 
   const showWelcome = useSubscription([SUB_IDS.SHOW_WELCOME])
-  const mode = useSubscription([SUB_IDS.MODE])
   const vocabularyRender = useSubscription([SUB_IDS.VOCABULARY_RENDER])
   const questionsLoaded = useSubscription([SUB_IDS.QUESTIONS_LOADED])
   
@@ -23,11 +22,8 @@ function App() {
     return (
       <div className="app-container">
         <Header />
-
         <QuestionList />
-        {mode === 'testing' &&
-          <Statistics />}
-
+        <Statistics />
         {vocabularyRender && (
           <Vocabulary />
         )}

@@ -39,3 +39,7 @@ regEvent(EVENT_IDS.FETCH_VOCABULARY, ({ draftDb }) => {
         }]
     ]
 })
+
+regEvent(EVENT_IDS.REQUEST_CLEAR_ANSWERS, () => {
+    return [[EFFECT_IDS.CONFIRM_CLEAR, null]]
+})

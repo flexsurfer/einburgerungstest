@@ -9,8 +9,8 @@ regEvent(EVENT_IDS.SET_SHOW_WELCOME, ({ draftDb }, show) => {
   return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'showWelcome', value: show }]]
 })
 
-regEvent(EVENT_IDS.SET_MODE, ({ draftDb }, mode) => {
-  draftDb.mode = mode
+regEvent(EVENT_IDS.TOGGLE_SHOW_ANSWERS, ({ draftDb }) => {
+  draftDb.showAnswers = !draftDb.showAnswers
 })
 
 regEvent(EVENT_IDS.TOGGLE_VOCABULARY, ({ draftDb }) => {
@@ -89,11 +89,8 @@ regEvent(EVENT_IDS.FETCH_VOCABULARY_FAILURE, ({ draftDb }, error) => {
 
 // User Actions Events
 regEvent(EVENT_IDS.ANSWER_QUESTION, ({ draftDb }, questionIndex, answerIndex) => {
-  if (draftDb.mode === 'testing') {
     draftDb.userAnswers[questionIndex] = answerIndex
-
     return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
-  }
 })
 
 regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {

@@ -7,13 +7,10 @@ import '../styles/Statistics.css'
 export const Statistics = memo(() => {
 
     const stats = useSubscription([SUB_IDS.STATISTICS])
+    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS])
 
-    const handleClearAnswers = useCallback(() => { dispatch([EVENT_IDS.CLEAR_ANSWERS]) }, [])
-
-    // Don't show statistics if no questions are answered
-    if (stats.totalAnswered === 0) {
-        return null
-    }
+    const handleClearAnswers = useCallback(() => { dispatch([EVENT_IDS.REQUEST_CLEAR_ANSWERS]) }, [])
+    const handleToggleShowAnswers = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_SHOW_ANSWERS]) }, [])
 
     return (
         <div className="statistics-container">
@@ -28,12 +25,21 @@ export const Statistics = memo(() => {
                         <span className="stat-number">{stats.incorrect}</span>
                     </div>
                     <div className="stat-item accuracy" title="Точность ответов">
-                        <div className="stat-icon">{stats.accuracy > 51.5 ? '👍' : '😔'}</div>
-                        <span className={`stat-number ${stats.accuracy > 51.5 ? 'stat-number-green' : 'stat-number-red'}`}>{stats.accuracy}%</span>
+                        <div className="stat-icon">{stats.passed ? '👍' : '😔'}</div>
+                        <span className={`stat-number ${stats.passed ? 'stat-number-green' : 'stat-number-red'}`}>{stats.accuracy}%</span>
                     </div>
-                    <button className="clear-button" onClick={handleClearAnswers} title="Clear all answers">
-                        Clear All
-                    </button>
+                    <div className="buttons-group">
+                        <button
+                            className={`toggle-button ${showAnswers ? 'active' : ''}`}
+                            onClick={handleToggleShowAnswers}
+                            title={showAnswers ? 'Hide answers' : 'Show answers'}
+                        >
+                            {showAnswers ? '🙈' : '👁️'} Answers
+                        </button>
+                        <button className="clear-button" onClick={handleClearAnswers} title="Clear all answers">
+                            Clear
+                        </button>
+                    </div>
                 </div>
                 <div className="statistics-footer">
                     <div className="progress-bar">
