@@ -230,7 +230,7 @@
     "correct": 0,
     "category": "Staat",
     "img": {
-      "url": "img/aufgabe_21.png"
+      "url": "aufgabe_21"
     }
   },
   {
@@ -607,7 +607,7 @@
     "correct": 0,
     "category": "Staat",
     "img": {
-      "url": "img/aufgabe_55.jpg"
+      "url": "aufgabe_55.jpg"
     }
   },
   {
@@ -1435,7 +1435,7 @@
     "correct": 0,
     "category": "Politik",
     "img": {
-      "url": "img/aufgabe_130.jpg",
+      "url": "aufgabe_130.jpg",
       "text": "In Anlehnung an Bundeswahlordnung (BWO), Anlage 26"
     }
   },
@@ -1945,7 +1945,7 @@
     "correct": 2,
     "category": "Geschichte",
     "img": {
-      "url": "img/aufgabe_176.png"
+      "url": "aufgabe_176"
     }
   },
   {
@@ -2069,7 +2069,7 @@
     "correct": 3,
     "category": "Geschichte",
     "img": {
-      "url": "img/aufgabe_187.jpg"
+      "url": "aufgabe_187.jpg"
     }
   },
   {
@@ -2314,7 +2314,7 @@
     "correct": 3,
     "category": "Geschichte",
     "img": {
-      "url": "img/aufgabe_21.png"
+      "url": "aufgabe_21"
     }
   },
   {
@@ -2504,7 +2504,7 @@
     "correct": 1,
     "category": "Europa und Welt",
     "img": {
-      "url": "img/aufgabe_226.png"
+      "url": "aufgabe_226"
     }
   },
   {
@@ -3327,7 +3327,7 @@
     "correct": 0,
     "category": "Baden-Württemberg",
     "img": {
-      "url": "img/baden-wurttemberg_1.png"
+      "url": "baden-wurttemberg_1"
     }
   },
   {
@@ -3377,7 +3377,7 @@
     "correct": 1,
     "category": "Baden-Württemberg",
     "img": {
-      "url": "img/baden-wurttemberg_8.png"
+      "url": "baden-wurttemberg_8"
     }
   },
   {
@@ -3408,7 +3408,7 @@
     "correct": 1,
     "category": "Bayern",
     "img": {
-      "url": "img/bayern_1.png"
+      "url": "bayern_1"
     }
   },
   {
@@ -3458,7 +3458,7 @@
     "correct": 3,
     "category": "Bayern",
     "img": {
-      "url": "img/bayern_8.png"
+      "url": "bayern_8"
     }
   },
   {
@@ -3489,7 +3489,7 @@
     "correct": 3,
     "category": "Berlin",
     "img": {
-      "url": "img/berlin_1.png"
+      "url": "berlin_1"
     }
   },
   {
@@ -3539,7 +3539,7 @@
     "correct": 3,
     "category": "Berlin",
     "img": {
-      "url": "img/berlin_8.png"
+      "url": "berlin_8"
     }
   },
   {
@@ -3570,7 +3570,7 @@
     "correct": 0,
     "category": "Brandenburg",
     "img": {
-      "url": "img/brandenburg_aufgabe_1.png"
+      "url": "brandenburg_aufgabe_1"
     }
   },
   {
@@ -3615,7 +3615,7 @@
     "correct": 3,
     "category": "Brandenburg",
     "img": {
-      "url": "img/brandenburg_aufgabe_8.png"
+      "url": "brandenburg_aufgabe_8"
     }
   },
   {
@@ -3636,7 +3636,7 @@
     "correct": 2,
     "category": "Bremen",
     "img": {
-      "url": "img/bremen_1.png"
+      "url": "bremen_1"
     }
   },
   {
@@ -3686,7 +3686,7 @@
     "correct": 0,
     "category": "Bremen",
     "img": {
-      "url": "img/bremen_8.png"
+      "url": "bremen_8"
     }
   },
   {
@@ -3717,7 +3717,7 @@
     "correct": 1,
     "category": "Hamburg",
     "img": {
-      "url": "img/hamburg_1.png"
+      "url": "hamburg_1"
     }
   },
   {
@@ -3767,7 +3767,7 @@
     "correct": 2,
     "category": "Hamburg",
     "img": {
-      "url": "img/hamburg_8.png"
+      "url": "hamburg_8"
     }
   },
   {
@@ -3798,7 +3798,7 @@
     "correct": 0,
     "category": "Hessen",
     "img": {
-      "url": "img/hessen_1.png"
+      "url": "hessen_1"
     }
   },
   {
@@ -3848,7 +3848,7 @@
     "correct": 2,
     "category": "Hessen",
     "img": {
-      "url": "img/hessen_8.png"
+      "url": "hessen_8"
     }
   },
   {
@@ -3879,7 +3879,7 @@
     "correct": 2,
     "category": "Mecklenburg-Vorpommern",
     "img": {
-      "url": "img/mecklenburg-vorpommern_1.png"
+      "url": "mecklenburg-vorpommern_1"
     }
   },
   {
@@ -3929,7 +3929,7 @@
     "correct": 2,
     "category": "Mecklenburg-Vorpommern",
     "img": {
-      "url": "img/mecklenburg-vorpommern_8.png"
+      "url": "mecklenburg-vorpommern_8"
     }
   },
   {
@@ -3960,7 +3960,7 @@
     "correct": 2,
     "category": "Niedersachsen",
     "img": {
-      "url": "img/niedersachsen_1.png"
+      "url": "niedersachsen_1"
     }
   },
   {
@@ -4010,7 +4010,7 @@
     "correct": 0,
     "category": "Niedersachsen",
     "img": {
-      "url": "img/niedersachsen_8.png"
+      "url": "niedersachsen_8"
     }
   },
   {
@@ -4041,7 +4041,7 @@
     "correct": 1,
     "category": "Nordrhein-Westfalen",
     "img": {
-      "url": "img/nordrhein-westfalen_1.png"
+      "url": "nordrhein-westfalen_1"
     }
   },
   {
@@ -4091,7 +4091,7 @@
     "correct": 2,
     "category": "Nordrhein-Westfalen",
     "img": {
-      "url": "img/nordrhein-westfalen_8.png"
+      "url": "nordrhein-westfalen_8"
     }
   },
   {
@@ -4122,7 +4122,7 @@
     "correct": 0,
     "category": "Rheinland-Pfalz",
     "img": {
-      "url": "img/rheinland-pfalz_1.png"
+      "url": "rheinland-pfalz_1"
     }
   },
   {
@@ -4172,7 +4172,7 @@
     "correct": 0,
     "category": "Rheinland-Pfalz",
     "img": {
-      "url": "img/rheinland-pfalz_8.png"
+      "url": "rheinland-pfalz_8"
     }
   },
   {
@@ -4203,7 +4203,7 @@
     "correct": 3,
     "category": "Saarland",
     "img": {
-      "url": "img/saarland_1.png"
+      "url": "saarland_1"
     }
   },
   {
@@ -4253,7 +4253,7 @@
     "correct": 1,
     "category": "Saarland",
     "img": {
-      "url": "img/saarland_8.png"
+      "url": "saarland_8"
     }
   },
   {
@@ -4284,7 +4284,7 @@
     "correct": 3,
     "category": "Sachsen",
     "img": {
-      "url": "img/sachsen_1.png"
+      "url": "sachsen_1"
     }
   },
   {
@@ -4334,7 +4334,7 @@
     "correct": 3,
     "category": "Sachsen",
     "img": {
-      "url": "img/sachsen_8.png"
+      "url": "sachsen_8"
     }
   },
   {
@@ -4365,7 +4365,7 @@
     "correct": 3,
     "category": "Sachsen-Anhalt",
     "img": {
-      "url": "img/sachsen-anhalt_1.png"
+      "url": "sachsen-anhalt_1"
     }
   },
   {
@@ -4415,7 +4415,7 @@
     "correct": 2,
     "category": "Sachsen-Anhalt",
     "img": {
-      "url": "img/sachsen-anhalt_8.png"
+      "url": "sachsen-anhalt_8"
     }
   },
   {
@@ -4446,7 +4446,7 @@
     "correct": 2,
     "category": "Schleswig-Holstein",
     "img": {
-      "url": "img/schleswig-holstein_1.png"
+      "url": "schleswig-holstein_1"
     }
   },
   {
@@ -4496,7 +4496,7 @@
     "correct": 0,
     "category": "Schleswig-Holstein",
     "img": {
-      "url": "img/schleswig-holstein_8.png"
+      "url": "schleswig-holstein_8"
     }
   },
   {
@@ -4527,7 +4527,7 @@
     "correct": 3,
     "category": "Thüringen",
     "img": {
-      "url": "img/thuringen_1.png"
+      "url": "thuringen_1"
     }
   },
   {
@@ -4577,7 +4577,7 @@
     "correct": 1,
     "category": "Thüringen",
     "img": {
-      "url": "img/thuringen_8.png"
+      "url": "thuringen_8"
     }
   },
   {
