@@ -13,6 +13,7 @@ export const EVENT_IDS = {
   SET_SELECTED_CATEGORY: 'setSelectedCategory',
   SET_SELECTED_LANGUAGE: 'setSelectedLanguage',
   TOGGLE_THEME: 'toggleTheme',
+  SCROLL_TO_TOP: 'scrollToTop',
   
   // Data Events
   FETCH_QUESTIONS: 'fetchQuestions',

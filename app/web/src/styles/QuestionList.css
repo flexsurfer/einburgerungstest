@@ -1,0 +1,20 @@
+.scroll-top-button {
+  position: fixed;
+  bottom: 65px;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--accent-color);
+  background-color: var(--accent-medium);
+  border: none;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}

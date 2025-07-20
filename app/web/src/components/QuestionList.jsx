@@ -1,7 +1,9 @@
-import { useSubscription } from '@flexsurfer/reflex'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { QuestionCard } from './QuestionCard.jsx'
-import { useState, useEffect, useRef, memo } from 'react'
+import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { SUB_IDS } from '/shared/sub-ids'
+import { EVENT_IDS } from '/shared/event-ids'
+import '../styles/QuestionList.css'
 
 export const QuestionList = memo(() => {
 
@@ -9,6 +11,7 @@ export const QuestionList = memo(() => {
 
   const [visibleCount, setVisibleCount] = useState(20)
   const loadMoreRef = useRef(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   useEffect(() => { setVisibleCount(20) }, [filteredQuestions])
 
@@ -30,10 +33,21 @@ export const QuestionList = memo(() => {
     }
   }, [visibleCount, filteredQuestions.length])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = useCallback(() => { dispatch([EVENT_IDS.SCROLL_TO_TOP]) }, [])
+
   const visibleQuestions = filteredQuestions.slice(0, visibleCount)
   return (
     <div>
-      <div style={{ height: '60px'}} />
+      <div style={{ height: '60px' }} />
       <div className="questions-grid">
         {visibleQuestions.map((question) => (
           <QuestionCard key={question.globalIndex} question={question} />
@@ -43,7 +57,15 @@ export const QuestionList = memo(() => {
       {visibleCount < filteredQuestions.length ? (
         <div ref={loadMoreRef} style={{ height: '60px' }} />
       ) : (
-        <div style={{ height: '60px'}} />
+        <div style={{ height: '60px' }} />
+      )}
+      {showScrollTop && (
+        <button
+          className="scroll-top-button"
+          onClick={scrollToTop}
+        >
+          ↑
+        </button>
       )}
     </div>
 

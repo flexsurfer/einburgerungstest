@@ -38,6 +38,10 @@ regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
   return [[EFFECT_IDS.SCROLL_TO_TOP, null]]
 })
 
+regEvent(EVENT_IDS.SCROLL_TO_TOP, () => {
+  return [[EFFECT_IDS.SCROLL_TO_TOP, null]]
+})
+
 regEvent(EVENT_IDS.SET_SELECTED_LANGUAGE, ({ draftDb }, language) => {
   draftDb.selectedLanguage = language
 })
