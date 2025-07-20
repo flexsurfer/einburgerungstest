@@ -38,22 +38,14 @@
 .categories-container {
   position: relative;
   z-index: 101;
-  overflow-x: auto;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
   margin: 0;
   background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
   height: 40px;
   display: flex;
   align-items: center;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.categories-container::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
+  flex: 1;
 }
 
 .categories-row {
@@ -90,4 +82,65 @@
   color: var(--accent-color);
   background-color: var(--accent-light);
   font-weight: 500;
+}
+
+/* Add styles for dropdown */
+.category-select-wrapper {
+  position: relative;
+}
+
+.category-select-button {
+  height: 28px;
+  padding: 0 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-select-button:hover {
+  color: var(--accent-color);
+  background-color: var(--accent-light);
+}
+
+.category-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  z-index: 102;
+  min-width: 200px;
+  margin-top: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.category-popup .category-button {
+  display: flex;
+  width: 100%;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  height: auto;
+  justify-content: flex-start;
+  text-align: left;
+  align-items: center;
+}
+
+.category-popup .category-button:hover {
+  background-color: var(--accent-light);
+}
+
+.filter-icon {
+  margin-left: 0.5rem;
 } 
