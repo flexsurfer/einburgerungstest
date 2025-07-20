@@ -1,8 +1,8 @@
 import { useCallback, useMemo, memo } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { FavoritesButton } from './FavoritesButton.jsx'
-import { EVENT_IDS } from '../../../../packages/shared/src/event-ids.js'
-import { SUB_IDS } from '../../../../packages/shared/src/sub-ids.js'
+import { EVENT_IDS } from '/shared/event-ids'
+import { SUB_IDS } from '/shared/sub-ids'
 import '../styles/Header.css'
 
 const MODES = [

@@ -25,7 +25,7 @@ describe('Data Events', () => {
     expect(initialState.questionsError).toBe(null)
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {
-        url: 'https://www.ebtest.org/data.json',
+        url: 'data.json',
         onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
         onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
       }]

@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react'
-import { useSubscription, dispatch, getSubscriptionValue } from '@flexsurfer/reflex'
+import { useCallback } from 'react'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { AnswerButton } from './AnswerButton.jsx'
-import { EVENT_IDS } from '../../../../packages/shared/src/event-ids.js'
-import { SUB_IDS } from '../../../../packages/shared/src/sub-ids.js'
+import { EVENT_IDS } from '/shared/event-ids'
+import { SUB_IDS } from '/shared/sub-ids'
 
 export const AnswerList = ({question}) => {
     

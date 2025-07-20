@@ -1,6 +1,6 @@
 import { Star } from './Star.jsx'
 import { useSubscription } from '@flexsurfer/reflex'
-import { SUB_IDS } from '../../../../packages/shared/src/sub-ids.js'
+import { SUB_IDS } from '/shared/sub-ids'
 
 export const FavoritesButton = ({ onCategoryClick }) => {
 

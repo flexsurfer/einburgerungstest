@@ -1,7 +1,7 @@
 import { useSubscription } from '@flexsurfer/reflex'
 import { QuestionCard } from './QuestionCard.jsx'
 import { useState, useEffect, useRef, memo } from 'react'
-import { SUB_IDS } from '../../../../packages/shared/src/sub-ids.js'
+import { SUB_IDS } from '/shared/sub-ids'
 
 export const QuestionList = memo(() => {
     
