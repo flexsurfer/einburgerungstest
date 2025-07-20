@@ -171,7 +171,8 @@ describe('Initialize App Event', () => {
     const mockLocalStorage = {
       userAnswers: { 1: 0, 2: 1 },
       favorites: [1, 3],
-      showWelcome: false
+      showWelcome: false,
+      theme: 'dark'
     }
     
     const coeffects = {
@@ -184,7 +185,11 @@ describe('Initialize App Event', () => {
     expect(initialState.userAnswers).toEqual({ 1: 0, 2: 1 })
     expect(initialState.favorites).toEqual([1, 3])
     expect(initialState.showWelcome).toBe(false)
-    expect(result).toEqual([['dispatch', [EVENT_IDS.FETCH_QUESTIONS]]])
+    expect(initialState.theme).toBe('dark')
+    expect(result).toEqual([
+      ['dispatch', [EVENT_IDS.FETCH_QUESTIONS]],
+      [EFFECT_IDS.SET_BODY_THEME, { theme: 'dark' }]
+    ])
   })
 
   it('should handle initializeApp event with no existing data', () => {
@@ -196,7 +201,9 @@ describe('Initialize App Event', () => {
       showWelcome: true
     }
     
-    const mockLocalStorage = {}
+    const mockLocalStorage = {
+      theme: 'light'
+    }
     
     const coeffects = {
       draftDb: initialState,
@@ -208,6 +215,10 @@ describe('Initialize App Event', () => {
     expect(initialState.userAnswers).toEqual({})
     expect(initialState.favorites).toEqual([])
     expect(initialState.showWelcome).toBe(true)
-    expect(result).toEqual([['dispatch', [EVENT_IDS.FETCH_QUESTIONS]]])
+    expect(initialState.theme).toBe('light')
+    expect(result).toEqual([
+      ['dispatch', [EVENT_IDS.FETCH_QUESTIONS]],
+      [EFFECT_IDS.SET_BODY_THEME, { theme: 'light' }]
+    ])
   })
 }) 
