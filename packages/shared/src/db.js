@@ -9,6 +9,7 @@ const initialDb = {
     selectedLanguage: 'en',
     showVocabulary: false,
     vocabularyRender: false,
+    theme: 'light',
 
     // Data state
     questions: [],

@@ -6,12 +6,12 @@
     right: 0;
     width: 100%;
     z-index: 10;
-    background-color: white;
+    background-color: var(--bg-color);
     box-shadow: 0 -4px 12px var(--shadow-color);
 }
 
 .statistics-card {
-    background-color: white;
+    background-color: var(--bg-color);
     max-width: 500px;
     margin: 0 auto;
 }
@@ -107,10 +107,11 @@
     padding: 8px 8px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: white;
+    background: var(--bg-color);
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .clear-button:hover {
@@ -122,10 +123,11 @@
     padding: 8px 8px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: white;
+    background: var(--bg-color);
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .toggle-button:hover {
@@ -135,7 +137,7 @@
 
 .toggle-button.active {
     background: var(--success-color);
-    color: white;
+    color: var(--bg-color);
     border-color: var(--success-color);
 }
 

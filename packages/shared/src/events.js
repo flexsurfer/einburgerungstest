@@ -42,6 +42,14 @@ regEvent(EVENT_IDS.SET_SELECTED_LANGUAGE, ({ draftDb }, language) => {
   draftDb.selectedLanguage = language
 })
 
+regEvent(EVENT_IDS.TOGGLE_THEME, ({ draftDb }) => {
+  draftDb.theme = draftDb.theme === 'light' ? 'dark' : 'light'
+  return [
+    [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'theme', value: draftDb.theme }],
+    [EFFECT_IDS.SET_BODY_THEME, { theme: draftDb.theme }]
+  ]
+})
+
 // Data Events
 
 regEvent(EVENT_IDS.FETCH_QUESTIONS_SUCCESS, ({ draftDb }, data) => {

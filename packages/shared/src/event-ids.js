@@ -12,6 +12,7 @@ export const EVENT_IDS = {
   VOCABULARY_UNMOUNT: 'vocabularyUnmount',
   SET_SELECTED_CATEGORY: 'setSelectedCategory',
   SET_SELECTED_LANGUAGE: 'setSelectedLanguage',
+  TOGGLE_THEME: 'toggleTheme',
   
   // Data Events
   FETCH_QUESTIONS: 'fetchQuestions',

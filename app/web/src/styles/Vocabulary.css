@@ -41,7 +41,7 @@ body.vocabulary-open {
   width: 90%;
   max-width: 700px;
   height: 100vh;
-  background: white;
+  background: var(--bg-color);
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
   padding: 20px;
   display: flex;
@@ -137,9 +137,10 @@ body.vocabulary-open {
   padding: 8px 16px;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  background: white;
+  background: var(--bg-color);
   cursor: pointer;
   transition: all 0.2s ease;
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
@@ -155,7 +156,7 @@ body.vocabulary-open {
 }
 
 .vocabulary-list {
-  background: white;
+  background: var(--bg-color);
   border-radius: 8px;
   box-shadow: 0 2px 4px var(--shadow-color);
   padding: 20px;
@@ -172,6 +173,7 @@ body.vocabulary-open {
   border-bottom: 1px solid var(--border-color);
   font-size: 0.95rem;
   line-height: 1.4;
+  color: var(--text-color);
 }
 
 .vocabulary-item:last-child {
@@ -192,11 +194,13 @@ body.vocabulary-open {
   display: flex;
   align-items: center;
   min-height: 40px;
+  color: var(--text-color);
 }
 
 .separator {
   margin: 0 8px;
   opacity: 0.7;
+  color: var(--text-color);
 }
 
 /* RTL support for Arabic */
@@ -226,4 +230,12 @@ body.vocabulary-open {
     height: 35px;
     font-size: 1.5rem;
   }
+}
+
+body.dark .lang-button.active {
+  color: #121212;
+}
+
+body.dark .vocabulary-item.category {
+  background: var(--accent-medium);
 } 

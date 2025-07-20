@@ -54,6 +54,11 @@ regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
   }
 })
 
+regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
+  document.body.classList.remove('light', 'dark')
+  document.body.classList.add(theme)
+})
+
 // ===== CO-EFFECTS =====
 
 // Local storage co-effect

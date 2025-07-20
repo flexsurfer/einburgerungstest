@@ -8,12 +8,14 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
         draftDb.userAnswers = localStorage?.userAnswers || {}
         draftDb.favorites = localStorage?.favorites || []
         draftDb.showWelcome = localStorage?.showWelcome ?? true
+        draftDb.theme = localStorage?.theme || 'light'
 
         return [
-            ['dispatch', [EVENT_IDS.FETCH_QUESTIONS]]
+            ['dispatch', [EVENT_IDS.FETCH_QUESTIONS]],
+            [EFFECT_IDS.SET_BODY_THEME, { theme: draftDb.theme }]
         ]
     },
-    [[EFFECT_IDS.LOCAL_STORAGE_GET, 'userAnswers'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'favorites'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'showWelcome']]
+    [[EFFECT_IDS.LOCAL_STORAGE_GET, 'userAnswers'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'favorites'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'showWelcome'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'theme']]
 )
 
 regEvent(EVENT_IDS.FETCH_QUESTIONS, ({ draftDb }) => {

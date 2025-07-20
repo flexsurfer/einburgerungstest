@@ -11,5 +11,6 @@ export const EFFECT_IDS = {
   
   // UI effects
   SCROLL_TO_TOP: 'scrollToTop',
-  CONFIRM_CLEAR: 'confirmClear'
+  CONFIRM_CLEAR: 'confirmClear',
+  SET_BODY_THEME: 'setBodyTheme'
 } 

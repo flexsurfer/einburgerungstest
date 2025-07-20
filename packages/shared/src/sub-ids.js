@@ -13,6 +13,7 @@ export const SUB_IDS = {
   SELECTED_LANGUAGE: 'selectedLanguage',
   SHOW_VOCABULARY: 'showVocabulary',
   VOCABULARY_RENDER: 'vocabularyRender',
+  THEME: 'theme',
   
   // Computed subscriptions - derived values
   FAVORITE_COUNT: 'favoriteCount',
