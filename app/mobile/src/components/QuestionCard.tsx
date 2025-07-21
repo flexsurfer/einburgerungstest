@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import React, { memo, useEffect, useState } from 'react'
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import { StarButton } from './StarButton'
 import { AnswerList } from './AnswerList'
 import { Question } from '../types'
@@ -9,7 +9,19 @@ interface QuestionCardProps {
   question: Question
 }
 
+const screenWidth = Dimensions.get('window').width - 80;
+
 export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
+  
+  const [height, setHeight] = useState(1);
+  const uri = question.img?.url ?? undefined;
+console.log(uri ,"uri");
+  useEffect(() => {
+    if (!uri) { return; }
+    const { width, height } = Image.resolveAssetSource(images[uri]);
+    setHeight(screenWidth / (width / height));
+  }, [uri]);
+
   return (
     <View style={styles.questionCard}>
       <View style={styles.questionBadge}>
@@ -19,12 +31,12 @@ export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
         <Text style={styles.questionText}>{question.question}</Text>
         <StarButton globalIndex={question.globalIndex} />
       </View>
-      
-      {question.img && (
+
+      {uri && (
         <View style={styles.questionImageContainer}>
           <Image
-            source={images[question.img.url]}
-            style={styles.questionImage}
+            source={images[uri]}
+            style={{ width: screenWidth, height: height, borderRadius: 8 }}
             resizeMode="contain"
           />
           {question.img.text && (
@@ -32,9 +44,9 @@ export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
           )}
         </View>
       )}
-      
+
       <AnswerList question={question} />
-      
+
       <View style={styles.questionFooter}>
         <Text style={styles.questionCategory}>{question.category}</Text>
       </View>
@@ -68,9 +80,9 @@ const styles = StyleSheet.create({
     top: -10,
     left: -10,
     backgroundColor: '#ffffff',
-    borderRadius: 14,
-    width: 28,
-    height: 28,
+    borderRadius: 16,
+    width: 32,
+    height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -83,7 +95,7 @@ const styles = StyleSheet.create({
   },
   questionBadgeText: {
     color: '#F1C40F',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
   },
   questionContent: {
@@ -99,11 +111,7 @@ const styles = StyleSheet.create({
   },
   questionImageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
-  },
-  questionImage: {
-    width: '100%',
-    height: 200
+    marginBottom: 20
   },
   questionImageText: {
     fontSize: 14,

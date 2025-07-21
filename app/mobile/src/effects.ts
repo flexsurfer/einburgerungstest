@@ -1,6 +1,7 @@
 import { regEffect, dispatch } from "@flexsurfer/reflex"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { EFFECT_IDS } from 'shared/effect-ids'
+import { questionListRef } from './refs';
 
 // Import data files using correct relative paths from mobile app to shared assets
 import questionsData from '../../../packages/shared/assets/data.json'
@@ -111,9 +112,8 @@ regEffect(EFFECT_IDS.FETCH, async ({ url, method = 'GET', onSuccess, onFailure }
     }
 })
 
-// Scroll effect (placeholder for mobile)
 regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
-    console.log('Scroll to top requested - implement with ScrollView ref')
+    questionListRef.current?.scrollToOffset({ animated: true, offset: 0 });
 })
 
 regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }: { value: string }) => {

@@ -1,9 +1,9 @@
 const images: { [key: string]: any } = {
   'aufgabe_21': require('../../../../packages/shared/assets/img/aufgabe_21.png'),
-  'aufgabe_55': require('../../../../packages/shared/assets/img/aufgabe_55.jpg'),
-  'aufgabe_130': require('../../../../packages/shared/assets/img/aufgabe_130.jpg'),
+  'aufgabe_55': require('../../../../packages/shared/assets/img/aufgabe_55.png'),
+  'aufgabe_130': require('../../../../packages/shared/assets/img/aufgabe_130.png'),
   'aufgabe_176': require('../../../../packages/shared/assets/img/aufgabe_176.png'),
-  'aufgabe_187': require('../../../../packages/shared/assets/img/aufgabe_187.jpg'),
+  'aufgabe_187': require('../../../../packages/shared/assets/img/aufgabe_187.png'),
   'aufgabe_226': require('../../../../packages/shared/assets/img/aufgabe_226.png'),
   'baden-wurttemberg_1': require('../../../../packages/shared/assets/img/baden-wurttemberg_1.png'),
   'baden-wurttemberg_8': require('../../../../packages/shared/assets/img/baden-wurttemberg_8.png'),

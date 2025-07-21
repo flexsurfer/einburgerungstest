@@ -20,13 +20,12 @@ describe('Initialize App Event', () => {
 
         const result = handler(coeffects, undefined)
 
-        expect(draftDb.storageLoading).toEqual({
-            userAnswers: null,
-            favorites: null,
-            showWelcome: null,
-            loadedCount: 0
-        })
         expect(result).toEqual([
+            [EFFECT_IDS.LOAD_LOCAL_DATA, {
+                dataType: 'questions',
+                onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
+                onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
+              }],
             [EFFECT_IDS.LOCAL_STORAGE_GET, {
                 key: 'userAnswers',
                 onSuccess: [EVENT_IDS.STORAGE_LOADED],
@@ -36,41 +35,12 @@ describe('Initialize App Event', () => {
                 key: 'favorites',
                 onSuccess: [EVENT_IDS.STORAGE_LOADED],
                 onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
-            }],
-            [EFFECT_IDS.LOCAL_STORAGE_GET, {
-                key: 'showWelcome',
-                onSuccess: [EVENT_IDS.STORAGE_LOADED],
-                onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
             }]
         ])
     })
 })
 
 describe('Data Events', () => {
-    it('should handle fetchQuestions event', () => {
-        const handler = getHandler('event', EVENT_IDS.FETCH_QUESTIONS)
-
-        const initialState = {
-            questionsLoading: false,
-            questionsError: 'previous error'
-        }
-
-        const coeffects = {
-            draftDb: initialState
-        }
-
-        const result = handler(coeffects, undefined)
-
-        expect(initialState.questionsLoading).toBe(true)
-        expect(initialState.questionsError).toBe(null)
-        expect(result).toEqual([
-            [EFFECT_IDS.LOAD_LOCAL_DATA, {
-                dataType: 'questions',
-                onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
-                onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
-            }]
-        ])
-    })
 
     it('should handle fetchVocabulary event', () => {
         const handler = getHandler('event', EVENT_IDS.FETCH_VOCABULARY)

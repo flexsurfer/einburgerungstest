@@ -4,6 +4,7 @@ import { useSubscription } from '@flexsurfer/reflex'
 import { SUB_IDS } from 'shared/sub-ids'
 import { QuestionCard } from './QuestionCard'
 import { Question } from '../types'
+import { questionListRef } from '../refs';
 
 export const QuestionList = memo(() => {
   const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS]) as Question[]
@@ -28,6 +29,7 @@ export const QuestionList = memo(() => {
 
   return (
     <FlatList
+      ref={questionListRef}
       data={filteredQuestions}
       renderItem={renderQuestion}
       keyExtractor={keyExtractor}
