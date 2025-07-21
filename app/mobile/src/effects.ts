@@ -10,41 +10,41 @@ import vocabularyData from '../../../packages/shared/assets/vocabulary_multilang
 // ===== TYPES =====
 
 interface LocalStorageSetPayload {
-  key: string
-  value: any
+    key: string
+    value: any
 }
 
 interface LocalStorageRemovePayload {
-  key: string
+    key: string
 }
 
 interface FetchPayload {
-  url: string
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  onSuccess?: any[]
-  onFailure?: any[]
+    url: string
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+    onSuccess?: any[]
+    onFailure?: any[]
 }
 
 interface LoadLocalDataPayload {
-  dataType: 'questions' | 'vocabulary'
-  onSuccess?: any[]
-  onFailure?: any[]
+    dataType: 'questions' | 'vocabulary'
+    onSuccess?: any[]
+    onFailure?: any[]
 }
 
 interface LocalStorageGetPayload {
-  key: string
-  onSuccess?: any[]
-  onFailure?: any[]
+    key: string
+    onSuccess?: any[]
+    onFailure?: any[]
 }
 
 interface LocalStorageGetResult {
-  key: string
-  value: any
+    key: string
+    value: any
 }
 
 interface LocalStorageGetError {
-  key: string
-  error: string
+    key: string
+    error: string
 }
 
 // ===== EFFECTS =====
@@ -70,7 +70,7 @@ regEffect(EFFECT_IDS.LOCAL_STORAGE_REMOVE, async ({ key }: LocalStorageRemovePay
 regEffect(EFFECT_IDS.LOAD_LOCAL_DATA, async ({ dataType, onSuccess, onFailure }: LoadLocalDataPayload) => {
     try {
         let data
-        
+
         switch (dataType) {
             case 'questions':
                 data = questionsData
@@ -81,7 +81,7 @@ regEffect(EFFECT_IDS.LOAD_LOCAL_DATA, async ({ dataType, onSuccess, onFailure }:
             default:
                 throw new Error(`Unknown data type: ${dataType}`)
         }
-        
+
         if (onSuccess) {
             dispatch([onSuccess[0], data])
         }
@@ -113,7 +113,9 @@ regEffect(EFFECT_IDS.FETCH, async ({ url, method = 'GET', onSuccess, onFailure }
 })
 
 regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
-    questionListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    setTimeout(() => {
+        questionListRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    }, 400);
 })
 
 regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }: { value: string }) => {

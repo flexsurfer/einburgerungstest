@@ -13,9 +13,9 @@ const screenWidth = Dimensions.get('window').width - 80;
 
 export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
   
-  const [height, setHeight] = useState(1);
+  const [height, setHeight] = useState(null);
   const uri = question.img?.url ?? undefined;
-console.log(uri ,"uri");
+
   useEffect(() => {
     if (!uri) { return; }
     const { width, height } = Image.resolveAssetSource(images[uri]);
@@ -32,7 +32,7 @@ console.log(uri ,"uri");
         <StarButton globalIndex={question.globalIndex} />
       </View>
 
-      {uri && (
+      {height && (
         <View style={styles.questionImageContainer}>
           <Image
             source={images[uri]}
