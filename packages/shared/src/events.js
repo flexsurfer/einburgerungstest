@@ -56,7 +56,6 @@ regEvent(EVENT_IDS.TOGGLE_THEME, ({ draftDb }) => {
 })
 
 // Data Events
-
 regEvent(EVENT_IDS.FETCH_QUESTIONS_SUCCESS, ({ draftDb }, data) => {
   draftDb.questionsLoading = false
   draftDb.questionsLoaded = true
@@ -120,4 +119,8 @@ regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {
 regEvent(EVENT_IDS.CLEAR_ANSWERS, ({ draftDb }) => {
   draftDb.userAnswers = {}
   return [[EFFECT_IDS.LOCAL_STORAGE_REMOVE, { key: 'userAnswers' }]]
+})
+
+regEvent(EVENT_IDS.REQUEST_CLEAR_ANSWERS, () => {
+  return [[EFFECT_IDS.CONFIRM_CLEAR]]
 })

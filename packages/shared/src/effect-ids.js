@@ -1,4 +1,3 @@
-// Effect and Co-effect IDs constants
 export const EFFECT_IDS = {
   // Storage effects
   LOCAL_STORAGE_SET: 'localStorageSet',

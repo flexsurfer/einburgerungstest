@@ -1,4 +1,3 @@
-// Event IDs constants
 export const EVENT_IDS = {
   // Application initialization
   INITIALIZE_APP: 'initializeApp',

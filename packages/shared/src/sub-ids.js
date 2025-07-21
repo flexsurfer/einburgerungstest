@@ -1,4 +1,3 @@
-// Subscription IDs constants
 export const SUB_IDS = {
   // Root subscriptions - direct state values
   SHOW_WELCOME: 'showWelcome',

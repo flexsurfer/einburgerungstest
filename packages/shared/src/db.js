@@ -1,6 +1,5 @@
 import { initAppDb } from "@flexsurfer/reflex"
 
-// Initialize the app database with the initial state
 const initialDb = {
     // UI state
     showWelcome: true,
