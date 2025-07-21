@@ -96,5 +96,4 @@ describe('Data Events', () => {
             }]
         ])
     })
-
 })
