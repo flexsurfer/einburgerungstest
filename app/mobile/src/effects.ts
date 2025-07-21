@@ -116,6 +116,10 @@ regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
     console.log('Scroll to top requested - implement with ScrollView ref')
 })
 
+regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }: { value: string }) => {
+    console.log(`Set body overflow to ${value} - implement with ScrollView props if needed`)
+})
+
 // ===== CO-EFFECTS =====
 
 // AsyncStorage read effect for mobile

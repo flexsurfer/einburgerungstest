@@ -59,6 +59,10 @@ regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
   document.body.classList.add(theme)
 })
 
+regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }) => {
+  document.body.style.overflow = value
+})
+
 // ===== CO-EFFECTS =====
 
 // Local storage co-effect

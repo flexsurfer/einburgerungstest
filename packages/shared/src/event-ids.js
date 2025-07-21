@@ -14,6 +14,7 @@ export const EVENT_IDS = {
   SET_SELECTED_LANGUAGE: 'setSelectedLanguage',
   TOGGLE_THEME: 'toggleTheme',
   SCROLL_TO_TOP: 'scrollToTop',
+  SET_BODY_OVERFLOW: 'setBodyOverflow',
   
   // Data Events
   FETCH_QUESTIONS: 'fetchQuestions',

@@ -21,15 +21,17 @@ regEvent(EVENT_IDS.TOGGLE_VOCABULARY, ({ draftDb }) => {
     // Open immediately
     draftDb.showVocabulary = true
     draftDb.vocabularyRender = true
-    // Prevent body scrolling
-    document.body.style.overflow = 'hidden'
+    return [[EFFECT_IDS.SET_BODY_OVERFLOW, { value: 'hidden' }]]
   }
 })
 
 regEvent(EVENT_IDS.VOCABULARY_UNMOUNT, ({ draftDb }) => {
   draftDb.vocabularyRender = false
-  // Restore body scrolling
-  document.body.style.overflow = 'auto'
+  return [[EFFECT_IDS.SET_BODY_OVERFLOW, { value: 'auto' }]]
+})
+
+regEvent(EVENT_IDS.SET_BODY_OVERFLOW, (_, value) => {
+  return [[EFFECT_IDS.SET_BODY_OVERFLOW, { value: value }]]
 })
 
 regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
@@ -85,8 +87,6 @@ regEvent(EVENT_IDS.FETCH_QUESTIONS_FAILURE, ({ draftDb }, error) => {
   draftDb.questionsError = error
 })
 
-
-
 regEvent(EVENT_IDS.FETCH_VOCABULARY_SUCCESS, ({ draftDb }, data) => {
   draftDb.vocabularyLoading = false
   draftDb.vocabularyError = null
@@ -100,8 +100,8 @@ regEvent(EVENT_IDS.FETCH_VOCABULARY_FAILURE, ({ draftDb }, error) => {
 
 // User Actions Events
 regEvent(EVENT_IDS.ANSWER_QUESTION, ({ draftDb }, questionIndex, answerIndex) => {
-    draftDb.userAnswers[questionIndex] = answerIndex
-    return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
+  draftDb.userAnswers[questionIndex] = answerIndex
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
 })
 
 regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {

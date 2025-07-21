@@ -1,7 +1,8 @@
-import { useCallback, memo, useState } from 'react'
+import { useCallback, memo, useState, useEffect } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { FavoritesButton } from './FavoritesButton.jsx'
 import { EVENT_IDS } from '/shared/event-ids'
+import { EFFECT_IDS } from '/shared/effect-ids'
 import { SUB_IDS } from '/shared/sub-ids'
 import '../styles/Header.css'
 
@@ -14,11 +15,20 @@ export const Categories = memo(() => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleCategoryClick = useCallback((category) => { dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category]) }, [])
+  const setOverFlow = useCallback((value) => {dispatch([EFFECT_IDS.SET_BODY_OVERFLOW, value])}, [])
+
+  useEffect(() => {
+    if (isPopupOpen) {
+      setOverFlow('hidden')
+    } else {
+      setOverFlow('auto')
+    }
+  }, [isPopupOpen])
 
   return (
     <div className="categories-container">
       <div className="category-select-wrapper">
-        
+
         <button className="category-select-button" onClick={() => setIsPopupOpen(!isPopupOpen)}>
           {selectedCategory === null ? `All (${questions.length})` : selectedCategory === 'favorites' ? `Favorites (${favoriteCount})` : `${selectedCategory} (${categories.find(([cat]) => cat === selectedCategory)?.[1] || 0})`}
           <span className="filter-icon">▼</span>
