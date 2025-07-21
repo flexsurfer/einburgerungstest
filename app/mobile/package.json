@@ -4,13 +4,7 @@
   "private": true,
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
-    "shared": "*",
-    "@flexsurfer/reflex": "*",
-    "react": "*",
-    "vitest": "*",
-    "immer": "*",
-    "@nx/vite": "*",
-    "react-native": "*"
+    "shared": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

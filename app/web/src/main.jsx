@@ -11,7 +11,7 @@ import './events'
 import './effects'
 
 import App from './App'
-import { enableTracing, enableTracePrint, dispatch, HotReloadWrapper, setDebugEnabled } from '@flexsurfer/reflex'
+import { enableTracing, enableTracePrint, dispatch, setDebugEnabled } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids.js'
 
 if (import.meta.env.MODE === 'development') {
@@ -22,14 +22,11 @@ if (import.meta.env.MODE === 'development') {
 
 dispatch([EVENT_IDS.INITIALIZE_APP])
 
-const useStrictMode = false
+const useStrictMode = true
 const Wrapper = useStrictMode ? StrictMode : Fragment;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Wrapper>
-    {/* HotReloadWrapper is used to force re-mount the app when subs are hot reloaded */}
-    <HotReloadWrapper>
-      <App />
-    </HotReloadWrapper>
+    <App />
   </Wrapper>
 )

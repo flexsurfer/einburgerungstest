@@ -7,13 +7,13 @@ interface AnswerButtonProps {
   index: number
   isCorrect: boolean
   isSelected: boolean
-  isReviewMode: boolean
+  showAnswers: boolean
   disabled: boolean
   onClick: (index: number) => void
   userAnswer: number | undefined
 }
 
-export const AnswerButton = memo<AnswerButtonProps>(({ answer, index, isCorrect, isSelected, isReviewMode, disabled, onClick, userAnswer }) => {
+export const AnswerButton = memo<AnswerButtonProps>(({ answer, index, isCorrect, isSelected, showAnswers, disabled, onClick, userAnswer }) => {
   const handlePress = () => {
     if (!disabled) {
       onClick(index)
@@ -21,7 +21,7 @@ export const AnswerButton = memo<AnswerButtonProps>(({ answer, index, isCorrect,
   }
 
   const getButtonStyle = () => {
-    if (isReviewMode) {
+    if (showAnswers) {
       return isCorrect ? styles.correctButton : styles.defaultButton
     } else if (userAnswer !== undefined) {
       if (isSelected && !isCorrect) {
@@ -34,7 +34,7 @@ export const AnswerButton = memo<AnswerButtonProps>(({ answer, index, isCorrect,
   }
 
   const getTextStyle = () => {
-    if (isReviewMode) {
+    if (showAnswers) {
       return isCorrect ? styles.correctText : styles.defaultText
     } else if (userAnswer !== undefined) {
       if (isSelected && !isCorrect) {
