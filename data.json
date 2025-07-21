@@ -607,7 +607,7 @@
     "correct": 0,
     "category": "Staat",
     "img": {
-      "url": "aufgabe_55.jpg"
+      "url": "aufgabe_55"
     }
   },
   {
@@ -1435,7 +1435,7 @@
     "correct": 0,
     "category": "Politik",
     "img": {
-      "url": "aufgabe_130.jpg",
+      "url": "aufgabe_130",
       "text": "In Anlehnung an Bundeswahlordnung (BWO), Anlage 26"
     }
   },
@@ -2069,7 +2069,7 @@
     "correct": 3,
     "category": "Geschichte",
     "img": {
-      "url": "aufgabe_187.jpg"
+      "url": "aufgabe_187"
     }
   },
   {
