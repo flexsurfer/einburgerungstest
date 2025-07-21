@@ -34,12 +34,11 @@ regEvent(EVENT_IDS.VOCABULARY_UNMOUNT, ({ draftDb }) => {
 
 regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
   draftDb.selectedCategory = category
-  //TODO fix bug in reflex, it's should be possible to call effect without parameters
-  return [[EFFECT_IDS.SCROLL_TO_TOP, null]]
+  return [[EFFECT_IDS.SCROLL_TO_TOP]]
 })
 
 regEvent(EVENT_IDS.SCROLL_TO_TOP, () => {
-  return [[EFFECT_IDS.SCROLL_TO_TOP, null]]
+  return [[EFFECT_IDS.SCROLL_TO_TOP]]
 })
 
 regEvent(EVENT_IDS.SET_SELECTED_LANGUAGE, ({ draftDb }, language) => {

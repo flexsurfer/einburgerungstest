@@ -38,7 +38,7 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
-    "@flexsurfer/reflex": "^0.1.5",
+    "@flexsurfer/reflex": "^0.1.7",
     "immer": "^10.1.1",
     "react": "19.1.0",
     "react-dom": "^19.1.0",
