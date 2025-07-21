@@ -42,7 +42,7 @@ export const QuestionList = memo(() => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const scrollToTop = useCallback(() => { dispatch([EVENT_IDS.SCROLL_TO_TOP]) }, [])
+  const scrollToTop = useCallback(() => { dispatch([EVENT_IDS.SCROLL_TO_TOP, 'smooth']) }, [])
 
   const visibleQuestions = filteredQuestions.slice(0, visibleCount)
   return (

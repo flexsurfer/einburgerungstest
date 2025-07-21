@@ -41,26 +41,26 @@ regEffect(EFFECT_IDS.FETCH, async ({ url, method = 'GET', onSuccess, onFailure }
 })
 
 // Scroll effect
-regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
+regEffect(EFFECT_IDS.SCROLL_TO_TOP, (behavior = 'auto') => {
     window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: behavior
     })
 })
 
 regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
-  if (window.confirm("Are you sure you want to clear answers for all categories?")) {
-    dispatch([EVENT_IDS.CLEAR_ANSWERS])
-  }
+    if (window.confirm("Are you sure you want to clear answers for all categories?")) {
+        dispatch([EVENT_IDS.CLEAR_ANSWERS])
+    }
 })
 
 regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
-  document.body.classList.remove('light', 'dark')
-  document.body.classList.add(theme)
+    document.body.classList.remove('light', 'dark')
+    document.body.classList.add(theme)
 })
 
 regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }) => {
-  document.body.style.overflow = value
+    document.body.style.overflow = value
 })
 
 // ===== CO-EFFECTS =====
