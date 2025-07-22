@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
-    "shared": "*"
+    "shared": "*",
+    "react-native": "0.80.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
