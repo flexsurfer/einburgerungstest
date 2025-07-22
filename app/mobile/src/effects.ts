@@ -1,6 +1,8 @@
 import { regEffect, dispatch } from "@flexsurfer/reflex"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { EFFECT_IDS } from 'shared/effect-ids'
+import { EVENT_IDS } from 'shared/event-ids'
+import { Alert } from 'react-native';
 import { questionListRef } from './refs';
 
 // Import data files using correct relative paths from mobile app to shared assets
@@ -122,6 +124,17 @@ regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }: { value: string }) => {
 })
 
 regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
+})
+
+regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
+  Alert.alert(
+    'Clear Answers',
+    'Are you sure you want to clear answers for all categories?',
+    [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'OK', onPress: () => dispatch([EVENT_IDS.CLEAR_ANSWERS]) }
+    ]
+  )
 })
 
 // ===== CO-EFFECTS =====

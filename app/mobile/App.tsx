@@ -5,6 +5,7 @@ import { EVENT_IDS } from 'shared/event-ids'
 import { useColors, type Colors } from './src/theme'
 import { QuestionList } from './src/components/QuestionList'
 import { Header } from './src/components/Header'
+import { Statistics } from './src/components/Statistics'
 
 function App() {
   const themeColors = useColors()
@@ -22,6 +23,7 @@ function App() {
       <View style={{ flex: 1, zIndex: 0 }}>
         <QuestionList />
       </View>
+      <Statistics />
     </SafeAreaView>
   )
 }
