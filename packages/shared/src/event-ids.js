@@ -27,5 +27,6 @@ export const EVENT_IDS = {
   ANSWER_QUESTION: 'answerQuestion',
   TOGGLE_FAVORITE: 'toggleFavorite',
   CLEAR_ANSWERS: 'clearAnswers',
-  REQUEST_CLEAR_ANSWERS: 'requestClearAnswers'
+  REQUEST_CLEAR_ANSWERS: 'requestClearAnswers',
+  SYSTEM_THEME_CHANGED: 'systemThemeChanged'
 } 

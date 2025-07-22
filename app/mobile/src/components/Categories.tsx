@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Modal, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids'
 import { SUB_IDS } from 'shared/sub-ids'
+import { useColors, type Colors } from '../theme'
 import { FavoritesButton } from './FavoritesButton'
 import { Question } from '../types'
 
@@ -38,15 +39,17 @@ export const Categories = () => {
       ? `Favorites (${favoriteCount})` 
       : `${selectedCategory} (${categories?.find(([cat]) => cat === selectedCategory)?.[1] ?? 0})`
 
+  const colors = useColors()
+
   return (
-    <View style={styles.categoriesContainer}>
+    <View style={styles(colors).categoriesContainer}>
       <TouchableOpacity 
-        style={styles.categorySelectButton}
+        style={styles(colors).categorySelectButton}
         onPress={openPopup}
         ref={buttonRef}
       >
-        <Text style={styles.buttonText}>{displayText}</Text>
-        <Text style={styles.filterIcon}>▼</Text>
+        <Text style={styles(colors).buttonText}>{displayText}</Text>
+        <Text style={styles(colors).filterIcon}>▼</Text>
       </TouchableOpacity>
       {isPopupOpen && (
         <Modal
@@ -58,7 +61,7 @@ export const Categories = () => {
           <TouchableWithoutFeedback onPress={() => setIsPopupOpen(false)}>
             <View style={{ flex: 1 }}>
               <TouchableWithoutFeedback>
-                <View style={[styles.categoryPopup, {
+                <View style={[styles(colors).categoryPopup, {
                   position: 'absolute',
                   top: popupPosition.y + popupPosition.height,
                   left: popupPosition.x,
@@ -67,9 +70,9 @@ export const Categories = () => {
                   <ScrollView>
                     <TouchableOpacity
                       onPress={() => handleCategoryClick(null)}
-                      style={[styles.categoryButton, selectedCategory === null && styles.active]}
+                      style={[styles(colors).categoryButton, selectedCategory === null && styles(colors).active]}
                     >
-                      <Text style={[styles.buttonText, selectedCategory === null && styles.activeText]}>All ({questions?.length ?? 0})</Text>
+                      <Text style={[styles(colors).buttonText, selectedCategory === null && styles(colors).activeText]}>All ({questions?.length ?? 0})</Text>
                     </TouchableOpacity>
                     <FavoritesButton 
                       onPress={() => handleCategoryClick('favorites')}
@@ -78,9 +81,9 @@ export const Categories = () => {
                       <TouchableOpacity
                         key={category}
                         onPress={() => handleCategoryClick(category)}
-                        style={[styles.categoryButton, selectedCategory === category && styles.active]}
+                        style={[styles(colors).categoryButton, selectedCategory === category && styles(colors).active]}
                       >
-                        <Text style={[styles.buttonText, selectedCategory === category && styles.activeText]}>{category} ({count})</Text>
+                        <Text style={[styles(colors).buttonText, selectedCategory === category && styles(colors).activeText]}>{category} ({count})</Text>
                       </TouchableOpacity>
                     )) ?? null}
                   </ScrollView>
@@ -94,7 +97,7 @@ export const Categories = () => {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = (colors: Colors) => StyleSheet.create({
   categoriesContainer: {
     flex: 1,
   },
@@ -107,25 +110,25 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 14,
-    color: '#000',
+    color: colors.textColor,
     fontWeight: '500',
   },
   filterIcon: {
     marginLeft: 4,
     fontSize: 14,
-    color: '#000',
+    color: colors.textColor,
   },
   categoryPopup: {
     position: 'absolute',
     top: 40,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgColor,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: colors.borderColor,
     borderRadius: 6,
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -139,9 +142,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   active: {
-    backgroundColor: '#e6f3ff',
+    backgroundColor: colors.accentMedium,
   },
   activeText: {
-    color: '#007bff',
+    color: colors.accentColor,
   },
 }) 

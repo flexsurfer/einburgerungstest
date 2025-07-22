@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Answer } from '../types'
+import { type Colors, useColors } from '../theme'
 
 interface AnswerButtonProps {
   answer: Answer
@@ -22,74 +23,76 @@ export const AnswerButton = memo<AnswerButtonProps>(({ answer, index, isCorrect,
 
   const getButtonStyle = () => {
     if (showAnswers) {
-      return isCorrect ? styles.correctButton : styles.defaultButton
+      return isCorrect ? styles(themeColors).correctButton : styles(themeColors).defaultButton
     } else if (userAnswer !== undefined) {
       if (isSelected && !isCorrect) {
-        return styles.incorrectButton
+        return styles(themeColors).incorrectButton
       } else if (isCorrect) {
-        return styles.correctButton
+        return styles(themeColors).correctButton
       }
     }
-    return styles.defaultButton
+    return styles(themeColors).defaultButton
   }
 
   const getTextStyle = () => {
     if (showAnswers) {
-      return isCorrect ? styles.correctText : styles.defaultText
+      return isCorrect ? styles(themeColors).correctText : styles(themeColors).defaultText
     } else if (userAnswer !== undefined) {
       if (isSelected && !isCorrect) {
-        return styles.incorrectText
+        return styles(themeColors).incorrectText
       } else if (isCorrect) {
-        return styles.correctText
+        return styles(themeColors).correctText
       }
     }
-    return styles.defaultText
+    return styles(themeColors).defaultText
   }
+
+  const themeColors = useColors() as Colors
 
   return (
     <TouchableOpacity
-      style={[styles.answerButton, getButtonStyle()]}
+      style={[styles(themeColors).answerButton, getButtonStyle()]}
       onPress={handlePress}
       activeOpacity={0.7}
       disabled={disabled}
     >
-      <Text style={[styles.answerText, getTextStyle()]}>
+      <Text style={[styles(themeColors).answerText, getTextStyle()]}>
         {answer}
       </Text>
     </TouchableOpacity>
   )
 })
 
-const styles = StyleSheet.create({
+const styles = (colors: Colors) => StyleSheet.create({
   answerButton: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E8E8E8',
+    borderColor: colors.borderColor,
   },
   answerText: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#2C3E50',
+    color: colors.textColor,
   },
   defaultButton: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.bgColor,
   },
   defaultText: {},
   correctButton: {
-    backgroundColor: 'rgba(40, 167, 69, 0.1)',
-    borderColor: '#28a745',
+    backgroundColor: colors.successLight,
+    borderColor: colors.successColor,
   },
   correctText: {
-    color: '#28a745',
+    color: colors.successColor,
   },
   incorrectButton: {
-    backgroundColor: 'rgba(231, 76, 60, 0.1)',
-    borderColor: '#E74C3C',
+    backgroundColor: colors.errorLight,
+    borderColor: colors.errorColor,
   },
   incorrectText: {
-    color: '#E74C3C',
+    color: colors.errorColor,
   },
 }) 

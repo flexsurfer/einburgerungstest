@@ -1,12 +1,14 @@
-import { Text, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
+import { useColors, type Colors } from '../theme'
 
 export const Star = () => {
-  return <Text style={styles.star}>★</Text>
+  const colors = useColors()
+  return <Text style={styles(colors).star}>★</Text>
 }
 
-const styles = StyleSheet.create({
+const styles = (colors: Colors) => ({
   star: {
     fontSize: 20,
-    color: '#F1C40F',
+    color: colors.accentColor,
   }
 }) 

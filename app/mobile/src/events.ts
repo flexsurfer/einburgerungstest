@@ -1,6 +1,7 @@
 import { regEvent } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids'
 import { EFFECT_IDS } from 'shared/effect-ids'
+import { Appearance } from 'react-native'
 
 interface StorageLoadedPayload {
   key: string
@@ -27,6 +28,11 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
       }],
       [EFFECT_IDS.LOCAL_STORAGE_GET, {
         key: 'favorites',
+        onSuccess: [EVENT_IDS.STORAGE_LOADED],
+        onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+      }],
+      [EFFECT_IDS.LOCAL_STORAGE_GET, {
+        key: 'theme',
         onSuccess: [EVENT_IDS.STORAGE_LOADED],
         onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
       }]
@@ -59,6 +65,15 @@ regEvent(EVENT_IDS.STORAGE_LOADED,
       case 'favorites':
         draftDb.favorites = value || []
         break
+      case 'theme':
+        if (value) {
+          draftDb.theme = value
+          draftDb.useSystemTheme = false
+        } else {
+          draftDb.theme = Appearance.getColorScheme() || 'light'
+          draftDb.useSystemTheme = true
+        }
+        break
     }
   }
 )
@@ -76,6 +91,19 @@ regEvent(EVENT_IDS.STORAGE_LOAD_FAILED,
       case 'favorites':
         draftDb.favorites = []
         break
+      case 'theme':
+        draftDb.theme = Appearance.getColorScheme() || 'light'
+        draftDb.useSystemTheme = true
+        break
     }
   }
-) 
+)
+
+regEvent(EVENT_IDS.SYSTEM_THEME_CHANGED, ({ draftDb }, scheme) => {
+  if (draftDb.useSystemTheme) {
+    draftDb.theme = scheme || 'light'
+    return [
+      [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'theme', value: draftDb.theme }]
+    ]
+  }
+}) 

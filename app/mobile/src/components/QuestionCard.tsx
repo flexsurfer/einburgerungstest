@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
+import { useColors, type Colors } from '../theme'
 import { StarButton } from './StarButton'
 import { AnswerList } from './AnswerList'
 import { Question } from '../types'
@@ -22,45 +23,47 @@ export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
     setHeight(screenWidth / (width / height));
   }, [uri]);
 
+  const colors = useColors();
+
   return (
-    <View style={styles.questionCard}>
-      <View style={styles.questionBadge}>
-        <Text style={styles.questionBadgeText}>{question.globalIndex}</Text>
+    <View style={styles(colors).questionCard}>
+      <View style={styles(colors).questionBadge}>
+        <Text style={styles(colors).questionBadgeText}>{question.globalIndex}</Text>
       </View>
-      <View style={styles.questionHeader}>
-        <Text style={styles.questionText}>{question.question}</Text>
+      <View style={styles(colors).questionHeader}>
+        <Text style={styles(colors).questionText}>{question.question}</Text>
         <StarButton globalIndex={question.globalIndex} />
       </View>
 
       {height && (
-        <View style={styles.questionImageContainer}>
+        <View style={styles(colors).questionImageContainer}>
           <Image
             source={images[uri]}
             style={{ width: screenWidth, height: height, borderRadius: 8 }}
             resizeMode="contain"
           />
           {question.img.text && (
-            <Text style={styles.questionImageText}>{question.img.text}</Text>
+            <Text style={styles(colors).questionImageText}>{question.img.text}</Text>
           )}
         </View>
       )}
 
       <AnswerList question={question} />
 
-      <View style={styles.questionFooter}>
-        <Text style={styles.questionCategory}>{question.category}</Text>
+      <View style={styles(colors).questionFooter}>
+        <Text style={styles(colors).questionCategory}>{question.category}</Text>
       </View>
     </View>
   )
 })
 
-const styles = StyleSheet.create({
+const styles = (colors: Colors) => StyleSheet.create({
   questionCard: {
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.bgColor,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E8E8E8',
-    shadowColor: '#000',
+    borderColor: colors.borderColor,
+    shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -79,22 +82,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     left: -10,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.bgColor,
     borderRadius: 16,
     width: 32,
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#F1C40F',
-    shadowColor: '#000',
+    borderColor: colors.accentColor,
+    shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
   },
   questionBadgeText: {
-    color: '#F1C40F',
+    color: colors.accentColor,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
   questionText: {
     fontSize: 17,
     fontWeight: '500',
-    color: '#2C3E50',
+    color: colors.textColor,
     lineHeight: 24,
     flex: 1,
   },
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
   },
   questionImageText: {
     fontSize: 14,
-    color: '#2C3E50',
+    color: colors.textColor,
     marginTop: 8,
     textAlign: 'center',
     fontStyle: 'italic',
@@ -125,11 +128,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 7,
     borderTopWidth: 1,
-    borderTopColor: '#E8E8E8',
+    borderTopColor: colors.borderColor,
   },
   questionCategory: {
     fontSize: 13,
-    color: '#2C3E50',
+    color: colors.textColor,
     opacity: 0.5,
     textAlign: 'right',
   },

@@ -1,6 +1,7 @@
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { useSubscription } from '@flexsurfer/reflex'
 import { SUB_IDS } from 'shared/sub-ids'
+import { useColors, type Colors } from '../theme'
 import { Star } from './Star'
 
 export const FavoritesButton = ({ onPress }) => {
@@ -9,18 +10,20 @@ export const FavoritesButton = ({ onPress }) => {
 
   const isActive = selectedCategory === 'favorites'
 
+  const colors = useColors()
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.categoryButton, isActive && styles.active]}
+      style={[styles(colors).categoryButton, isActive && styles(colors).active]}
     >
       <Star />
-      <Text style={[styles.text, isActive && styles.activeText]}>Favorites ({favoriteCount})</Text>
+      <Text style={[styles(colors).text, isActive && styles(colors).activeText]}>Favorites ({favoriteCount})</Text>
     </TouchableOpacity>
   )
 }
 
-const styles = StyleSheet.create({
+const styles = (colors: Colors) => StyleSheet.create({
   categoryButton: {
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -28,15 +31,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   active: {
-    backgroundColor: '#e6f3ff',
+    backgroundColor: colors.accentMedium,
   },
   text: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#000',
+    color: colors.textColor,
     fontWeight: '500',
   },
   activeText: {
-    color: '#007bff',
+    color: colors.accentColor,
   },
 }) 

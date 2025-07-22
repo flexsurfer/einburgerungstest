@@ -119,7 +119,9 @@ regEffect(EFFECT_IDS.SCROLL_TO_TOP, () => {
 })
 
 regEffect(EFFECT_IDS.SET_BODY_OVERFLOW, ({ value }: { value: string }) => {
-    console.log(`Set body overflow to ${value} - implement with ScrollView props if needed`)
+})
+
+regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
 })
 
 // ===== CO-EFFECTS =====
