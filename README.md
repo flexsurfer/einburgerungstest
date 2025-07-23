@@ -1,4 +1,3 @@
-
 # Einbürgerungstest
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -13,7 +12,7 @@ If you like it, please give it a ⭐ on [GitHub](https://github.com/flexsurfer/e
 
 Questions are based on the official dataset from: [www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
 
-The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Reflex](https://github.com/flexsurfer/reflex) library and a monorepo setup using Nx.
+The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Reflex](https://github.com/flexsurfer/reflex) library and a monorepo setup.
 
 ## Features
 
@@ -33,7 +32,6 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 - **Frontend:** React (Web), React Native (Mobile)
 - **State Management:** [Reflex](https://github.com/flexsurfer/reflex) (custom state management with events, effects, and subscriptions)
 - **Build Tools:** Vite (Web), Metro (Mobile)
-- **Monorepo:** Nx
 - **Package Manager:** pnpm
 - **Testing:** Vitest
 
@@ -60,11 +58,12 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 
 ## Usage
 
+- Test: `pnpm test` (runs all tests)
+
 ### Web App
 
 - Development: `pnpm dev:web` (runs on http://localhost:4200)
-- Build: `pnpm build` (includes web build)
-- Test: `pnpm test` (runs all tests, including web)
+- Build: `pnpm build:web` 
 
 ### Mobile App
 
@@ -72,19 +71,12 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 - Run on Android: `pnpm dev:run-android`
 - Run on iOS: `pnpm dev:run-ios`
 - For iOS, ensure Pods are installed: `cd app/mobile/ios && bundle exec pod install`
-- Test: `pnpm test` (includes mobile, web and shared tests)
 
 ### Shared Package
 
 The shared package contains common logic, data, events, and subscriptions used by both web and mobile apps.
 
 - Test shared: `pnpm test:shared`
-
-## Development
-
-- Lint: `pnpm lint`
-- Graph dependencies: `pnpm graph`
-- Build all: `pnpm build`
 
 ## Contributing
 

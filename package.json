@@ -2,46 +2,35 @@
   "name": "einburgerungstest",
   "private": true,
   "scripts": {
-    "dev:web": "nx serve web",
-    "dev:mobile": "nx run mobile:start",
-    "dev:run-ios": "nx run mobile:run-ios",
-    "dev:run-android": "nx run mobile:run-android",
-    "test:shared": "nx run shared:test",
-    "test": "nx run-many -t test",
-    "build": "nx run-many -t build",
-    "build:web": "nx run web:vite:build",
-    "build:android": "nx run mobile:build-android",
-    "deploy:web": "gh-pages -d ./app/web/dist",
-    "lint": "nx run-many -t lint",
-    "graph": "nx graph"
+    "test": "pnpm --filter ./packages/shared exec vitest run && pnpm --filter ./app/web exec vitest run && pnpm --filter ./app/mobile exec vitest run",
+    "test:web": "pnpm --filter ./app/web exec vitest run",
+    "test:mobile": "pnpm --filter ./app/mobile exec vitest run",
+    "test:shared": "pnpm --filter ./packages/shared exec vitest run",
+    "dev:web": "pnpm --filter ./app/web exec vite",
+    "dev:mobile": "pnpm --filter ./app/mobile exec react-native start",
+    "dev:run-android": "pnpm --filter ./app/mobile exec react-native run-android",
+    "dev:run-ios": "pnpm --filter ./app/mobile exec react-native run-ios",
+    "build:web": "pnpm --filter ./app/web exec vite build",
+    "build": "pnpm build:web"
   },
+  "workspaces": [
+    "app/*",
+    "packages/*"
+  ],
   "devDependencies": {
-    "@nx/eslint": "21.2.4",
-    "@nx/js": "21.2.4",
-    "@nx/react-native": "21.2.4",
-    "@nx/vite": "21.2.4",
-    "@nx/web": "21.2.4",
-    "@react-native-community/cli": "19.0.0",
-    "@swc-node/register": "~1.9.1",
-    "@swc/core": "~1.5.7",
-    "@swc/helpers": "~0.5.11",
-    "@vitejs/plugin-react": "^4.2.0",
-    "@vitest/ui": "^3.0.0",
     "eslint": "~8.57.0",
     "gh-pages": "^6.3.0",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
-    "nx": "21.2.4",
     "prettier": "^2.6.2",
     "typescript": "~5.8.2",
     "vite": "^6.3.5",
     "vitest": "^3.0.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.27.6",
     "@flexsurfer/reflex": "^0.1.7",
     "immer": "^10.1.1",
-    "react": "19.1.0",
-    "react-dom": "^19.1.0",
-    "react-native": "0.80.1"
+    "react": "19.1.0"
   }
 }

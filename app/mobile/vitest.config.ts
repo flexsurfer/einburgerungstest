@@ -1,8 +1,14 @@
 import { defineConfig } from 'vitest/config'
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import path from 'node:path'
 
 export default defineConfig({
-  plugins: [nxViteTsPaths()],
+  resolve: {
+    alias: {
+      shared: path.resolve(__dirname, '../../packages/shared/src'),
+      'react-native': path.resolve(__dirname, './test/mocks/react-native.ts'),
+    },
+  },
+  plugins: [],
   test: {
     globals: true,
     environment: 'node',

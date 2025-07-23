@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "react-native": "0.80.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
-    "shared": "*",
-    "react-native": "0.80.1"
+    "shared": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -22,7 +22,8 @@
     "@types/react": "^19.1.0",
     "eslint": "^8.19.0",
     "prettier": "2.8.8",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18"

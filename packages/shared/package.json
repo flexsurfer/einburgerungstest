@@ -3,21 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "src/index.js",
-  "module": "src/index.js",
-  "types": "src/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/index.js",
-      "require": "./src/index.js"
-    },
-    "./*": {
-      "types": "./src/*.d.ts",
-      "import": "./src/*",
-      "require": "./src/*"
-    }
-  },
+
   "devDependencies": {
     "vitest": "^3.0.0"
   }

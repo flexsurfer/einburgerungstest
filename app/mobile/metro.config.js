@@ -4,7 +4,6 @@ const path = require('path');
 const projectRoot = __dirname;
 const monorepoRoot = path.resolve(projectRoot, '../../');
 const sharedPath = path.resolve(projectRoot, '../../packages/shared/src');
-const sharedAssetsPath = path.resolve(projectRoot, '../../packages/shared/assets');
 const rootNodeModules = path.resolve(projectRoot, '../../node_modules');
 
 const config = {
@@ -12,7 +11,6 @@ const config = {
   resetCache: true,
   watchFolders: [
     monorepoRoot,
-    sharedAssetsPath,
     rootNodeModules
   ],
   resolver: {

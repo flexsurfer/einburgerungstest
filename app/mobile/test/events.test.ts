@@ -5,7 +5,7 @@ import { EVENT_IDS } from 'shared/event-ids.js'
 import { EFFECT_IDS } from 'shared/effect-ids.js'
 
 import '../src/events.ts'
-import 'shared/events.ts'
+import 'shared/events.js'
 
 describe('Initialize App Event', () => {
     it('should handle initializeApp event', () => {
@@ -35,6 +35,11 @@ describe('Initialize App Event', () => {
                 key: 'favorites',
                 onSuccess: [EVENT_IDS.STORAGE_LOADED],
                 onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+            }],
+            [EFFECT_IDS.LOCAL_STORAGE_GET, {
+              key: 'theme',
+              onSuccess: [EVENT_IDS.STORAGE_LOADED],
+              onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
             }]
         ])
     })
