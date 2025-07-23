@@ -22,16 +22,34 @@ regSub(SUB_IDS.FAVORITE_COUNT,
   () => [[SUB_IDS.FAVORITES]]
 )
 
+regSub(SUB_IDS.WRONG_COUNT,
+  (userAnswers, questions) => {
+    return questions.filter(q => {
+      const ua = userAnswers[q.globalIndex];
+      return ua !== undefined && ua !== q.correct;
+    }).length;
+  },
+  () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.QUESTIONS]]
+)
+
+//TODO: it's not really efficient, could be improved, but it's not a big deal for now
+// each time user changes fav or answer, questions are filtered again, and in reflex it compare the result, but it doesn't trigger a re-render
+// so we have this unnecessary computations on every fav or answer change
 regSub(SUB_IDS.FILTERED_QUESTIONS,
-  (questions, selectedCategory, favorites) => {
+  (questions, selectedCategory, favorites, userAnswers) => {
     if (selectedCategory === 'favorites') {
       return questions.filter(q => favorites.includes(q.globalIndex))
+    } else if (selectedCategory === 'wrong') {
+      return questions.filter(q => {
+        const ua = userAnswers[q.globalIndex];
+        return ua !== undefined && ua !== q.correct;
+      })
     }
     return selectedCategory
       ? questions.filter(q => q.category === selectedCategory)
       : questions
   },
-  () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES]]
+  () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES], [SUB_IDS.USER_ANSWERS]]
 )
 
 regSub(SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX,
@@ -62,4 +80,19 @@ regSub(SUB_IDS.STATISTICS,
     }
   },
   () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.FILTERED_QUESTIONS]]
+)
+
+regSub(SUB_IDS.SELECTED_CATEGORY_COUNT,
+  (selectedCategory, categories) => {
+    if (selectedCategory && selectedCategory !== 'favorites' && selectedCategory !== 'wrong') {
+      for (const group of categories) {
+        const found = group.items.find(([cat]) => cat === selectedCategory);
+        if (found) {
+          return found[1];
+        }
+      }
+    }
+    return 0;
+  },
+  () => [[SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.CATEGORIES]]
 )

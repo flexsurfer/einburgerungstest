@@ -16,8 +16,10 @@ export const SUB_IDS = {
   
   // Computed subscriptions - derived values
   FAVORITE_COUNT: 'favoriteCount',
+  WRONG_COUNT: 'wrongCount',
   FILTERED_QUESTIONS: 'filteredQuestions',
   USER_ANSWER_BY_QUESTION_INDEX: 'userAnswerByQuestionIndex',
   IS_FAVORITE_BY_GLOBAL_INDEX: 'isFavoriteByGlobalIndex',
-  STATISTICS: 'statistics'
+  STATISTICS: 'statistics',
+  SELECTED_CATEGORY_COUNT: 'selectedCategoryCount'
 } 

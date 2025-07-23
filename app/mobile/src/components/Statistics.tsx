@@ -23,7 +23,7 @@ export const Statistics = memo(() => {
                     </View>
                     <View style={styles(colors).statItem}>
                         <View style={styles(colors).statIconIncorrect}>
-                            <Text style={styles(colors).statIconText}>✗</Text>
+                            <Text style={styles(colors).statIconText}>X</Text>
                         </View>
                         <Text style={styles(colors).statNumber}>{stats.incorrect}</Text>
                     </View>

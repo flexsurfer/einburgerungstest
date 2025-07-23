@@ -4,8 +4,8 @@ import { QuestionList } from './components/QuestionList.jsx'
 import { Welcome } from './components/Welcome.jsx'
 import { Vocabulary } from './components/Vocabulary.jsx'
 import { Statistics } from './components/Statistics.jsx'
-import { EVENT_IDS } from '/shared/event-ids'
-import { SUB_IDS } from '/shared/sub-ids'
+import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from 'shared/sub-ids'
 import './styles/App.css'
 
 function App() {

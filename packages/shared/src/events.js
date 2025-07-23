@@ -75,11 +75,37 @@ regEvent(EVENT_IDS.FETCH_QUESTIONS_SUCCESS, ({ draftDb }, data) => {
     return acc
   }, {})
 
-  // Convert to array and sort by count in descending order
-  const sortedCategories = Object.entries(categoryCount)
-    .sort((a, b) => b[1] - a[1])
+  const lands = [
+    'Baden-Württemberg',
+    'Bayern',
+    'Berlin',
+    'Brandenburg',
+    'Bremen',
+    'Hamburg',
+    'Hessen',
+    'Mecklenburg-Vorpommern',
+    'Niedersachsen',
+    'Nordrhein-Westfalen',
+    'Rheinland-Pfalz',
+    'Saarland',
+    'Sachsen',
+    'Sachsen-Anhalt',
+    'Schleswig-Holstein',
+    'Thüringen'
+  ];
 
-  draftDb.categories = sortedCategories
+  const themeItems = Object.entries(categoryCount)
+    .filter(([cat]) => !lands.includes(cat))
+    .sort((a, b) => a[0].localeCompare(b[0]));
+
+  const landItems = Object.entries(categoryCount)
+    .filter(([cat]) => lands.includes(cat))
+    .sort((a, b) => a[0].localeCompare(b[0]));
+
+  draftDb.categories = [
+    { title: 'Themes', items: themeItems },
+    { title: 'Bundesländer', items: landItems }
+  ];
 })
 
 regEvent(EVENT_IDS.FETCH_QUESTIONS_FAILURE, ({ draftDb }, error) => {

@@ -241,8 +241,8 @@ describe('Event Handlers', () => {
 
     // Check categories are sorted by count
     expect(initialState.categories).toEqual([
-        ['Politik', 2],
-        ['Geschichte', 1]
+        { title: 'Themes', items: [ ['Geschichte', 1], ['Politik', 2] ] },
+        { title: 'Bundesländer', items: [] }
     ])
 })
 

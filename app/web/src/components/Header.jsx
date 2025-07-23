@@ -1,7 +1,7 @@
 import { useCallback, memo } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { EVENT_IDS } from '/shared/event-ids'
-import { SUB_IDS } from '/shared/sub-ids'
+import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from 'shared/sub-ids'
 import { Categories } from './Categories.jsx'
 
 import '../styles/Header.css'

@@ -21,6 +21,7 @@ export const StarButton = memo<StarButtonProps>(({ globalIndex }) => {
       style={styles.starButton}
       onPress={handlePress}
       activeOpacity={0.7}
+      hitSlop={{ top: 10, bottom: 10, left: 20, right: 20 }}
     >
       <Text style={[styles.starIcon, isFavorite ? styles.starIconActive : styles.starIconInactive]}>
         {isFavorite ? '★' : '☆'}

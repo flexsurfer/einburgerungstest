@@ -1,7 +1,7 @@
 import { useCallback, memo } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { EVENT_IDS } from '/shared/event-ids'
-import { SUB_IDS } from '/shared/sub-ids'
+import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from 'shared/sub-ids'
 import '../styles/Statistics.css'
 
 export const Statistics = memo(() => {
@@ -21,7 +21,7 @@ export const Statistics = memo(() => {
                         <span className="stat-number">{stats.correct}</span>
                     </div>
                     <div className="stat-item incorrect">
-                        <div className="stat-icon">✗</div>
+                        <div className="stat-icon">X</div>
                         <span className="stat-number">{stats.incorrect}</span>
                     </div>
                     <div className="stat-item accuracy" title="Точность ответов">

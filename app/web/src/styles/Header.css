@@ -143,4 +143,13 @@
 
 .filter-icon {
   margin-left: 0.5rem;
+}
+
+/* Group title styles */
+.category-popup h3 {
+  margin: 0.5rem 0 0.25rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
 } 

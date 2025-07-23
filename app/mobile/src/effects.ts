@@ -6,8 +6,8 @@ import { Alert } from 'react-native';
 import { questionListRef } from './refs';
 
 // Import data files using correct relative paths from mobile app to shared assets
-import questionsData from '../../../packages/shared/assets/data.json'
-import vocabularyData from '../../../packages/shared/assets/vocabulary_multilang.json'
+import questionsData from '../assets/data.json'
+import vocabularyData from '../assets/vocabulary_multilang.json'
 
 // ===== TYPES =====
 

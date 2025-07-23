@@ -7,11 +7,15 @@ import { useColors, type Colors } from '../theme'
 import { FavoritesButton } from './FavoritesButton'
 import { Question } from '../types'
 
+type Group = { title: string; items: [string, number][] };
+
 export const Categories = () => {
   const questions = useSubscription([SUB_IDS.QUESTIONS]) as Question[]
-  const categories = useSubscription([SUB_IDS.CATEGORIES]) as [string, number][]
+  const categories = useSubscription([SUB_IDS.CATEGORIES]) as Group[]
+  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT]) as number
   const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY]) as string | null
   const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT]) as number
+  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT]) as number
 
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, width: 0, height: 0 })
@@ -24,7 +28,7 @@ export const Categories = () => {
 
   const openPopup = () => {
     if (buttonRef.current) {
-      buttonRef.current.measureInWindow((x, y, width, height) => {
+      buttonRef.current.measureInWindow((x: number, y: number, width: number, height: number) => {
         setPopupPosition({ x, y, width, height })
         setIsPopupOpen(!isPopupOpen)
       })
@@ -37,7 +41,9 @@ export const Categories = () => {
     ? `All (${questions?.length ?? 0})` 
     : selectedCategory === 'favorites' 
       ? `Favorites (${favoriteCount})` 
-      : `${selectedCategory} (${categories?.find(([cat]) => cat === selectedCategory)?.[1] ?? 0})`
+      : selectedCategory === 'wrong' 
+        ? `Wrong answers (${wrongCount})` 
+        : `${selectedCategory} (${selectedCount})`
 
   const colors = useColors()
 
@@ -77,14 +83,26 @@ export const Categories = () => {
                     <FavoritesButton 
                       onPress={() => handleCategoryClick('favorites')}
                     />
-                    {categories?.map(([category, count]) => (
-                      <TouchableOpacity
-                        key={category}
-                        onPress={() => handleCategoryClick(category)}
-                        style={[styles(colors).categoryButton, selectedCategory === category && styles(colors).active]}
-                      >
-                        <Text style={[styles(colors).buttonText, selectedCategory === category && styles(colors).activeText]}>{category} ({count})</Text>
-                      </TouchableOpacity>
+                    <TouchableOpacity
+                      key="wrong"
+                      onPress={() => handleCategoryClick('wrong')}
+                      style={[styles(colors).categoryButton, selectedCategory === 'wrong' && styles(colors).active]}
+                    >
+                      <Text style={[styles(colors).buttonText, selectedCategory === 'wrong' && styles(colors).activeText]}>Wrong answers ({wrongCount})</Text>
+                    </TouchableOpacity>
+                    {categories?.map((group, groupIndex) => (
+                      <React.Fragment key={groupIndex}>
+                        <Text style={styles(colors).groupTitle}>{group.title}</Text>
+                        {group.items.map(([category, count]) => (
+                          <TouchableOpacity
+                            key={category}
+                            onPress={() => handleCategoryClick(category)}
+                            style={[styles(colors).categoryButton, selectedCategory === category && styles(colors).active]}
+                          >
+                            <Text style={[styles(colors).buttonText, selectedCategory === category && styles(colors).activeText]}>{category} ({count})</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </React.Fragment>
                     )) ?? null}
                   </ScrollView>
                 </View>
@@ -147,4 +165,13 @@ const styles = (colors: Colors) => StyleSheet.create({
   activeText: {
     color: colors.accentColor,
   },
-}) 
+  groupTitle: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.textColor,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderColor
+  },
+}); 
