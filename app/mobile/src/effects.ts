@@ -129,7 +129,7 @@ regEffect(EFFECT_IDS.SET_BODY_THEME, ({ theme }) => {
 regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
   Alert.alert(
     'Clear Answers',
-    'Are you sure you want to clear answers for all categories?',
+    'Are you sure you want to clear ALL your answers?',
     [
       { text: 'Cancel', style: 'cancel' },
       { text: 'OK', onPress: () => dispatch([EVENT_IDS.CLEAR_ANSWERS]) }
