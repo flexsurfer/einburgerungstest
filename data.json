@@ -1954,7 +1954,7 @@
       "München",
       "Berlin",
       "Dresden",
-      "Frankfurt/Oder"
+      "Frankfurt / Oder"
     ],
     "correct": 1,
     "category": "Geschichte"
@@ -3381,23 +3381,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Baden-Württemberg?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Baden-Württemberg?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Baden-Württemberg"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Baden-Württemberg nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Baden-Württemberg nicht?",
     "answers": [
-      "Finanzministerin/Finanzminister",
-      "Justizministerin/Justizminister",
-      "Innenministerin/Innenminister",
-      "Außenministerin/Außenminister"
+      "Finanzministerin / Finanzminister",
+      "Justizministerin / Justizminister",
+      "Innenministerin / Innenminister",
+      "Außenministerin / Außenminister"
     ],
     "correct": 3,
     "category": "Baden-Württemberg"
@@ -3462,23 +3462,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Bayern?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Bayern?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Bayern"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Bayern nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Bayern nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Bayern"
@@ -3543,23 +3543,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef des Stadtstaates Berlin?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef des Stadtstaates Berlin?",
     "answers": [
-      "Ministerpräsidentin/Ministerpräsident",
-      "Oberbürgermeisterin/Oberbürgermeister",
-      "Präsidentin/Präsident des Senates",
-      "Regierende Bürgermeisterin/Regierender Bürgermeister"
+      "Ministerpräsidentin / Ministerpräsident",
+      "Oberbürgermeisterin / Oberbürgermeister",
+      "Präsidentin / Präsident des Senates",
+      "Regierende Bürgermeisterin / Regierender Bürgermeister"
     ],
     "correct": 3,
     "category": "Berlin"
   },
   {
-    "question": "Welche Senatorin/welchen Senator hat Berlin nicht?",
+    "question": "Welche Senatorin / welchen Senator hat Berlin nicht?",
     "answers": [
-      "Finanzsenatorin/Finanzsenator",
-      "Innensenatorin/Innensenator",
-      "Senatorin/Senator für Außenbeziehungen",
-      "Justizsenatorin/Justizsenator"
+      "Finanzsenatorin / Finanzsenator",
+      "Innensenatorin / Innensenator",
+      "Senatorin / Senator für Außenbeziehungen",
+      "Justizsenatorin / Justizsenator"
     ],
     "correct": 2,
     "category": "Berlin"
@@ -3690,23 +3690,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef des Stadtstaates Bremen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef des Stadtstaates Bremen?",
     "answers": [
-      "Ministerpräsidentin/Ministerpräsident",
-      "Erste Bürgermeisterin/Erster Bürgermeister",
-      "Präsidentin/Präsident des Senates",
-      "Regierende Bürgermeisterin/Regierender Bürgermeister"
+      "Ministerpräsidentin / Ministerpräsident",
+      "Erste Bürgermeisterin / Erster Bürgermeister",
+      "Präsidentin / Präsident des Senates",
+      "Regierende Bürgermeisterin / Regierender Bürgermeister"
     ],
     "correct": 2,
     "category": "Bremen"
   },
   {
-    "question": "Welche Senatorin/welchen Senator hat Bremen nicht?",
+    "question": "Welche Senatorin / welchen Senator hat Bremen nicht?",
     "answers": [
-      "Senatorin/Senator für Außenbeziehungen",
-      "Finanzsenatorin/Finanzsenator",
-      "Justizsenatorin/Justizsenator",
-      "Innensenatorin/Innensenator"
+      "Senatorin / Senator für Außenbeziehungen",
+      "Finanzsenatorin / Finanzsenator",
+      "Justizsenatorin / Justizsenator",
+      "Innensenatorin / Innensenator"
     ],
     "correct": 0,
     "category": "Bremen"
@@ -3771,23 +3771,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef des Stadtstaates Hamburg?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef des Stadtstaates Hamburg?",
     "answers": [
-      "Ministerpräsidentin/Ministerpräsident",
-      "Erste Bürgermeisterin/Erster Bürgermeister",
-      "Regierende Senatorin/Regierender Senator",
-      "Oberbürgermeisterin/Oberbürgermeister"
+      "Ministerpräsidentin / Ministerpräsident",
+      "Erste Bürgermeisterin / Erster Bürgermeister",
+      "Regierende Senatorin / Regierender Senator",
+      "Oberbürgermeisterin / Oberbürgermeister"
     ],
     "correct": 1,
     "category": "Hamburg"
   },
   {
-    "question": "Welche Senatorin/welchen Senator hat Hamburg nicht?",
+    "question": "Welche Senatorin / welchen Senator hat Hamburg nicht?",
     "answers": [
-      "Justizsenatorin/Justizsenator",
-      "Senatorin/Senator für Außenbeziehungen",
-      "Finanzsenatorin/Finanzsenator",
-      "Innensenatorin/Innensenator"
+      "Justizsenatorin / Justizsenator",
+      "Senatorin / Senator für Außenbeziehungen",
+      "Finanzsenatorin / Finanzsenator",
+      "Innensenatorin / Innensenator"
     ],
     "correct": 1,
     "category": "Hamburg"
@@ -3852,23 +3852,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Hessen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Hessen?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Hessen"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Hessen nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Hessen nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Hessen"
@@ -3933,23 +3933,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Mecklenburg-Vorpommern?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Mecklenburg-Vorpommern?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Mecklenburg-Vorpommern"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Mecklenburg-Vorpommern nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Mecklenburg-Vorpommern nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Mecklenburg-Vorpommern"
@@ -4014,23 +4014,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Niedersachsen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Niedersachsen?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Niedersachsen"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Niedersachsen nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Niedersachsen nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Niedersachsen"
@@ -4095,23 +4095,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Nordrhein-Westfalen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Nordrhein-Westfalen?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Nordrhein-Westfalen"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Nordrhein-Westfalen nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Nordrhein-Westfalen nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Nordrhein-Westfalen"
@@ -4176,23 +4176,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Rheinland-Pfalz?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Rheinland-Pfalz?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Rheinland-Pfalz"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Rheinland-Pfalz nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Rheinland-Pfalz nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Rheinland-Pfalz"
@@ -4257,23 +4257,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef des Saarlandes?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef des Saarlandes?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Saarland"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat das Saarland nicht?",
+    "question": "Welche Ministerin / welchen Minister hat das Saarland nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Saarland"
@@ -4338,23 +4338,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Sachsen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Sachsen?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Sachsen"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Sachsen nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Sachsen nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Sachsen"
@@ -4419,23 +4419,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Sachsen-Anhalt?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Sachsen-Anhalt?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Sachsen-Anhalt"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Sachsen-Anhalt nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Sachsen-Anhalt nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Sachsen-Anhalt"
@@ -4478,7 +4478,7 @@
     "answers": [
       "bei der Verbraucherzentrale",
       "beim Ordnungsamt der Gemeinde",
-      "beim / bei der Landesbeauftragten für politische Bildung",
+      "beim  /  bei der Landesbeauftragten für politische Bildung",
       "bei den Kirchen"
     ],
     "correct": 2,
@@ -4500,23 +4500,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Schleswig-Holstein?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Schleswig-Holstein?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Schleswig-Holstein"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Schleswig-Holstein nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Schleswig-Holstein nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Schleswig-Holstein"
@@ -4581,23 +4581,23 @@
     }
   },
   {
-    "question": "Wie nennt man die Regierungschefin/den Regierungschef in Thüringen?",
+    "question": "Wie nennt man die Regierungschefin / den Regierungschef in Thüringen?",
     "answers": [
-      "Erste Ministerin/Erster Minister",
-      "Premierministerin/Premierminister",
-      "Bürgermeisterin/Bürgermeister",
-      "Ministerpräsidentin/Ministerpräsident"
+      "Erste Ministerin / Erster Minister",
+      "Premierministerin / Premierminister",
+      "Bürgermeisterin / Bürgermeister",
+      "Ministerpräsidentin / Ministerpräsident"
     ],
     "correct": 3,
     "category": "Thüringen"
   },
   {
-    "question": "Welche Ministerin/welchen Minister hat Thüringen nicht?",
+    "question": "Welche Ministerin / welchen Minister hat Thüringen nicht?",
     "answers": [
-      "Justizministerin/Justizminister",
-      "Außenministerin/Außenminister",
-      "Finanzministerin/Finanzminister",
-      "Innenministerin/Innenminister"
+      "Justizministerin / Justizminister",
+      "Außenministerin / Außenminister",
+      "Finanzministerin / Finanzminister",
+      "Innenministerin / Innenminister"
     ],
     "correct": 1,
     "category": "Thüringen"
