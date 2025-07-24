@@ -15,6 +15,8 @@ regSub(SUB_IDS.SELECTED_LANGUAGE)
 regSub(SUB_IDS.SHOW_VOCABULARY)
 regSub(SUB_IDS.VOCABULARY_RENDER)
 regSub(SUB_IDS.THEME)
+regSub(SUB_IDS.TEST_QUESTIONS)
+regSub(SUB_IDS.TEST_ANSWERS)
 
 // Computed subscriptions
 regSub(SUB_IDS.FAVORITE_COUNT,
@@ -36,7 +38,7 @@ regSub(SUB_IDS.WRONG_COUNT,
 // each time user changes fav or answer, questions are filtered again, and in reflex it compare the result, but it doesn't trigger a re-render
 // so we have this unnecessary computations on every fav or answer change
 regSub(SUB_IDS.FILTERED_QUESTIONS,
-  (questions, selectedCategory, favorites, userAnswers) => {
+  (questions, selectedCategory, favorites, userAnswers, testQuestions) => {
     if (selectedCategory === 'favorites') {
       return questions.filter(q => favorites.includes(q.globalIndex))
     } else if (selectedCategory === 'wrong') {
@@ -44,17 +46,23 @@ regSub(SUB_IDS.FILTERED_QUESTIONS,
         const ua = userAnswers[q.globalIndex];
         return ua !== undefined && ua !== q.correct;
       })
+    } else if (selectedCategory === 'test') {
+      return testQuestions
     }
     return selectedCategory
       ? questions.filter(q => q.category === selectedCategory)
       : questions
   },
-  () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES], [SUB_IDS.USER_ANSWERS]]
+  () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES], [SUB_IDS.USER_ANSWERS], [SUB_IDS.TEST_QUESTIONS]]
 )
 
 regSub(SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX,
-  (userAnswers, questionIndex) => userAnswers[questionIndex],
-  () => [[SUB_IDS.USER_ANSWERS]]
+  (userAnswers, testAnswers, selectedCategory, questionIndex) => {
+    return selectedCategory === 'test' 
+      ? testAnswers[questionIndex]
+      : userAnswers[questionIndex]
+  },
+  () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.TEST_ANSWERS], [SUB_IDS.SELECTED_CATEGORY]]
 )
 
 regSub(SUB_IDS.IS_FAVORITE_BY_GLOBAL_INDEX,
@@ -63,9 +71,10 @@ regSub(SUB_IDS.IS_FAVORITE_BY_GLOBAL_INDEX,
 )
 
 regSub(SUB_IDS.STATISTICS,
-  (userAnswers, filteredQuestions) => {
-    const correctCount = filteredQuestions.filter(q => userAnswers[q.globalIndex] === q.correct).length
-    const totalAnswered = filteredQuestions.filter(q => userAnswers[q.globalIndex] !== undefined).length
+  (filteredQuestions, userAnswers, testAnswers, selectedCategory) => {
+    const answers = selectedCategory === 'test' ? testAnswers : userAnswers
+    const correctCount = filteredQuestions.filter(q => answers[q.globalIndex] === q.correct).length
+    const totalAnswered = filteredQuestions.filter(q => answers[q.globalIndex] !== undefined).length
     const incorrect = totalAnswered - correctCount
     const totalVisible = filteredQuestions.length
     const accuracy = totalAnswered > 0 ? (correctCount / totalAnswered * 100).toFixed(1) : 0
@@ -79,7 +88,7 @@ regSub(SUB_IDS.STATISTICS,
       passed
     }
   },
-  () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.FILTERED_QUESTIONS]]
+  () => [[SUB_IDS.FILTERED_QUESTIONS], [SUB_IDS.USER_ANSWERS], [SUB_IDS.TEST_ANSWERS], [SUB_IDS.SELECTED_CATEGORY]]
 )
 
 regSub(SUB_IDS.SELECTED_CATEGORY_COUNT,

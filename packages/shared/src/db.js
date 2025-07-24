@@ -15,10 +15,13 @@ const initialDb = {
     questions: [],
     categories: [],
     vocabularyData: null,
+    testQuestions: [],
 
     // User state  
     userAnswers: {},
     favorites: [],
+    testAnswers: {},
+    usedTestQuestions: {},
 
     // Loading states
     questionsLoading: false,

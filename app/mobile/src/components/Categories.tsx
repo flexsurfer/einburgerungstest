@@ -38,12 +38,14 @@ export const Categories = () => {
   }
 
   const displayText = selectedCategory === null 
-    ? `All (${questions?.length ?? 0})` 
+    ? `All Questions (${questions?.length ?? 0})` 
     : selectedCategory === 'favorites' 
       ? `Favorites (${favoriteCount})` 
       : selectedCategory === 'wrong' 
         ? `Wrong answers (${wrongCount})` 
-        : `${selectedCategory} (${selectedCount})`
+        : selectedCategory === 'test'
+          ? `Test (30)`
+          : `${selectedCategory} (${selectedCount})`
 
   const colors = useColors()
 
@@ -78,7 +80,14 @@ export const Categories = () => {
                       onPress={() => handleCategoryClick(null)}
                       style={[styles(colors).categoryButton, selectedCategory === null && styles(colors).active]}
                     >
-                      <Text style={[styles(colors).buttonText, selectedCategory === null && styles(colors).activeText]}>All ({questions?.length ?? 0})</Text>
+                      <Text style={[styles(colors).buttonText, selectedCategory === null && styles(colors).activeText]}>All Questions ({questions?.length ?? 0})</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      key="test"
+                      onPress={() => handleCategoryClick('test')}
+                      style={[styles(colors).categoryButton, selectedCategory === 'test' && styles(colors).active]}
+                    >
+                      <Text style={[styles(colors).buttonText, selectedCategory === 'test' && styles(colors).activeText]}>Test (30)</Text>
                     </TouchableOpacity>
                     <FavoritesButton 
                       onPress={() => handleCategoryClick('favorites')}
@@ -90,6 +99,7 @@ export const Categories = () => {
                     >
                       <Text style={[styles(colors).buttonText, selectedCategory === 'wrong' && styles(colors).activeText]}>Wrong answers ({wrongCount})</Text>
                     </TouchableOpacity>
+                    
                     {categories?.map((group, groupIndex) => (
                       <React.Fragment key={groupIndex}>
                         <Text style={styles(colors).groupTitle}>{group.title}</Text>

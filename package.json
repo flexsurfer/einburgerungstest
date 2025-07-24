@@ -11,7 +11,8 @@
     "dev:run-android": "pnpm --filter ./app/mobile exec react-native run-android",
     "dev:run-ios": "pnpm --filter ./app/mobile exec react-native run-ios",
     "build:web": "pnpm --filter ./app/web exec vite build",
-    "build": "pnpm build:web"
+    "build": "pnpm build:web",
+    "deploy:web": "gh-pages -d ./app/web/dist"
   },
   "workspaces": [
     "app/*",

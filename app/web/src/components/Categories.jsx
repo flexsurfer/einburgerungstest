@@ -26,10 +26,11 @@ export const Categories = memo(() => {
       <div className="category-select-wrapper">
 
         <button className="category-select-button" onClick={() => setIsPopupOpen(!isPopupOpen)}>
-          {selectedCategory === null ? `All (${questions.length})` :
-            selectedCategory === 'favorites' ? `Favorites (${favoriteCount})` :
-              selectedCategory === 'wrong' ? `Wrong answers (${wrongCount})` : `
-           ${selectedCategory} (${selectedCount})`}
+          {selectedCategory === null ? `All Questions (${questions.length})` :
+           selectedCategory === 'favorites' ? `Favorites (${favoriteCount})` :
+           selectedCategory === 'wrong' ? `Wrong answers (${wrongCount})` :
+           selectedCategory === 'test' ? `Test (30)` :
+           `${selectedCategory} (${selectedCount})`}
           <span className="filter-icon">▼</span>
         </button>
 
@@ -39,7 +40,14 @@ export const Categories = memo(() => {
               onClick={() => { handleCategoryClick(null); setIsPopupOpen(false); }}
               className={`category-button ${selectedCategory === null ? 'active' : ''}`}
             >
-              All ({questions.length})
+              All Questions ({questions.length})
+            </button>
+            <button
+              key="test"
+              onClick={() => { handleCategoryClick('test'); setIsPopupOpen(false); }}
+              className={`category-button ${selectedCategory === 'test' ? 'active' : ''}`}
+            >
+              Test (30)
             </button>
             <FavoritesButton
               key="favorites"

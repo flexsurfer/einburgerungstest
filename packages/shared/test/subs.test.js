@@ -86,7 +86,7 @@ describe('Subscription Handlers', () => {
       const userAnswers = { 1: 0, 2: 1, 3: 2 }
       const questionIndex = 2
       
-      const result = handler(userAnswers, questionIndex)
+      const result = handler(userAnswers, {}, null, questionIndex)
       
       expect(result).toBe(1)
     })
@@ -97,7 +97,7 @@ describe('Subscription Handlers', () => {
       const userAnswers = { 1: 0, 2: 1 }
       const questionIndex = 5
       
-      const result = handler(userAnswers, questionIndex)
+      const result = handler(userAnswers, {}, null, questionIndex)
       
       expect(result).toBeUndefined()
     })
@@ -135,7 +135,7 @@ describe('Subscription Handlers', () => {
         { globalIndex: 4, correct: 0 }  // not answered
       ]
       
-      const result = handler(userAnswers, filteredQuestions)
+      const result = handler(filteredQuestions, userAnswers, {}, null)
       
       expect(result).toEqual({
         correct: 1,
@@ -156,7 +156,7 @@ describe('Subscription Handlers', () => {
         { globalIndex: 2, correct: 1 }
       ]
       
-      const result = handler(userAnswers, filteredQuestions)
+      const result = handler(filteredQuestions, userAnswers, {}, null)
       
       expect(result).toEqual({
         correct: 0,
@@ -177,7 +177,7 @@ describe('Subscription Handlers', () => {
         { globalIndex: 2, correct: 1 }  // correct
       ]
       
-      const result = handler(userAnswers, filteredQuestions)
+      const result = handler(filteredQuestions, userAnswers, {}, null)
       
       expect(result).toEqual({
         correct: 2,
@@ -195,7 +195,7 @@ describe('Subscription Handlers', () => {
       const userAnswers = { 1: 0 }
       const filteredQuestions = []
       
-      const result = handler(userAnswers, filteredQuestions)
+      const result = handler(filteredQuestions, userAnswers, {}, null)
       
       expect(result).toEqual({
         correct: 0,

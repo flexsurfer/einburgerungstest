@@ -2,6 +2,7 @@ import { regEvent, clearHandlers } from "@flexsurfer/reflex"
 import { current } from "immer"
 import { EVENT_IDS } from './event-ids.js'
 import { EFFECT_IDS } from './effect-ids.js'
+import { generateTest } from './test';
 
 // UI Events
 regEvent(EVENT_IDS.SET_SHOW_WELCOME, ({ draftDb }, show) => {
@@ -36,6 +37,10 @@ regEvent(EVENT_IDS.SET_BODY_OVERFLOW, (_, value) => {
 
 regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
   draftDb.selectedCategory = category
+  if (category === 'test') {
+    generateTest(draftDb);
+  }
+
   return [[EFFECT_IDS.SCROLL_TO_TOP]]
 })
 
@@ -126,8 +131,12 @@ regEvent(EVENT_IDS.FETCH_VOCABULARY_FAILURE, ({ draftDb }, error) => {
 
 // User Actions Events
 regEvent(EVENT_IDS.ANSWER_QUESTION, ({ draftDb }, questionIndex, answerIndex) => {
-  draftDb.userAnswers[questionIndex] = answerIndex
-  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
+  if (draftDb.selectedCategory === 'test') {
+    draftDb.testAnswers[questionIndex] = answerIndex
+  } else {
+    draftDb.userAnswers[questionIndex] = answerIndex
+    return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
+  }
 })
 
 regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {
