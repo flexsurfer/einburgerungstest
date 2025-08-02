@@ -7,12 +7,12 @@ import { SUB_IDS } from 'shared/sub-ids'
 import '../styles/Header.css'
 
 export const Categories = memo(() => {
-  const questions = useSubscription([SUB_IDS.QUESTIONS])
-  const categories = useSubscription([SUB_IDS.CATEGORIES])
-  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY])
-  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT])
-  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT])
-  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT])
+  const questions = useSubscription([SUB_IDS.QUESTIONS], "Categories")
+  const categories = useSubscription([SUB_IDS.CATEGORIES], "Categories")
+  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "Categories")
+  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT], "Categories")
+  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT], "Categories")
+  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT], "Categories")
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 

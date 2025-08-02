@@ -13,8 +13,8 @@ interface AnswerListProps {
 
 export const AnswerList = memo<AnswerListProps>(({ question }) => {
 
-    const showAnswers = useSubscription<boolean>([SUB_IDS.SHOW_ANSWERS])
-    const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex]) as number | undefined
+    const showAnswers = useSubscription<boolean>([SUB_IDS.SHOW_ANSWERS],"AnswerList")
+    const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex], "AnswerList") as number | undefined
 
 
     const handleAnswerClick = useCallback((index: number) => {

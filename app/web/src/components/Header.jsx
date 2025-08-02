@@ -8,8 +8,8 @@ import '../styles/Header.css'
 
 export const Header = memo(() => {
 
-  const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY])
-  const theme = useSubscription([SUB_IDS.THEME])
+  const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY], "Header")
+  const theme = useSubscription([SUB_IDS.THEME], "Header")
 
   const toggleVocabulary = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_VOCABULARY]) }, [])
   const toggleTheme = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_THEME]) }, [])

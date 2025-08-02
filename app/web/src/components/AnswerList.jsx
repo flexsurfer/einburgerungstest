@@ -6,9 +6,9 @@ import { SUB_IDS } from 'shared/sub-ids'
 
 export const AnswerList = ({question}) => {
     
-    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS])
+    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS], "AnswerList")
 
-    const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex])
+    const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex], "AnswerList")
   
     const handleAnswerClick = useCallback((index) => {
       if (!showAnswers && userAnswer === undefined) {

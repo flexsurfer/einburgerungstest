@@ -5,8 +5,8 @@ import { useColors, type Colors } from '../theme'
 import { Star } from './Star'
 
 export const FavoritesButton = ({ onPress }) => {
-  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY]) as string | null
-  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT]) as number
+  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "FavoritesButton") as string | null
+  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT], "FavoritesButton") as number
 
   const isActive = selectedCategory === 'favorites'
 

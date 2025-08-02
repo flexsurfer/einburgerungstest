@@ -6,8 +6,8 @@ import '../styles/Statistics.css'
 
 export const Statistics = memo(() => {
 
-    const stats = useSubscription([SUB_IDS.STATISTICS])
-    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS])
+    const stats = useSubscription([SUB_IDS.STATISTICS], "Statistics")
+    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS], "Statistics")
 
     const handleClearAnswers = useCallback(() => { dispatch([EVENT_IDS.REQUEST_CLEAR_ANSWERS]) }, [])
     const handleToggleShowAnswers = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_SHOW_ANSWERS]) }, [])

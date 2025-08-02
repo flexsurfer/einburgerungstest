@@ -7,7 +7,7 @@ import '../styles/QuestionList.css'
 
 export const QuestionList = memo(() => {
 
-  const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS])
+  const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS], "QuestionList")
 
   const [visibleCount, setVisibleCount] = useState(20)
   const loadMoreRef = useRef(null)

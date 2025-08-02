@@ -10,12 +10,12 @@ import { Question } from '../types'
 type Group = { title: string; items: [string, number][] };
 
 export const Categories = () => {
-  const questions = useSubscription([SUB_IDS.QUESTIONS]) as Question[]
-  const categories = useSubscription([SUB_IDS.CATEGORIES]) as Group[]
-  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT]) as number
-  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY]) as string | null
-  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT]) as number
-  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT]) as number
+  const questions = useSubscription([SUB_IDS.QUESTIONS], "Categories") as Question[]
+  const categories = useSubscription([SUB_IDS.CATEGORIES], "Categories") as Group[]
+  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT], "Categories") as number
+  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "Categories") as string | null
+  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT], "Categories") as number
+  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT], "Categories") as number
 
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0, width: 0, height: 0 })

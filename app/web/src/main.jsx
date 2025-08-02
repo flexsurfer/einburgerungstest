@@ -13,16 +13,18 @@ import './effects'
 import App from './App'
 import { enableTracing, enableTracePrint, dispatch, setDebugEnabled } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids.js'
+import { enableDevtools } from '@flexsurfer/reflex-devtools'
 
 if (import.meta.env.MODE === 'development') {
   //setDebugEnabled(true)
-  //enableTracing()
+  enableTracing()
   //enableTracePrint()
+  enableDevtools();
 }
 
 dispatch([EVENT_IDS.INITIALIZE_APP])
 
-const useStrictMode = true
+const useStrictMode = false
 const Wrapper = useStrictMode ? StrictMode : Fragment;
 
 ReactDOM.createRoot(document.getElementById('root')).render(

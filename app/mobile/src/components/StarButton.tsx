@@ -9,7 +9,7 @@ interface StarButtonProps {
 }
 
 export const StarButton = memo<StarButtonProps>(({ globalIndex }) => {
-  const favorites = useSubscription([SUB_IDS.FAVORITES]) as number[]
+  const favorites = useSubscription([SUB_IDS.FAVORITES], "StarButton") as number[]
   const isFavorite = favorites.includes(globalIndex)
 
   const handlePress = () => {

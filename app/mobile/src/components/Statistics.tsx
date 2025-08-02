@@ -6,8 +6,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useColors, type Colors } from '../theme'
 
 export const Statistics = memo(() => {
-    const stats = useSubscription([SUB_IDS.STATISTICS]) as {correct: number, incorrect: number, accuracy: number, passed: boolean, totalAnswered: number, totalVisible: number}
-    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS]) as boolean
+    const stats = useSubscription([SUB_IDS.STATISTICS], "Statistics") as {correct: number, incorrect: number, accuracy: number, passed: boolean, totalAnswered: number, totalVisible: number}
+    const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS], "Statistics") as boolean
     const handleClearAnswers = useCallback(() => { dispatch([EVENT_IDS.REQUEST_CLEAR_ANSWERS]) }, [])
     const handleToggleShowAnswers = useCallback(() => { dispatch([EVENT_IDS.TOGGLE_SHOW_ANSWERS]) }, [])
     const colors = useColors()

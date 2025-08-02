@@ -13,9 +13,9 @@ const AVAILABLE_LANGUAGES = [
 
 export const Vocabulary = memo(function Vocabulary() {
 
-  const selectedLanguage = useSubscription([SUB_IDS.SELECTED_LANGUAGE])
-  const vocabularyData = useSubscription([SUB_IDS.VOCABULARY_DATA])
-  const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY])
+  const selectedLanguage = useSubscription([SUB_IDS.SELECTED_LANGUAGE], "Vocabulary")
+  const vocabularyData = useSubscription([SUB_IDS.VOCABULARY_DATA], "Vocabulary")
+  const showVocabulary = useSubscription([SUB_IDS.SHOW_VOCABULARY], "Vocabulary")
   
   // Handle unmounting after closing animation
   useEffect(() => {

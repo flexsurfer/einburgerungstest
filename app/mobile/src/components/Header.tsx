@@ -9,7 +9,7 @@ import { Categories } from './Categories'
 
 export const Header = memo(({ style }: { style?: ViewStyle }) => {
   const themeColors = useColors() as Colors
-  const theme = useSubscription([SUB_IDS.THEME])
+  const theme = useSubscription([SUB_IDS.THEME], "Header")
 
   const toggleTheme = useCallback(() => {
     dispatch([EVENT_IDS.TOGGLE_THEME])

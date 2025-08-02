@@ -8,7 +8,7 @@ import { Question } from '../types'
 import { questionListRef } from '../refs';
 
 export const QuestionList = memo(() => {
-  const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS]) as Question[]
+  const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS], "QuestionList") as Question[]
   const colors = useColors()
 
   const renderQuestion = useCallback(({ item }: { item: Question }) => (
