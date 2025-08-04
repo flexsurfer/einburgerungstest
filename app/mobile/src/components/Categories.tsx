@@ -87,7 +87,7 @@ export const Categories = () => {
                       onPress={() => handleCategoryClick('test')}
                       style={[styles(colors).categoryButton, selectedCategory === 'test' && styles(colors).active]}
                     >
-                      <Text style={[styles(colors).buttonText, selectedCategory === 'test' && styles(colors).activeText]}>Test (30)</Text>
+                      <Text style={[styles(colors).buttonText, selectedCategory === 'test' && styles(colors).activeText]}>Start Test (30)</Text>
                     </TouchableOpacity>
                     <FavoritesButton 
                       onPress={() => handleCategoryClick('favorites')}

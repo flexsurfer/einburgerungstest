@@ -16,6 +16,10 @@ export const SUB_IDS = {
   TEST_QUESTIONS: 'testQuestions',
   TEST_ANSWERS: 'testAnswers',
   
+  // Navigation state
+  CURRENT_QUESTION_INDEX: 'currentQuestionIndex',
+  SHOW_QUESTION_PICKER: 'showQuestionPicker',
+  
   // Computed subscriptions - derived values
   FAVORITE_COUNT: 'favoriteCount',
   WRONG_COUNT: 'wrongCount',
@@ -23,5 +27,8 @@ export const SUB_IDS = {
   USER_ANSWER_BY_QUESTION_INDEX: 'userAnswerByQuestionIndex',
   IS_FAVORITE_BY_GLOBAL_INDEX: 'isFavoriteByGlobalIndex',
   STATISTICS: 'statistics',
-  SELECTED_CATEGORY_COUNT: 'selectedCategoryCount'
+  SELECTED_CATEGORY_COUNT: 'selectedCategoryCount',
+  CURRENT_QUESTION: 'currentQuestion',
+  QUESTION_PICKER_ITEMS: 'questionPickerItems',
+  IS_TEST_MODE: 'isTestMode'
 } 

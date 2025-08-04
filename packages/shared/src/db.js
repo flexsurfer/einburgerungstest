@@ -11,6 +11,10 @@ const initialDb = {
     theme: 'light',
     useSystemTheme: true,
 
+    // Navigation state
+    currentQuestionIndex: 0,
+    showQuestionPicker: false,
+
     // Data state
     questions: [],
     categories: [],

@@ -41,6 +41,10 @@ regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
     generateTest(draftDb);
   }
 
+  // Reset navigation state when category changes
+  draftDb.currentQuestionIndex = 0
+  draftDb.showQuestionPicker = false
+
   return [[EFFECT_IDS.SCROLL_TO_TOP]]
 })
 
@@ -159,4 +163,35 @@ regEvent(EVENT_IDS.CLEAR_ANSWERS, ({ draftDb }) => {
 
 regEvent(EVENT_IDS.REQUEST_CLEAR_ANSWERS, () => {
   return [[EFFECT_IDS.CONFIRM_CLEAR]]
+})
+
+regEvent(EVENT_IDS.CLEAR_QUESTION_ANSWER, ({ draftDb }, questionIndex) => {
+  if (draftDb.selectedCategory === 'test') {
+    delete draftDb.testAnswers[questionIndex]
+  } else {
+    delete draftDb.userAnswers[questionIndex]
+    return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'userAnswers', value: current(draftDb.userAnswers) }]]
+  }
+})
+
+// Navigation events 
+regEvent(EVENT_IDS.NAVIGATE_TO_QUESTION, ({ draftDb }, questionIndex) => {
+  draftDb.currentQuestionIndex = questionIndex
+  draftDb.showQuestionPicker = false
+})
+
+regEvent(EVENT_IDS.NAVIGATE_NEXT, ({ draftDb }) => {
+  const currentIndex = draftDb.currentQuestionIndex || 0
+  const nextIndex = Math.min(currentIndex + 1, draftDb.questions.length - 1)
+  draftDb.currentQuestionIndex = nextIndex
+})
+
+regEvent(EVENT_IDS.NAVIGATE_PREV, ({ draftDb }) => {
+  const currentIndex = draftDb.currentQuestionIndex || 0
+  const prevIndex = Math.max(currentIndex - 1, 0)
+  draftDb.currentQuestionIndex = prevIndex
+})
+
+regEvent(EVENT_IDS.SHOW_QUESTION_PICKER, ({ draftDb }, show) => {
+  draftDb.showQuestionPicker = show
 })

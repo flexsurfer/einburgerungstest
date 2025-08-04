@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { dispatch } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids'
 import { useColors, type Colors } from './src/theme'
-import { QuestionList } from './src/components/QuestionList'
+import { QuestionView } from './src/components/QuestionView'
 import { Header } from './src/components/Header'
 import { Statistics } from './src/components/Statistics'
 
@@ -21,7 +21,7 @@ function App() {
     <SafeAreaView style={styles(themeColors).appContainer}>
       <Header style={{ zIndex: 1 }} />
       <View style={{ flex: 1, zIndex: 0 }}>
-        <QuestionList />
+        <QuestionView />
       </View>
       <Statistics />
     </SafeAreaView>

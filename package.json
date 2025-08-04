@@ -6,6 +6,7 @@
     "test:web": "pnpm --filter ./app/web exec vitest run",
     "test:mobile": "pnpm --filter ./app/mobile exec vitest run",
     "test:shared": "pnpm --filter ./packages/shared exec vitest run",
+    "preview:web": "pnpm --filter ./app/web exec vite preview",
     "dev:web": "pnpm --filter ./app/web exec vite",
     "dev:mobile": "pnpm --filter ./app/mobile exec react-native start",
     "dev:run-android": "pnpm --filter ./app/mobile exec react-native run-android",

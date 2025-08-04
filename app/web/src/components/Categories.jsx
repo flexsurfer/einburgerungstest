@@ -1,4 +1,4 @@
-import { useCallback, memo, useState, useEffect } from 'react'
+import { useCallback, memo, useState, useEffect, useRef } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { FavoritesButton } from './FavoritesButton.jsx'
 import { EVENT_IDS } from 'shared/event-ids'
@@ -16,10 +16,28 @@ export const Categories = memo(() => {
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+  const popupRef = useRef(null);
+
   const handleCategoryClick = useCallback((category) => { dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category]) }, [])
   const setOverFlow = useCallback((value) => { dispatch([EFFECT_IDS.SET_BODY_OVERFLOW, value]) }, [])
 
   useEffect(() => { if (isPopupOpen) { setOverFlow('hidden') } else { setOverFlow('auto') } }, [isPopupOpen])
+
+  useEffect(() => {
+    if (!isPopupOpen) return;
+
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setIsPopupOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isPopupOpen]);
 
   return (
     <div className="categories-container">
@@ -35,7 +53,7 @@ export const Categories = memo(() => {
         </button>
 
         {isPopupOpen && (
-          <div className="category-popup">
+          <div className="category-popup" ref={popupRef}>
             <button
               onClick={() => { handleCategoryClick(null); setIsPopupOpen(false); }}
               className={`category-button ${selectedCategory === null ? 'active' : ''}`}
@@ -47,7 +65,7 @@ export const Categories = memo(() => {
               onClick={() => { handleCategoryClick('test'); setIsPopupOpen(false); }}
               className={`category-button ${selectedCategory === 'test' ? 'active' : ''}`}
             >
-              Test (30)
+              Start Test (30)
             </button>
             <FavoritesButton
               key="favorites"

@@ -1,6 +1,6 @@
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { Header } from './components/Header.jsx'
-import { QuestionList } from './components/QuestionList.jsx'
+import { QuestionView } from './components/QuestionView.jsx'
 import { Welcome } from './components/Welcome.jsx'
 import { Vocabulary } from './components/Vocabulary.jsx'
 import { Statistics } from './components/Statistics.jsx'
@@ -22,7 +22,7 @@ function App() {
     return (
       <div className="app-container">
         <Header />
-        <QuestionList />
+        <QuestionView />
         <Statistics />
         {vocabularyRender && (
           <Vocabulary />

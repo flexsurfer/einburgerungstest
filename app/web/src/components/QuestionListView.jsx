@@ -1,12 +1,11 @@
-import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { QuestionCard } from './QuestionCard.jsx'
 import { useState, useEffect, useRef, memo, useCallback } from 'react'
+import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { SUB_IDS } from 'shared/sub-ids'
 import { EVENT_IDS } from 'shared/event-ids'
+import { QuestionCard } from './QuestionCard.jsx'
 import '../styles/QuestionList.css'
 
-export const QuestionList = memo(() => {
-
+export const QuestionListView = memo(() => {
   const filteredQuestions = useSubscription([SUB_IDS.FILTERED_QUESTIONS], "QuestionList")
 
   const [visibleCount, setVisibleCount] = useState(20)
@@ -44,7 +43,16 @@ export const QuestionList = memo(() => {
 
   const scrollToTop = useCallback(() => { dispatch([EVENT_IDS.SCROLL_TO_TOP, 'smooth']) }, [])
 
+  if (!filteredQuestions || filteredQuestions.length === 0) {
+    return (
+      <div className="empty-questions">
+        <p>No questions available</p>
+      </div>
+    )
+  }
+
   const visibleQuestions = filteredQuestions.slice(0, visibleCount)
+
   return (
     <div>
       <div style={{ height: '60px' }} />
@@ -66,6 +74,5 @@ export const QuestionList = memo(() => {
         </button>
       )}
     </div>
-
   )
-}) 
+})

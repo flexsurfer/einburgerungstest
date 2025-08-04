@@ -28,5 +28,12 @@ export const EVENT_IDS = {
   TOGGLE_FAVORITE: 'toggleFavorite',
   CLEAR_ANSWERS: 'clearAnswers',
   REQUEST_CLEAR_ANSWERS: 'requestClearAnswers',
-  SYSTEM_THEME_CHANGED: 'systemThemeChanged'
+  SYSTEM_THEME_CHANGED: 'systemThemeChanged',
+  CLEAR_QUESTION_ANSWER: 'clearQuestionAnswer',
+  
+  // Navigation Events
+  NAVIGATE_TO_QUESTION: 'navigateToQuestion',
+  NAVIGATE_NEXT: 'navigateNext',
+  NAVIGATE_PREV: 'navigatePrev',
+  SHOW_QUESTION_PICKER: 'showQuestionPicker'
 } 

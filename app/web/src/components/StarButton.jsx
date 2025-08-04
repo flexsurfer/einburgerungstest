@@ -1,16 +1,16 @@
-import { memo, useCallback, useState } from 'react'
-import { dispatch, getSubscriptionValue } from '@flexsurfer/reflex'
+import { memo, useCallback } from 'react'
+import { dispatch, useSubscription } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids'
 import { SUB_IDS } from 'shared/sub-ids'
 import '../styles/StarButton.css'
 
 export const StarButton = memo(function StarButton({ globalIndex }) {
-  const [isFavorite, setIsFavorite] = useState(()=> getSubscriptionValue([SUB_IDS.IS_FAVORITE_BY_GLOBAL_INDEX, globalIndex]))
+
+  const isFavorite = useSubscription([SUB_IDS.IS_FAVORITE_BY_GLOBAL_INDEX, globalIndex], 'StarButton')
 
   const onClick = useCallback(() => { 
-    setIsFavorite(!isFavorite)
     dispatch([EVENT_IDS.TOGGLE_FAVORITE, globalIndex]) 
-  }, [isFavorite])
+  }, [isFavorite, globalIndex])
 
   return (
     <button

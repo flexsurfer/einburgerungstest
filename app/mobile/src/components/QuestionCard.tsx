@@ -8,56 +8,74 @@ import images from '../assets/images'
 
 interface QuestionCardProps {
   question: Question
+  isTablet?: boolean
+  numColumns?: number
+  screenWidth?: number
+  gap?: number
 }
 
-const screenWidth = Dimensions.get('window').width - 80;
-
-export const QuestionCard = memo<QuestionCardProps>(({ question }) => {
+export const QuestionCard = memo<QuestionCardProps>(({ 
+  question, 
+  isTablet = false, 
+  numColumns = 1, 
+  screenWidth: propScreenWidth,
+  gap = 0
+}) => {
   
   const [height, setHeight] = useState(null);
   const uri = question.img?.url ?? undefined;
 
+  // Calculate card width based on screen size and number of columns
+  const screenWidth = propScreenWidth || Dimensions.get('window').width;
+  const horizontalPadding = isTablet ? 40 : 32;
+  
+  const cardWidth = isTablet 
+    ? (screenWidth - horizontalPadding - (gap * (numColumns - 1))) / numColumns
+    : screenWidth - horizontalPadding;
+  
+  const imageWidth = cardWidth - (isTablet ? 32 : 40); // Account for card padding
+
   useEffect(() => {
     if (!uri) { return; }
     const { width, height } = Image.resolveAssetSource(images[uri]);
-    setHeight(screenWidth / (width / height));
-  }, [uri]);
+    setHeight(imageWidth / (width / height));
+  }, [uri, imageWidth, numColumns, screenWidth, gap]);
 
   const colors = useColors();
 
   return (
-    <View style={styles(colors).questionCard}>
-      <View style={styles(colors).questionBadge}>
-        <Text style={styles(colors).questionBadgeText}>{question.globalIndex}</Text>
+    <View style={[styles(colors, isTablet).questionCard, isTablet && { width: cardWidth }]}>
+      <View style={styles(colors, isTablet).questionBadge}>
+        <Text style={styles(colors, isTablet).questionBadgeText}>{question.globalIndex}</Text>
       </View>
-      <View style={styles(colors).questionHeader}>
-        <Text style={styles(colors).questionText}>{question.question}</Text>
+      <View style={styles(colors, isTablet).questionHeader}>
+        <Text style={styles(colors, isTablet).questionText}>{question.question}</Text>
         <StarButton globalIndex={question.globalIndex} />
       </View>
 
       {height && (
-        <View style={styles(colors).questionImageContainer}>
+        <View style={styles(colors, isTablet).questionImageContainer}>
           <Image
             source={images[uri]}
-            style={{ width: screenWidth, height: height, borderRadius: 8 }}
+            style={{ width: imageWidth, height: height, borderRadius: 8 }}
             resizeMode="contain"
           />
           {question.img.text && (
-            <Text style={styles(colors).questionImageText}>{question.img.text}</Text>
+            <Text style={styles(colors, isTablet).questionImageText}>{question.img.text}</Text>
           )}
         </View>
       )}
 
       <AnswerList question={question} />
 
-      <View style={styles(colors).questionFooter}>
-        <Text style={styles(colors).questionCategory}>{question.category}</Text>
+      <View style={styles(colors, isTablet).questionFooter}>
+        <Text style={styles(colors, isTablet).questionCategory}>{question.category}</Text>
       </View>
     </View>
   )
 })
 
-const styles = (colors: Colors) => StyleSheet.create({
+const styles = (colors: Colors, isTablet = false) => StyleSheet.create({
   questionCard: {
     backgroundColor: colors.bgColor,
     borderRadius: 12,
@@ -68,15 +86,16 @@ const styles = (colors: Colors) => StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 5,
-    padding: 20,
+    padding: isTablet ? 16 : 20,
     position: 'relative',
     flexDirection: 'column',
-    minHeight: 200,
+    minHeight: isTablet ? 240 : 200,
+    marginBottom: isTablet ? 0 : undefined,
   },
   questionHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: isTablet ? 16 : 20,
   },
   questionBadge: {
     position: 'absolute',
@@ -106,32 +125,32 @@ const styles = (colors: Colors) => StyleSheet.create({
     paddingBottom: 16,
   },
   questionText: {
-    fontSize: 17,
+    fontSize: isTablet ? 15 : 17,
     fontWeight: '500',
     color: colors.textColor,
-    lineHeight: 24,
+    lineHeight: isTablet ? 22 : 24,
     flex: 1,
   },
   questionImageContainer: {
     alignItems: 'center',
-    marginBottom: 20
+    marginBottom: isTablet ? 16 : 20
   },
   questionImageText: {
-    fontSize: 14,
+    fontSize: isTablet ? 13 : 14,
     color: colors.textColor,
     marginTop: 8,
     textAlign: 'center',
     fontStyle: 'italic',
-    lineHeight: 20,
+    lineHeight: isTablet ? 18 : 20,
   },
   questionFooter: {
-    marginTop: 16,
+    marginTop: isTablet ? 12 : 16,
     paddingTop: 7,
     borderTopWidth: 1,
     borderTopColor: colors.borderColor,
   },
   questionCategory: {
-    fontSize: 13,
+    fontSize: isTablet ? 12 : 13,
     color: colors.textColor,
     opacity: 0.5,
     textAlign: 'right',

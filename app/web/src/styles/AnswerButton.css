@@ -33,4 +33,18 @@
   border-color: var(--error-color);
   color: var(--error-color);
   background-color: var(--error-light);
+}
+
+.try-again-button {
+  margin-top: 16px;
+  padding: 12px;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.try-again-button:hover {
+  background-color: var(--accent-light);
 } 

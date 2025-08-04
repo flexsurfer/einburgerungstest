@@ -5,7 +5,7 @@ import { AnswerList } from './AnswerList'
 import '../styles/QuestionCard.css'
 
 export const QuestionCard = memo(({ question }) => {
-  
+
   return (
     <div className="question-card">
       <div className="question-badge">

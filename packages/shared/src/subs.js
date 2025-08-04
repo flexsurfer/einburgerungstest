@@ -18,6 +18,10 @@ regSub(SUB_IDS.THEME)
 regSub(SUB_IDS.TEST_QUESTIONS)
 regSub(SUB_IDS.TEST_ANSWERS)
 
+// Navigation root subscriptions
+regSub(SUB_IDS.CURRENT_QUESTION_INDEX)
+regSub(SUB_IDS.SHOW_QUESTION_PICKER)
+
 // Computed subscriptions
 regSub(SUB_IDS.FAVORITE_COUNT,
   (favorites) => favorites.length,
@@ -32,6 +36,11 @@ regSub(SUB_IDS.WRONG_COUNT,
     }).length;
   },
   () => [[SUB_IDS.USER_ANSWERS], [SUB_IDS.QUESTIONS]]
+)
+
+regSub(SUB_IDS.IS_TEST_MODE,
+  (selectedCategory) => selectedCategory === 'test',
+  () => [[SUB_IDS.SELECTED_CATEGORY]]
 )
 
 //TODO: it's not really efficient, could be improved, but it's not a big deal for now
@@ -54,6 +63,11 @@ regSub(SUB_IDS.FILTERED_QUESTIONS,
       : questions
   },
   () => [[SUB_IDS.QUESTIONS], [SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.FAVORITES], [SUB_IDS.USER_ANSWERS], [SUB_IDS.TEST_QUESTIONS]]
+)
+
+regSub(SUB_IDS.FILTERED_QUESTIONS_COUNT,
+  (filteredQuestions) => filteredQuestions.length,
+  () => [[SUB_IDS.FILTERED_QUESTIONS]]
 )
 
 regSub(SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX,
@@ -104,4 +118,42 @@ regSub(SUB_IDS.SELECTED_CATEGORY_COUNT,
     return 0;
   },
   () => [[SUB_IDS.SELECTED_CATEGORY], [SUB_IDS.CATEGORIES]]
+)
+
+regSub(SUB_IDS.CURRENT_QUESTION,
+  (filteredQuestions, currentQuestionIndex) => {
+    if (!filteredQuestions || filteredQuestions.length === 0) return null;
+    const index = Math.max(0, Math.min(currentQuestionIndex || 0, filteredQuestions.length - 1));
+    return filteredQuestions[index];
+  },
+  () => [[SUB_IDS.FILTERED_QUESTIONS], [SUB_IDS.CURRENT_QUESTION_INDEX]]
+)
+
+regSub(SUB_IDS.QUESTION_PICKER_ITEMS,
+  (filteredQuestions, userAnswers, testAnswers, currentQuestionIndex, selectedCategory) => {
+    return filteredQuestions.map((question, index) => {
+      const userAnswer = selectedCategory === 'test' ? testAnswers[question.globalIndex] : userAnswers[question.globalIndex];
+      const isAnswered = userAnswer !== undefined;
+      const isCorrect = isAnswered && userAnswer === question.correct;
+      const isSelected = index === (currentQuestionIndex || 0);
+      let className = 'question-picker-item';
+      if (isSelected) className += ' selected';
+      if (isAnswered) {
+        className += isCorrect ? ' correct' : ' incorrect';
+      }
+      const ariaLabel = `Question ${index + 1}${isAnswered ? (isCorrect ? ' (correct)' : ' (incorrect)') : ''}`;
+      return {
+        key: `${question.globalIndex}-${index}`,
+        className,
+        ariaLabel,
+        number: question.globalIndex,
+        isAnswered,
+        indicatorClass: `answer-indicator ${isCorrect ? 'correct' : 'incorrect'}` ,
+        filteredIndex: index,
+        isSelected,
+        isCorrect
+      };
+    });
+  },
+  () => [[SUB_IDS.FILTERED_QUESTIONS], [SUB_IDS.USER_ANSWERS], [SUB_IDS.TEST_ANSWERS], [SUB_IDS.CURRENT_QUESTION_INDEX], [SUB_IDS.SELECTED_CATEGORY]]
 )
