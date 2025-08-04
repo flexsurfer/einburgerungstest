@@ -49,7 +49,7 @@ regEffect(EFFECT_IDS.SCROLL_TO_TOP, (behavior = 'auto') => {
 })
 
 regEffect(EFFECT_IDS.CONFIRM_CLEAR, () => {
-    if (window.confirm("Are you sure you want to clear ALL your answers?")) {
+    if (window.confirm("Are you sure you want to clear ALL your progress?")) {
         dispatch([EVENT_IDS.CLEAR_ANSWERS])
     }
 })
