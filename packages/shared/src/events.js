@@ -45,7 +45,11 @@ regEvent(EVENT_IDS.SET_SELECTED_CATEGORY, ({ draftDb }, category) => {
   draftDb.currentQuestionIndex = 0
   draftDb.showQuestionPicker = false
 
-  return [[EFFECT_IDS.SCROLL_TO_TOP]]
+  return [
+    [EFFECT_IDS.SCROLL_TO_TOP],
+    [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'selectedCategory', value: category }],
+    [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'currentQuestionIndex', value: 0 }]
+  ]
 })
 
 regEvent(EVENT_IDS.SCROLL_TO_TOP, (_, behavior = 'auto') => {
@@ -178,18 +182,21 @@ regEvent(EVENT_IDS.CLEAR_QUESTION_ANSWER, ({ draftDb }, questionIndex) => {
 regEvent(EVENT_IDS.NAVIGATE_TO_QUESTION, ({ draftDb }, questionIndex) => {
   draftDb.currentQuestionIndex = questionIndex
   draftDb.showQuestionPicker = false
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'currentQuestionIndex', value: questionIndex }]]
 })
 
 regEvent(EVENT_IDS.NAVIGATE_NEXT, ({ draftDb }) => {
   const currentIndex = draftDb.currentQuestionIndex || 0
   const nextIndex = Math.min(currentIndex + 1, draftDb.questions.length - 1)
   draftDb.currentQuestionIndex = nextIndex
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'currentQuestionIndex', value: nextIndex }]]
 })
 
 regEvent(EVENT_IDS.NAVIGATE_PREV, ({ draftDb }) => {
   const currentIndex = draftDb.currentQuestionIndex || 0
   const prevIndex = Math.max(currentIndex - 1, 0)
   draftDb.currentQuestionIndex = prevIndex
+  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'currentQuestionIndex', value: prevIndex }]]
 })
 
 regEvent(EVENT_IDS.SHOW_QUESTION_PICKER, ({ draftDb }, show) => {

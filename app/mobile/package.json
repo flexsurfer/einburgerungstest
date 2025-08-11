@@ -2,6 +2,10 @@
   "name": "mobile",
   "version": "0.0.1",
   "private": true,
+  "scripts": {
+    "build:android:bundle": "pnpm react-native build-android --mode=release",
+    "build:android:apk": "cd android && ./gradlew assembleRelease"
+  },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
     "react-native": "0.80.1",

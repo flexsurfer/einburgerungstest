@@ -35,6 +35,16 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
         key: 'theme',
         onSuccess: [EVENT_IDS.STORAGE_LOADED],
         onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+      }],
+      [EFFECT_IDS.LOCAL_STORAGE_GET, {
+        key: 'selectedCategory',
+        onSuccess: [EVENT_IDS.STORAGE_LOADED],
+        onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+      }],
+      [EFFECT_IDS.LOCAL_STORAGE_GET, {
+        key: 'currentQuestionIndex',
+        onSuccess: [EVENT_IDS.STORAGE_LOADED],
+        onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
       }]
     ]
   }
@@ -74,6 +84,16 @@ regEvent(EVENT_IDS.STORAGE_LOADED,
           draftDb.useSystemTheme = true
         }
         break
+      case 'selectedCategory':
+        if (value !== null && value !== undefined) {
+          draftDb.selectedCategory = value
+        }
+        break
+      case 'currentQuestionIndex':
+        if (value !== null && value !== undefined) {
+          draftDb.currentQuestionIndex = value
+        }
+        break
     }
   }
 )
@@ -94,6 +114,12 @@ regEvent(EVENT_IDS.STORAGE_LOAD_FAILED,
       case 'theme':
         draftDb.theme = Appearance.getColorScheme() || 'light'
         draftDb.useSystemTheme = true
+        break
+      case 'selectedCategory':
+        // Keep default value (null) if not found in storage
+        break
+      case 'currentQuestionIndex':
+        // Keep default value (0) if not found in storage  
         break
     }
   }
