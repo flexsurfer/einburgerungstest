@@ -9,7 +9,8 @@ export const AnswerList = ({question}) => {
     const showAnswers = useSubscription([SUB_IDS.SHOW_ANSWERS], "AnswerList")
     const userAnswer = useSubscription([SUB_IDS.USER_ANSWER_BY_QUESTION_INDEX, question.globalIndex], "AnswerList")
     const isTestMode = useSubscription([SUB_IDS.IS_TEST_MODE], "AnswerList")
-  
+    const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "AnswerList")
+
     const handleAnswerClick = useCallback((index) => {
       if (!showAnswers && userAnswer === undefined) {
         dispatch([EVENT_IDS.ANSWER_QUESTION, question.globalIndex, index])
@@ -17,7 +18,8 @@ export const AnswerList = ({question}) => {
     }, [showAnswers, userAnswer, question.globalIndex])
 
     const isIncorrect = !isTestMode && userAnswer !== undefined && userAnswer !== question.correct && !showAnswers;
-
+    const wrongAnswersMode = selectedCategory === 'wrong'
+    
     return (
         <div className="answers-container">
             {question.answers.map((answer, index) => (
@@ -38,7 +40,7 @@ export const AnswerList = ({question}) => {
                     className="try-again-button"
                     onClick={() => dispatch([EVENT_IDS.CLEAR_QUESTION_ANSWER, question.globalIndex])}
                 >
-                    Try again
+                    {wrongAnswersMode ? 'Clear answer' : 'Try again'}
                 </button>
             )}
         </div>
