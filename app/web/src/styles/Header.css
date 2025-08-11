@@ -145,6 +145,17 @@
   margin-left: 0.5rem;
 }
 
+.github-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.github-tab:hover {
+  color: var(--accent-color);
+}
+
 /* Group title styles */
 .category-popup h3 {
   margin: 0.5rem 0 0.25rem 1rem;
