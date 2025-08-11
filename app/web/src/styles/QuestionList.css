@@ -58,11 +58,27 @@
     display: none;
   }
   
+  .mobile-question-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    /* Prevent iOS Safari from bouncing */
+    overscroll-behavior: none;
+  }
+  
   .single-question-wrapper {
     padding: 10px;
     /* Enable smooth scrolling */
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    /* Ensure proper scrolling on iOS */
+    overscroll-behavior: contain;
+    /* Force hardware acceleration for smoother scrolling */
+    transform: translateZ(0);
+    will-change: transform;
   }
   
   /* Ensure question cards on mobile don't have minimum height restrictions */

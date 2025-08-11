@@ -47,6 +47,16 @@ body {
   background-color: var(--bg-color);
 }
 
+/* Prevent page-level scrolling on mobile devices */
+@media (max-width: 600px) {
+  html, body {
+    height: 100vh;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
 button {
   border: 1px solid var(--border-color);
   background-color: var(--bg-color);
