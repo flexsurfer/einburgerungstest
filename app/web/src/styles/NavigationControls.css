@@ -3,9 +3,21 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
-  position: sticky;
-  bottom: 0;
   z-index: 100;
+}
+
+/* Mobile: flex item in column layout */
+@media (max-width: 600px) {
+  .navigation-controls {
+    flex-shrink: 0; /* Don't shrink */
+  }
+}
+
+/* Desktop: hide navigation controls since we have question list */
+@media (min-width: 601px) {
+  .navigation-controls {
+    display: none; /* Navigation not needed for desktop list view */
+  }
 }
 
 .nav-button {
@@ -61,16 +73,8 @@
   font-weight: bold;
   margin-right: 4px;
 }
-/* Mobile-specific styles */
+/* Mobile responsive button sizing */
 @media (max-width: 600px) {
-  .navigation-controls {
-    position: fixed;
-    bottom: 60px; /* Position above statistics */
-    left: 0;
-    right: 0;
-    z-index: 150; /* Higher than statistics (10) */
-  }
-  
   .nav-button {
     font-size: 14px;
     min-width: 70px;

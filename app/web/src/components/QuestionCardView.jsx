@@ -19,9 +19,8 @@ export const QuestionCardView = memo(() => {
 
   return (
     <div className="mobile-question-container">
-      <div style={{ height: '40px' }} />
       <div className="single-question-wrapper">
-        <QuestionCard key={currentQuestion.globalIndex} question={currentQuestion}   />
+        <QuestionCard key={currentQuestion.globalIndex} question={currentQuestion} />
       </div>
       <NavigationControls isVisible={true} />
       <QuestionPicker />

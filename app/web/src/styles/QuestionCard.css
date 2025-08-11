@@ -87,8 +87,7 @@
 /* Mobile responsiveness */
 @media (max-width: 600px) {
   .question-card {
-    margin-bottom: 0;
-    /* Ensure cards work well in scrollable container */
+    margin-bottom: 0; /* Reset margin */
     width: 100%;
     box-sizing: border-box;
   }

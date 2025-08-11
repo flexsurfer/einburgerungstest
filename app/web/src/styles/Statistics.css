@@ -1,13 +1,28 @@
 .statistics-container {
+    background-color: var(--bg-color);
+    box-shadow: 0 -4px 12px var(--shadow-color);
+    z-index: 10;
+    padding: 0.2rem;
+    /* iOS safe area support */
+    padding-bottom: calc(0.2rem + env(safe-area-inset-bottom, 0));
+}
+
+/* Mobile: flex item in column layout */
+@media (max-width: 600px) {
+  .statistics-container {
+    flex-shrink: 0; /* Don't shrink */
+  }
+}
+
+/* Desktop: fixed positioning */
+@media (min-width: 601px) {
+  .statistics-container {
     position: fixed;
-    padding: 0.2rem 0.2rem 0 0.2rem;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 10;
-    background-color: var(--bg-color);
-    box-shadow: 0 -4px 12px var(--shadow-color);
+  }
 }
 
 .statistics-card {
@@ -163,3 +178,4 @@
         font-size: 0.9rem;
     }
 }
+

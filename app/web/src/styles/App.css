@@ -1,20 +1,30 @@
+/* Universal flex column layout */
 .app-container {
   background-color: var(--bg-color);
-  min-height: 100vh;
   width: 100%;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Mobile-specific app container styles */
+/* Mobile: full height container */
 @media (max-width: 600px) {
   .app-container {
     height: 100vh;
+    height: 100dvh; /* Better mobile support */
     overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  }
+}
+
+/* Desktop: normal scroll behavior with fixed header/footer */
+@media (min-width: 601px) {
+  .app-container {
+    min-height: 100vh; /* Allow page to be longer than viewport */
+  }
+  
+  /* Add padding for fixed header and statistics */
+  .app-container > *:nth-child(2) { /* QuestionView */
+    padding-top: 60px; /* Space for fixed header */
+    padding-bottom: 80px; /* Space for fixed statistics */
   }
 }
 

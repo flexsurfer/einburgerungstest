@@ -54,8 +54,7 @@ export const QuestionListView = memo(() => {
   const visibleQuestions = filteredQuestions.slice(0, visibleCount)
 
   return (
-    <div>
-      <div style={{ height: '60px' }} />
+    <div className="question-list-container">
       <div className="questions-grid">
         {visibleQuestions.map((question) => (
           <QuestionCard key={question.globalIndex} question={question} />
@@ -64,7 +63,6 @@ export const QuestionListView = memo(() => {
           <div ref={loadMoreRef} style={{ height: '60px' }} />
         }
       </div>
-      {visibleCount >= filteredQuestions.length && <div style={{ height: '60px' }} />}
       {showScrollTop && (
         <button
           className="scroll-top-button"

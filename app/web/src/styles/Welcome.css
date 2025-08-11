@@ -14,8 +14,6 @@
   margin: 0 auto;
   background: var(--bg-color);
   padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .readme-content {
@@ -102,27 +100,40 @@
   bottom: 1rem;
 }
 
-.start-button:hover {
-  background-color: var(--accent-medium);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--accent-light);
-}
-
-.start-button:active {
-  transform: translateY(0);
-  box-shadow: none;
-  background-color: var(--accent-color);
-}
-
 @media (max-width: 768px) {
+  .welcome-container {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for better mobile support */
+    position: relative;
+    padding-bottom: 100px; /* Reserve space for button */
+    box-sizing: border-box;
+  }
+  
   .welcome-content {
     margin: 0;
     border-radius: 0;
-    min-height: 100vh;
+    padding: 1rem;
+    height: 100%;
+    box-sizing: border-box;
   }
   
   .readme-content {
-    max-height: calc(100vh - 120px);
+    height: 100%;
+    overflow-y: auto;
+    /* Ensure content doesn't run into button space */
+    padding-bottom: 20px;
+  }
+  
+  .start-button {
+    /* Absolutely positioned at bottom - always visible */
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    /* Handle iOS safe area */
+    bottom: calc(20px + env(safe-area-inset-bottom, 0));
+    /* Ensure button stands out */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 }
 
