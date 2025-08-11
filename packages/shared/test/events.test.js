@@ -112,7 +112,7 @@ describe('Event Handlers', () => {
       const result = handler(coeffects, 'Politik')
 
       expect(initialState.selectedCategory).toBe('Politik')
-      expect(result).toEqual([[EFFECT_IDS.SCROLL_TO_TOP]])
+      expect(result).toEqual([[EFFECT_IDS.SCROLL_TO_TOP], [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'selectedCategory', value: 'Politik' }], [EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'currentQuestionIndex', value: 0 }]])
     })
 
     it('should handle setSelectedLanguage event', () => {

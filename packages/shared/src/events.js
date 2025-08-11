@@ -154,6 +154,7 @@ regEvent(EVENT_IDS.TOGGLE_FAVORITE, ({ draftDb }, questionIndex) => {
   if (index === -1) {
     favorites.push(questionIndex)
   } else {
+    draftDb.currentQuestionIndex = Math.max(0, draftDb.currentQuestionIndex - 1)
     favorites.splice(index, 1)
   }
 
@@ -170,6 +171,7 @@ regEvent(EVENT_IDS.REQUEST_CLEAR_ANSWERS, () => {
 })
 
 regEvent(EVENT_IDS.CLEAR_QUESTION_ANSWER, ({ draftDb }, questionIndex) => {
+  draftDb.currentQuestionIndex = Math.max(0, draftDb.currentQuestionIndex - 1)
   if (draftDb.selectedCategory === 'test') {
     delete draftDb.testAnswers[questionIndex]
   } else {

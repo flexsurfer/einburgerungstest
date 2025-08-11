@@ -40,6 +40,16 @@ describe('Initialize App Event', () => {
               key: 'theme',
               onSuccess: [EVENT_IDS.STORAGE_LOADED],
               onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+            }],
+            [EFFECT_IDS.LOCAL_STORAGE_GET, {
+                key: 'selectedCategory',
+                onSuccess: [EVENT_IDS.STORAGE_LOADED],
+                onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
+            }],
+            [EFFECT_IDS.LOCAL_STORAGE_GET, {
+                key: 'currentQuestionIndex',
+                onSuccess: [EVENT_IDS.STORAGE_LOADED],
+                onFailure: [EVENT_IDS.STORAGE_LOAD_FAILED]
             }]
         ])
     })
