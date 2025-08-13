@@ -90,7 +90,7 @@ const styles = (colors: Colors, isTablet = false) => StyleSheet.create({
     position: 'relative',
     flexDirection: 'column',
     minHeight: isTablet ? 240 : 200,
-    marginBottom: isTablet ? 0 : undefined,
+    marginVertical: isTablet ? 0 : 20,
   },
   questionHeader: {
     flexDirection: 'row',

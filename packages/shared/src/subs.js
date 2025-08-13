@@ -143,7 +143,7 @@ regSub(SUB_IDS.QUESTION_PICKER_ITEMS,
       }
       const ariaLabel = `Question ${index + 1}${isAnswered ? (isCorrect ? ' (correct)' : ' (incorrect)') : ''}`;
       return {
-        key: `${question.globalIndex}-${index}`,
+        key: question.globalIndex,
         className,
         ariaLabel,
         number: question.globalIndex,

@@ -56,8 +56,7 @@ const styles = (colors: Colors) => StyleSheet.create({
   },
   singleCardContainer: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingHorizontal: 16
   },
   emptyContainer: {
     flex: 1,

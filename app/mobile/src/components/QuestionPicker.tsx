@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import {
   View,
   Text,
@@ -18,6 +18,9 @@ export const QuestionPicker = memo(() => {
   const showQuestionPicker = useSubscription([SUB_IDS.SHOW_QUESTION_PICKER], "QuestionPicker") as boolean
   const colors = useColors()
 
+  // Memoize styles to avoid recreation on every render
+  const styleSheet = useMemo(() => createStyles(colors), [colors])
+
   const handleQuestionSelect = useCallback((index: number) => {
     dispatch([EVENT_IDS.NAVIGATE_TO_QUESTION, index])
   }, [])
@@ -26,33 +29,60 @@ export const QuestionPicker = memo(() => {
     dispatch([EVENT_IDS.SHOW_QUESTION_PICKER, false])
   }, [])
 
+  // Pre-calculate style combinations for better performance
+  const questionItemStyles = useMemo(() => ({
+    base: styleSheet.questionItem,
+    selected: [styleSheet.questionItem, styleSheet.selectedQuestionItem],
+    correct: [styleSheet.questionItem, styleSheet.correctQuestionItem],
+    incorrect: [styleSheet.questionItem, styleSheet.incorrectQuestionItem],
+    selectedCorrect: [styleSheet.questionItem, styleSheet.selectedQuestionItem, styleSheet.correctQuestionItem],
+    selectedIncorrect: [styleSheet.questionItem, styleSheet.selectedQuestionItem, styleSheet.incorrectQuestionItem],
+  }), [styleSheet])
+
+  const textStyles = useMemo(() => ({
+    base: styleSheet.questionItemText,
+    selected: [styleSheet.questionItemText, styleSheet.selectedQuestionItemText],
+    answered: [styleSheet.questionItemText, styleSheet.answeredQuestionItemText],
+    selectedAnswered: [styleSheet.questionItemText, styleSheet.selectedQuestionItemText, styleSheet.answeredQuestionItemText],
+  }), [styleSheet])
+
+  const getQuestionItemStyle = useCallback((item) => {
+    if (item.isSelected && item.isAnswered) {
+      return item.isCorrect ? questionItemStyles.selectedCorrect : questionItemStyles.selectedIncorrect
+    }
+    if (item.isSelected) return questionItemStyles.selected
+    if (item.isAnswered) {
+      return item.isCorrect ? questionItemStyles.correct : questionItemStyles.incorrect
+    }
+    return questionItemStyles.base
+  }, [questionItemStyles])
+
+  const getTextStyle = useCallback((item) => {
+    if (item.isSelected && item.isAnswered) return textStyles.selectedAnswered
+    if (item.isSelected) return textStyles.selected
+    if (item.isAnswered) return textStyles.answered
+    return textStyles.base
+  }, [textStyles])
+
   const renderQuestionItem = useCallback(({ item }) => {
     return (
       <TouchableOpacity
-        style={[
-          styles(colors).questionItem,
-          item.isSelected && styles(colors).selectedQuestionItem,
-          item.isAnswered && (item.isCorrect ? styles(colors).correctQuestionItem : styles(colors).incorrectQuestionItem)
-        ]}
+        style={getQuestionItemStyle(item)}
         onPress={() => handleQuestionSelect(item.filteredIndex)}
         accessibilityLabel={item.ariaLabel}
       >
-        <Text style={[
-          styles(colors).questionItemText,
-          item.isSelected && styles(colors).selectedQuestionItemText,
-          item.isAnswered && styles(colors).answeredQuestionItemText
-        ]}>
+        <Text style={getTextStyle(item)}>
           {item.number}
         </Text>
         {item.isAnswered && (
           <View style={[
-            styles(colors).answerIndicator,
-            item.isCorrect ? styles(colors).correctIndicator : styles(colors).incorrectIndicator
+            styleSheet.answerIndicator,
+            item.isCorrect ? styleSheet.correctIndicator : styleSheet.incorrectIndicator
           ]} />
         )}
       </TouchableOpacity>
     )
-  }, [colors, handleQuestionSelect])
+  }, [getQuestionItemStyle, getTextStyle, handleQuestionSelect, styleSheet])
 
   const keyExtractor = useCallback((item, index: number) => item.key, [])
 
@@ -67,31 +97,31 @@ export const QuestionPicker = memo(() => {
       animationType="slide"
       onRequestClose={handleClose}
     >
-      <View style={styles(colors).modalOverlay}>
-        <View style={styles(colors).modalContent}>
-          <View style={styles(colors).modalHeader}>
-            <Text style={styles(colors).modalTitle}>Select Question</Text>
+      <View style={styleSheet.modalOverlay}>
+        <View style={styleSheet.modalContent}>
+          <View style={styleSheet.modalHeader}>
+            <Text style={styleSheet.modalTitle}>Select Question</Text>
             <TouchableOpacity
-              style={styles(colors).closeButton}
+              style={styleSheet.closeButton}
               onPress={handleClose}
               accessibilityLabel="Close question picker"
             >
-              <Text style={styles(colors).closeButtonText}>✕</Text>
+              <Text style={styleSheet.closeButtonText}>✕</Text>
             </TouchableOpacity>
           </View>
 
-          <View style={styles(colors).legendContainer}>
-            <View style={styles(colors).legendItem}>
-              <View style={[styles(colors).legendDot, styles(colors).correctIndicator]} />
-              <Text style={styles(colors).legendText}>Correct</Text>
+          <View style={styleSheet.legendContainer}>
+            <View style={styleSheet.legendItem}>
+              <View style={[styleSheet.legendDot, styleSheet.correctIndicator]} />
+              <Text style={styleSheet.legendText}>Correct</Text>
             </View>
-            <View style={styles(colors).legendItem}>
-              <View style={[styles(colors).legendDot, styles(colors).incorrectIndicator]} />
-              <Text style={styles(colors).legendText}>Incorrect</Text>
+            <View style={styleSheet.legendItem}>
+              <View style={[styleSheet.legendDot, styleSheet.incorrectIndicator]} />
+              <Text style={styleSheet.legendText}>Incorrect</Text>
             </View>
-            <View style={styles(colors).legendItem}>
-              <View style={[styles(colors).legendDot, styles(colors).unansweredIndicator]} />
-              <Text style={styles(colors).legendText}>Unanswered</Text>
+            <View style={styleSheet.legendItem}>
+              <View style={[styleSheet.legendDot, styleSheet.unansweredIndicator]} />
+              <Text style={styleSheet.legendText}>Unanswered</Text>
             </View>
           </View>
 
@@ -100,13 +130,17 @@ export const QuestionPicker = memo(() => {
             renderItem={renderQuestionItem}
             keyExtractor={keyExtractor}
             numColumns={5}
-            contentContainerStyle={styles(colors).questionsGrid}
+            contentContainerStyle={styleSheet.questionsGrid}
             showsVerticalScrollIndicator={false}
-            getItemLayout={(_, index) => ({
-              length: 60,
-              offset: 60 * Math.floor(index / 5),
-              index,
-            })}
+            // Performance optimizations for Android - tuned for fast scrolling without gaps
+            removeClippedSubviews={false} // Disabled to prevent gaps during fast scroll
+            initialNumToRender={30} // Render more items initially to cover viewport + buffer
+            maxToRenderPerBatch={40} // Larger batches to keep up with fast scrolling
+            windowSize={20} // Larger window to keep more items rendered around viewport
+            updateCellsBatchingPeriod={100} // Slower updates to prevent rendering conflicts
+            disableVirtualization={false}
+            scrollEventThrottle={16}
+            legacyImplementation={false} // Use newer FlatList implementation
           />
         </View>
       </View>
@@ -116,20 +150,28 @@ export const QuestionPicker = memo(() => {
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
 
-const styles = (colors: Colors) => StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: colors.bgColor,
-    borderRadius: 16,
-    width: Math.min(screenWidth - 40, 400),
-    maxHeight: screenHeight * 0.8,
-    paddingBottom: 20,
-  },
+const createStyles = (colors: Colors) => {
+  const modalWidth = Math.min(screenWidth - 40, 400)
+  const numColumns = 5
+  const gridPadding = 40 // 20px padding on each side
+  const itemMargin = 5
+  const availableWidth = modalWidth - gridPadding
+  const itemSize = (availableWidth - (itemMargin * 2 * numColumns)) / numColumns
+
+  return StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: colors.bgColor,
+      borderRadius: 16,
+      width: modalWidth,
+      maxHeight: screenHeight * 0.8,
+      paddingBottom: 20,
+    },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -184,10 +226,9 @@ const styles = (colors: Colors) => StyleSheet.create({
     paddingBottom: 0,
   },
   questionItem: {
-    flex: 1,
-    height: 50,
-    maxWidth: 50,
-    margin: 5,
+    width: itemSize,
+    height: itemSize,
+    margin: itemMargin,
     borderRadius: 8,
     backgroundColor: colors.bgColor,
     borderWidth: 1,
@@ -236,4 +277,4 @@ const styles = (colors: Colors) => StyleSheet.create({
   unansweredIndicator: {
     backgroundColor: colors.borderColor,
   },
-})
+})}
