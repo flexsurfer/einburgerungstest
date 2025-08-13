@@ -17,6 +17,7 @@
 # Keep our application class
 -keep class org.ebtest.MainApplication { *; }
 -keep class org.ebtest.MainActivity { *; }
+-keep class org.ebtest.BuildConfig { *; }
 
 # Keep React Native modules
 -dontwarn com.facebook.react.**

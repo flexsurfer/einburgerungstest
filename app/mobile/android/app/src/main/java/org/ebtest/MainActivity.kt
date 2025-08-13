@@ -1,4 +1,4 @@
-package com.mobile
+package org.ebtest
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
