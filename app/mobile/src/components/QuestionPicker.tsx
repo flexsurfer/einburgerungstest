@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Pressable,
   Modal,
   FlatList,
   StyleSheet,
@@ -66,10 +67,17 @@ export const QuestionPicker = memo(() => {
 
   const renderQuestionItem = useCallback(({ item }) => {
     return (
-      <TouchableOpacity
-        style={getQuestionItemStyle(item)}
+      <Pressable
+        style={({ pressed }) => [
+          getQuestionItemStyle(item),
+          pressed && !item.isSelected && styleSheet.pressedQuestionItem,
+        ]}
         onPress={() => handleQuestionSelect(item.filteredIndex)}
         accessibilityLabel={item.ariaLabel}
+        android_ripple={{ color: colors.accentMedium, borderless: false }}
+        hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+        pressRetentionOffset={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        onStartShouldSetResponderCapture={() => true}
       >
         <Text style={getTextStyle(item)}>
           {item.number}
@@ -80,7 +88,7 @@ export const QuestionPicker = memo(() => {
             item.isCorrect ? styleSheet.correctIndicator : styleSheet.incorrectIndicator
           ]} />
         )}
-      </TouchableOpacity>
+      </Pressable>
     )
   }, [getQuestionItemStyle, getTextStyle, handleQuestionSelect, styleSheet])
 
@@ -131,6 +139,7 @@ export const QuestionPicker = memo(() => {
             keyExtractor={keyExtractor}
             numColumns={5}
             contentContainerStyle={styleSheet.questionsGrid}
+            keyboardShouldPersistTaps="always"
             showsVerticalScrollIndicator={false}
             // Performance optimizations for Android - tuned for fast scrolling without gaps
             removeClippedSubviews={false} // Disabled to prevent gaps during fast scroll
@@ -172,109 +181,113 @@ const createStyles = (colors: Colors) => {
       maxHeight: screenHeight * 0.8,
       paddingBottom: 20,
     },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderColor,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: colors.textColor,
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.borderColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  closeButtonText: {
-    fontSize: 16,
-    color: colors.textColor,
-    fontWeight: 'bold',
-  },
-  legendContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderColor,
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  legendDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 6,
-  },
-  legendText: {
-    fontSize: 12,
-    color: colors.textColor,
-    opacity: 0.7,
-  },
-  questionsGrid: {
-    padding: 20,
-    paddingBottom: 0,
-  },
-  questionItem: {
-    width: itemSize,
-    height: itemSize,
-    margin: itemMargin,
-    borderRadius: 8,
-    backgroundColor: colors.bgColor,
-    borderWidth: 1,
-    borderColor: colors.borderColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  selectedQuestionItem: {
-    backgroundColor: colors.accentColor,
-    borderColor: colors.accentColor,
-  },
-  correctQuestionItem: {
-    borderColor: '#4CAF50',
-    borderWidth: 2,
-  },
-  incorrectQuestionItem: {
-    borderColor: '#F44336',
-    borderWidth: 2,
-  },
-  questionItemText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.textColor,
-  },
-  selectedQuestionItemText: {
-    color: colors.bgColor,
-  },
-  answeredQuestionItemText: {
-    fontWeight: 'bold',
-  },
-  answerIndicator: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  correctIndicator: {
-    backgroundColor: '#4CAF50',
-  },
-  incorrectIndicator: {
-    backgroundColor: '#F44336',
-  },
-  unansweredIndicator: {
-    backgroundColor: colors.borderColor,
-  },
-})}
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderColor,
+    },
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: colors.textColor,
+    },
+    closeButton: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: colors.borderColor,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    closeButtonText: {
+      fontSize: 16,
+      color: colors.textColor,
+      fontWeight: 'bold',
+    },
+    legendContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderColor,
+    },
+    legendItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    legendDot: {
+      width: 12,
+      height: 12,
+      borderRadius: 6,
+      marginRight: 6,
+    },
+    legendText: {
+      fontSize: 12,
+      color: colors.textColor,
+      opacity: 0.7,
+    },
+    questionsGrid: {
+      padding: 20,
+      paddingBottom: 0,
+    },
+    questionItem: {
+      width: itemSize,
+      height: itemSize,
+      margin: itemMargin,
+      borderRadius: 8,
+      backgroundColor: colors.bgColor,
+      borderWidth: 1,
+      borderColor: colors.borderColor,
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    pressedQuestionItem: {
+      backgroundColor: colors.accentLight,
+    },
+    selectedQuestionItem: {
+      backgroundColor: colors.accentColor,
+      borderColor: colors.accentColor,
+    },
+    correctQuestionItem: {
+      borderColor: '#4CAF50',
+      borderWidth: 2,
+    },
+    incorrectQuestionItem: {
+      borderColor: '#F44336',
+      borderWidth: 2,
+    },
+    questionItemText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colors.textColor,
+    },
+    selectedQuestionItemText: {
+      color: colors.bgColor,
+    },
+    answeredQuestionItemText: {
+      fontWeight: 'bold',
+    },
+    answerIndicator: {
+      position: 'absolute',
+      top: 2,
+      right: 2,
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+    },
+    correctIndicator: {
+      backgroundColor: '#4CAF50',
+    },
+    incorrectIndicator: {
+      backgroundColor: '#F44336',
+    },
+    unansweredIndicator: {
+      backgroundColor: colors.borderColor,
+    },
+  })
+}
