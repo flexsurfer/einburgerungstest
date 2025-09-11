@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "title": "Einbürgerungstest Deutschland – Übungsfragen & Prüfungstraining",
+    "description": "Kostenlose Übungsfragen für den deutschen Einbürgerungstest und 'Leben in Deutschland'. Lernen Sie online auf ebtest.org mit Statistiken, Favoriten und länderspezifischen Fragen.",
+    "ogTitle": "EBTest.org – Einbürgerungstest Deutschland online",
+    "ogDescription": "Üben Sie für den Einbürgerungstest online – kostenlos, modern und mobil.",
+    "twitterTitle": "EBTest.org – Einbürgerungstest Deutschland online", 
+    "twitterDescription": "Üben Sie für den Einbürgerungstest online – kostenlos, modern und mobil."
+  },
+  "navigation": {
+    "webApp": "Web App",
+    "android": "Android",
+    "themeToggleLight": "Zum hellen Design wechseln",
+    "themeToggleDark": "Zum dunklen Design wechseln"
+  },
+  "hero": {
+    "eyebrow": "Bereiten Sie sich auf den deutschen Einbürgerungstest und das \"Leben in Deutschland\" vor",
+    "heading": "Schnell, clever und selbstbewusst lernen",
+    "subtitle": "Basierend auf öffentlich verfügbaren Materialien des Bundesamtes für Migration und Flüchtlinge (BAMF), gültig ab 7. Mai 2025.",
+    "ctaPrimary": "Jetzt üben",
+    "ctaAndroid": "📱 Android App",
+    "ctaGithub": "⭐ GitHub",
+    "kpi": "Keine Anmeldung erforderlich • Keine Werbung • Open Source"
+  },
+  "features": {
+    "testMode": {
+      "title": "Prüfungsmodus",
+      "description": "Simuliert die echte Prüfungserfahrung."
+    },
+    "categories": {
+      "title": "Kategorien",
+      "description": "Nach Themen lernen für gezieltes Üben."
+    },
+    "bookmarks": {
+      "title": "Lesezeichen",
+      "description": "Wichtige Fragen zum Wiederholen speichern."
+    },
+    "mistakeReview": {
+      "title": "Fehlerwiederholung",
+      "description": "Falsch beantwortete Fragen nochmals üben."
+    },
+    "statistics": {
+      "title": "Statistiken",
+      "description": "Verfolgen Sie Ihren Lernfortschritt und Ihre Genauigkeit."
+    }
+  },
+  "sections": {
+    "learnQuestions": {
+      "title": "Alle 460 Fragen lernen",
+      "description": "Kostenlose und werbefreie Einbürgerungstest-Übung"
+    },
+    "checkProgress": {
+      "title": "Fortschritt überprüfen",
+      "description": "Sofortiges Feedback mit hervorgehobenen richtigen Antworten"
+    },
+    "organizedTopics": {
+      "title": "Nach Themen organisiert",
+      "description": "Spezielle Themen studieren oder einen vollständigen Test absolvieren"
+    },
+    "darkMode": {
+      "title": "Dunkler Modus inklusive",
+      "description": "Komfortables Lernen bei Tag und Nacht"
+    }
+  },
+  "footer": {
+    "copyright": "EBTest.org"
+  }
+}

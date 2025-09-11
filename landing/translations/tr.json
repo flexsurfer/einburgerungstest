@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "title": "Almanya Vatandaşlık Testi – Pratik Sorular ve Sınav Hazırlığı",
+    "description": "Alman Vatandaşlık Testi (Einbürgerungstest) ve 'Almanya'da Yaşam' için ücretsiz pratik sorular. ebtest.org'da istatistikler, favoriler ve eyalet özel soruları ile online öğrenin.",
+    "ogTitle": "EBTest.org – Almanya Vatandaşlık Testi online",
+    "ogDescription": "Vatandaşlık testi için online hazırlanın – ücretsiz, modern ve mobil.",
+    "twitterTitle": "EBTest.org – Almanya Vatandaşlık Testi online",
+    "twitterDescription": "Vatandaşlık testi için online hazırlanın – ücretsiz, modern ve mobil."
+  },
+  "navigation": {
+    "webApp": "Web Uygulaması",
+    "android": "Android",
+    "themeToggleLight": "Açık temaya geç",
+    "themeToggleDark": "Koyu temaya geç"
+  },
+  "hero": {
+    "eyebrow": "Alman vatandaşlığa geçiş testine (Einbürgerungstest) ve \"Leben in Deutschland\" sınavına hazırlanın",
+    "heading": "Hızlı, akıllı ve güvenle öğrenin",
+    "subtitle": "Federal Göç ve Mülteci Dairesi'nin (BAMF) kamuya açık materyallerine dayanarak, 7 Mayıs 2025 tarihinden itibaren geçerli.",
+    "ctaPrimary": "Pratik yapmaya başla",
+    "ctaAndroid": "📱 Android Uygulaması",
+    "ctaGithub": "⭐ GitHub",
+    "kpi": "Hesap gerekli değil • Reklamsız • Açık kaynak"
+  },
+  "features": {
+    "testMode": {
+      "title": "Test modu",
+      "description": "Gerçek sınav deneyimini simüle eder."
+    },
+    "categories": {
+      "title": "Kategoriler",
+      "description": "Hedefli öğrenme için konuya göre çalışın."
+    },
+    "bookmarks": {
+      "title": "Yer imleri",
+      "description": "Önemli soruları tekrar için kaydedin."
+    },
+    "mistakeReview": {
+      "title": "Hata incelemesi",
+      "description": "Yanlış cevaplanmış soruları tekrar pratik yapın."
+    },
+    "statistics": {
+      "title": "İstatistikler",
+      "description": "Öğrenme ilerlemenizi ve doğruluğunuzu zaman içinde takip edin."
+    }
+  },
+  "sections": {
+    "learnQuestions": {
+      "title": "Tüm 460 Soruyu Öğrenin",
+      "description": "Ücretsiz ve reklamsız vatandaşlık testi pratiği"
+    },
+    "checkProgress": {
+      "title": "İlerlemenizi Kontrol Edin",
+      "description": "Vurgulanan doğru cevaplarla anında geri bildirim"
+    },
+    "organizedTopics": {
+      "title": "Konulara Göre Düzenlenmiş",
+      "description": "Belirli temaları çalışın veya tam test alın"
+    },
+    "darkMode": {
+      "title": "Koyu Mod Dahil",
+      "description": "Gece gündüz rahat öğrenme"
+    }
+  },
+  "footer": {
+    "copyright": "EBTest.org"
+  }
+}
