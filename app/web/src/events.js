@@ -7,7 +7,6 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
     ({ draftDb, localStorage }) => {
         draftDb.userAnswers = localStorage?.userAnswers || {}
         draftDb.favorites = localStorage?.favorites || []
-        draftDb.showWelcome = localStorage?.showWelcome ?? true
         draftDb.theme = localStorage?.theme || 'light'
 
         draftDb.questionsLoading = true
@@ -22,7 +21,7 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
             [EFFECT_IDS.SET_BODY_THEME, { theme: draftDb.theme }]
         ]
     },
-    [[EFFECT_IDS.LOCAL_STORAGE_GET, 'userAnswers'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'favorites'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'showWelcome'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'theme']]
+    [[EFFECT_IDS.LOCAL_STORAGE_GET, 'userAnswers'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'favorites'], [EFFECT_IDS.LOCAL_STORAGE_GET, 'theme']]
 )
 
 regEvent(EVENT_IDS.FETCH_VOCABULARY, ({ draftDb }) => {

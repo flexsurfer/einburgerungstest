@@ -2,7 +2,6 @@ import { regSub, setupSubsHotReload } from "@flexsurfer/reflex"
 import { SUB_IDS } from './sub-ids.js'
 
 // Root subscriptions
-regSub(SUB_IDS.SHOW_WELCOME)
 regSub(SUB_IDS.SHOW_ANSWERS)
 regSub(SUB_IDS.SELECTED_CATEGORY)
 regSub(SUB_IDS.QUESTIONS)

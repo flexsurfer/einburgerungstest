@@ -10,24 +10,6 @@ import '../src/events.js'
 describe('Event Handlers', () => {
 
   describe('UI Events', () => {
-    it('should handle setShowWelcome event', () => {
-      const handler = getHandler('event', EVENT_IDS.SET_SHOW_WELCOME)
-
-      const initialState = {
-        showWelcome: true
-      }
-
-      const coeffects = {
-        draftDb: initialState,
-        localStorage: {}
-      }
-
-      const result = handler(coeffects, false)
-
-      expect(initialState.showWelcome).toBe(false)
-      expect(result).toEqual([[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'showWelcome', value: false }]])
-    })
-
     it('should handle toggleShowAnswers event', () => {
       const handler = getHandler('event', EVENT_IDS.TOGGLE_SHOW_ANSWERS)
 

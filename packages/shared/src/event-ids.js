@@ -5,7 +5,6 @@ export const EVENT_IDS = {
   STORAGE_LOAD_FAILED: 'storageLoadFailed',
   
   // UI Events
-  SET_SHOW_WELCOME: 'setShowWelcome',
   TOGGLE_SHOW_ANSWERS: 'toggleShowAnswers',
   TOGGLE_VOCABULARY: 'toggleVocabulary',
   VOCABULARY_UNMOUNT: 'vocabularyUnmount',

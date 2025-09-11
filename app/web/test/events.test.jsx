@@ -13,13 +13,11 @@ describe('Initialize App Event', () => {
     const initialState = {
       userAnswers: {},
       favorites: [],
-      showWelcome: true
     }
 
     const mockLocalStorage = {
       userAnswers: { 1: 0, 2: 1 },
       favorites: [1, 3],
-      showWelcome: false,
       theme: 'dark'
     }
 
@@ -32,7 +30,6 @@ describe('Initialize App Event', () => {
 
     expect(initialState.userAnswers).toEqual({ 1: 0, 2: 1 })
     expect(initialState.favorites).toEqual([1, 3])
-    expect(initialState.showWelcome).toBe(false)
     expect(initialState.theme).toBe('dark')
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {
@@ -50,7 +47,6 @@ describe('Initialize App Event', () => {
     const initialState = {
       userAnswers: {},
       favorites: [],
-      showWelcome: true
     }
 
     const mockLocalStorage = {
@@ -66,7 +62,6 @@ describe('Initialize App Event', () => {
 
     expect(initialState.userAnswers).toEqual({})
     expect(initialState.favorites).toEqual([])
-    expect(initialState.showWelcome).toBe(true)
     expect(initialState.theme).toBe('light')
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {

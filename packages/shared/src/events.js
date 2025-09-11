@@ -5,11 +5,6 @@ import { EFFECT_IDS } from './effect-ids.js'
 import { generateTest } from './test';
 
 // UI Events
-regEvent(EVENT_IDS.SET_SHOW_WELCOME, ({ draftDb }, show) => {
-  draftDb.showWelcome = show
-  return [[EFFECT_IDS.LOCAL_STORAGE_SET, { key: 'showWelcome', value: show }]]
-})
-
 regEvent(EVENT_IDS.TOGGLE_SHOW_ANSWERS, ({ draftDb }) => {
   draftDb.showAnswers = !draftDb.showAnswers
 })

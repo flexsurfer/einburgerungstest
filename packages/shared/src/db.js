@@ -2,7 +2,6 @@ import { initAppDb } from "@flexsurfer/reflex"
 
 const initialDb = {
     // UI state
-    showWelcome: true,
     showAnswers: false,
     selectedCategory: null,
     selectedLanguage: 'en',

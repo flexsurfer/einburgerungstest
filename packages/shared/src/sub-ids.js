@@ -1,6 +1,5 @@
 export const SUB_IDS = {
   // Root subscriptions - direct state values
-  SHOW_WELCOME: 'showWelcome',
   SHOW_ANSWERS: 'showAnswers',
   SELECTED_CATEGORY: 'selectedCategory',
   QUESTIONS: 'questions',
