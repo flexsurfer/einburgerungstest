@@ -1,14 +1,289 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description"
-      content="Kostenlose Übungsfragen zum deutschen „Leben in Deutschland“ und zum „Einbürgerungstest“. Trainiere jetzt online bei ebtest.org und bestehe die Prüfung sicher! , Stand: 07.05.2025" />
-    <title>Einbürgerungstest online – Übungsfragen & Prüfungstraining | 07.05.2025</title>
+      content="Free practice questions for the German Citizenship Test (Einbürgerungstest) and ‘Life in Germany’. Learn online on ebtest.org with stats, favorites and state-specific questions." />
+    <title>German Citizenship Test – Practice Questions & Exam Training</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:title" content="EBTest.org – German Citizenship Test online" />
+    <meta property="og:description" content="Practice for the citizenship test online – free, modern, and mobile." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ebtest.org/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EBTest.org – German Citizenship Test online" />
+    <meta name="twitter:description" content="Practice for the citizenship test online – free, modern, and mobile." />
+    <style>
+      :root {
+        /* Light theme (default) */
+        --bg-color: #ffffff;
+        --text-color: #2C3E50;
+        --muted-color: #6c757d;
+        --border-color: #E8E8E8;
+        --accent-color: #F1C40F;
+        --accent-rgb: 241, 196, 15;
+        --card-bg: #f8f9fa;
+      }
+      
+      body.dark {
+        --bg-color: hsl(0, 0%, 7%);
+        --text-color: #ffffff;
+        --muted-color: #b9c2cf;
+        --border-color: #333333;
+        --accent-color: #FFD700;
+        --accent-rgb: 255, 215, 0;
+        --card-bg: #171717;
+      }
+      
+      /* RTL Support */
+      [dir="rtl"] .container { text-align: right; }
+      [dir="rtl"] .brand { flex-direction: row-reverse; }
+      [dir="rtl"] nav a { margin-left: 0; margin-right: 18px; }
+      [dir="rtl"] .theme-toggle { margin-left: 0; margin-right: 18px; }
+      [dir="rtl"] .hero { grid-template-columns: 1fr 1.1fr; }
+      [dir="rtl"] .cta-row { flex-direction: row-reverse; }
+      [dir="rtl"] .btn { gap: 10px; }
+      [dir="rtl"] .kpi { flex-direction: row-reverse; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text-color);
+        background:
+          radial-gradient(1000px 700px at 80% -10%, rgba(var(--accent-rgb), .12), transparent),
+          radial-gradient(900px 600px at -10% 10%, rgba(var(--accent-rgb), .08), transparent),
+          var(--bg-color);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .container { max-width: 1160px; padding: 28px 20px 80px; margin: 0 auto; }
+      header { display: flex; justify-content: space-between; align-items: center; gap: 16px; position: sticky; top: 0; backdrop-filter: saturate(180%) blur(8px); background: rgba(var(--bg-color), 0.6); border-bottom: 1px solid var(--border-color); padding: 14px 0; z-index: 10; }
+      .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .2px; }
+      .logo { width: 34px; height: 34px; background-color: #ffffff; border-radius: 9px; }
+      nav a { color: var(--muted-color); text-decoration: none; margin-left: 18px; font-weight: 600; }
+      nav a:hover { color: var(--text-color); }
+      .theme-toggle { background: none; border: none; color: var(--muted-color); font-size: 20px; margin-left: 18px; cursor: pointer; padding: 4px; border-radius: 6px; transition: color 0.2s ease; }
+      .theme-toggle:hover { color: var(--text-color); }
+      .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; padding: 80px 0; }
+      .eyebrow { color: var(--accent-color); font-weight: 700; letter-spacing: .4px; text-transform: uppercase; font-size: 14px;  margin-bottom: 30px; }
+      h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.05; margin: 8px 0 16px;  margin-bottom: 30px; }
+      .sub { color: var(--muted-color); font-size: clamp(16px, 2.5vw, 18px); margin: 0 0 32px; }
+      .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; }
+      .btn-primary { background: linear-gradient(135deg, var(--accent-color), rgba(var(--accent-rgb), .85)); color: #111; box-shadow: 0 10px 24px rgba(var(--accent-rgb), .35); }
+      .btn-secondary { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); transition: all 0.2s ease; }
+      .btn-secondary:hover { background: var(--border-color); transform: translateY(-1px); }
+      .card { background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)), var(--card-bg); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 18px; display: grid; gap: 10px; }
+      .grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .muted { color: var(--muted-color); }
+      .section { padding: 16px 0 0; margin: 8px 0 0; }
+      .kpi { display: flex; gap: 12px; align-items: center; }
+      .kpi .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .15); }
+      .feature { display: grid; gap: 8px; }
+      .feature h3 { margin: 0; font-size: 16px; }
+      .feature p { margin: 0; color: var(--muted-color); font-size: 14px; }
+      .shot { aspect-ratio: 16/10; border-radius: 14px; background: linear-gradient(180deg, rgba(var(--accent-rgb), .10), rgba(255,255,255,.02)); border: 1px dashed rgba(255,255,255,.14); display: grid; place-items: center; color: var(--muted-color); font-weight: 600; }
+      .steps { counter-reset: s; }
+      .step { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start; padding: 16px; border: 1px solid rgba(255,255,255,.06); border-radius: 14px; background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)); }
+      .step::before { counter-increment: s; content: counter(s); width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--accent-rgb), .2); color: #111; font-weight: 800; border: 1px solid rgba(var(--accent-rgb), .5); }
+      details { border: 1px solid rgba(255,255,255,.06); border-radius: 14px; background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)); padding: 12px 16px; }
+      summary { cursor: pointer; font-weight: 700; }
+      footer { margin-top: 64px; color: var(--muted-color); font-size: 14px; border-top: 1px solid rgba(255,255,255,.06); padding-top: 16px; }
+      @media (max-width: 960px) { .hero { grid-template-columns: 1fr; gap: 24px; padding: 56px 0; } .grid-2, .grid-3 { grid-template-columns: 1fr; } header { position: static; } }
+      @media (max-width: 768px) { 
+        nav { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+        nav a { margin-left: 0; font-size: 14px; white-space: nowrap; }
+        .theme-toggle { margin-left: 0; font-size: 18px; }
+        #language-selector-container { margin-left: 0; }
+        .container { padding: 28px 16px 80px; }
+      }
+      @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    </style>
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","name":"EBTest.org","url":"https://ebtest.org/"}
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="container">
+      <header>
+        <div class="brand"><img class="logo" src="/landing/app-icon.png" width="34" height="34" alt="EBTest logo" /> EBTest.org</div>
+        <nav>
+          <a href="/app/" data-i18n="navigation.webApp">Web App</a>
+          <a href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener" data-i18n="navigation.android">Android</a>
+          <button id="theme-toggle" class="theme-toggle" data-i18n-title="navigation.themeToggleLight">🌞</button>
+          <div id="language-selector-container" style="margin-left: 12px;"></div>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div>
+          <div class="eyebrow" data-i18n="hero.eyebrow">Prepare for the German naturalization test (Einbürgerungstest) and the "Leben in Deutschland"</div>
+          <h1 data-i18n="hero.heading">Learn fast, smart and confidently</h1>
+          <p class="sub" data-i18n="hero.subtitle">Based on publicly available materials from the Bundesamt für Migration und Flüchtlinge (BAMF), valid as of May 7, 2025.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="/app/" data-i18n="hero.ctaPrimary">Start practicing</a>
+            <a class="btn btn-secondary" href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener" data-i18n="hero.ctaAndroid">📱 Android App</a>
+            <a class="btn btn-secondary" href="https://github.com/flexsurfer/einburgerungstest" target="_blank" rel="noopener" data-i18n="hero.ctaGithub">⭐ GitHub</a>
+          </div>
+          <div class="section">
+            <div class="kpi muted"><div class="dot"></div> <span data-i18n="hero.kpi">No account required • No ads • Open source</span></div>
+          </div>
+        </div>
+        <div class="card grid-2">
+          <div class="feature">
+            <h3 data-i18n="features.testMode.title">Test mode</h3>
+            <p data-i18n="features.testMode.description">Simulates the real exam experience.</p>
+          </div>
+          <div class="feature">
+            <h3 data-i18n="features.categories.title">Categories</h3>
+            <p data-i18n="features.categories.description">Study by topic for targeted learning.</p>
+          </div>
+          <div class="feature">
+            <h3 data-i18n="features.bookmarks.title">Bookmarks</h3>
+            <p data-i18n="features.bookmarks.description">Save important questions for review.</p>
+          </div>
+          <div class="feature">
+            <h3 data-i18n="features.mistakeReview.title">Mistake review</h3>
+            <p data-i18n="features.mistakeReview.description">Practice incorrectly answered questions again.</p>
+          </div>
+          <div class="feature">
+            <h3 data-i18n="features.statistics.title">Statistics</h3>
+            <p data-i18n="features.statistics.description">Track your learning progress and accuracy over time.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div style="display: grid; gap: 32px; margin: 32px 0;">
+          <!-- Learn All 460 Questions -->
+          <div style="text-align: center;">
+            <h2 style="color: var(--accent-color); font-size: 48px; margin: 16px 0 8px; font-weight: 800;" data-i18n="sections.learnQuestions.title">Learn All 460 Questions</h2>
+            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.learnQuestions.description">Free and ad-free citizenship test practice</p>
+            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+              <img src="/landing/img/screen1.jpg" alt="Learn All 460 Questions" style="width: 100%; height: auto; display: block;" />
+            </div>
+          </div>
+
+           <!-- Check Your Progress -->
+           <div style="text-align: center;">
+            <h2 style="color: #E74C3C; font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.checkProgress.title">Check Your Progress</h2>
+            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.checkProgress.description">Instant feedback with correct answers highlighted</p>
+            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+              <img src="/landing/img/screen2.jpg" alt="Progress Tracking" style="width: 100%; height: auto; display: block;" />
+            </div>
+          </div>
+
+          <!-- Organized by Topics -->
+          <div style="text-align: center;">
+            <h2 style="color: var(--accent-color); font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.organizedTopics.title">Organized by Topics</h2>
+            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.organizedTopics.description">Study specific themes or take a full test</p>
+            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+              <img src="/landing/img/screen3.jpg" alt="Topics Organization" style="width: 100%; height: auto; display: block;" />
+            </div>
+          </div>
+
+          <!-- Dark Mode -->
+          <div style="text-align: center;">
+            <h2 style="color: var(--accent-color); font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.darkMode.title">Dark Mode Included</h2>
+            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.darkMode.description">Comfortable learning day and night</p>
+            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+              <img src="/landing/img/screen4.jpg" alt="Dark Mode Interface" style="width: 100%; height: auto; display: block;" />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer>
+        © <span id="y"></span> <span data-i18n="footer.copyright">EBTest.org</span> 
+      </footer>
+    </div>
+    <script>
+      // Theme management
+      function getStoredTheme() {
+        const item = localStorage.getItem("theme")
+        if (item == null) return null
+        try { return JSON.parse(item) } catch { return item }
+      }
+      
+      function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+      
+      function getCurrentTheme() {
+        return getStoredTheme() || 'light' // Default to light theme to match main app
+      }
+      
+      function applyTheme(theme) {
+        document.body.classList.remove('light', 'dark')
+        document.body.classList.add(theme)
+        
+        const themeToggle = document.getElementById('theme-toggle')
+        if (themeToggle) {
+          themeToggle.textContent = theme === 'dark' ? '🌙' : '🌞'
+          themeToggle.title = `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`
+        }
+        
+        // Update meta theme-color for mobile browsers
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+        if (metaThemeColor) {
+          metaThemeColor.content = theme === 'dark' ? '#121212' : '#ffffff'
+        }
+      }
+      
+      function toggleTheme() {
+        const currentTheme = getCurrentTheme()
+        const newTheme = currentTheme === 'dark' ? "light" : "dark"
+        localStorage.setItem("theme", JSON.stringify(newTheme))
+        applyTheme(newTheme)
+      }
+      
+      // Initialize theme on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        const theme = getCurrentTheme()
+        applyTheme(theme)
+        
+        // Add click listener to theme toggle
+        const themeToggle = document.getElementById('theme-toggle')
+        if (themeToggle) {
+          themeToggle.addEventListener('click', toggleTheme)
+        }
+      })
+      
+      // Listen for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!getStoredTheme()) {
+          applyTheme(e.matches ? 'dark' : 'light')
+        }
+      })
+      
+      // Set copyright year
+      document.getElementById('y').textContent = new Date().getFullYear()
+    </script>
+    <script src="/landing/i18n.js"></script>
+    <script>
+      // Initialize language selector when i18n is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        // Wait for i18n to be initialized
+        const initLanguageSelector = () => {
+          if (window.i18n) {
+            const container = document.getElementById('language-selector-container')
+            if (container) {
+              const selector = window.i18n.createLanguageSelector()
+              container.appendChild(selector)
+            }
+          } else {
+            // Retry after a short delay
+            setTimeout(initLanguageSelector, 100)
+          }
+        }
+        
+        setTimeout(initLanguageSelector, 50)
+      })
+    </script>
   </body>
 </html>

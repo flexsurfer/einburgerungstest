@@ -36,7 +36,7 @@ describe('Initialize App Event', () => {
     expect(initialState.theme).toBe('dark')
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {
-        url: 'data.json',
+        url: '/assets/data.json',
         onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
         onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
       }],
@@ -70,7 +70,7 @@ describe('Initialize App Event', () => {
     expect(initialState.theme).toBe('light')
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {
-        url: 'data.json',
+        url: '/assets/data.json',
         onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
         onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
       }],
@@ -99,7 +99,7 @@ describe('Data Events', () => {
     expect(initialState.vocabularyError).toBe(null)
     expect(result).toEqual([
       [EFFECT_IDS.FETCH, {
-        url: 'vocabulary_multilang.json',
+        url: '/assets/vocabulary_multilang.json',
         onSuccess: [EVENT_IDS.FETCH_VOCABULARY_SUCCESS],
         onFailure: [EVENT_IDS.FETCH_VOCABULARY_FAILURE]
       }]

@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -14,7 +15,16 @@ export default defineConfig(() => ({
     port: 4300,
     host: 'localhost',
   },
-  plugins: [react()],
+  plugins: [react(),
+  viteStaticCopy({
+    targets: [
+      {
+        src: path.resolve(__dirname, '../mobile/assets'),
+        dest: ''
+      }
+    ]
+  })
+  ],
   resolve: {
     alias: {
       'shared': path.resolve(__dirname, '../../packages/shared/src'),
@@ -23,12 +33,17 @@ export default defineConfig(() => ({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        app: path.resolve(__dirname, 'app/index.html'),
+      }
+    },
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
   },
-  publicDir: path.resolve(__dirname, '../../app/mobile/assets'),
   test: {
     environment: 'jsdom',
     globals: true,

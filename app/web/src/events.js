@@ -15,7 +15,7 @@ regEvent(EVENT_IDS.INITIALIZE_APP,
 
         return [
             [EFFECT_IDS.FETCH, {
-                url: 'data.json',
+                url: '/assets/data.json',
                 onSuccess: [EVENT_IDS.FETCH_QUESTIONS_SUCCESS],
                 onFailure: [EVENT_IDS.FETCH_QUESTIONS_FAILURE]
             }],
@@ -30,7 +30,7 @@ regEvent(EVENT_IDS.FETCH_VOCABULARY, ({ draftDb }) => {
     draftDb.vocabularyError = null
     return [
         [EFFECT_IDS.FETCH, {
-            url: 'vocabulary_multilang.json',
+            url: '/assets/vocabulary_multilang.json',
             onSuccess: [EVENT_IDS.FETCH_VOCABULARY_SUCCESS],
             onFailure: [EVENT_IDS.FETCH_VOCABULARY_FAILURE]
         }]

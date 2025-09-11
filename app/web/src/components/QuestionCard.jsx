@@ -19,7 +19,7 @@ export const QuestionCard = memo(({ question }) => {
         <div className="question-image-container">
           <img
             loading="lazy"
-            src={"img/" + question.img.url + ".png"}
+            src={"/assets/img/" + question.img.url + ".png"}
             alt={`Question ${question.globalIndex} illustration`}
             className="question-image"
           />
