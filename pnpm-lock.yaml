@@ -12,8 +12,8 @@ importers:
         specifier: ^7.27.6
         version: 7.27.6
       '@flexsurfer/reflex':
-        specifier: ^0.1.12
-        version: 0.1.12(react@19.1.0)
+        specifier: ^0.1.14
+        version: 0.1.14(react@19.1.0)
       immer:
         specifier: ^10.1.1
         version: 10.1.1
@@ -22,8 +22,8 @@ importers:
         version: 19.1.0
     devDependencies:
       '@flexsurfer/reflex-devtools':
-        specifier: ^0.1.3
-        version: 0.1.3(@flexsurfer/reflex@0.1.12(react@19.1.0))
+        specifier: ^0.1.4
+        version: 0.1.4(@flexsurfer/reflex@0.1.14(react@19.1.0))
       eslint:
         specifier: ~8.57.0
         version: 8.57.1
@@ -1068,14 +1068,14 @@ packages:
     resolution: {integrity: sha512-Ul5l+lHEcw3L5+k8POx6r74mxEYKG5kOb6Xpy2gCRW6zweT6TEhAf8vhxGgjhqrd/VO/Dirhsb+1hNpD1ue9hw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@flexsurfer/reflex-devtools@0.1.3':
-    resolution: {integrity: sha512-7QaTiLAqKEVdwvhKbNDqKBX3QlDJN4er5SrFvbGjhiEkLZFHIirtSlPcOBZcxX7wiB9kCqURRNdTHy3ug0WsMg==}
+  '@flexsurfer/reflex-devtools@0.1.4':
+    resolution: {integrity: sha512-eF+flGxAqtJ96loBUdWAcSqlhc/hUt3hPwbgXqvhzbvY5rgUhMf0NLmRaaTE1sj1sXQg5mwW/iFFdMiZrPbeJA==}
     hasBin: true
     peerDependencies:
       '@flexsurfer/reflex': '>=0.1.12'
 
-  '@flexsurfer/reflex@0.1.12':
-    resolution: {integrity: sha512-BrG2LjhmDYK57T/ueNpWWOtKimVUrgqVN9aASEfVdtAc6GIhWRGUDIt6hhkMOP7RymXorKs/OQ38kMs4gQdXMQ==}
+  '@flexsurfer/reflex@0.1.14':
+    resolution: {integrity: sha512-2GTe97kpuIZqY1sDDTCKhCC0tIEy1Gq6M0j5lUbuOA5Agz8mPhVlTJb+1pi4IS3uznAwV8TtNzkz3BzdR6tdzw==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -5415,9 +5415,9 @@ snapshots:
       '@eslint/core': 0.15.1
       levn: 0.4.1
 
-  '@flexsurfer/reflex-devtools@0.1.3(@flexsurfer/reflex@0.1.12(react@19.1.0))':
+  '@flexsurfer/reflex-devtools@0.1.4(@flexsurfer/reflex@0.1.14(react@19.1.0))':
     dependencies:
-      '@flexsurfer/reflex': 0.1.12(react@19.1.0)
+      '@flexsurfer/reflex': 0.1.14(react@19.1.0)
       cors: 2.8.5
       express: 4.21.2
       ws: 8.18.3
@@ -5426,7 +5426,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@flexsurfer/reflex@0.1.12(react@19.1.0)':
+  '@flexsurfer/reflex@0.1.14(react@19.1.0)':
     dependencies:
       fast-deep-equal: 3.1.3
       immer: 10.1.1

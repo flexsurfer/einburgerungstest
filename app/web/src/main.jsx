@@ -11,12 +11,11 @@ import './events'
 import './effects'
 
 import App from './App'
-import { enableTracing, enableTracePrint, dispatch, setDebugEnabled } from '@flexsurfer/reflex'
+import { enableTracing, enableTracePrint, dispatch } from '@flexsurfer/reflex'
 import { EVENT_IDS } from 'shared/event-ids.js'
 import { enableDevtools } from '@flexsurfer/reflex-devtools'
 
 if (import.meta.env.MODE === 'development') {
-  //setDebugEnabled(true)
   enableTracing()
   //enableTracePrint()
   enableDevtools();

@@ -20,7 +20,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@flexsurfer/reflex-devtools": "^0.1.3",
+    "@flexsurfer/reflex-devtools": "^0.1.4",
     "eslint": "~8.57.0",
     "gh-pages": "^6.3.0",
     "jiti": "2.4.2",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.27.6",
-    "@flexsurfer/reflex": "^0.1.12",
+    "@flexsurfer/reflex": "^0.1.14",
     "immer": "^10.1.1",
     "react": "19.1.0"
   }
