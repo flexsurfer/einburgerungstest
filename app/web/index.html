@@ -7,7 +7,8 @@
       content="Free practice questions for the German Citizenship Test (Einbürgerungstest) and ‘Life in Germany’. Learn online on ebtest.org with stats, favorites and state-specific questions." />
     <title>German Citizenship Test – Practice Questions & Exam Training</title>
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" href="/landing/app-icon.png">
+    <meta name="theme-color" content="#faf9f6">
     <meta property="og:title" content="EBTest.org – German Citizenship Test online" />
     <meta property="og:description" content="Practice for the citizenship test online – free, modern, and mobile." />
     <meta property="og:type" content="website" />
@@ -15,273 +16,911 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="EBTest.org – German Citizenship Test online" />
     <meta name="twitter:description" content="Practice for the citizenship test online – free, modern, and mobile." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js')</script>
     <style>
       :root {
-        /* Light theme (default) */
-        --bg-color: #ffffff;
-        --text-color: #2C3E50;
-        --muted-color: #6c757d;
-        --border-color: #E8E8E8;
-        --accent-color: #F1C40F;
-        --accent-rgb: 241, 196, 15;
-        --card-bg: #f8f9fa;
+        color-scheme: light;
+        --bg: #faf9f6;
+        --bg-soft: #f2f0ea;
+        --card: #ffffff;
+        --ink: #141416;
+        --muted: #5d6067;
+        --line: #e8e6df;
+        --line-strong: #d8d5cc;
+        --gold: #f7c21b;
+        --gold-soft: rgba(247, 194, 27, .13);
+        --gold-border: rgba(200, 150, 0, .32);
+        --gold-ink: #8f6400;
+        --red: #dd3a34;
+        --green: #1e9c60;
+        --cta-grad: linear-gradient(180deg, #ffd84d, #f5bb00);
+        --cta-ink: #1a1500;
+        --glow-a: rgba(247, 194, 27, .16);
+        --glow-b: rgba(221, 58, 52, .07);
+        --shadow-card: 0 1px 2px rgba(20, 18, 10, .04), 0 12px 32px -16px rgba(20, 18, 10, .14);
+        --shadow-pop: 0 28px 70px -28px rgba(25, 20, 5, .35);
+        --header-bg: rgba(250, 249, 246, .75);
       }
-      
       body.dark {
-        --bg-color: hsl(0, 0%, 7%);
-        --text-color: #ffffff;
-        --muted-color: #b9c2cf;
-        --border-color: #333333;
-        --accent-color: #FFD700;
-        --accent-rgb: 255, 215, 0;
-        --card-bg: #171717;
+        color-scheme: dark;
+        --bg: #0c0c0d;
+        --bg-soft: #131315;
+        --card: #161619;
+        --ink: #f4f4f1;
+        --muted: #a2a5ac;
+        --line: #242429;
+        --line-strong: #35353b;
+        --gold: #ffd34d;
+        --gold-soft: rgba(255, 211, 77, .09);
+        --gold-border: rgba(255, 211, 77, .34);
+        --gold-ink: #ffc933;
+        --red: #f0554e;
+        --green: #37c283;
+        --cta-grad: linear-gradient(180deg, #ffd84d, #efb400);
+        --cta-ink: #1a1500;
+        --glow-a: rgba(255, 211, 77, .10);
+        --glow-b: rgba(240, 85, 78, .05);
+        --shadow-card: 0 1px 2px rgba(0, 0, 0, .35), 0 12px 32px -16px rgba(0, 0, 0, .5);
+        --shadow-pop: 0 28px 70px -28px rgba(0, 0, 0, .65);
+        --header-bg: rgba(12, 12, 13, .72);
       }
-      
-      /* RTL Support */
-      [dir="rtl"] .container { text-align: right; }
-      [dir="rtl"] .brand { flex-direction: row-reverse; }
-      [dir="rtl"] nav a { margin-left: 0; margin-right: 18px; }
-      [dir="rtl"] .theme-toggle { margin-left: 0; margin-right: 18px; }
-      [dir="rtl"] .hero { grid-template-columns: 1fr 1.1fr; }
-      [dir="rtl"] .cta-row { flex-direction: row-reverse; }
-      [dir="rtl"] .btn { gap: 10px; }
-      [dir="rtl"] .kpi { flex-direction: row-reverse; }
+
       * { box-sizing: border-box; }
-      html, body { height: 100%; }
+      html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
       body {
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        color: var(--text-color);
-        background:
-          radial-gradient(1000px 700px at 80% -10%, rgba(var(--accent-rgb), .12), transparent),
-          radial-gradient(900px 600px at -10% 10%, rgba(var(--accent-rgb), .08), transparent),
-          var(--bg-color);
+        font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--ink);
+        background: var(--bg);
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
-      .container { max-width: 1160px; padding: 28px 20px 80px; margin: 0 auto; }
-      header { display: flex; justify-content: space-between; align-items: center; gap: 16px; position: sticky; top: 0; backdrop-filter: saturate(180%) blur(8px); background: rgba(var(--bg-color), 0.6); border-bottom: 1px solid var(--border-color); padding: 14px 0; z-index: 10; }
-      .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .2px; }
-      .logo { width: 34px; height: 34px; background-color: #ffffff; border-radius: 9px; }
-      nav a { color: var(--muted-color); text-decoration: none; margin-left: 18px; font-weight: 600; }
-      nav a:hover { color: var(--text-color); }
-      .theme-toggle { background: none; border: none; color: var(--muted-color); font-size: 20px; margin-left: 18px; cursor: pointer; padding: 4px; border-radius: 6px; transition: color 0.2s ease; }
-      .theme-toggle:hover { color: var(--text-color); }
-      .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center; padding: 80px 0; }
-      .eyebrow { color: var(--accent-color); font-weight: 700; letter-spacing: .4px; text-transform: uppercase; font-size: 14px;  margin-bottom: 30px; }
-      h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.05; margin: 8px 0 16px;  margin-bottom: 30px; }
-      .sub { color: var(--muted-color); font-size: clamp(16px, 2.5vw, 18px); margin: 0 0 32px; }
-      .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
-      .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 12px; text-decoration: none; font-weight: 700; }
-      .btn-primary { background: linear-gradient(135deg, var(--accent-color), rgba(var(--accent-rgb), .85)); color: #111; box-shadow: 0 10px 24px rgba(var(--accent-rgb), .35); }
-      .btn-secondary { background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); transition: all 0.2s ease; }
-      .btn-secondary:hover { background: var(--border-color); transform: translateY(-1px); }
-      .card { background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)), var(--card-bg); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 18px; display: grid; gap: 10px; }
-      .grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-3 { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .muted { color: var(--muted-color); }
-      .section { padding: 16px 0 0; margin: 8px 0 0; }
-      .kpi { display: flex; gap: 12px; align-items: center; }
-      .kpi .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .15); }
-      .feature { display: grid; gap: 8px; }
-      .feature h3 { margin: 0; font-size: 16px; }
-      .feature p { margin: 0; color: var(--muted-color); font-size: 14px; }
-      .shot { aspect-ratio: 16/10; border-radius: 14px; background: linear-gradient(180deg, rgba(var(--accent-rgb), .10), rgba(255,255,255,.02)); border: 1px dashed rgba(255,255,255,.14); display: grid; place-items: center; color: var(--muted-color); font-weight: 600; }
-      .steps { counter-reset: s; }
-      .step { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start; padding: 16px; border: 1px solid rgba(255,255,255,.06); border-radius: 14px; background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)); }
-      .step::before { counter-increment: s; content: counter(s); width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--accent-rgb), .2); color: #111; font-weight: 800; border: 1px solid rgba(var(--accent-rgb), .5); }
-      details { border: 1px solid rgba(255,255,255,.06); border-radius: 14px; background: linear-gradient(0deg, rgba(255,255,255,.02), rgba(255,255,255,.02)); padding: 12px 16px; }
-      summary { cursor: pointer; font-weight: 700; }
-      footer { margin-top: 64px; color: var(--muted-color); font-size: 14px; border-top: 1px solid rgba(255,255,255,.06); padding-top: 16px; }
-      @media (max-width: 960px) { .hero { grid-template-columns: 1fr; gap: 24px; padding: 56px 0; } .grid-2, .grid-3 { grid-template-columns: 1fr; } header { position: static; } }
-      @media (max-width: 768px) { 
-        nav { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
-        nav a { margin-left: 0; font-size: 14px; white-space: nowrap; }
-        .theme-toggle { margin-left: 0; font-size: 18px; }
-        #language-selector-container { margin-left: 0; }
-        .container { padding: 28px 16px 80px; }
+      h1, h2, h3, .display {
+        font-family: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.02em;
+        text-wrap: balance;
+        margin: 0;
       }
-      @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+      p { margin: 0; }
+      a { color: inherit; }
+      img { max-width: 100%; display: block; }
+      button { font: inherit; color: inherit; }
+      ::selection { background: var(--gold); color: #1a1500; }
+
+      .container { max-width: 1180px; margin-inline: auto; padding-inline: 24px; }
+
+      /* ---------- flag stripe motif ---------- */
+      .flag-stripe {
+        display: block; height: 4px; border: 0; margin: 0;
+        background: linear-gradient(90deg, #141416 0 33.4%, #dd3a34 33.4% 66.7%, #ffcc00 66.7% 100%);
+      }
+      .flag-chip {
+        display: inline-block; width: 21px; height: 9px; border-radius: 2.5px; flex: none;
+        background: linear-gradient(180deg, #141416 0 33.4%, #dd3a34 33.4% 66.7%, #ffcc00 66.7% 100%);
+      }
+
+      /* ---------- header ---------- */
+      .site-header {
+        position: sticky; top: 0; z-index: 50;
+        backdrop-filter: blur(14px) saturate(1.5);
+        -webkit-backdrop-filter: blur(14px) saturate(1.5);
+        background: var(--header-bg);
+        border-bottom: 1px solid transparent;
+        transition: border-color .25s ease, background .25s ease;
+      }
+      .site-header.scrolled { border-bottom-color: var(--line); }
+      .header-inner { display: flex; align-items: center; gap: 20px; height: 66px; }
+      .brand { display: inline-flex; align-items: center; gap: 11px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -.01em; text-decoration: none; }
+      .brand img { width: 34px; height: 34px; border-radius: 9px; background: #fff; border: 1px solid var(--line); padding: 2px; }
+      .header-nav { display: flex; align-items: center; gap: 26px; margin-inline-start: auto; }
+      .header-nav .nav-link { text-decoration: none; font-size: 14.5px; font-weight: 550; color: var(--muted); transition: color .15s ease; }
+      .header-nav .nav-link:hover { color: var(--ink); }
+      .header-tools { display: flex; align-items: center; gap: 10px; }
+      .icon-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 38px; height: 38px; border-radius: 11px; cursor: pointer;
+        background: transparent; border: 1px solid transparent; color: var(--muted);
+        transition: color .15s, background .15s, border-color .15s;
+      }
+      .icon-btn:hover { color: var(--ink); background: var(--bg-soft); border-color: var(--line); }
+      .icon-btn svg { width: 19px; height: 19px; }
+      body:not(.dark) .icon-moon { display: none; }
+      body.dark .icon-sun { display: none; }
+      .lang-select {
+        appearance: none; -webkit-appearance: none;
+        background: transparent; color: var(--muted);
+        border: 1px solid var(--line); border-radius: 11px;
+        padding: 8px 30px 8px 12px; font-size: 13.5px; font-weight: 550; cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 11px center;
+        transition: color .15s, border-color .15s;
+      }
+      [dir="rtl"] .lang-select { padding: 8px 12px 8px 30px; background-position: left 11px center; }
+      .lang-select:hover { color: var(--ink); border-color: var(--line-strong); }
+
+      /* ---------- buttons ---------- */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+        padding: 13px 24px; border-radius: 999px; border: 1px solid transparent;
+        font-size: 15px; font-weight: 650; text-decoration: none; cursor: pointer;
+        transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+      }
+      .btn svg { width: 17px; height: 17px; flex: none; }
+      .btn:active { transform: translateY(1px) scale(.99); }
+      .btn-primary {
+        background: var(--cta-grad); color: var(--cta-ink);
+        box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 10px 26px -10px rgba(222, 168, 0, .55);
+      }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 16px 34px -12px rgba(222, 168, 0, .65); }
+      .btn-ghost { background: var(--card); border-color: var(--line-strong); color: var(--ink); }
+      .btn-ghost:hover { transform: translateY(-2px); border-color: var(--gold-border); box-shadow: var(--shadow-card); }
+      .btn-sm { padding: 10px 18px; font-size: 14px; }
+      .btn-header { padding: 9px 18px; font-size: 14px; }
+
+      /* ---------- hero ---------- */
+      .hero { position: relative; overflow: clip; }
+      .hero::before {
+        content: ""; position: absolute; inset: 0; pointer-events: none;
+        background:
+          radial-gradient(720px 480px at 82% -8%, var(--glow-a), transparent 70%),
+          radial-gradient(560px 420px at -6% 30%, var(--glow-b), transparent 70%);
+      }
+      .hero::after {
+        content: ""; position: absolute; inset: 0; pointer-events: none;
+        background-image: radial-gradient(color-mix(in srgb, var(--ink) 13%, transparent) 1px, transparent 1px);
+        background-size: 26px 26px;
+        mask-image: radial-gradient(640px 480px at 74% 18%, rgba(0,0,0,.5), transparent 72%);
+        -webkit-mask-image: radial-gradient(640px 480px at 74% 18%, rgba(0,0,0,.5), transparent 72%);
+      }
+      .hero-grid {
+        position: relative; display: grid; grid-template-columns: 1.04fr .96fr; gap: 56px;
+        align-items: center; padding-block: 88px 96px;
+      }
+      .eyebrow-pill {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 8px 16px; border-radius: 999px;
+        background: var(--gold-soft); border: 1px solid var(--gold-border);
+        color: var(--gold-ink); font-size: 13px; font-weight: 600; line-height: 1.45;
+        margin-bottom: 26px; max-width: 60ch;
+      }
+      .hero h1 {
+        font-size: clamp(2.55rem, 4.6vw + .6rem, 4.15rem);
+        line-height: 1.04; font-weight: 700; letter-spacing: -.03em;
+        margin-bottom: 22px;
+      }
+      .hero h1 em {
+        font-style: normal;
+        background: linear-gradient(94deg, #c98a00, #e7ab00 60%, #dd3a34 135%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      body.dark .hero h1 em { background: linear-gradient(94deg, #ffd34d, #ffb800 60%, #ff7a5c 135%); -webkit-background-clip: text; background-clip: text; }
+      .hero .sub { color: var(--muted); font-size: 17px; max-width: 52ch; margin-bottom: 34px; }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 13px; margin-bottom: 30px; }
+      .trust-row { display: flex; flex-wrap: wrap; gap: 9px; }
+      .trust-chip {
+        display: inline-flex; align-items: center; gap: 7px;
+        padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--card) 62%, transparent);
+        font-size: 13.5px; font-weight: 550; color: var(--muted);
+      }
+      .trust-chip svg { width: 14px; height: 14px; color: var(--gold-ink); flex: none; }
+
+      /* ---------- demo card ---------- */
+      .demo-wrap { position: relative; max-width: 470px; justify-self: end; width: 100%; }
+      .demo-wrap::before {
+        content: ""; position: absolute; inset: 0; z-index: 0;
+        transform: rotate(3.2deg) translate(12px, 10px);
+        border-radius: 22px; border: 1px solid var(--line);
+        background: var(--bg-soft);
+      }
+      .demo-card {
+        position: relative; z-index: 1; overflow: hidden;
+        background: var(--card); border: 1px solid var(--line);
+        border-radius: 22px; padding: 26px 26px 22px;
+        box-shadow: var(--shadow-pop);
+        transform: rotate(-1.1deg);
+        transition: transform .35s cubic-bezier(.2,.7,.2,1);
+      }
+      .demo-wrap:hover .demo-card { transform: rotate(0deg); }
+      .demo-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+        background: linear-gradient(90deg, #141416 0 33.4%, #dd3a34 33.4% 66.7%, #ffcc00 66.7% 100%); }
+      .demo-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+      .demo-label { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gold-ink); }
+      .demo-count { font-size: 13px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .demo-qrow { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
+      .demo-num {
+        flex: none; display: grid; place-items: center; width: 40px; height: 40px;
+        border-radius: 50%; border: 2px solid var(--gold); color: var(--gold-ink);
+        font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 13.5px;
+        font-variant-numeric: tabular-nums;
+      }
+      .demo-q { font-size: 16.5px; font-weight: 650; line-height: 1.42; letter-spacing: -.01em; padding-top: 7px; }
+      .demo-star { margin-inline-start: auto; flex: none; width: 21px; height: 21px; color: var(--gold); padding-top: 8px; }
+      .demo-answers { display: grid; gap: 9px; }
+      .demo-answer {
+        display: flex; align-items: center; gap: 10px; width: 100%;
+        text-align: start; padding: 12px 15px; border-radius: 13px;
+        border: 1.5px solid var(--line); background: transparent; cursor: pointer;
+        font-size: 14.5px; font-weight: 500; line-height: 1.4;
+        transition: border-color .15s, background .15s, opacity .2s, transform .15s;
+      }
+      .demo-answer:hover:not(:disabled) { border-color: var(--gold-border); background: var(--gold-soft); transform: translateX(2px); }
+      [dir="rtl"] .demo-answer:hover:not(:disabled) { transform: translateX(-2px); }
+      .demo-answer:disabled { cursor: default; }
+      .demo-answer.dim { opacity: .42; }
+      .demo-answer .mark { flex: none; width: 17px; height: 17px; margin-inline-start: auto; display: none; }
+      .demo-answer.is-correct { border-color: var(--green); background: color-mix(in srgb, var(--green) 9%, transparent); font-weight: 600; }
+      .demo-answer.is-correct .mark-ok { display: block; color: var(--green); }
+      .demo-answer.is-wrong { border-color: var(--red); background: color-mix(in srgb, var(--red) 8%, transparent); }
+      .demo-answer.is-wrong .mark-no { display: block; color: var(--red); }
+      .demo-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; min-height: 38px; }
+      .demo-cat { font-size: 12.5px; color: var(--muted); }
+      .demo-feedback { display: none; align-items: center; gap: 8px; font-size: 14px; font-weight: 650; }
+      .demo-feedback.show { display: inline-flex; }
+      .demo-feedback .fb { display: none; }
+      .demo-feedback.ok .fb-ok { display: inline; color: var(--green); }
+      .demo-feedback.no .fb-no { display: inline; color: var(--red); }
+      .demo-next {
+        display: none; align-items: center; gap: 7px;
+        padding: 9px 16px; border-radius: 999px; border: none; cursor: pointer;
+        background: var(--ink); color: var(--bg); font-size: 13.5px; font-weight: 650;
+        transition: transform .15s, opacity .15s;
+      }
+      .demo-next:hover { transform: translateY(-1px); opacity: .92; }
+      .demo-next.show { display: inline-flex; }
+      .demo-next svg { width: 14px; height: 14px; }
+      [dir="rtl"] .demo-next svg { transform: scaleX(-1); }
+
+      /* ---------- stats strip ---------- */
+      .stats { border-block: 1px solid var(--line); background: color-mix(in srgb, var(--bg-soft) 55%, transparent); }
+      .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+      .stat { padding: 30px 26px; }
+      .stat + .stat { border-inline-start: 1px solid var(--line); }
+      .stat .num {
+        font-family: "Space Grotesk", sans-serif; font-weight: 700;
+        font-size: clamp(1.9rem, 2.6vw, 2.5rem); line-height: 1.1; letter-spacing: -.02em;
+        color: var(--gold-ink); font-variant-numeric: tabular-nums;
+      }
+      .stat .lbl { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+      /* ---------- section scaffolding ---------- */
+      .section { padding-block: 96px; }
+      .section-head { max-width: 640px; margin-bottom: 52px; }
+      .section-eyebrow {
+        display: inline-flex; align-items: center; gap: 10px;
+        font-size: 13px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+        color: var(--gold-ink); margin-bottom: 16px;
+      }
+      .section h2 { font-size: clamp(1.85rem, 2.6vw + .4rem, 2.7rem); line-height: 1.12; font-weight: 700; }
+      .section-sub { color: var(--muted); font-size: 16.5px; margin-top: 14px; max-width: 54ch; }
+
+      /* ---------- bento ---------- */
+      .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+      .bento-card {
+        position: relative; border: 1px solid var(--line); border-radius: 20px;
+        background: var(--card); padding: 28px; overflow: hidden;
+        box-shadow: var(--shadow-card);
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+      }
+      .bento-card:hover { transform: translateY(-4px); border-color: var(--gold-border); }
+      .bento-card.span-4 { grid-column: span 4; }
+      .bento-card.span-3 { grid-column: span 3; }
+      .bento-card.span-2 { grid-column: span 2; }
+      .bento-card.span-6 { grid-column: span 6; }
+      .bento-icon {
+        display: grid; place-items: center; width: 42px; height: 42px;
+        border-radius: 12px; background: var(--gold-soft); border: 1px solid var(--gold-border);
+        color: var(--gold-ink); margin-bottom: 40px;
+      }
+      .bento-icon svg { width: 20px; height: 20px; }
+      .bento-card h3 { font-size: 17.5px; font-weight: 650; letter-spacing: -.01em; margin-bottom: 8px; }
+      .bento-card p { color: var(--muted); font-size: 14.5px; line-height: 1.58; }
+      .bento-art { position: absolute; inset-block-start: 24px; inset-inline-end: 24px; display: flex; gap: 6px; }
+
+      .mini-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1px solid var(--line); color: var(--muted); background: var(--bg-soft); }
+      .mini-pill svg { width: 12px; height: 12px; }
+      .mini-pill.gold { color: var(--gold-ink); border-color: var(--gold-border); background: var(--gold-soft); }
+      .mini-pill.red { color: var(--red); border-color: color-mix(in srgb, var(--red) 35%, transparent); background: color-mix(in srgb, var(--red) 7%, transparent); }
+      .mini-pill.green { color: var(--green); border-color: color-mix(in srgb, var(--green) 35%, transparent); background: color-mix(in srgb, var(--green) 8%, transparent); }
+
+      .mini-bars { display: flex; align-items: flex-end; gap: 5px; height: 34px; }
+      .mini-bars i { width: 7px; border-radius: 3px 3px 1px 1px; background: linear-gradient(180deg, var(--gold), color-mix(in srgb, var(--gold) 55%, transparent)); }
+
+      .open-source-card { display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+        background: linear-gradient(115deg, var(--gold-soft), transparent 55%), var(--card); }
+      .open-source-card .bento-icon { margin-bottom: 0; }
+      .open-source-card .os-text { flex: 1 1 320px; }
+      .open-source-card h3 { margin-bottom: 6px; }
+      .os-lead { display: flex; align-items: center; gap: 18px; flex: 1 1 380px; }
+
+      /* ---------- showcase rows ---------- */
+      .rows { display: grid; gap: 92px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+      .row-index { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px;
+        font-family: "Space Grotesk", sans-serif; font-size: 13.5px; font-weight: 700; letter-spacing: .1em; color: var(--gold-ink); }
+      .row h2 { font-size: clamp(1.6rem, 2.1vw + .4rem, 2.2rem); line-height: 1.15; margin-bottom: 14px; }
+      .row .row-desc { color: var(--muted); font-size: 16px; max-width: 46ch; }
+      .row:nth-child(even) .row-visual { order: -1; }
+      .row-visual { position: relative; }
+      .row-visual::before { content: ""; position: absolute; inset: 8% -4%; border-radius: 28px;
+        background: radial-gradient(closest-side, var(--glow-a), transparent); pointer-events: none; }
+      .shot-frame {
+        position: relative; border: 1px solid var(--line); border-radius: 20px;
+        background: var(--card); box-shadow: var(--shadow-card); padding: 20px; overflow: hidden;
+      }
+
+      /* mock: question deck */
+      .mock-deck { position: relative; display: grid; gap: 12px; }
+      .mock-qcard { border: 1px solid var(--line); border-radius: 15px; background: var(--card); padding: 16px; box-shadow: var(--shadow-card); }
+      .mock-qcard .head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+      .mock-num { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--gold);
+        color: var(--gold-ink); font-family: "Space Grotesk", sans-serif; font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .mock-star { margin-inline-start: auto; width: 15px; height: 15px; color: var(--gold); }
+      .sk { height: 9px; border-radius: 5px; background: var(--bg-soft); }
+      .sk.b { background: color-mix(in srgb, var(--ink) 14%, var(--bg-soft)); }
+      .mock-ans { display: grid; gap: 7px; }
+      .mock-ans i { display: block; height: 30px; border-radius: 9px; border: 1.5px solid var(--line); }
+      .mock-qcard.faded { opacity: .55; transform: scale(.985); }
+      .deck-badge { position: absolute; inset-block-start: -14px; inset-inline-end: -10px; z-index: 2;
+        padding: 9px 16px; border-radius: 999px; background: var(--ink); color: var(--bg);
+        font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 14px; box-shadow: var(--shadow-pop); }
+
+      /* mock: progress */
+      .mock-progress { display: grid; gap: 14px; }
+      .mock-ansrow { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 11px; border: 1.5px solid var(--line); }
+      .mock-ansrow .sk { flex: 1; }
+      .mock-ansrow svg { flex: none; width: 16px; height: 16px; }
+      .mock-ansrow.good { border-color: var(--green); background: color-mix(in srgb, var(--green) 8%, transparent); }
+      .mock-ansrow.good svg { color: var(--green); }
+      .mock-ansrow.bad { border-color: var(--red); background: color-mix(in srgb, var(--red) 7%, transparent); }
+      .mock-ansrow.bad svg { color: var(--red); }
+      .mock-statbar { display: flex; align-items: center; gap: 14px; padding-top: 4px; font-size: 13.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+      .mock-statbar .s { display: inline-flex; align-items: center; gap: 5px; }
+      .mock-statbar .s svg { width: 15px; height: 15px; }
+      .mock-statbar .good { color: var(--green); }
+      .mock-statbar .bad { color: var(--red); }
+      .mock-statbar .pct { color: var(--gold-ink); }
+      .mock-track { height: 7px; border-radius: 99px; background: var(--bg-soft); overflow: hidden; }
+      .mock-track i { display: block; height: 100%; width: 72%; border-radius: 99px; background: linear-gradient(90deg, var(--gold), #e7ab00); }
+      [dir="rtl"] .mock-track i { background: linear-gradient(-90deg, var(--gold), #e7ab00); }
+
+      /* mock: topics */
+      .mock-menu { display: grid; font-size: 14px; }
+      .mock-menu .mrow { display: flex; align-items: center; gap: 9px; padding: 11px 14px; border-radius: 10px; font-weight: 550; }
+      .mock-menu .mrow .cnt { margin-inline-start: auto; color: var(--muted); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
+      .mock-menu .mrow.active { background: var(--gold-soft); color: var(--gold-ink); font-weight: 650; }
+      .mock-menu .mrow.active .cnt { color: var(--gold-ink); }
+      .mock-menu .mrow svg { width: 15px; height: 15px; color: var(--gold); }
+      .mock-menu .mhead { padding: 14px 14px 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+      /* dark mode band */
+      .band {
+        border-radius: 26px; border: 1px solid var(--line); overflow: hidden;
+        background:
+          radial-gradient(560px 300px at 85% 0%, rgba(255, 211, 77, .13), transparent 70%),
+          #101012;
+        color: #f4f4f1; padding: 56px; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+      }
+      .band .row-desc { color: #a2a5ac; }
+      .band h2 { color: #f4f4f1; }
+      .band .row-index { color: #ffd34d; }
+      .band-cards { display: flex; gap: 18px; align-items: center; }
+      .band-card { width: 205px; border-radius: 15px; padding: 15px; }
+      .band-card.lite { background: #ffffff; border: 1px solid #e8e6df; color: #141416; box-shadow: 0 18px 44px -18px rgba(0,0,0,.5); }
+      .band-card.dark { background: #19191c; border: 1px solid #2c2c31; color: #f4f4f1; box-shadow: 0 18px 44px -18px rgba(0,0,0,.65); transform: translateY(14px); }
+      .band-card .head { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+      .band-card .q { font-size: 12.5px; font-weight: 650; line-height: 1.35; margin-bottom: 10px; }
+      .band-card .opt { height: 26px; border-radius: 8px; border: 1.5px solid; margin-top: 6px; }
+      .band-card.lite .opt { border-color: #e8e6df; }
+      .band-card.dark .opt { border-color: #2c2c31; }
+      .band-card .opt.sel { border-color: #f7c21b; background: rgba(247, 194, 27, .12); }
+      .band-toggle {
+        display: inline-flex; align-items: center; gap: 9px; margin-top: 26px;
+        padding: 11px 20px; border-radius: 999px; border: 1px solid #3a3a40; cursor: pointer;
+        background: #1b1b1f; color: #ffd34d; font-size: 14px; font-weight: 650;
+        transition: transform .18s, border-color .18s;
+      }
+      .band-toggle:hover { transform: translateY(-2px); border-color: #ffd34d; }
+      .band-toggle svg { width: 16px; height: 16px; }
+
+      /* ---------- final CTA ---------- */
+      .final-cta {
+        position: relative; overflow: hidden; text-align: center;
+        border-radius: 28px; padding: 76px 32px;
+        background:
+          radial-gradient(640px 320px at 50% -40%, rgba(255, 216, 77, .5), transparent 72%),
+          linear-gradient(180deg, color-mix(in srgb, var(--gold-soft) 80%, var(--card)), var(--card));
+        border: 1px solid var(--gold-border);
+      }
+      .final-cta::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+        background: linear-gradient(90deg, #141416 0 33.4%, #dd3a34 33.4% 66.7%, #ffcc00 66.7% 100%); }
+      .final-cta h2 { font-size: clamp(1.9rem, 3vw + .4rem, 2.9rem); margin-bottom: 14px; }
+      .final-cta p { color: var(--muted); font-size: 16.5px; margin-bottom: 34px; }
+      .final-cta .cta-row { justify-content: center; margin-bottom: 0; }
+
+      /* ---------- footer ---------- */
+      .site-footer { margin-top: 96px; border-top: 1px solid var(--line); }
+      .footer-inner { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; justify-content: space-between; padding-block: 44px 30px; }
+      .footer-brand { max-width: 340px; }
+      .footer-brand .brand { margin-bottom: 12px; }
+      .footer-brand p { color: var(--muted); font-size: 14px; }
+      .footer-links { display: flex; flex-wrap: wrap; gap: 8px 26px; padding-top: 7px; }
+      .footer-links a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 550; transition: color .15s; }
+      .footer-links a:hover { color: var(--ink); }
+      .footer-base { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; align-items: center;
+        border-top: 1px solid var(--line); padding-block: 20px 26px; color: var(--muted); font-size: 13px; }
+
+      /* ---------- reveal ---------- */
+      .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+      .js .reveal.in { opacity: 1; transform: none; }
+
+      :focus-visible { outline: 2.5px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1020px) {
+        .hero-grid { grid-template-columns: 1fr; gap: 56px; padding-block: 64px 72px; }
+        .demo-wrap { justify-self: center; }
+        .row, .row:nth-child(even) { grid-template-columns: 1fr; gap: 36px; }
+        .row:nth-child(even) .row-visual { order: 0; }
+        .bento-card.span-2, .bento-card.span-3, .bento-card.span-4 { grid-column: span 6; }
+        .band { grid-template-columns: 1fr; padding: 40px 28px; }
+        .band-cards { justify-content: center; flex-wrap: wrap; }
+      }
+      @media (max-width: 760px) {
+        .header-nav .nav-link { display: none; }
+        .btn-header { display: none; }
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .stat { padding: 22px 20px; }
+        .stat:nth-child(3) { border-inline-start: none; }
+        .stat:nth-child(n+3) { border-block-start: 1px solid var(--line); }
+        .section { padding-block: 68px; }
+        .rows { gap: 64px; }
+        .final-cta { padding: 56px 22px; }
+        .hero h1 { letter-spacing: -.02em; }
+        .demo-card { padding: 20px 18px 18px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+        .js .reveal { opacity: 1; transform: none; }
+      }
     </style>
     <script type="application/ld+json">
       {"@context":"https://schema.org","@type":"WebSite","name":"EBTest.org","url":"https://ebtest.org/"}
     </script>
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebApplication","name":"EBTest.org","url":"https://ebtest.org/app/","applicationCategory":"EducationalApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
+    </script>
   </head>
   <body>
-    <div class="container">
-      <header>
-        <div class="brand"><img class="logo" src="/landing/app-icon.png" width="34" height="34" alt="EBTest logo" /> EBTest.org</div>
-        <nav>
-          <a href="/app/" data-i18n="navigation.webApp">Web App</a>
-          <a href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener" data-i18n="navigation.android">Android</a>
-          <button id="theme-toggle" class="theme-toggle" data-i18n-title="navigation.themeToggleLight">🌞</button>
-          <div id="language-selector-container" style="margin-left: 12px;"></div>
+    <span class="flag-stripe" aria-hidden="true"></span>
+
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/">
+          <img src="/landing/app-icon.png" width="34" height="34" alt="EBTest logo" />
+          EBTest.org
+        </a>
+        <nav class="header-nav" aria-label="Main">
+          <a class="nav-link" href="#features" data-i18n="navigation.features">Features</a>
+          <a class="nav-link" href="#showcase" data-i18n="navigation.preview">Preview</a>
+          <a class="nav-link" href="https://github.com/flexsurfer/einburgerungstest" target="_blank" rel="noopener">GitHub</a>
+          <div class="header-tools">
+            <button id="theme-toggle" class="icon-btn" data-i18n-title="navigation.themeToggleDark" aria-label="Toggle color theme">
+              <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"/></svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 14.2A8.6 8.6 0 0 1 9.8 3.4a8.6 8.6 0 1 0 10.8 10.8Z"/></svg>
+            </button>
+            <div id="language-selector-container"></div>
+            <a class="btn btn-primary btn-header" href="/app/" data-i18n="navigation.webApp">Web App</a>
+          </div>
         </nav>
-      </header>
+      </div>
+    </header>
 
+    <main>
+      <!-- ============ HERO ============ -->
       <section class="hero">
-        <div>
-          <div class="eyebrow" data-i18n="hero.eyebrow">Prepare for the German naturalization test (Einbürgerungstest) and the "Leben in Deutschland"</div>
-          <h1 data-i18n="hero.heading">Learn fast, smart and confidently</h1>
-          <p class="sub" data-i18n="hero.subtitle">Based on publicly available materials from the Bundesamt für Migration und Flüchtlinge (BAMF), valid as of May 7, 2025.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="/app/" data-i18n="hero.ctaPrimary">Start practicing</a>
-            <a class="btn btn-secondary" href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener" data-i18n="hero.ctaAndroid">📱 Android App</a>
-            <a class="btn btn-secondary" href="https://github.com/flexsurfer/einburgerungstest" target="_blank" rel="noopener" data-i18n="hero.ctaGithub">⭐ GitHub</a>
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow-pill">
+              <span class="flag-chip" aria-hidden="true"></span>
+              <span data-i18n="hero.eyebrow">Prepare for the German naturalization test (Einbürgerungstest) and the "Leben in Deutschland"</span>
+            </span>
+            <h1 data-i18n="hero.heading">Learn fast, smart and <em>confidently</em></h1>
+            <p class="sub" data-i18n="hero.subtitle">Based on publicly available materials from the Bundesamt für Migration und Flüchtlinge (BAMF), valid as of May 7, 2025.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="/app/">
+                <span data-i18n="hero.ctaPrimary">Start practicing</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13 5.5 19.5 12 13 18.5"/></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3.7c0-.8.9-1.3 1.6-.9l13.6 7.9c.7.4.7 1.4 0 1.8L5.6 20.4c-.7.4-1.6-.1-1.6-.9V3.7Z" opacity=".9"/></svg>
+                <span data-i18n="hero.ctaAndroid">Android App</span>
+              </a>
+            </div>
+            <div class="trust-row">
+              <span class="trust-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg><span data-i18n="hero.chip1">No account required</span></span>
+              <span class="trust-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg><span data-i18n="hero.chip2">No ads</span></span>
+              <span class="trust-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg><span data-i18n="hero.chip3">Open source</span></span>
+            </div>
           </div>
-          <div class="section">
-            <div class="kpi muted"><div class="dot"></div> <span data-i18n="hero.kpi">No account required • No ads • Open source</span></div>
+
+          <div class="demo-wrap">
+            <div class="demo-card" id="demo-card">
+              <div class="demo-top">
+                <span class="demo-label" data-i18n="demo.label">Try a real exam question</span>
+                <span class="demo-count"><span id="demo-idx">1</span>&thinsp;/&thinsp;<span id="demo-total">3</span></span>
+              </div>
+              <div class="demo-qrow">
+                <span class="demo-num" id="demo-num">25</span>
+                <p class="demo-q" id="demo-question" lang="de" dir="ltr">Was ist kein Bundesland der Bundesrepublik Deutschland?</p>
+                <svg class="demo-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg>
+              </div>
+              <div class="demo-answers" id="demo-answers" lang="de" dir="ltr"></div>
+              <div class="demo-foot">
+                <span class="demo-cat" id="demo-cat" lang="de" dir="ltr">Bund und Länder</span>
+                <span class="demo-feedback" id="demo-feedback">
+                  <span class="fb fb-ok" data-i18n="demo.correct">Correct!</span>
+                  <span class="fb fb-no" data-i18n="demo.wrong">Not quite</span>
+                </span>
+                <button class="demo-next" id="demo-next" type="button">
+                  <span data-i18n="demo.next">Next question</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13 5.5 19.5 12 13 18.5"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="card grid-2">
-          <div class="feature">
-            <h3 data-i18n="features.testMode.title">Test mode</h3>
-            <p data-i18n="features.testMode.description">Simulates the real exam experience.</p>
-          </div>
-          <div class="feature">
-            <h3 data-i18n="features.categories.title">Categories</h3>
-            <p data-i18n="features.categories.description">Study by topic for targeted learning.</p>
-          </div>
-          <div class="feature">
-            <h3 data-i18n="features.bookmarks.title">Bookmarks</h3>
-            <p data-i18n="features.bookmarks.description">Save important questions for review.</p>
-          </div>
-          <div class="feature">
-            <h3 data-i18n="features.mistakeReview.title">Mistake review</h3>
-            <p data-i18n="features.mistakeReview.description">Practice incorrectly answered questions again.</p>
-          </div>
-          <div class="feature">
-            <h3 data-i18n="features.statistics.title">Statistics</h3>
-            <p data-i18n="features.statistics.description">Track your learning progress and accuracy over time.</p>
+      </section>
+
+      <!-- ============ EXAM FACTS ============ -->
+      <section class="stats">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat reveal"><div class="num">460</div><div class="lbl" data-i18n="stats.catalog">questions in the official catalogue</div></div>
+            <div class="stat reveal" style="--d:.06s"><div class="num">33</div><div class="lbl" data-i18n="stats.exam">questions in the real exam</div></div>
+            <div class="stat reveal" style="--d:.12s"><div class="num">17</div><div class="lbl" data-i18n="stats.pass">correct answers to pass</div></div>
+            <div class="stat reveal" style="--d:.18s"><div class="num">60</div><div class="lbl" data-i18n="stats.time">minutes to complete</div></div>
           </div>
         </div>
       </section>
 
-      <section class="section">
-        <div style="display: grid; gap: 32px; margin: 32px 0;">
-          <!-- Learn All 460 Questions -->
-          <div style="text-align: center;">
-            <h2 style="color: var(--accent-color); font-size: 48px; margin: 16px 0 8px; font-weight: 800;" data-i18n="sections.learnQuestions.title">Learn All 460 Questions</h2>
-            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.learnQuestions.description">Free and ad-free citizenship test practice</p>
-            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-              <img src="/landing/img/screen1.jpg" alt="Learn All 460 Questions" style="width: 100%; height: auto; display: block;" />
+      <!-- ============ FEATURES / BENTO ============ -->
+      <section class="section" id="features">
+        <div class="container">
+          <div class="section-head reveal">
+            <span class="section-eyebrow"><span class="flag-chip" aria-hidden="true"></span><span data-i18n="navigation.features">Features</span></span>
+            <h2 data-i18n="features.heading">Everything you need to pass</h2>
+            <p class="section-sub" data-i18n="features.subheading">Built for focused, efficient preparation — on any device.</p>
+          </div>
+          <div class="bento">
+            <div class="bento-card span-4 reveal">
+              <div class="bento-art">
+                <span class="mini-pill green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>29</span>
+                <span class="mini-pill red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>1</span>
+                <span class="mini-pill gold">30&thinsp;/&thinsp;33</span>
+              </div>
+              <div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg></div>
+              <h3 data-i18n="features.testMode.title">Test mode</h3>
+              <p data-i18n="features.testMode.description">Simulates the real exam experience.</p>
+            </div>
+            <div class="bento-card span-2 reveal" style="--d:.06s">
+              <div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h9"/></svg></div>
+              <h3 data-i18n="features.categories.title">Categories</h3>
+              <p data-i18n="features.categories.description">Study by topic for targeted learning.</p>
+            </div>
+            <div class="bento-card span-2 reveal">
+              <div class="bento-art"><span class="mini-pill gold"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg>4</span></div>
+              <div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21l-6.5-3.8L5.5 21V4.5a1 1 0 0 1 1-1Z"/></svg></div>
+              <h3 data-i18n="features.bookmarks.title">Bookmarks</h3>
+              <p data-i18n="features.bookmarks.description">Save important questions for review.</p>
+            </div>
+            <div class="bento-card span-2 reveal" style="--d:.06s">
+              <div class="bento-art"><span class="mini-pill red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>2</span></div>
+              <div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6L3.5 8.5"/><path d="M3.5 3.5v5h5"/></svg></div>
+              <h3 data-i18n="features.mistakeReview.title">Mistake review</h3>
+              <p data-i18n="features.mistakeReview.description">Practice incorrectly answered questions again.</p>
+            </div>
+            <div class="bento-card span-2 reveal" style="--d:.12s">
+              <div class="bento-art"><span class="mini-bars" aria-hidden="true"><i style="height:38%"></i><i style="height:60%"></i><i style="height:46%"></i><i style="height:78%"></i><i style="height:100%"></i></span></div>
+              <div class="bento-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M21 20H3.5"/></svg></div>
+              <h3 data-i18n="features.statistics.title">Statistics</h3>
+              <p data-i18n="features.statistics.description">Track your learning progress and accuracy over time.</p>
+            </div>
+            <div class="bento-card span-6 open-source-card reveal">
+              <div class="os-lead">
+                <div class="bento-icon"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg></div>
+                <div class="os-text">
+                  <h3 data-i18n="features.openSource.title">Free &amp; open source</h3>
+                  <p data-i18n="features.openSource.description">No ads, no tracking, no account. The entire code is public on GitHub.</p>
+                </div>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="https://github.com/flexsurfer/einburgerungstest" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg>
+                <span data-i18n="features.openSource.cta">View on GitHub</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SHOWCASE ROWS ============ -->
+      <section class="section" id="showcase" style="padding-block-start: 0;">
+        <div class="container rows">
+
+          <div class="row">
+            <div class="reveal">
+              <span class="row-index"><span class="flag-chip" aria-hidden="true"></span>01</span>
+              <h2 data-i18n="sections.learnQuestions.title">Learn All 460 Questions</h2>
+              <p class="row-desc" data-i18n="sections.learnQuestions.description">Free and ad-free citizenship test practice</p>
+            </div>
+            <div class="row-visual reveal" style="--d:.1s">
+              <div class="shot-frame">
+                <div class="mock-deck" aria-hidden="true">
+                  <span class="deck-badge">460</span>
+                  <div class="mock-qcard">
+                    <div class="head"><span class="mock-num">25</span><span class="sk b" style="width:64%"></span><svg class="mock-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg></div>
+                    <div class="mock-ans"><i></i><i></i><i></i><i></i></div>
+                  </div>
+                  <div class="mock-qcard faded">
+                    <div class="head"><span class="mock-num">112</span><span class="sk b" style="width:48%"></span></div>
+                    <div class="mock-ans"><i></i><i></i></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-           <!-- Check Your Progress -->
-           <div style="text-align: center;">
-            <h2 style="color: #E74C3C; font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.checkProgress.title">Check Your Progress</h2>
-            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.checkProgress.description">Instant feedback with correct answers highlighted</p>
-            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-              <img src="/landing/img/screen2.jpg" alt="Progress Tracking" style="width: 100%; height: auto; display: block;" />
+          <div class="row">
+            <div class="reveal">
+              <span class="row-index"><span class="flag-chip" aria-hidden="true"></span>02</span>
+              <h2 data-i18n="sections.checkProgress.title">Check Your Progress</h2>
+              <p class="row-desc" data-i18n="sections.checkProgress.description">Instant feedback with correct answers highlighted</p>
+            </div>
+            <div class="row-visual reveal" style="--d:.1s">
+              <div class="shot-frame">
+                <div class="mock-progress" aria-hidden="true">
+                  <div class="mock-ansrow good"><span class="sk" style="max-width:62%"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg></div>
+                  <div class="mock-ansrow"><span class="sk" style="max-width:74%"></span></div>
+                  <div class="mock-ansrow bad"><span class="sk" style="max-width:52%"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
+                  <div class="mock-statbar">
+                    <span class="s good"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>31</span>
+                    <span class="s bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>2</span>
+                    <span class="s pct">93.9%</span>
+                  </div>
+                  <div class="mock-track"><i></i></div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Organized by Topics -->
-          <div style="text-align: center;">
-            <h2 style="color: var(--accent-color); font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.organizedTopics.title">Organized by Topics</h2>
-            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.organizedTopics.description">Study specific themes or take a full test</p>
-            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-              <img src="/landing/img/screen3.jpg" alt="Topics Organization" style="width: 100%; height: auto; display: block;" />
+          <div class="row">
+            <div class="reveal">
+              <span class="row-index"><span class="flag-chip" aria-hidden="true"></span>03</span>
+              <h2 data-i18n="sections.organizedTopics.title">Organized by Topics</h2>
+              <p class="row-desc" data-i18n="sections.organizedTopics.description">Study specific themes or take a full test</p>
+            </div>
+            <div class="row-visual reveal" style="--d:.1s">
+              <div class="shot-frame">
+                <div class="mock-menu" aria-hidden="true" lang="de" dir="ltr">
+                  <div class="mrow"><span>All Questions</span><span class="cnt">460</span></div>
+                  <div class="mrow"><span>Start Test</span><span class="cnt">30</span></div>
+                  <div class="mrow active"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg><span>Favorites</span><span class="cnt">4</span></div>
+                  <div class="mrow"><span>Wrong answers</span><span class="cnt">2</span></div>
+                  <div class="mhead">Themes</div>
+                  <div class="mrow"><span>Bund und Länder</span><span class="cnt">13</span></div>
+                  <div class="mrow"><span>Geschichte</span><span class="cnt">70</span></div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Dark Mode -->
-          <div style="text-align: center;">
-            <h2 style="color: var(--accent-color); font-size: 48px; margin: 48px 0 8px; font-weight: 800;" data-i18n="sections.darkMode.title">Dark Mode Included</h2>
-            <p style="color: var(--muted-color); font-size: 18px; margin: 0 0 24px;" data-i18n="sections.darkMode.description">Comfortable learning day and night</p>
-            <div style="max-width: 800px; margin: 0 auto; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-              <img src="/landing/img/screen4.jpg" alt="Dark Mode Interface" style="width: 100%; height: auto; display: block;" />
+          <!-- dark mode band -->
+          <div class="band reveal">
+            <div>
+              <span class="row-index"><span class="flag-chip" aria-hidden="true"></span>04</span>
+              <h2 data-i18n="sections.darkMode.title">Dark Mode Included</h2>
+              <p class="row-desc" data-i18n="sections.darkMode.description">Comfortable learning day and night</p>
+              <button class="band-toggle" type="button" id="band-theme-toggle" data-i18n-title="navigation.themeToggleDark" aria-label="Toggle color theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.2M12 19.3v2.2M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 14.2A8.6 8.6 0 0 1 9.8 3.4a8.6 8.6 0 1 0 10.8 10.8Z"/></svg>
+                <span data-i18n="sections.darkMode.toggle">Try it</span>
+              </button>
+            </div>
+            <div class="band-cards" aria-hidden="true" lang="de" dir="ltr">
+              <div class="band-card lite">
+                <div class="head"><span class="mock-num">61</span><svg class="mock-star" viewBox="0 0 24 24" fill="#f7c21b" style="margin-inline-start:auto"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg></div>
+                <div class="q">Wie viele Bundesländer hat Deutschland?</div>
+                <div class="opt"></div><div class="opt sel"></div><div class="opt"></div>
+              </div>
+              <div class="band-card dark">
+                <div class="head"><span class="mock-num">61</span><svg class="mock-star" viewBox="0 0 24 24" fill="#ffd34d" style="margin-inline-start:auto"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3L2.8 9.5l6.4-.8L12 2.8z"/></svg></div>
+                <div class="q">Wie viele Bundesländer hat Deutschland?</div>
+                <div class="opt"></div><div class="opt sel"></div><div class="opt"></div>
+              </div>
             </div>
           </div>
 
         </div>
       </section>
 
-      <footer>
-        © <span id="y"></span> <span data-i18n="footer.copyright">EBTest.org</span> 
-      </footer>
-    </div>
+      <!-- ============ FINAL CTA ============ -->
+      <section class="section" style="padding-block-start: 0;">
+        <div class="container">
+          <div class="final-cta reveal">
+            <h2 data-i18n="cta.title">Ready to pass your Einbürgerungstest?</h2>
+            <p data-i18n="cta.subtitle">Start now — free, no sign-up, on any device.</p>
+            <div class="cta-row">
+              <a class="btn btn-primary" href="/app/">
+                <span data-i18n="hero.ctaPrimary">Start practicing</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13 5.5 19.5 12 13 18.5"/></svg>
+              </a>
+              <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3.7c0-.8.9-1.3 1.6-.9l13.6 7.9c.7.4.7 1.4 0 1.8L5.6 20.4c-.7.4-1.6-.1-1.6-.9V3.7Z" opacity=".9"/></svg>
+                <span data-i18n="hero.ctaAndroid">Android App</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <a class="brand" href="/">
+              <img src="/landing/app-icon.png" width="34" height="34" alt="EBTest logo" />
+              EBTest.org
+            </a>
+            <p data-i18n="footer.tagline">Free, open-source practice for the German citizenship test.</p>
+          </div>
+          <nav class="footer-links" aria-label="Footer">
+            <a href="/app/" data-i18n="navigation.webApp">Web App</a>
+            <a href="https://play.google.com/store/apps/details?id=org.ebtest" target="_blank" rel="noopener" data-i18n="navigation.android">Android</a>
+            <a href="https://github.com/flexsurfer/einburgerungstest" target="_blank" rel="noopener">GitHub</a>
+            <a href="/privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a>
+          </nav>
+        </div>
+        <div class="footer-base">
+          <span>© <span id="y"></span> <span data-i18n="footer.copyright">EBTest.org</span></span>
+          <span data-i18n="footer.disclaimer">Independent project. Not affiliated with the BAMF.</span>
+        </div>
+      </div>
+      <span class="flag-stripe" aria-hidden="true"></span>
+    </footer>
+
     <script>
-      // Theme management
+      // ---------- theme ----------
       function getStoredTheme() {
         const item = localStorage.getItem("theme")
         if (item == null) return null
         try { return JSON.parse(item) } catch { return item }
       }
-      
-      function getSystemTheme() {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      }
-      
       function getCurrentTheme() {
-        return getStoredTheme() || 'light' // Default to light theme to match main app
+        return getStoredTheme() || 'light' // default matches the main app
       }
-      
       function applyTheme(theme) {
         document.body.classList.remove('light', 'dark')
         document.body.classList.add(theme)
-        
-        const themeToggle = document.getElementById('theme-toggle')
-        if (themeToggle) {
-          themeToggle.textContent = theme === 'dark' ? '🌙' : '🌞'
-          themeToggle.title = `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`
-        }
-        
-        // Update meta theme-color for mobile browsers
+        document.documentElement.style.colorScheme = theme
         const metaThemeColor = document.querySelector('meta[name="theme-color"]')
-        if (metaThemeColor) {
-          metaThemeColor.content = theme === 'dark' ? '#121212' : '#ffffff'
-        }
+        if (metaThemeColor) metaThemeColor.content = theme === 'dark' ? '#0c0c0d' : '#faf9f6'
       }
-      
       function toggleTheme() {
-        const currentTheme = getCurrentTheme()
-        const newTheme = currentTheme === 'dark' ? "light" : "dark"
+        const newTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark'
         localStorage.setItem("theme", JSON.stringify(newTheme))
         applyTheme(newTheme)
       }
-      
-      // Initialize theme on page load
+      applyTheme(getCurrentTheme())
       document.addEventListener('DOMContentLoaded', function() {
-        const theme = getCurrentTheme()
-        applyTheme(theme)
-        
-        // Add click listener to theme toggle
-        const themeToggle = document.getElementById('theme-toggle')
-        if (themeToggle) {
-          themeToggle.addEventListener('click', toggleTheme)
-        }
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme)
+        document.getElementById('band-theme-toggle').addEventListener('click', toggleTheme)
       })
-      
-      // Listen for system theme changes
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!getStoredTheme()) {
-          applyTheme(e.matches ? 'dark' : 'light')
-        }
+        if (!getStoredTheme()) applyTheme(e.matches ? 'dark' : 'light')
       })
-      
-      // Set copyright year
+
+      // ---------- header shadow on scroll ----------
+      document.addEventListener('DOMContentLoaded', function() {
+        const header = document.getElementById('site-header')
+        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8)
+        onScroll()
+        window.addEventListener('scroll', onScroll, { passive: true })
+      })
+
+      // ---------- reveal on scroll ----------
+      document.addEventListener('DOMContentLoaded', function() {
+        const els = document.querySelectorAll('.reveal')
+        if (!('IntersectionObserver' in window)) { els.forEach(el => el.classList.add('in')); return }
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } })
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
+        els.forEach(el => io.observe(el))
+      })
+
+      // ---------- interactive demo (real BAMF catalogue questions) ----------
+      document.addEventListener('DOMContentLoaded', function() {
+        const QUESTIONS = [
+          { n: 25, cat: 'Bund und Länder', q: 'Was ist kein Bundesland der Bundesrepublik Deutschland?',
+            a: ['Elsass-Lothringen', 'Nordrhein-Westfalen', 'Mecklenburg-Vorpommern', 'Sachsen-Anhalt'], c: 0 },
+          { n: 112, cat: 'Politik in der Demokratie', q: 'Die Wahlen in Deutschland sind …',
+            a: ['speziell.', 'geheim.', 'berufsbezogen.', 'geschlechtsabhängig.'], c: 1 },
+          { n: 61, cat: 'Bund und Länder', q: 'Wie viele Bundesländer hat die Bundesrepublik Deutschland?',
+            a: ['14', '15', '16', '17'], c: 2 }
+        ]
+        let idx = 0
+        const qEl = document.getElementById('demo-question')
+        const numEl = document.getElementById('demo-num')
+        const catEl = document.getElementById('demo-cat')
+        const idxEl = document.getElementById('demo-idx')
+        const totalEl = document.getElementById('demo-total')
+        const answersEl = document.getElementById('demo-answers')
+        const feedbackEl = document.getElementById('demo-feedback')
+        const nextBtn = document.getElementById('demo-next')
+        totalEl.textContent = QUESTIONS.length
+
+        function render() {
+          const item = QUESTIONS[idx]
+          qEl.textContent = item.q
+          numEl.textContent = item.n
+          catEl.textContent = item.cat
+          idxEl.textContent = idx + 1
+          feedbackEl.className = 'demo-feedback'
+          nextBtn.classList.remove('show')
+          answersEl.innerHTML = ''
+          item.a.forEach((text, i) => {
+            const btn = document.createElement('button')
+            btn.type = 'button'
+            btn.className = 'demo-answer'
+            btn.innerHTML = '<span></span>' +
+              '<svg class="mark mark-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12.5 5.5 5.5L20 6.5"/></svg>' +
+              '<svg class="mark mark-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+            btn.firstChild.textContent = text
+            btn.addEventListener('click', () => answer(i, btn))
+            answersEl.appendChild(btn)
+          })
+        }
+
+        function answer(i, btn) {
+          const item = QUESTIONS[idx]
+          const buttons = answersEl.querySelectorAll('.demo-answer')
+          buttons.forEach((b, j) => {
+            b.disabled = true
+            if (j === item.c) b.classList.add('is-correct')
+            else if (j === i) b.classList.add('is-wrong')
+            else b.classList.add('dim')
+          })
+          feedbackEl.classList.add('show', i === item.c ? 'ok' : 'no')
+          nextBtn.classList.add('show')
+        }
+
+        nextBtn.addEventListener('click', () => { idx = (idx + 1) % QUESTIONS.length; render() })
+        render()
+      })
+
+      // ---------- year ----------
       document.getElementById('y').textContent = new Date().getFullYear()
     </script>
     <script src="/landing/i18n.js"></script>
     <script>
-      // Initialize language selector when i18n is ready
+      // Mount the language selector once i18n is ready
       document.addEventListener('DOMContentLoaded', function() {
-        // Wait for i18n to be initialized
         const initLanguageSelector = () => {
           if (window.i18n) {
             const container = document.getElementById('language-selector-container')
-            if (container) {
-              const selector = window.i18n.createLanguageSelector()
-              container.appendChild(selector)
+            if (container && !container.hasChildNodes()) {
+              container.appendChild(window.i18n.createLanguageSelector())
             }
           } else {
-            // Retry after a short delay
             setTimeout(initLanguageSelector, 100)
           }
         }
-        
         setTimeout(initLanguageSelector, 50)
       })
     </script>

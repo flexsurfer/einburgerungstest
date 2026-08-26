@@ -1,3 +1,6 @@
 packages:
   - app/*
   - packages/*
+allowBuilds:
+  bson: false
+  esbuild: true

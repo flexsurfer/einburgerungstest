@@ -4,8 +4,10 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+const projectRoot = import.meta.dirname;
+
 export default defineConfig(() => ({
-  root: __dirname,
+  root: projectRoot,
   cacheDir: '../../node_modules/.vite/app/web',
   server: {
     port: 4200,
@@ -19,15 +21,18 @@ export default defineConfig(() => ({
   viteStaticCopy({
     targets: [
       {
-        src: path.resolve(__dirname, '../mobile/assets'),
-        dest: ''
+        src: path.resolve(projectRoot, '../mobile/assets'),
+        dest: 'assets',
+        rename: {
+          stripBase: true
+        }
       }
     ]
   })
   ],
   resolve: {
     alias: {
-      'shared': path.resolve(__dirname, '../../packages/shared/src'),
+      'shared': path.resolve(projectRoot, '../../packages/shared/src'),
     },
   },
   build: {
@@ -35,8 +40,8 @@ export default defineConfig(() => ({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'index.html'),
-        app: path.resolve(__dirname, 'app/index.html'),
+        main: path.resolve(projectRoot, 'index.html'),
+        app: path.resolve(projectRoot, 'app/index.html'),
       }
     },
     reportCompressedSize: true,

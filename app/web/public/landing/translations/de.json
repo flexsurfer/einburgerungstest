@@ -4,25 +4,42 @@
     "description": "Kostenlose Übungsfragen für den deutschen Einbürgerungstest und 'Leben in Deutschland'. Lernen Sie online auf ebtest.org mit Statistiken, Favoriten und länderspezifischen Fragen.",
     "ogTitle": "EBTest.org – Einbürgerungstest Deutschland online",
     "ogDescription": "Üben Sie für den Einbürgerungstest online – kostenlos, modern und mobil.",
-    "twitterTitle": "EBTest.org – Einbürgerungstest Deutschland online", 
+    "twitterTitle": "EBTest.org – Einbürgerungstest Deutschland online",
     "twitterDescription": "Üben Sie für den Einbürgerungstest online – kostenlos, modern und mobil."
   },
   "navigation": {
     "webApp": "Web App",
     "android": "Android",
+    "features": "Funktionen",
+    "preview": "Einblicke",
     "themeToggleLight": "Zum hellen Design wechseln",
     "themeToggleDark": "Zum dunklen Design wechseln"
   },
   "hero": {
     "eyebrow": "Bereiten Sie sich auf den deutschen Einbürgerungstest und das \"Leben in Deutschland\" vor",
-    "heading": "Schnell, clever und selbstbewusst lernen",
+    "heading": "Schnell, clever und <em>selbstbewusst</em> lernen",
     "subtitle": "Basierend auf öffentlich verfügbaren Materialien des Bundesamtes für Migration und Flüchtlinge (BAMF), gültig ab 7. Mai 2025.",
     "ctaPrimary": "Jetzt üben",
-    "ctaAndroid": "📱 Android App",
-    "ctaGithub": "⭐ GitHub",
-    "kpi": "Keine Anmeldung erforderlich • Keine Werbung • Open Source"
+    "ctaAndroid": "Android App",
+    "chip1": "Keine Anmeldung erforderlich",
+    "chip2": "Keine Werbung",
+    "chip3": "Open Source"
+  },
+  "demo": {
+    "label": "Echte Prüfungsfrage",
+    "correct": "Richtig!",
+    "wrong": "Nicht ganz",
+    "next": "Nächste Frage"
+  },
+  "stats": {
+    "catalog": "Fragen im offiziellen Katalog",
+    "exam": "Fragen in der echten Prüfung",
+    "pass": "richtige Antworten zum Bestehen",
+    "time": "Minuten Bearbeitungszeit"
   },
   "features": {
+    "heading": "Alles, was Sie zum Bestehen brauchen",
+    "subheading": "Für konzentriertes, effizientes Lernen – auf jedem Gerät.",
     "testMode": {
       "title": "Prüfungsmodus",
       "description": "Simuliert die echte Prüfungserfahrung."
@@ -42,6 +59,11 @@
     "statistics": {
       "title": "Statistiken",
       "description": "Verfolgen Sie Ihren Lernfortschritt und Ihre Genauigkeit."
+    },
+    "openSource": {
+      "title": "Kostenlos & Open Source",
+      "description": "Keine Werbung, kein Tracking, kein Konto. Der gesamte Code ist öffentlich auf GitHub.",
+      "cta": "Auf GitHub ansehen"
     }
   },
   "sections": {
@@ -59,10 +81,18 @@
     },
     "darkMode": {
       "title": "Dunkler Modus inklusive",
-      "description": "Komfortables Lernen bei Tag und Nacht"
+      "description": "Komfortables Lernen bei Tag und Nacht",
+      "toggle": "Ausprobieren"
     }
   },
+  "cta": {
+    "title": "Bereit, Ihren Einbürgerungstest zu bestehen?",
+    "subtitle": "Starten Sie jetzt – kostenlos, ohne Anmeldung, auf jedem Gerät."
+  },
   "footer": {
+    "tagline": "Kostenloses Open-Source-Training für den deutschen Einbürgerungstest.",
+    "privacy": "Datenschutzerklärung",
+    "disclaimer": "Unabhängiges Projekt. Nicht mit dem BAMF verbunden.",
     "copyright": "EBTest.org"
   }
 }

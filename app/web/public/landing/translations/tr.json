@@ -10,19 +10,36 @@
   "navigation": {
     "webApp": "Web Uygulaması",
     "android": "Android",
+    "features": "Özellikler",
+    "preview": "Önizleme",
     "themeToggleLight": "Açık temaya geç",
     "themeToggleDark": "Koyu temaya geç"
   },
   "hero": {
     "eyebrow": "Alman vatandaşlığa geçiş testine (Einbürgerungstest) ve \"Leben in Deutschland\" sınavına hazırlanın",
-    "heading": "Hızlı, akıllı ve güvenle öğrenin",
+    "heading": "Hızlı, akıllı ve <em>güvenle</em> öğrenin",
     "subtitle": "Federal Göç ve Mülteci Dairesi'nin (BAMF) kamuya açık materyallerine dayanarak, 7 Mayıs 2025 tarihinden itibaren geçerli.",
     "ctaPrimary": "Pratik yapmaya başla",
-    "ctaAndroid": "📱 Android Uygulaması",
-    "ctaGithub": "⭐ GitHub",
-    "kpi": "Hesap gerekli değil • Reklamsız • Açık kaynak"
+    "ctaAndroid": "Android Uygulaması",
+    "chip1": "Hesap gerekmez",
+    "chip2": "Reklamsız",
+    "chip3": "Açık kaynak"
+  },
+  "demo": {
+    "label": "Gerçek sınav sorusu",
+    "correct": "Doğru!",
+    "wrong": "Tam değil",
+    "next": "Sonraki soru"
+  },
+  "stats": {
+    "catalog": "resmi katalogdaki soru sayısı",
+    "exam": "gerçek sınavdaki soru sayısı",
+    "pass": "geçmek için gereken doğru cevap",
+    "time": "dakika sınav süresi"
   },
   "features": {
+    "heading": "Sınavı geçmek için gereken her şey",
+    "subheading": "Her cihazda odaklı ve verimli hazırlık için tasarlandı.",
     "testMode": {
       "title": "Test modu",
       "description": "Gerçek sınav deneyimini simüle eder."
@@ -36,12 +53,17 @@
       "description": "Önemli soruları tekrar için kaydedin."
     },
     "mistakeReview": {
-      "title": "Hata incelemesi",
-      "description": "Yanlış cevaplanmış soruları tekrar pratik yapın."
+      "title": "Hata tekrarı",
+      "description": "Yanlış cevaplanan soruları tekrar çalışın."
     },
     "statistics": {
       "title": "İstatistikler",
       "description": "Öğrenme ilerlemenizi ve doğruluğunuzu zaman içinde takip edin."
+    },
+    "openSource": {
+      "title": "Ücretsiz ve açık kaynak",
+      "description": "Reklam yok, izleme yok, hesap yok. Tüm kod GitHub'da herkese açık.",
+      "cta": "GitHub'da görüntüle"
     }
   },
   "sections": {
@@ -55,14 +77,22 @@
     },
     "organizedTopics": {
       "title": "Konulara Göre Düzenlenmiş",
-      "description": "Belirli temaları çalışın veya tam test alın"
+      "description": "Belirli temaları çalışın veya tam test çözün"
     },
     "darkMode": {
       "title": "Koyu Mod Dahil",
-      "description": "Gece gündüz rahat öğrenme"
+      "description": "Gece gündüz rahat öğrenme",
+      "toggle": "Deneyin"
     }
   },
+  "cta": {
+    "title": "Einbürgerungstest'i geçmeye hazır mısınız?",
+    "subtitle": "Hemen başlayın – ücretsiz, kayıt olmadan, her cihazda."
+  },
   "footer": {
+    "tagline": "Alman vatandaşlık testi için ücretsiz, açık kaynaklı alıştırma.",
+    "privacy": "Gizlilik Politikası",
+    "disclaimer": "Bağımsız bir projedir. BAMF ile bağlantılı değildir.",
     "copyright": "EBTest.org"
   }
 }

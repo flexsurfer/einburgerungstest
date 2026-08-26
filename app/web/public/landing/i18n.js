@@ -68,7 +68,7 @@ class I18n {
       // Fallback to English if current language fails to load
       if (language !== 'en') {
         try {
-          const fallbackResponse = await fetch('/translations/en.json')
+          const fallbackResponse = await fetch('/landing/translations/en.json')
           this.translations = await fallbackResponse.json()
           this.currentLanguage = 'en'
         } catch (fallbackError) {
@@ -94,13 +94,14 @@ class I18n {
   }
 
   updateMetaTag(attribute, value, content) {
-    const selector = content ? 
-      `meta[${attribute}="${value}"]` : 
-      `meta[${attribute}="${value}"]`
-    
+    // Two-arg form: updateMetaTag('description', text) targets meta[name="description"]
+    const selector = content !== undefined
+      ? `meta[${attribute}="${value}"]`
+      : `meta[name="${attribute}"]`
+
     const metaTag = document.querySelector(selector)
     if (metaTag) {
-      metaTag.content = content || this.translations.meta[value]
+      metaTag.content = content !== undefined ? content : value
     }
   }
 
@@ -210,16 +211,8 @@ class I18n {
   createLanguageSelector() {
     const selector = document.createElement('select')
     selector.id = 'language-selector'
-    selector.style.cssText = `
-      background: var(--card-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 6px 8px;
-      font-size: 14px;
-      cursor: pointer;
-      margin-left: 12px;
-    `
+    selector.className = 'lang-select'
+    selector.setAttribute('aria-label', 'Language')
 
     Object.entries(this.supportedLanguages).forEach(([code, name]) => {
       const option = document.createElement('option')
@@ -237,12 +230,7 @@ class I18n {
   }
 }
 
-// Initialize i18n when DOM is loaded
-let i18n = null
-
-document.addEventListener('DOMContentLoaded', async function() {
-  i18n = new I18n()
+// Initialize i18n when DOM is loaded and export for global access
+document.addEventListener('DOMContentLoaded', function() {
+  window.i18n = new I18n()
 })
-
-// Export for global access
-window.i18n = i18n
