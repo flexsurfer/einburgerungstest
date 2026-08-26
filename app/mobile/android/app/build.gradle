@@ -103,12 +103,15 @@ android {
     }
     buildTypes {
         debug {
+            // Keep the locally installed debug app separate from the Play Store app.
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
             signingConfig signingConfigs.debug
         }
         release {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 }
