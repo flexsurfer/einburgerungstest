@@ -100,3 +100,11 @@ yarn-error.log
 /coverage
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+# Expo CNG output
+/app/mobile-expo/.expo/
+/app/mobile-expo/android/
+/app/mobile-expo/ios/
+
+# Local pnpm metadata
+/.pnpm-store/

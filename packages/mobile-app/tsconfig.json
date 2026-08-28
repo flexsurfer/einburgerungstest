@@ -6,9 +6,9 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "types": ["@types/react", "node"],
-    "allowJs": true,
-    "checkJs": true
+    "allowJs": false,
+    "checkJs": false
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

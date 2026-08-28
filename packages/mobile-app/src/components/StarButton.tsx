@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 
 interface StarButtonProps {
   globalIndex: number

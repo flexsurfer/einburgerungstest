@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { getHandler } from '@flexsurfer/reflex'
 import { createDraft } from 'immer'
-import { EVENT_IDS } from 'shared/event-ids.js'
-import { EFFECT_IDS } from 'shared/effect-ids.js'
+import { EVENT_IDS } from '@ebtest/shared/event-ids.js'
+import { EFFECT_IDS } from '@ebtest/shared/effect-ids.js'
 
 import '../src/events.ts'
-import 'shared/events.js'
+import '@ebtest/shared/events.js'
 
 describe('Initialize App Event', () => {
     it('should handle initializeApp event', () => {

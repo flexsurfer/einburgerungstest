@@ -91,7 +91,7 @@ regSub(SUB_IDS.STATISTICS,
     const incorrect = totalAnswered - correctCount
     const totalVisible = filteredQuestions.length
     const accuracy = totalAnswered > 0 ? (correctCount / totalAnswered * 100).toFixed(1) : 0
-    const passed = accuracy > 51.5
+    const passed = Number(accuracy) > 51.5
     return {
       correct: correctCount,
       incorrect,

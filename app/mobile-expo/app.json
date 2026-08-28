@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Einbürgerungstest",
+    "slug": "einburgerungstest-expo",
+    "version": "1.2.0",
+    "orientation": "default",
+    "icon": "../web/public/landing/app-icon.png",
+    "scheme": "einburgerungstest",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "org.ebtest.expo",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "org.ebtest.expo",
+      "versionCode": 1
+    },
+    "plugins": [
+      [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false
+        }
+      ]
+    ]
+  }
+}

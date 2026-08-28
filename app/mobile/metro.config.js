@@ -16,7 +16,7 @@ const config = {
   resolver: {
     extraNodeModules: new Proxy({}, {
       get: (_, name) => {
-        if (name === 'shared') return sharedPath;
+        if (name === '@ebtest/shared') return sharedPath;
         return path.join(rootNodeModules, name);
       }
     }),

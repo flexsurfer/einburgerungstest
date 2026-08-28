@@ -1,0 +1,15 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "strict": false,
+    "paths": {
+      "@ebtest/mobile-app/*": ["../../packages/mobile-app/src/*"],
+      "@ebtest/shared/*": ["../../packages/shared/src/*"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

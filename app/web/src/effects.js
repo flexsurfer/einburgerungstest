@@ -1,6 +1,6 @@
 import { regEffect, regCoeffect, dispatch } from "@flexsurfer/reflex"
-import { EFFECT_IDS } from 'shared/effect-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { EFFECT_IDS } from '@ebtest/shared/effect-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 
 // ===== EFFECTS =====
 

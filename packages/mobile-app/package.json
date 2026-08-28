@@ -1,0 +1,31 @@
+{
+  "name": "@ebtest/mobile-app",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/App.tsx",
+  "exports": {
+    ".": "./src/App.tsx",
+    "./bootstrap": "./src/bootstrap.ts",
+    "./platform": "./src/platform.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ebtest/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "@flexsurfer/reflex": "^0.1.25",
+    "@react-native-async-storage/async-storage": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-svg": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "@types/react": "^19.2.18",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

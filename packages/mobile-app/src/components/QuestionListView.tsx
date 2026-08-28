@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo, useState, useEffect } from 'react'
 import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native'
 import { useSubscription } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
 import { useColors, type Colors } from '../theme'
 import { QuestionCard } from './QuestionCard'
 import { Question } from '../types'

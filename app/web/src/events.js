@@ -1,6 +1,6 @@
 import { regEvent } from '@flexsurfer/reflex'
-import { EVENT_IDS } from 'shared/event-ids'
-import { EFFECT_IDS } from 'shared/effect-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
+import { EFFECT_IDS } from '@ebtest/shared/effect-ids'
 
 // Initialize application, load data from localStorage, fetch questions from data.json
 regEvent(EVENT_IDS.INITIALIZE_APP,

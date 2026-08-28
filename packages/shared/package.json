@@ -1,8 +1,28 @@
 {
-  "name": "shared",
+  "name": "@ebtest/shared",
   "version": "0.0.1",
   "private": true,
   "type": "module",
+  "exports": {
+    "./db": "./src/db.js",
+    "./db.js": "./src/db.js",
+    "./effect-ids": "./src/effect-ids.js",
+    "./effect-ids.js": "./src/effect-ids.js",
+    "./event-ids": "./src/event-ids.js",
+    "./event-ids.js": "./src/event-ids.js",
+    "./events": "./src/events.js",
+    "./events.js": "./src/events.js",
+    "./sub-ids": "./src/sub-ids.js",
+    "./sub-ids.js": "./src/sub-ids.js",
+    "./subs": "./src/subs.js",
+    "./subs.js": "./src/subs.js",
+    "./test": "./src/test.js",
+    "./test.js": "./src/test.js"
+  },
+  "dependencies": {
+    "@flexsurfer/reflex": "^0.1.25",
+    "immer": "^11.1.18"
+  },
   "devDependencies": {
     "vitest": "^4.1.11"
   }

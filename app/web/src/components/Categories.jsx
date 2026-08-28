@@ -1,9 +1,9 @@
 import { useCallback, memo, useState, useEffect, useRef } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
 import { FavoritesButton } from './FavoritesButton.jsx'
-import { EVENT_IDS } from 'shared/event-ids'
-import { EFFECT_IDS } from 'shared/effect-ids'
-import { SUB_IDS } from 'shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
+import { EFFECT_IDS } from '@ebtest/shared/effect-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
 import '../styles/Header.css'
 
 export const Categories = memo(() => {

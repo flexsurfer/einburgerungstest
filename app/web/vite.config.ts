@@ -21,7 +21,7 @@ export default defineConfig(() => ({
   viteStaticCopy({
     targets: [
       {
-        src: path.resolve(projectRoot, '../mobile/assets'),
+        src: path.resolve(projectRoot, '../../packages/mobile-app/assets'),
         dest: 'assets',
         rename: {
           stripBase: true
@@ -32,7 +32,7 @@ export default defineConfig(() => ({
   ],
   resolve: {
     alias: {
-      'shared': path.resolve(projectRoot, '../../packages/shared/src'),
+      '@ebtest/shared': path.resolve(projectRoot, '../../packages/shared/src'),
     },
   },
   build: {

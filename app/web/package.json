@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "react-dom": "^19.2.8",
-    "shared": "*"
+    "@ebtest/shared": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

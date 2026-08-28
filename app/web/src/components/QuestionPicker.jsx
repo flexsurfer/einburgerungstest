@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 import '../styles/QuestionPicker.css'
 
 export const QuestionPicker = () => {

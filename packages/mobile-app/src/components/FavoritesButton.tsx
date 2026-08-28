@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { useSubscription } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
 import { useColors, type Colors } from '../theme'
 import { Star } from './Star'
 

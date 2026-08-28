@@ -3,7 +3,7 @@ import { Header } from './components/Header.jsx'
 import { QuestionView } from './components/QuestionView.jsx'
 import { Vocabulary } from './components/Vocabulary.jsx'
 import { Statistics } from './components/Statistics.jsx'
-import { SUB_IDS } from 'shared/sub-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
 import './styles/App.css'
 
 function App() {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 import { QuestionCard } from './QuestionCard.jsx'
 import '../styles/QuestionList.css'
 

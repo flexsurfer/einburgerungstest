@@ -10,8 +10,8 @@ import {
   Dimensions
 } from 'react-native'
 import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from 'shared/sub-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 import { useColors, type Colors } from '../theme'
 
 export const QuestionPicker = memo(() => {
@@ -149,7 +149,6 @@ export const QuestionPicker = memo(() => {
             updateCellsBatchingPeriod={100} // Slower updates to prevent rendering conflicts
             disableVirtualization={false}
             scrollEventThrottle={16}
-            legacyImplementation={false} // Use newer FlatList implementation
           />
         </View>
       </View>

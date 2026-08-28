@@ -1,20 +1,27 @@
 {
   "name": "einburgerungstest",
   "private": true,
-  "packageManager": "pnpm@11.13.0",
+  "packageManager": "pnpm@11.20.0",
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
-    "test": "pnpm --filter ./packages/shared exec vitest run && pnpm --filter ./app/web exec vitest run && pnpm --filter ./app/mobile exec vitest run",
+    "test": "pnpm --filter ./packages/shared exec vitest run && pnpm --filter ./packages/mobile-app exec vitest run && pnpm --filter ./app/web exec vitest run",
     "test:web": "pnpm --filter ./app/web exec vitest run",
-    "test:mobile": "pnpm --filter ./app/mobile exec vitest run",
+    "test:mobile": "pnpm --filter ./packages/mobile-app exec vitest run",
+    "test:mobile-app": "pnpm --filter ./packages/mobile-app exec vitest run",
     "test:shared": "pnpm --filter ./packages/shared exec vitest run",
+    "typecheck:mobile": "pnpm --filter ./app/mobile exec tsc --noEmit -p tsconfig.json",
+    "typecheck:mobile-app": "pnpm --filter ./packages/mobile-app exec tsc --noEmit -p tsconfig.json",
+    "typecheck:mobile-expo": "pnpm --filter ./app/mobile-expo run typecheck",
     "preview:web": "pnpm --filter ./app/web exec vite preview",
     "dev:web": "pnpm --filter ./app/web exec vite",
     "dev:mobile": "pnpm --filter ./app/mobile exec react-native start",
     "dev:run-android": "pnpm --filter ./app/mobile exec react-native run-android",
     "dev:run-ios": "pnpm --filter ./app/mobile exec react-native run-ios",
+    "dev:expo": "pnpm --filter ./app/mobile-expo exec expo start",
+    "dev:expo-android": "pnpm --filter ./app/mobile-expo exec expo run:android",
+    "dev:expo-ios": "pnpm --filter ./app/mobile-expo exec expo run:ios",
     "build:web": "pnpm --filter ./app/web exec vite build",
     "build": "pnpm build:web",
     "deploy:web": "gh-pages -d ./app/web/dist"

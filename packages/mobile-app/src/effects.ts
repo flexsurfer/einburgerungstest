@@ -1,7 +1,7 @@
 import { regEffect, dispatch } from "@flexsurfer/reflex"
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { EFFECT_IDS } from 'shared/effect-ids'
-import { EVENT_IDS } from 'shared/event-ids'
+import { EFFECT_IDS } from '@ebtest/shared/effect-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
 import { Alert } from 'react-native';
 import { questionListRef } from './refs';
 

@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { dispatch, useSubscription } from '@flexsurfer/reflex'
-import { EVENT_IDS } from 'shared/event-ids'
-import { SUB_IDS } from 'shared/sub-ids'
+import { EVENT_IDS } from '@ebtest/shared/event-ids'
+import { SUB_IDS } from '@ebtest/shared/sub-ids'
 import '../styles/StarButton.css'
 
 export const StarButton = memo(function StarButton({ globalIndex }) {
