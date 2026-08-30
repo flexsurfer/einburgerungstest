@@ -37,6 +37,43 @@ describe("Uklad application foundation", () => {
     expect(second.runtimeId).toBe("foundation-second");
   });
 
+  it("injects detached questions into the first runtime snapshot", () => {
+    const initialQuestions = [
+      {
+        question: "Who elects the Bundestag?",
+        category: "Politik",
+        correct: 0,
+        answers: ["The people", "The courts"],
+      },
+      {
+        question: "Which state is a Bundesland?",
+        category: "Bayern",
+        correct: 0,
+        answers: ["Bayern", "Elsass"],
+      },
+    ];
+    const runtime = createAppRuntime({
+      runtimeId: "foundation-initial-questions",
+      initialQuestions,
+    });
+    runtimes.push(runtime);
+    const state = createUkladTestHarness(runtime).getState();
+
+    expect(state[stateKeys.questionsLoaded]).toBe(true);
+    expect(state[stateKeys.questionsLoading]).toBe(false);
+    expect(
+      state[stateKeys.questionsItems].map(({ globalIndex }) => globalIndex),
+    ).toEqual([1, 2]);
+    expect(state[stateKeys.questionsCategories]).toEqual([
+      { title: "Themes", items: [["Politik", 1]] },
+      { title: "Bundesländer", items: [["Bayern", 1]] },
+    ]);
+    expect(state[stateKeys.questionsItems]).not.toBe(initialQuestions);
+    expect(state[stateKeys.questionsItems][0].answers).not.toBe(
+      initialQuestions[0].answers,
+    );
+  });
+
   it("registers modules against one runtime and exposes typed root subscriptions", () => {
     const runtime = createAppRuntime({ runtimeId: "foundation-module" });
     runtimes.push(runtime);

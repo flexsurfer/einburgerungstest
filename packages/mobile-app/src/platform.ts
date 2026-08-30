@@ -19,8 +19,10 @@ export interface MobilePlatform {
   applySystemBarTheme(theme: Theme): void | Promise<void>;
 }
 
+export const mobileQuestionsData = questionsData as QuestionInput[];
+
 const localData: Record<DataKind, unknown> = {
-  questions: questionsData,
+  questions: mobileQuestionsData,
   vocabulary: vocabularyData,
 };
 
@@ -166,9 +168,7 @@ export function registerMobilePlatform(
 }
 
 /** Keep system-following theme in sync after persistence hydration. */
-export function watchMobileSystemTheme(
-  runtime: AppRuntime,
-): () => void {
+export function watchMobileSystemTheme(runtime: AppRuntime): () => void {
   if (typeof Appearance.addChangeListener !== "function") return () => {};
 
   const subscription = Appearance.addChangeListener(({ colorScheme }) => {

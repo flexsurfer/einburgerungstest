@@ -1,4 +1,4 @@
-import type { AppContracts } from "./contracts.js";
+import type { AppContracts, QuestionInput } from "./contracts.js";
 import { createNavigationState } from "../../features/navigation/state.js";
 import { createPreferencesState } from "../../features/preferences/state.js";
 import { createPracticeState } from "../../features/practice/state.js";
@@ -7,13 +7,19 @@ import { createTestSessionState } from "../../features/test-session/state.js";
 import { createUiState } from "../../features/ui/state.js";
 import { createVocabularyState } from "../../features/vocabulary/state.js";
 
+export interface CreateAppStateOptions {
+  readonly initialQuestions?: readonly QuestionInput[];
+}
+
 /** Create fresh roots for one application/runtime owner. */
-export function createAppState(): AppContracts["state"] {
+export function createAppState(
+  options: CreateAppStateOptions = {},
+): AppContracts["state"] {
   return {
     ...createUiState(),
     ...createPreferencesState(),
     ...createVocabularyState(),
-    ...createQuestionsState(),
+    ...createQuestionsState(options.initialQuestions),
     ...createPracticeState(),
     ...createTestSessionState(),
     ...createNavigationState(),
