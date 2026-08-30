@@ -1,46 +1,63 @@
-import { memo, useCallback, useEffect } from 'react'
-import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from '@ebtest/shared/sub-ids'
-import { EVENT_IDS } from '@ebtest/shared/event-ids'
-import '../styles/QuestionPicker.css'
+import { useCallback, useEffect } from "react";
+import {
+  appIds,
+  useRuntime,
+  useSubscription,
+} from "@ebtest/shared/uklad";
+import "../styles/QuestionPicker.css";
 
 export const QuestionPicker = () => {
-  const showQuestionPicker = useSubscription([SUB_IDS.SHOW_QUESTION_PICKER], "QuestionPicker")
-  const pickerItems = useSubscription([SUB_IDS.QUESTION_PICKER_ITEMS], "QuestionPicker")
+  const runtime = useRuntime();
+  const showQuestionPicker = useSubscription(
+    [appIds.subscriptions.navigationQuestionPickerVisible],
+    "QuestionPicker",
+  );
+  const pickerItems = useSubscription(
+    [appIds.subscriptions.navigationQuestionPickerItems],
+    "QuestionPicker",
+  );
 
-  const handleQuestionSelect = useCallback((index) => {
-    dispatch([EVENT_IDS.NAVIGATE_TO_QUESTION, index])
-  }, [])
+  const handleQuestionSelect = useCallback(
+    (index) => {
+      runtime.dispatch([appIds.events.navigationQuestionSelected, index]);
+    },
+    [runtime],
+  );
 
   const handleClose = useCallback(() => {
-    dispatch([EVENT_IDS.SHOW_QUESTION_PICKER, false])
-  }, [])
+    runtime.dispatch([appIds.events.navigationQuestionPickerShown, false]);
+  }, [runtime]);
 
-  const handleOverlayClick = useCallback((e) => {
-    if (e.target === e.currentTarget) {
-      handleClose()
-    }
-  }, [])
+  const handleOverlayClick = useCallback(
+    (e) => {
+      if (e.target === e.currentTarget) {
+        handleClose();
+      }
+    },
+    [handleClose],
+  );
 
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && showQuestionPicker) {
-        handleClose()
+      if (e.key === "Escape" && showQuestionPicker) {
+        handleClose();
       }
-    }
+    };
 
     if (showQuestionPicker) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
+      document.addEventListener("keydown", handleEscape);
     }
 
     return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [showQuestionPicker])
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "auto";
+    };
+  }, [handleClose, showQuestionPicker]);
 
   if (!showQuestionPicker || !pickerItems || pickerItems.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -80,16 +97,12 @@ export const QuestionPicker = () => {
               onClick={() => handleQuestionSelect(item.filteredIndex)}
               aria-label={item.ariaLabel}
             >
-              <span className="question-item-number">
-                {item.number}
-              </span>
-              {item.isAnswered && (
-                <div className={item.indicatorClass} />
-              )}
+              <span className="question-item-number">{item.number}</span>
+              {item.isAnswered && <div className={item.indicatorClass} />}
             </button>
           ))}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

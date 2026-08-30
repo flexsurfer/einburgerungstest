@@ -12,12 +12,12 @@ If you like it, please give it a ⭐ on [GitHub](https://github.com/flexsurfer/e
 
 Questions are based on the official dataset from: [www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
 
-The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Reflex](https://github.com/flexsurfer/reflex) library and a monorepo setup.
+The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Uklad](https://github.com/ukladjs/uklad) and a monorepo setup.
 
 ## Features
 
 - **Practice Questions:** Over 300 questions categorized by topics like Recht, Gesellschaft und Familie, Staat, Politik, etc.
-- **Multiple Modes:** 
+- **Multiple Modes:**
   - Testing mode for practicing with statistics.
   - Review mode for checking answers.
 - **Favorites:** Mark questions as favorites for quick access.
@@ -30,7 +30,8 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 ## Tech Stack
 
 - **Frontend:** React (Web), React Native (Mobile)
-- **State Management:** [Reflex](https://github.com/flexsurfer/reflex) (custom state management with events, effects, and subscriptions)
+- **State Management:** [Uklad](https://github.com/ukladjs/uklad) (re-frame-style events, effects, subscriptions, and platform modules)
+- **Persistence:** [`@ukladjs/persist`](https://www.npmjs.com/package/@ukladjs/persist) (versioned web `localStorage` and native `AsyncStorage` hydration)
 - **Build Tools:** Vite (Web), Metro (Mobile)
 - **Package Manager:** pnpm
 - **Testing:** Vitest
@@ -39,13 +40,14 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 
 ### Prerequisites
 
-- Node.js >= 18
+- Node.js >= 22.18
 - pnpm (install globally: `npm install -g pnpm`)
 - For mobile: Android Studio (for Android), Xcode (for iOS), CocoaPods (for iOS)
 
 ### Setup
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/flexsurfer/einburgerungstest.git
    cd einburgerungstest
@@ -63,7 +65,7 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 ### Web App
 
 - Development: `pnpm dev:web` (runs on http://localhost:4200)
-- Build: `pnpm build:web` 
+- Build: `pnpm build:web`
 
 ### Mobile App
 
@@ -74,7 +76,7 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 
 ### Shared Package
 
-The shared package contains common logic, data, events, and subscriptions used by both web and mobile apps.
+The shared package contains common Uklad state, data, events, subscriptions, and platform-neutral feature modules used by both web and mobile apps.
 
 - Test shared: `pnpm test:shared`
 

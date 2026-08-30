@@ -1,43 +1,51 @@
-import { memo, useCallback } from 'react'
-import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { SUB_IDS } from '@ebtest/shared/sub-ids'
-import { EVENT_IDS } from '@ebtest/shared/event-ids'
-import { LeftArrow, RightArrow, DownArrow } from './Icons'
-import '../styles/NavigationControls.css'
+import { memo, useCallback } from "react";
+import {
+  appIds,
+  useRuntime,
+  useSubscription,
+} from "@ebtest/shared/uklad";
+import { LeftArrow, RightArrow, DownArrow } from "./Icons";
+import "../styles/NavigationControls.css";
 
 export const NavigationControls = memo(({ isVisible = true }) => {
+  const runtime = useRuntime();
+  const currentQuestionIndex = useSubscription(
+    [appIds.subscriptions.navigationCurrentQuestionIndex],
+    "NavigationControls",
+  );
+  const filteredQuestionsCount = useSubscription(
+    [appIds.subscriptions.practiceFilteredQuestionsCount],
+    "NavigationControls",
+  );
 
-  const currentQuestionIndex = useSubscription([SUB_IDS.CURRENT_QUESTION_INDEX], "NavigationControls")
-  const filteredQuestionsCount = useSubscription([SUB_IDS.FILTERED_QUESTIONS_COUNT], "NavigationControls")
-
-  const currentIndex = currentQuestionIndex || 0
-  const isFirstQuestion = currentIndex === 0
-  const isLastQuestion = currentIndex === filteredQuestionsCount - 1
+  const currentIndex = currentQuestionIndex || 0;
+  const isFirstQuestion = currentIndex === 0;
+  const isLastQuestion = currentIndex === filteredQuestionsCount - 1;
 
   const handlePrevious = useCallback(() => {
     if (!isFirstQuestion) {
-      dispatch([EVENT_IDS.NAVIGATE_PREV])
+      runtime.dispatch([appIds.events.navigationPrevious]);
     }
-  }, [isFirstQuestion])
+  }, [runtime, isFirstQuestion]);
 
   const handleNext = useCallback(() => {
     if (!isLastQuestion) {
-      dispatch([EVENT_IDS.NAVIGATE_NEXT])
+      runtime.dispatch([appIds.events.navigationNext]);
     }
-  }, [isLastQuestion])
+  }, [runtime, isLastQuestion]);
 
   const handleQuestionNumberPress = useCallback(() => {
-    dispatch([EVENT_IDS.SHOW_QUESTION_PICKER, true])
-  }, [])
+    runtime.dispatch([appIds.events.navigationQuestionPickerShown, true]);
+  }, [runtime]);
 
-  if (!isVisible ) {
-    return null
+  if (!isVisible) {
+    return null;
   }
 
   return (
     <div className="navigation-controls">
       <button
-        className={`nav-button ${isFirstQuestion ? 'disabled' : ''}`}
+        className={`nav-button ${isFirstQuestion ? "disabled" : ""}`}
         onClick={handlePrevious}
         disabled={isFirstQuestion}
         title="Previous question (← or h key)"
@@ -50,12 +58,14 @@ export const NavigationControls = memo(({ isVisible = true }) => {
         className="question-number-button"
         onClick={handleQuestionNumberPress}
       >
-        <span className="question-number-text">{currentIndex + 1} of {filteredQuestionsCount}</span>
+        <span className="question-number-text">
+          {currentIndex + 1} of {filteredQuestionsCount}
+        </span>
         <DownArrow />
       </button>
 
       <button
-        className={`nav-button ${isLastQuestion ? 'disabled' : ''}`}
+        className={`nav-button ${isLastQuestion ? "disabled" : ""}`}
         onClick={handleNext}
         disabled={isLastQuestion}
         title="Next question (→ or l key)"
@@ -64,5 +74,5 @@ export const NavigationControls = memo(({ isVisible = true }) => {
         <RightArrow />
       </button>
     </div>
-  )
-})
+  );
+});

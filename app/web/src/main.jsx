@@ -1,33 +1,24 @@
-import { StrictMode, Fragment } from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode, Fragment } from "react";
+import ReactDOM from "react-dom/client";
 
-import './styles/index.css'
+import "./styles/index.css";
+import { UkladProvider } from "@ebtest/shared/uklad";
+import { createWebApp } from "./bootstrap.js";
+import { HydrationGate } from "./HydrationGate.jsx";
 
-import '@ebtest/shared/db'
-import '@ebtest/shared/events'
-import '@ebtest/shared/subs'
+const webApp = createWebApp({
+  onHydrationError: (error) => {
+    console.error("Failed to hydrate web persistence:", error);
+  },
+});
 
-import './events'
-import './effects'
-
-import App from './App'
-import { enableTracing, enableTracePrint, dispatch } from '@flexsurfer/reflex'
-import { EVENT_IDS } from '@ebtest/shared/event-ids.js'
-import { enableDevtools } from '@flexsurfer/reflex-devtools'
-
-if (import.meta.env.MODE === 'development') {
-  enableTracing()
-  //enableTracePrint()
-  enableDevtools();
-}
-
-dispatch([EVENT_IDS.INITIALIZE_APP])
-
-const useStrictMode = false
+const useStrictMode = false;
 const Wrapper = useStrictMode ? StrictMode : Fragment;
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <Wrapper>
-    <App />
-  </Wrapper>
-)
+    <UkladProvider runtime={webApp.runtime}>
+      <HydrationGate app={webApp} />
+    </UkladProvider>
+  </Wrapper>,
+);

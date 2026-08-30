@@ -1,9 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@ebtest/shared/*": ["packages/shared/src/*"]
+      "@ebtest/shared/*": ["./packages/shared/src/*"]
     },
     "target": "ES2021",
     "module": "ES2022",

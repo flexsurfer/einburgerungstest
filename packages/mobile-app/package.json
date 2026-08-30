@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/App.tsx",
     "./bootstrap": "./src/bootstrap.ts",
-    "./platform": "./src/platform.ts"
+    "./platform": "./src/platform.ts",
+    "./persistence": "./src/persistence.ts"
   },
   "scripts": {
     "test": "vitest run"
@@ -15,7 +16,6 @@
     "@ebtest/shared": "workspace:*"
   },
   "peerDependencies": {
-    "@flexsurfer/reflex": "^0.1.25",
     "@react-native-async-storage/async-storage": "*",
     "react": "*",
     "react-native": "*",
@@ -23,6 +23,7 @@
     "react-native-svg": "*"
   },
   "devDependencies": {
+    "@ukladjs/core": "catalog:",
     "@types/node": "^26.3.0",
     "@types/react": "^19.2.18",
     "typescript": "^5.9.3",

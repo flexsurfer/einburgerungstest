@@ -1,9 +1,9 @@
 {
   "name": "einburgerungstest",
   "private": true,
-  "packageManager": "pnpm@11.20.0",
+  "packageManager": "pnpm@11.24.0",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "test": "pnpm --filter ./packages/shared exec vitest run && pnpm --filter ./packages/mobile-app exec vitest run && pnpm --filter ./app/web exec vitest run",
@@ -31,7 +31,6 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@flexsurfer/reflex-devtools": "^0.1.15",
     "eslint": "~9.39.5",
     "gh-pages": "^6.3.0",
     "jiti": "2.7.0",
@@ -43,8 +42,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.29.7",
-    "@flexsurfer/reflex": "^0.1.25",
-    "immer": "^11.1.18",
     "react": "19.2.8"
   }
 }
