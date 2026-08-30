@@ -3,13 +3,14 @@ import {
   type CreateUkladRuntimeOptions,
   type UkladRuntime,
 } from "@ukladjs/core/vanilla";
-import { createAppState } from "./initial-state.js";
+import { createAppState, type CreateAppStateOptions } from "./initial-state.js";
 import type { AppContracts } from "./contracts.js";
 
 export type AppRuntimeOptions = Omit<
   CreateUkladRuntimeOptions<AppContracts["state"]>,
   "initialState"
->;
+> &
+  CreateAppStateOptions;
 
 export type AppRuntime = UkladRuntime<AppContracts>;
 
@@ -23,11 +24,12 @@ export function createAppRuntime(
   const {
     runtimeId = "einburgerungstest",
     name = "Einbürgerungstest",
+    initialQuestions,
     ...runtimeOptions
   } = options;
 
   return createUkladRuntime<AppContracts>({
-    initialState: createAppState(),
+    initialState: createAppState({ initialQuestions }),
     runtimeId,
     name,
     ...runtimeOptions,

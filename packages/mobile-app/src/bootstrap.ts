@@ -3,8 +3,10 @@ import {
   createAppRuntime,
   registerSharedModules,
   type AppRuntime,
+  type AppRuntimeOptions,
 } from "@ebtest/shared/uklad";
 import {
+  mobileQuestionsData,
   registerMobilePlatform,
   watchMobileSystemTheme,
   type MobilePlatform,
@@ -17,6 +19,7 @@ import { createMobilePersistenceLifecycle } from "./persistence-lifecycle";
 
 export interface MobileBootstrapOptions {
   readonly platform: MobilePlatform;
+  /** Preconfigured runtimes should be created with `createMobileAppRuntime`. */
   readonly runtime?: AppRuntime;
   readonly persistence?: ReturnType<typeof attachMobilePersistence>;
   readonly persistenceFactory?: (
@@ -39,18 +42,39 @@ export interface MobileApp {
   dispose(): Promise<void>;
 }
 
+export type MobileAppRuntimeOptions = Omit<
+  AppRuntimeOptions,
+  "initialQuestions"
+>;
+
+/** Create a native runtime whose first snapshot already contains questions. */
+export function createMobileAppRuntime(
+  options: MobileAppRuntimeOptions = {},
+): AppRuntime {
+  const {
+    runtimeId = "einburgerungstest-native",
+    name = "Einbürgerungstest Native",
+    ...runtimeOptions
+  } = options;
+
+  return createAppRuntime({
+    ...runtimeOptions,
+    runtimeId,
+    name,
+    initialQuestions: mobileQuestionsData,
+  });
+}
+
 /**
- * Create and start one native runtime with one persistence attachment. Domain events are dispatched
- * only after AsyncStorage hydration succeeds, so restored answers and
- * navigation cannot be overwritten by boot events or followed by a session
- * whose writes are silently disabled.
+ * Create and start one native runtime with one persistence attachment. The
+ * bundled question catalog is already present in the first runtime snapshot;
+ * persisted user state continues hydrating asynchronously.
  */
 export function bootstrapMobileApp(options: MobileBootstrapOptions): MobileApp {
   const runtime =
     options.runtime ??
-    createAppRuntime({
+    createMobileAppRuntime({
       runtimeId: options.runtimeId ?? "einburgerungstest-native",
-      name: "Einbürgerungstest Native",
     });
 
   registerSharedModules(runtime);
@@ -73,7 +97,6 @@ export function bootstrapMobileApp(options: MobileBootstrapOptions): MobileApp {
     initialized = true;
     stopSystemThemeWatch = watchMobileSystemTheme(runtime);
     runtime.dispatch([appIds.events.appInitialize]);
-    runtime.dispatch([appIds.events.questionsFetchRequested]);
   };
 
   let activeHydration: Promise<MobileHydrationResult> | undefined;

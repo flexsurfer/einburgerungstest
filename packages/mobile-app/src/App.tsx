@@ -4,11 +4,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import {
-  UkladProvider,
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { UkladProvider, appIds, useSubscription } from "@ebtest/shared/uklad";
 import type { MobileApp, MobileHydrationResult } from "./bootstrap";
 import { useColors, type Colors } from "./theme";
 import { QuestionView } from "./components/QuestionView";
@@ -19,7 +15,9 @@ export interface AppProps {
   app: MobileApp;
 }
 
-export function AppContent() {
+export function AppContent({
+  interactive = true,
+}: { interactive?: boolean } = {}) {
   const questionsLoaded = useSubscription(
     [appIds.subscriptions.questionsLoaded],
     "App",
@@ -30,7 +28,10 @@ export function AppContent() {
   if (!questionsLoaded) return null;
 
   return (
-    <View style={styles(themeColors, insets).appContainer}>
+    <View
+      pointerEvents={interactive ? "auto" : "none"}
+      style={styles(themeColors, insets).appContainer}
+    >
       <Header style={{ zIndex: 1 }} />
       <View style={{ flex: 1, zIndex: 0 }}>
         <QuestionView />
@@ -80,14 +81,6 @@ function MobileHydrationGate({ app }: { app: MobileApp }) {
     );
   };
 
-  if (state.status === "loading") {
-    return (
-      <View style={hydrationStyles.container} accessibilityLiveRegion="polite">
-        <Text>Loading saved data…</Text>
-      </View>
-    );
-  }
-
   if (state.status === "failed") {
     return (
       <View
@@ -103,7 +96,7 @@ function MobileHydrationGate({ app }: { app: MobileApp }) {
     );
   }
 
-  return <AppContent />;
+  return <AppContent interactive={state.status === "ready"} />;
 }
 
 function App({ app }: AppProps) {

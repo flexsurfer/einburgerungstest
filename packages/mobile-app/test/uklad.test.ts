@@ -12,7 +12,7 @@ import {
   watchMobileSystemTheme,
   type MobilePlatform,
 } from "../src/platform";
-import { bootstrapMobileApp } from "../src/bootstrap";
+import { bootstrapMobileApp, createMobileAppRuntime } from "../src/bootstrap";
 
 vi.mock("@react-native-async-storage/async-storage", () => ({
   default: {
@@ -123,7 +123,7 @@ describe("Uklad mobile platform", () => {
     );
   });
 
-  it("does not dispatch boot events until persistence hydration settles", async () => {
+  it("injects bundled questions before persistence hydration settles", async () => {
     let resolveHydration: (() => void) | undefined;
     const hydrationPromise = new Promise<void>((resolve) => {
       resolveHydration = resolve;
@@ -138,7 +138,7 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const applySystemBarTheme = vi.fn();
-    const runtime = createAppRuntime({
+    const runtime = createMobileAppRuntime({
       runtimeId: "mobile-bootstrap",
     });
     runtimes.push(runtime);
@@ -152,7 +152,11 @@ describe("Uklad mobile platform", () => {
     const harness = createUkladTestHarness(runtime);
 
     expect(persistence.hydrate).toHaveBeenCalledTimes(1);
-    expect(harness.getState()[stateKeys.questionsLoading]).toBe(false);
+    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(true);
+    expect(harness.getState()[stateKeys.questionsItems].length).toBeGreaterThan(
+      0,
+    );
+    expect(applySystemBarTheme).not.toHaveBeenCalled();
     emitAppStateChange("background");
     await Promise.resolve();
     expect(persistence.flush).not.toHaveBeenCalled();
@@ -179,7 +183,7 @@ describe("Uklad mobile platform", () => {
     } as unknown as ReturnType<
       typeof import("../src/persistence").attachMobilePersistence
     >;
-    const runtime = createAppRuntime({
+    const runtime = createMobileAppRuntime({
       runtimeId: "mobile-hydration-failure",
     });
     runtimes.push(runtime);
@@ -194,11 +198,12 @@ describe("Uklad mobile platform", () => {
     apps.push(app);
 
     await app.hydration;
+    await harness.flush();
 
     expect(onHydrationError).toHaveBeenCalledOnce();
     expect(purge).not.toHaveBeenCalled();
     expect(harness.getState()[stateKeys.questionsLoading]).toBe(false);
-    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(false);
+    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(true);
   });
 
   it("keeps boot actions blocked until a hydration retry succeeds", async () => {
@@ -217,7 +222,7 @@ describe("Uklad mobile platform", () => {
     } as unknown as ReturnType<
       typeof import("../src/persistence").attachMobilePersistence
     >;
-    const runtime = createAppRuntime({
+    const runtime = createMobileAppRuntime({
       runtimeId: "mobile-hydration-retry",
     });
     runtimes.push(runtime);
@@ -230,8 +235,9 @@ describe("Uklad mobile platform", () => {
     const harness = createUkladTestHarness(runtime);
 
     expect((await app.hydration).ok).toBe(false);
+    await harness.flush();
     expect(harness.getState()[stateKeys.questionsLoading]).toBe(false);
-    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(false);
+    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(true);
 
     expect((await app.retryHydration()).ok).toBe(true);
     await harness.flush();
