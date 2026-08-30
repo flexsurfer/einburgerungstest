@@ -1,27 +1,63 @@
-import { useCallback, memo, useState, useEffect, useRef } from 'react'
-import { useSubscription, dispatch } from '@flexsurfer/reflex'
-import { FavoritesButton } from './FavoritesButton.jsx'
-import { EVENT_IDS } from '@ebtest/shared/event-ids'
-import { EFFECT_IDS } from '@ebtest/shared/effect-ids'
-import { SUB_IDS } from '@ebtest/shared/sub-ids'
-import '../styles/Header.css'
+import { useCallback, memo, useState, useEffect, useRef } from "react";
+import {
+  appIds,
+  useRuntime,
+  useSubscription,
+} from "@ebtest/shared/uklad";
+import { FavoritesButton } from "./FavoritesButton.jsx";
+import "../styles/Header.css";
 
 export const Categories = memo(() => {
-  const questions = useSubscription([SUB_IDS.QUESTIONS], "Categories")
-  const categories = useSubscription([SUB_IDS.CATEGORIES], "Categories")
-  const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "Categories")
-  const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT], "Categories")
-  const wrongCount = useSubscription([SUB_IDS.WRONG_COUNT], "Categories")
-  const selectedCount = useSubscription([SUB_IDS.SELECTED_CATEGORY_COUNT], "Categories")
+  const runtime = useRuntime();
+  const questions = useSubscription(
+    [appIds.subscriptions.questionsItems],
+    "Categories",
+  );
+  const categories = useSubscription(
+    [appIds.subscriptions.questionsCategories],
+    "Categories",
+  );
+  const selectedCategory = useSubscription(
+    [appIds.subscriptions.navigationSelectedCategory],
+    "Categories",
+  );
+  const favoriteCount = useSubscription(
+    [appIds.subscriptions.practiceFavoriteCount],
+    "Categories",
+  );
+  const wrongCount = useSubscription(
+    [appIds.subscriptions.practiceWrongCount],
+    "Categories",
+  );
+  const selectedCount = useSubscription(
+    [appIds.subscriptions.navigationSelectedCategoryCount],
+    "Categories",
+  );
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const popupRef = useRef(null);
 
-  const handleCategoryClick = useCallback((category) => { dispatch([EVENT_IDS.SET_SELECTED_CATEGORY, category]) }, [])
-  const setOverFlow = useCallback((value) => { dispatch([EFFECT_IDS.SET_BODY_OVERFLOW, value]) }, [])
+  const handleCategoryClick = useCallback(
+    (category) => {
+      runtime.dispatch([appIds.events.navigationCategorySelected, category]);
+    },
+    [runtime],
+  );
+  const setOverFlow = useCallback(
+    (value) => {
+      runtime.dispatch([appIds.events.uiBodyOverflowSet, value]);
+    },
+    [runtime],
+  );
 
-  useEffect(() => { if (isPopupOpen) { setOverFlow('hidden') } else { setOverFlow('auto') } }, [isPopupOpen])
+  useEffect(() => {
+    if (isPopupOpen) {
+      setOverFlow("hidden");
+    } else {
+      setOverFlow("auto");
+    }
+  }, [isPopupOpen, setOverFlow]);
 
   useEffect(() => {
     if (!isPopupOpen) return;
@@ -32,49 +68,67 @@ export const Categories = memo(() => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isPopupOpen]);
 
   return (
     <div className="categories-container">
       <div className="category-select-wrapper">
-
-        <button className="category-select-button" onClick={() => setIsPopupOpen(!isPopupOpen)}>
-          {selectedCategory === null ? `All Questions (${questions.length})` :
-           selectedCategory === 'favorites' ? `Favorites (${favoriteCount})` :
-           selectedCategory === 'wrong' ? `Wrong answers (${wrongCount})` :
-           selectedCategory === 'test' ? `Test (30)` :
-           `${selectedCategory} (${selectedCount})`}
+        <button
+          className="category-select-button"
+          onClick={() => setIsPopupOpen(!isPopupOpen)}
+        >
+          {selectedCategory === null
+            ? `All Questions (${questions.length})`
+            : selectedCategory === "favorites"
+              ? `Favorites (${favoriteCount})`
+              : selectedCategory === "wrong"
+                ? `Wrong answers (${wrongCount})`
+                : selectedCategory === "test"
+                  ? `Test (30)`
+                  : `${selectedCategory} (${selectedCount})`}
           <span className="filter-icon">▼</span>
         </button>
 
         {isPopupOpen && (
           <div className="category-popup" ref={popupRef}>
             <button
-              onClick={() => { handleCategoryClick(null); setIsPopupOpen(false); }}
-              className={`category-button ${selectedCategory === null ? 'active' : ''}`}
+              onClick={() => {
+                handleCategoryClick(null);
+                setIsPopupOpen(false);
+              }}
+              className={`category-button ${selectedCategory === null ? "active" : ""}`}
             >
               All Questions ({questions.length})
             </button>
             <button
               key="test"
-              onClick={() => { handleCategoryClick('test'); setIsPopupOpen(false); }}
-              className={`category-button ${selectedCategory === 'test' ? 'active' : ''}`}
+              onClick={() => {
+                handleCategoryClick("test");
+                setIsPopupOpen(false);
+              }}
+              className={`category-button ${selectedCategory === "test" ? "active" : ""}`}
             >
               Start Test (30)
             </button>
             <FavoritesButton
               key="favorites"
-              onCategoryClick={(cat) => { handleCategoryClick(cat); setIsPopupOpen(false); }}
+              onCategoryClick={(cat) => {
+                handleCategoryClick(cat);
+                setIsPopupOpen(false);
+              }}
             />
             <button
               key="wrong"
-              onClick={() => { handleCategoryClick('wrong'); setIsPopupOpen(false); }}
-              className={`category-button ${selectedCategory === 'wrong' ? 'active' : ''}`}
+              onClick={() => {
+                handleCategoryClick("wrong");
+                setIsPopupOpen(false);
+              }}
+              className={`category-button ${selectedCategory === "wrong" ? "active" : ""}`}
             >
               Wrong answers ({wrongCount})
             </button>
@@ -85,8 +139,11 @@ export const Categories = memo(() => {
                 {group.items.map(([category, count]) => (
                   <button
                     key={category}
-                    onClick={() => { handleCategoryClick(category); setIsPopupOpen(false); }}
-                    className={`category-button ${selectedCategory === category ? 'active' : ''}`}
+                    onClick={() => {
+                      handleCategoryClick(category);
+                      setIsPopupOpen(false);
+                    }}
+                    className={`category-button ${selectedCategory === category ? "active" : ""}`}
                   >
                     {category} ({count})
                   </button>
@@ -97,5 +154,5 @@ export const Categories = memo(() => {
         )}
       </div>
     </div>
-  )
-}) 
+  );
+});

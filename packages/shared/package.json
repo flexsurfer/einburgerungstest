@@ -4,26 +4,25 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./db": "./src/db.js",
-    "./db.js": "./src/db.js",
-    "./effect-ids": "./src/effect-ids.js",
-    "./effect-ids.js": "./src/effect-ids.js",
-    "./event-ids": "./src/event-ids.js",
-    "./event-ids.js": "./src/event-ids.js",
-    "./events": "./src/events.js",
-    "./events.js": "./src/events.js",
-    "./sub-ids": "./src/sub-ids.js",
-    "./sub-ids.js": "./src/sub-ids.js",
-    "./subs": "./src/subs.js",
-    "./subs.js": "./src/subs.js",
-    "./test": "./src/test.js",
-    "./test.js": "./src/test.js"
+    "./uklad": "./src/uklad.ts",
+    "./uklad/catalog": "./src/app/uklad/catalog.ts",
+    "./uklad/contracts": "./src/app/uklad/contracts.ts",
+    "./uklad/initial-state": "./src/app/uklad/initial-state.ts",
+    "./uklad/runtime": "./src/app/uklad/runtime.ts",
+    "./uklad/bindings": "./src/app/uklad/bindings.ts",
+    "./uklad/register": "./src/app/uklad/register.ts",
+    "./uklad/modules": "./src/app/uklad/modules.ts",
+    "./uklad/persistence": "./src/app/uklad/persistence.ts"
   },
   "dependencies": {
-    "@flexsurfer/reflex": "^0.1.25",
-    "immer": "^11.1.18"
+    "@ukladjs/core": "catalog:",
+    "@ukladjs/persist": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@types/react": "^19.2.18",
     "vitest": "^4.1.11"
   }
 }

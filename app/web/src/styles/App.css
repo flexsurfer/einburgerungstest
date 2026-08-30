@@ -6,6 +6,26 @@
   flex-direction: column;
 }
 
+.hydration-gate {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.hydration-gate p {
+  max-width: 32rem;
+}
+
+.hydration-gate button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
 /* Mobile: full height container */
 @media (max-width: 600px) {
   .app-container {
@@ -20,9 +40,10 @@
   .app-container {
     min-height: 100vh; /* Allow page to be longer than viewport */
   }
-  
+
   /* Add padding for fixed header and statistics */
-  .app-container > *:nth-child(2) { /* QuestionView */
+  .app-container > *:nth-child(2) {
+    /* QuestionView */
     padding-top: 60px; /* Space for fixed header */
     padding-bottom: 80px; /* Space for fixed statistics */
   }
@@ -35,4 +56,4 @@
   gap: 1rem;
   position: relative;
   z-index: 1;
-} 
+}

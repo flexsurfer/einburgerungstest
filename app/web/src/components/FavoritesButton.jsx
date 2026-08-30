@@ -1,19 +1,26 @@
-import { Star } from './Star.jsx'
-import { useSubscription } from '@flexsurfer/reflex'
-import { SUB_IDS } from '@ebtest/shared/sub-ids'
+import { Star } from "./Star.jsx";
+import {
+  appIds,
+  useSubscription,
+} from "@ebtest/shared/uklad";
 
 export const FavoritesButton = ({ onCategoryClick }) => {
+  const selectedCategory = useSubscription(
+    [appIds.subscriptions.navigationSelectedCategory],
+    "FavoritesButton",
+  );
+  const favoriteCount = useSubscription(
+    [appIds.subscriptions.practiceFavoriteCount],
+    "FavoritesButton",
+  );
 
-    const selectedCategory = useSubscription([SUB_IDS.SELECTED_CATEGORY], "FavoritesButton")
-    const favoriteCount = useSubscription([SUB_IDS.FAVORITE_COUNT], "FavoritesButton")
-    
-    return (
-        <button
-            onClick={() => onCategoryClick('favorites')}
-            className={`category-button ${selectedCategory === 'favorites' ? 'active' : ''}`}
-        >
-            <Star />
-            Favorites ({favoriteCount})
-        </button>
-    )
-} 
+  return (
+    <button
+      onClick={() => onCategoryClick("favorites")}
+      className={`category-button ${selectedCategory === "favorites" ? "active" : ""}`}
+    >
+      <Star />
+      Favorites ({favoriteCount})
+    </button>
+  );
+};

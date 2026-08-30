@@ -1,6 +1,13 @@
 packages:
   - app/*
   - packages/*
+catalog:
+  "@ukladjs/core": ^0.2.4
+  "@ukladjs/persist": ^0.2.0
+publicHoistPattern:
+  - "@react-native/gradle-plugin"
 allowBuilds:
   bson: false
   esbuild: true
+minimumReleaseAgeExclude:
+  - "@ukladjs/core@0.2.4"
