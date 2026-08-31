@@ -47,8 +47,10 @@ export const appIds = {
     vocabularyUnmounted: "vocabulary/unmounted",
     navigationCategorySelected: "navigation/category-selected",
     navigationHomeOpened: "navigation/home-opened",
+    navigationSettingsOpened: "navigation/settings-opened",
     navigationPracticeResumed: "navigation/practice-resumed",
     preferencesLanguageSelected: "preferences/language-selected",
+    preferencesThemeSelected: "preferences/theme-selected",
     preferencesThemeToggled: "preferences/theme-toggled",
     uiScrollToTop: "ui/scroll-to-top",
     uiBodyOverflowSet: "ui/body-overflow-set",
@@ -94,6 +96,8 @@ export const appIds = {
 
     preferencesSelectedLanguage: "preferences/selected-language",
     preferencesTheme: "preferences/theme",
+    preferencesUseSystemTheme: "preferences/use-system-theme",
+    preferencesThemeSelection: "preferences/theme-selection",
 
     practiceUserAnswers: "practice/user-answers",
     practiceFavorites: "practice/favorites",

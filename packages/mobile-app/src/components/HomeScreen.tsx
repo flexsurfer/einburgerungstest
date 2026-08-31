@@ -432,6 +432,10 @@ export const HomeScreen = memo(() => {
     [runtime],
   );
 
+  const openSettings = useCallback(() => {
+    runtime.dispatch([appIds.events.navigationSettingsOpened]);
+  }, [runtime]);
+
   const canResume = practiceGlobalIndex !== null;
 
   const handlePrimaryAction = useCallback(() => {
@@ -482,9 +486,16 @@ export const HomeScreen = memo(() => {
               },
             ]}
           >
-            <View style={styleSheet.topBarSlot}>
+            <TouchableOpacity
+              accessibilityLabel="Open settings"
+              accessibilityRole="button"
+              activeOpacity={0.7}
+              hitSlop={8}
+              onPress={openSettings}
+              style={styleSheet.topBarSlot}
+            >
               <MenuIcon color={colors.primaryColor} size={28} />
-            </View>
+            </TouchableOpacity>
             <View style={styleSheet.brand}>
               <Text style={styleSheet.brandTitle}>Einbürgerungstest</Text>
             </View>

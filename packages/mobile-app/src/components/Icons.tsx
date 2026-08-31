@@ -62,6 +62,30 @@ export const ChevronRight = ({ color, size = 18 }: IconProps) => (
   </Svg>
 );
 
+export const ChevronUp = ({ color, size = 22 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="m6 15 6-6 6 6"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const CheckIcon = ({ color, size = 18 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="m5 12.5 4.2 4.2L19 7"
+      stroke={color}
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
 export const HomeIcon = ({ color, size = 20 }: IconProps) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Path
@@ -291,6 +315,24 @@ export const MoonIcon = ({ color, size = 20 }: IconProps) => (
       strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const DeviceIcon = ({ color, size = 20 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M7 2.5h10a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-15a2 2 0 0 1 2-2Z"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M9.5 5h5M10.5 18.5h3"
+      stroke={color}
+      strokeWidth={1.8}
+      strokeLinecap="round"
     />
   </Svg>
 );

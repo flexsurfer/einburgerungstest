@@ -2,12 +2,13 @@ import type { UkladContracts } from "@ukladjs/core/vanilla";
 import { appIds, stateKeys } from "./catalog.js";
 
 export type Theme = "light" | "dark";
+export type ThemePreference = Theme | "system";
 export type ColorScheme = Theme | null;
 export type ScrollMode = "auto" | "smooth";
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type DataKind = "questions" | "vocabulary";
 export type CategorySelection = string | null;
-export type NavigationScreen = "home" | "questions";
+export type NavigationScreen = "settings" | "home" | "questions";
 export type AppError = string | null;
 
 export interface QuestionImage {
@@ -111,8 +112,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.vocabularyUnmounted]: [];
     [appIds.events.navigationCategorySelected]: [category: CategorySelection];
     [appIds.events.navigationHomeOpened]: [];
+    [appIds.events.navigationSettingsOpened]: [];
     [appIds.events.navigationPracticeResumed]: [];
     [appIds.events.preferencesLanguageSelected]: [language: string];
+    [appIds.events.preferencesThemeSelected]: [theme: ThemePreference];
     [appIds.events.preferencesThemeToggled]: [];
     [appIds.events.uiScrollToTop]: [behavior?: ScrollMode];
     [appIds.events.uiBodyOverflowSet]: [value: string];
@@ -201,6 +204,14 @@ export interface AppContracts extends UkladContracts {
       result: string;
     };
     [appIds.subscriptions.preferencesTheme]: { params: []; result: Theme };
+    [appIds.subscriptions.preferencesUseSystemTheme]: {
+      params: [];
+      result: boolean;
+    };
+    [appIds.subscriptions.preferencesThemeSelection]: {
+      params: [];
+      result: ThemePreference;
+    };
 
     [appIds.subscriptions.practiceUserAnswers]: {
       params: [];

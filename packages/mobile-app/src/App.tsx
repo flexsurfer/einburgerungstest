@@ -13,17 +13,29 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { UkladProvider, appIds, useSubscription } from "@ebtest/shared/uklad";
+import {
+  UkladProvider,
+  appIds,
+  useSubscription,
+  type NavigationScreen,
+} from "@ebtest/shared/uklad";
 import type { MobileApp, MobileHydrationResult } from "./bootstrap";
 import { useColors, type Colors } from "./theme";
 import { QuestionView } from "./components/QuestionView";
 import { Header } from "./components/Header";
 import { HomeScreen } from "./components/HomeScreen";
+import { SettingsScreen } from "./components/SettingsScreen";
 import { AppBackground } from "./components/AppBackground";
 
 export interface AppProps {
   app: MobileApp;
 }
+
+const SCREEN_POSITION: Record<NavigationScreen, number> = {
+  settings: 0,
+  home: 1,
+  questions: 2,
+};
 
 export function AppContent({
   interactive = true,
@@ -40,13 +52,13 @@ export function AppContent({
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const screenProgress = useRef(
-    new Animated.Value(activeScreen === "home" ? 0 : 1),
+    new Animated.Value(SCREEN_POSITION[activeScreen]),
   ).current;
 
   useEffect(() => {
     screenProgress.stopAnimation();
     Animated.timing(screenProgress, {
-      toValue: activeScreen === "home" ? 0 : 1,
+      toValue: SCREEN_POSITION[activeScreen],
       duration: 520,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
@@ -57,8 +69,8 @@ export function AppContent({
 
   const styleSheet = styles(themeColors, insets);
   const translateY = screenProgress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -height],
+    inputRange: [0, 1, 2],
+    outputRange: [0, -height, -height * 2],
   });
 
   return (
@@ -71,9 +83,19 @@ export function AppContent({
       <Animated.View
         style={[
           styleSheet.screenRail,
-          { height: height * 2, transform: [{ translateY }] },
+          { height: height * 3, transform: [{ translateY }] },
         ]}
       >
+        <View
+          accessibilityElementsHidden={activeScreen !== "settings"}
+          importantForAccessibility={
+            activeScreen === "settings" ? "auto" : "no-hide-descendants"
+          }
+          pointerEvents={activeScreen === "settings" ? "auto" : "none"}
+          style={[styleSheet.screen, styleSheet.settingsScreen, { height }]}
+        >
+          <SettingsScreen />
+        </View>
         <View
           accessibilityElementsHidden={activeScreen !== "home"}
           importantForAccessibility={
@@ -85,11 +107,11 @@ export function AppContent({
           <HomeScreen />
         </View>
         <View
-          accessibilityElementsHidden={activeScreen === "home"}
+          accessibilityElementsHidden={activeScreen !== "questions"}
           importantForAccessibility={
-            activeScreen === "home" ? "no-hide-descendants" : "auto"
+            activeScreen === "questions" ? "auto" : "no-hide-descendants"
           }
-          pointerEvents={activeScreen === "home" ? "none" : "auto"}
+          pointerEvents={activeScreen === "questions" ? "auto" : "none"}
           style={[styleSheet.screen, styleSheet.practiceScreen, { height }]}
         >
           <Header style={{ zIndex: 1 }} />
@@ -204,6 +226,9 @@ const styles = (
       backgroundColor: "transparent",
     },
     homeScreen: {
+      paddingTop: 0,
+    },
+    settingsScreen: {
       paddingTop: 0,
     },
     practiceScreen: {

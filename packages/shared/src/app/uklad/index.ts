@@ -45,6 +45,7 @@ export type {
   Statistics,
   TestUsedQuestions,
   Theme,
+  ThemePreference,
   UserAnswers,
   VocabularyData,
 } from "./contracts.js";

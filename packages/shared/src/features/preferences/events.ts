@@ -10,6 +10,20 @@ export const registerPreferencesEvents: AppModule = (registrar) => {
   );
 
   registrar.regEvent(
+    appIds.events.preferencesThemeSelected,
+    ({ draftState, coeffects: { system } }, selection) => {
+      const followsSystem = selection === "system";
+      const theme = followsSystem ? (system ?? "light") : selection;
+
+      draftState[stateKeys.preferencesUseSystemTheme] = followsSystem;
+      draftState[stateKeys.preferencesTheme] = theme;
+
+      return [[appIds.effects.uiSetBodyTheme, { theme }]];
+    },
+    { coeffects: { system: appIds.coeffects.systemColorScheme } },
+  );
+
+  registrar.regEvent(
     appIds.events.preferencesThemeToggled,
     ({ draftState }) => {
       const theme = draftState[stateKeys.preferencesTheme];

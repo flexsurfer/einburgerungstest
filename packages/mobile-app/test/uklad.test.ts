@@ -136,6 +136,51 @@ describe("Uklad mobile platform", () => {
     expect(applySystemBarTheme).toHaveBeenCalledWith("dark");
   });
 
+  it("opens settings and applies system, light, and dark theme choices", () => {
+    vi.spyOn(Appearance, "getColorScheme").mockReturnValue("dark");
+    const applySystemBarTheme = vi.fn();
+    const { harness } = createRuntime({ applySystemBarTheme });
+
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.preferencesThemeSelection,
+      ]),
+    ).toBe("system");
+
+    harness.dispatchSync([appIds.events.navigationSettingsOpened]);
+    expect(harness.getState()[stateKeys.navigationActiveScreen]).toBe(
+      "settings",
+    );
+
+    harness.dispatchSync([appIds.events.preferencesThemeSelected, "light"]);
+    expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
+    expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.preferencesThemeSelection,
+      ]),
+    ).toBe("light");
+    expect(applySystemBarTheme).toHaveBeenLastCalledWith("light");
+
+    harness.dispatchSync([appIds.events.preferencesThemeSelected, "dark"]);
+    expect(harness.getState()[stateKeys.preferencesTheme]).toBe("dark");
+    expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
+    expect(applySystemBarTheme).toHaveBeenLastCalledWith("dark");
+
+    harness.dispatchSync([appIds.events.preferencesThemeSelected, "system"]);
+    expect(harness.getState()[stateKeys.preferencesTheme]).toBe("dark");
+    expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(true);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.preferencesThemeSelection,
+      ]),
+    ).toBe("system");
+    expect(applySystemBarTheme).toHaveBeenLastCalledWith("dark");
+
+    harness.dispatchSync([appIds.events.navigationHomeOpened]);
+    expect(harness.getState()[stateKeys.navigationActiveScreen]).toBe("home");
+  });
+
   it("forwards native system-theme changes only while system mode is enabled", async () => {
     const listeners: Array<
       (event: { colorScheme: "light" | "dark" | null }) => void

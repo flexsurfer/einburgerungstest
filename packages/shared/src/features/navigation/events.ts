@@ -90,6 +90,14 @@ export const registerNavigationEvents: AppModule = (registrar) => {
   });
 
   registrar.regEvent(
+    appIds.events.navigationSettingsOpened,
+    ({ draftState }) => {
+      draftState[stateKeys.navigationActiveScreen] = "settings";
+      draftState[stateKeys.navigationQuestionPickerVisible] = false;
+    },
+  );
+
+  registrar.regEvent(
     appIds.events.navigationPracticeResumed,
     ({ draftState }) => {
       resumePracticePosition(draftState);

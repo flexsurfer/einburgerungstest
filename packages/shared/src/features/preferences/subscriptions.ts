@@ -10,4 +10,17 @@ export const registerPreferencesSubscriptions: AppModule = (registrar) => {
     appIds.subscriptions.preferencesTheme,
     stateKeys.preferencesTheme,
   );
+  registrar.regRootSub(
+    appIds.subscriptions.preferencesUseSystemTheme,
+    stateKeys.preferencesUseSystemTheme,
+  );
+
+  registrar.regSub(
+    appIds.subscriptions.preferencesThemeSelection,
+    () => [
+      [appIds.subscriptions.preferencesTheme],
+      [appIds.subscriptions.preferencesUseSystemTheme],
+    ],
+    ([theme, followsSystem]) => (followsSystem ? "system" : theme),
+  );
 };
