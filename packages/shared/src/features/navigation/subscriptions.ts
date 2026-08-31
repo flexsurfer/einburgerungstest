@@ -14,6 +14,10 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
     appIds.subscriptions.navigationQuestionPickerVisible,
     stateKeys.navigationQuestionPickerVisible,
   );
+  registrar.regRootSub(
+    appIds.subscriptions.navigationActiveScreen,
+    stateKeys.navigationActiveScreen,
+  );
 
   registrar.regSub(
     appIds.subscriptions.navigationSelectedCategoryCount,

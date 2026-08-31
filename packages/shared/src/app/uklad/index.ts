@@ -35,6 +35,8 @@ export type {
   DataKind,
   Favorites,
   HttpMethod,
+  NavigationScreen,
+  PracticeOverview,
   Question,
   QuestionInput,
   QuestionImage,

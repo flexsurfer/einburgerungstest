@@ -1,43 +1,63 @@
-import React, { memo } from "react";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import {
-  View,
-  TouchableOpacity,
-  Text,
-  ViewStyle,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  type ViewStyle,
 } from "react-native";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
-import { Categories } from "./Categories";
+import { HomeIcon } from "./Icons";
 
 export const Header = memo(({ style }: { style?: ViewStyle }) => {
   const runtime = useRuntime();
-  const themeColors = useColors() as Colors;
-  const theme = useSubscription(
-    [appIds.subscriptions.preferencesTheme],
+  const colors = useColors();
+  const selectedCategory = useSubscription(
+    [appIds.subscriptions.navigationSelectedCategory],
+    "Header",
+  );
+  const questionCount = useSubscription(
+    [appIds.subscriptions.practiceFilteredQuestionsCount],
     "Header",
   );
 
-  const toggleTheme = useCallback(() => {
-    runtime.dispatch([appIds.events.preferencesThemeToggled]);
+  const openHome = useCallback(() => {
+    runtime.dispatch([appIds.events.navigationHomeOpened]);
   }, [runtime]);
 
+  const title =
+    selectedCategory === null
+      ? "All questions"
+      : selectedCategory === "favorites"
+        ? "Saved questions"
+        : selectedCategory === "wrong"
+          ? "Review mistakes"
+          : selectedCategory === "unanswered"
+            ? "Unattempted questions"
+            : selectedCategory === "test"
+              ? "Mock exam"
+              : selectedCategory;
+
   return (
-    <View style={[styles(themeColors).header, style]}>
-      <Categories />
+    <View style={[styles(colors).header, style]}>
       <TouchableOpacity
-        onPress={toggleTheme}
-        style={styles(themeColors).themeButton}
+        accessibilityLabel="Back to home"
+        accessibilityRole="button"
+        onPress={openHome}
+        style={styles(colors).homeButton}
       >
-        <Text style={styles(themeColors).themeIcon}>
-          {theme === "dark" ? "🌙" : "🌞"}
-        </Text>
+        <HomeIcon color={colors.primaryColor} size={28} />
       </TouchableOpacity>
+
+      <View style={styles(colors).titleContainer}>
+        <Text style={styles(colors).eyebrow}>
+          {selectedCategory === "test" ? "EXAM MODE" : "PRACTICE"}
+        </Text>
+        <Text numberOfLines={1} style={styles(colors).title}>
+          {title} · {questionCount}
+        </Text>
+      </View>
     </View>
   );
 });
@@ -45,24 +65,36 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
 const styles = (colors: Colors) =>
   StyleSheet.create({
     header: {
-      height: 50,
+      minHeight: 68,
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: colors.bgColor,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.borderColor,
-      paddingHorizontal: 10,
-      elevation: 4,
-      shadowColor: colors.shadowColor,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 12,
+      gap: 12,
+      backgroundColor: "transparent",
+      paddingHorizontal: 16,
+      paddingVertical: 10,
     },
-    themeButton: {
-      padding: 10,
+    homeButton: {
+      width: 48,
+      height: 48,
+      alignItems: "flex-start",
+      justifyContent: "center",
     },
-    themeIcon: {
-      fontSize: 20,
+    titleContainer: {
+      flex: 1,
+      minWidth: 0,
+    },
+    eyebrow: {
+      color: colors.primaryColor,
+      fontSize: 10,
+      lineHeight: 14,
+      fontWeight: "800",
+      letterSpacing: 1.1,
+      marginBottom: 1,
+    },
+    title: {
       color: colors.textColor,
+      fontSize: 16,
+      lineHeight: 21,
+      fontWeight: "700",
     },
   });

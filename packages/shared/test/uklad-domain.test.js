@@ -232,6 +232,17 @@ describe("Uklad shared domain graph", () => {
       harness.getSubscriptionValue([appIds.subscriptions.practiceWrongCount]),
     ).toBe(1);
     expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceOverview]),
+    ).toEqual({
+      correct: 0,
+      incorrect: 1,
+      totalAnswered: 1,
+      totalQuestions: 3,
+      remaining: 2,
+      accuracy: 0,
+      progress: 33,
+    });
+    expect(
       harness.getSubscriptionValue([appIds.subscriptions.practiceStatistics]),
     ).toEqual({
       correct: 0,
@@ -311,6 +322,38 @@ describe("Uklad shared domain graph", () => {
   it("keeps navigation bounds, picker state, and clear-answer intent in the graph", () => {
     const { effects, harness } = createDomainHarness();
     loadQuestions(harness);
+
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationActiveScreen,
+      ]),
+    ).toBe("home");
+
+    harness.dispatchSync([appIds.events.navigationCategorySelected, "Politik"]);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationActiveScreen,
+      ]),
+    ).toBe("questions");
+
+    harness.dispatchSync([appIds.events.navigationHomeOpened]);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationActiveScreen,
+      ]),
+    ).toBe("home");
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationSelectedCategory,
+      ]),
+    ).toBe("Politik");
+
+    harness.dispatchSync([appIds.events.navigationPracticeResumed]);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationActiveScreen,
+      ]),
+    ).toBe("questions");
 
     harness.dispatchSync([appIds.events.navigationQuestionSelected, 2]);
     expect(

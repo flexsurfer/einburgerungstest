@@ -34,6 +34,7 @@ export const stateKeys = {
   navigationSelectedCategory: "navigationSelectedCategory",
   navigationCurrentQuestionIndex: "navigationCurrentQuestionIndex",
   navigationQuestionPickerVisible: "navigationQuestionPickerVisible",
+  navigationActiveScreen: "navigationActiveScreen",
 } as const;
 
 export const appIds = {
@@ -44,6 +45,8 @@ export const appIds = {
     vocabularyToggled: "vocabulary/toggled",
     vocabularyUnmounted: "vocabulary/unmounted",
     navigationCategorySelected: "navigation/category-selected",
+    navigationHomeOpened: "navigation/home-opened",
+    navigationPracticeResumed: "navigation/practice-resumed",
     preferencesLanguageSelected: "preferences/language-selected",
     preferencesThemeToggled: "preferences/theme-toggled",
     uiScrollToTop: "ui/scroll-to-top",
@@ -74,6 +77,7 @@ export const appIds = {
     navigationSelectedCategory: "navigation/selected-category",
     navigationCurrentQuestionIndex: "navigation/current-question-index",
     navigationQuestionPickerVisible: "navigation/question-picker-visible",
+    navigationActiveScreen: "navigation/active-screen",
 
     questionsItems: "questions/items",
     questionsLoaded: "questions/loaded",
@@ -102,6 +106,7 @@ export const appIds = {
     practiceUserAnswerByQuestionIndex: "practice/user-answer-by-question-index",
     practiceIsFavoriteByGlobalIndex: "practice/is-favorite-by-global-index",
     practiceStatistics: "practice/statistics",
+    practiceOverview: "practice/overview",
     navigationSelectedCategoryCount: "navigation/selected-category-count",
     navigationCurrentQuestion: "navigation/current-question",
     navigationQuestionPickerItems: "navigation/question-picker-items",

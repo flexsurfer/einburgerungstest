@@ -51,6 +51,11 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
           return answer !== undefined && answer !== question.correct;
         });
       }
+      if (selectedCategory === "unanswered") {
+        return questions.filter(
+          (question) => userAnswers[question.globalIndex] === undefined,
+        );
+      }
       if (selectedCategory === "test") return testQuestions;
       return selectedCategory
         ? questions.filter((question) => question.category === selectedCategory)
@@ -111,6 +116,40 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
         totalVisible,
         accuracy,
         passed: Number(accuracy) > 51.5,
+      };
+    },
+  );
+
+  registrar.regSub(
+    appIds.subscriptions.practiceOverview,
+    () => [
+      [appIds.subscriptions.questionsItems],
+      [appIds.subscriptions.practiceUserAnswers],
+    ],
+    ([questions, userAnswers]) => {
+      const answeredQuestions = questions.filter(
+        (question) => userAnswers[question.globalIndex] !== undefined,
+      );
+      const correct = answeredQuestions.filter(
+        (question) => userAnswers[question.globalIndex] === question.correct,
+      ).length;
+      const totalAnswered = answeredQuestions.length;
+      const totalQuestions = questions.length;
+      const accuracy =
+        totalAnswered === 0 ? 0 : Math.round((correct / totalAnswered) * 100);
+      const progress =
+        totalQuestions === 0
+          ? 0
+          : Math.round((totalAnswered / totalQuestions) * 100);
+
+      return {
+        correct,
+        incorrect: totalAnswered - correct,
+        totalAnswered,
+        totalQuestions,
+        remaining: Math.max(totalQuestions - totalAnswered, 0),
+        accuracy,
+        progress,
       };
     },
   );

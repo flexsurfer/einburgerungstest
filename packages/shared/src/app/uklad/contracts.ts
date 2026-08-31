@@ -7,6 +7,7 @@ export type ScrollMode = "auto" | "smooth";
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type DataKind = "questions" | "vocabulary";
 export type CategorySelection = string | null;
+export type NavigationScreen = "home" | "questions";
 export type AppError = string | null;
 
 export interface QuestionImage {
@@ -44,6 +45,16 @@ export interface Statistics {
   totalVisible: number;
   accuracy: string | number;
   passed: boolean;
+}
+
+export interface PracticeOverview {
+  correct: number;
+  incorrect: number;
+  totalAnswered: number;
+  totalQuestions: number;
+  remaining: number;
+  accuracy: number;
+  progress: number;
 }
 
 export interface QuestionPickerItem {
@@ -88,6 +99,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.navigationSelectedCategory]: CategorySelection;
     [stateKeys.navigationCurrentQuestionIndex]: number;
     [stateKeys.navigationQuestionPickerVisible]: boolean;
+    [stateKeys.navigationActiveScreen]: NavigationScreen;
   };
 
   readonly events: {
@@ -97,6 +109,8 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.vocabularyToggled]: [];
     [appIds.events.vocabularyUnmounted]: [];
     [appIds.events.navigationCategorySelected]: [category: CategorySelection];
+    [appIds.events.navigationHomeOpened]: [];
+    [appIds.events.navigationPracticeResumed]: [];
     [appIds.events.preferencesLanguageSelected]: [language: string];
     [appIds.events.preferencesThemeToggled]: [];
     [appIds.events.uiScrollToTop]: [behavior?: ScrollMode];
@@ -157,6 +171,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.navigationQuestionPickerVisible]: {
       params: [];
       result: boolean;
+    };
+    [appIds.subscriptions.navigationActiveScreen]: {
+      params: [];
+      result: NavigationScreen;
     };
 
     [appIds.subscriptions.questionsItems]: { params: []; result: Question[] };
@@ -221,6 +239,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.practiceStatistics]: {
       params: [];
       result: Statistics;
+    };
+    [appIds.subscriptions.practiceOverview]: {
+      params: [];
+      result: PracticeOverview;
     };
     [appIds.subscriptions.navigationSelectedCategoryCount]: {
       params: [];

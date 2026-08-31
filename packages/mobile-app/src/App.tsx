@@ -1,5 +1,14 @@
-import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Button,
+  Easing,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -9,7 +18,8 @@ import type { MobileApp, MobileHydrationResult } from "./bootstrap";
 import { useColors, type Colors } from "./theme";
 import { QuestionView } from "./components/QuestionView";
 import { Header } from "./components/Header";
-import { Statistics } from "./components/Statistics";
+import { HomeScreen } from "./components/HomeScreen";
+import { AppBackground } from "./components/AppBackground";
 
 export interface AppProps {
   app: MobileApp;
@@ -22,21 +32,72 @@ export function AppContent({
     [appIds.subscriptions.questionsLoaded],
     "App",
   );
+  const activeScreen = useSubscription(
+    [appIds.subscriptions.navigationActiveScreen],
+    "App",
+  );
   const themeColors = useColors();
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const screenProgress = useRef(
+    new Animated.Value(activeScreen === "home" ? 0 : 1),
+  ).current;
+
+  useEffect(() => {
+    screenProgress.stopAnimation();
+    Animated.timing(screenProgress, {
+      toValue: activeScreen === "home" ? 0 : 1,
+      duration: 520,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  }, [activeScreen, screenProgress]);
 
   if (!questionsLoaded) return null;
+
+  const styleSheet = styles(themeColors, insets);
+  const translateY = screenProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, -height],
+  });
 
   return (
     <View
       pointerEvents={interactive ? "auto" : "none"}
-      style={styles(themeColors, insets).appContainer}
+      style={styleSheet.appContainer}
     >
-      <Header style={{ zIndex: 1 }} />
-      <View style={{ flex: 1, zIndex: 0 }}>
-        <QuestionView />
-      </View>
-      <Statistics />
+      <StatusBar animated />
+      <AppBackground />
+      <Animated.View
+        style={[
+          styleSheet.screenRail,
+          { height: height * 2, transform: [{ translateY }] },
+        ]}
+      >
+        <View
+          accessibilityElementsHidden={activeScreen !== "home"}
+          importantForAccessibility={
+            activeScreen === "home" ? "auto" : "no-hide-descendants"
+          }
+          pointerEvents={activeScreen === "home" ? "auto" : "none"}
+          style={[styleSheet.screen, styleSheet.homeScreen, { height }]}
+        >
+          <HomeScreen />
+        </View>
+        <View
+          accessibilityElementsHidden={activeScreen === "home"}
+          importantForAccessibility={
+            activeScreen === "home" ? "no-hide-descendants" : "auto"
+          }
+          pointerEvents={activeScreen === "home" ? "none" : "auto"}
+          style={[styleSheet.screen, styleSheet.practiceScreen, { height }]}
+        >
+          <Header style={{ zIndex: 1 }} />
+          <View style={{ flex: 1, zIndex: 0 }}>
+            <QuestionView />
+          </View>
+        </View>
+      </Animated.View>
     </View>
   );
 }
@@ -129,11 +190,24 @@ const styles = (
   StyleSheet.create({
     appContainer: {
       flex: 1,
-      backgroundColor: colors.bgColor,
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
+      backgroundColor: colors.pageColor,
+      overflow: "hidden",
+    },
+    screenRail: {
+      width: "100%",
+    },
+    screen: {
+      width: "100%",
       paddingLeft: insets.left,
       paddingRight: insets.right,
+      paddingBottom: insets.bottom,
+      backgroundColor: "transparent",
+    },
+    homeScreen: {
+      paddingTop: 0,
+    },
+    practiceScreen: {
+      paddingTop: insets.top,
     },
   });
 

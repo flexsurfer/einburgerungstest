@@ -11,7 +11,29 @@ export const registerNavigationEvents: AppModule = (registrar) => {
 
       draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
+      draftState[stateKeys.navigationActiveScreen] = "questions";
       return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
+    },
+    { coeffects: { random: appIds.coeffects.systemRandom } },
+  );
+
+  registrar.regEvent(appIds.events.navigationHomeOpened, ({ draftState }) => {
+    draftState[stateKeys.navigationActiveScreen] = "home";
+    draftState[stateKeys.navigationQuestionPickerVisible] = false;
+  });
+
+  registrar.regEvent(
+    appIds.events.navigationPracticeResumed,
+    ({ draftState, coeffects: { random } }) => {
+      if (
+        draftState[stateKeys.navigationSelectedCategory] === "test" &&
+        draftState[stateKeys.testSessionQuestions].length === 0
+      ) {
+        generateTest(draftState, 30, random);
+        draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
+      }
+      draftState[stateKeys.navigationActiveScreen] = "questions";
+      draftState[stateKeys.navigationQuestionPickerVisible] = false;
     },
     { coeffects: { random: appIds.coeffects.systemRandom } },
   );

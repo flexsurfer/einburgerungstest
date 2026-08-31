@@ -1,10 +1,6 @@
 import React, { memo, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { LeftArrow, RightArrow, DownArrow } from "./Icons";
 
@@ -63,7 +59,9 @@ export const NavigationControls = memo<NavigationControlsProps>(
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <LeftArrow
-              color={isFirstQuestion ? colors.textColor : colors.bgColor}
+              color={
+                isFirstQuestion ? colors.disabledText : colors.primaryTextColor
+              }
             />
             <Text
               style={[
@@ -83,7 +81,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
           <Text style={styles(colors).questionNumberText}>
             {currentIndex + 1} of {filteredQuestionsCount}
           </Text>
-          <DownArrow color={colors.accentColor} />
+          <DownArrow color={colors.primaryColor} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -105,7 +103,9 @@ export const NavigationControls = memo<NavigationControlsProps>(
               Next
             </Text>
             <RightArrow
-              color={isLastQuestion ? colors.textColor : colors.bgColor}
+              color={
+                isLastQuestion ? colors.disabledText : colors.primaryTextColor
+              }
             />
           </View>
         </TouchableOpacity>
@@ -121,23 +121,33 @@ const styles = (colors: Colors) =>
       alignItems: "center",
       justifyContent: "space-between",
       paddingHorizontal: 16,
-      paddingVertical: 8,
-      backgroundColor: colors.bgColor,
+      paddingTop: 10,
+      paddingBottom: 14,
+      backgroundColor: "transparent",
     },
     navButton: {
-      paddingHorizontal: 8,
-      paddingVertical: 6,
-      borderRadius: 8,
-      backgroundColor: colors.accentColor,
+      minHeight: 44,
+      paddingHorizontal: 10,
+      paddingVertical: 9,
+      borderRadius: 14,
+      backgroundColor: colors.primaryColor,
       minWidth: 80,
       alignItems: "center",
+      justifyContent: "center",
+      shadowColor: colors.primaryDarkColor,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.18,
+      shadowRadius: 8,
+      elevation: 3,
     },
     disabledButton: {
-      backgroundColor: colors.borderColor,
-      opacity: 0.5,
+      backgroundColor: colors.disabledBg,
+      opacity: 0.82,
+      shadowOpacity: 0,
+      elevation: 0,
     },
     navButtonText: {
-      color: colors.bgColor,
+      color: colors.primaryTextColor,
       fontSize: 16,
       fontWeight: "600",
     },
@@ -149,15 +159,21 @@ const styles = (colors: Colors) =>
       alignItems: "center",
       flexDirection: "row",
       paddingHorizontal: 10,
-      paddingVertical: 6,
-      borderRadius: 12,
-      backgroundColor: colors.bgColor,
-      borderWidth: 2,
-      borderColor: colors.accentColor,
+      paddingVertical: 9,
+      borderRadius: 14,
+      backgroundColor: colors.surfaceColor,
+      borderWidth: 1,
+      borderColor: colors.borderColor,
       minWidth: 100,
+      minHeight: 44,
+      shadowColor: colors.shadowColor,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.12,
+      shadowRadius: 7,
+      elevation: 2,
     },
     questionNumberText: {
-      color: colors.accentColor,
+      color: colors.primaryColor,
       fontSize: 14,
       fontWeight: "bold",
       marginRight: 4,

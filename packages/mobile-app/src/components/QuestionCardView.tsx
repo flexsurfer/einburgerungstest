@@ -1,9 +1,6 @@
 import React, { memo } from "react";
 import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
-import {
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { QuestionCard } from "./QuestionCard";
 import { NavigationControls } from "./NavigationControls";
@@ -61,11 +58,12 @@ const styles = (colors: Colors) =>
   StyleSheet.create({
     phoneContainer: {
       flex: 1,
-      backgroundColor: colors.bgColor,
+      backgroundColor: "transparent",
     },
     singleCardContainer: {
       flex: 1,
       paddingHorizontal: 16,
+      backgroundColor: "transparent",
     },
     emptyContainer: {
       flex: 1,

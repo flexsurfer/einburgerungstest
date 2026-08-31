@@ -1,19 +1,21 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const path = require('path');
 
-const projectRoot = __dirname;
-const monorepoRoot = path.resolve(projectRoot, '../../');
-const sharedPath = path.resolve(projectRoot, '../../packages/shared/src');
+const appRoot = __dirname;
+const monorepoRoot = path.resolve(appRoot, '../../');
+const sharedPath = path.resolve(appRoot, '../../packages/shared/src');
 const sharedNodeModules = path.resolve(
-  projectRoot,
+  appRoot,
   '../../packages/shared/node_modules',
 );
-const rootNodeModules = path.resolve(projectRoot, '../../node_modules');
+const rootNodeModules = path.resolve(appRoot, '../../node_modules');
 
 const config = {
-  projectRoot: projectRoot,
+  // Shared UI assets live outside app/mobile. Using the workspace as Metro's
+  // root prevents invalid asset URLs such as /assets/../../packages/...
+  projectRoot: monorepoRoot,
   resetCache: true,
-  watchFolders: [monorepoRoot, rootNodeModules],
+  watchFolders: [appRoot, rootNodeModules],
   resolver: {
     // TypeScript source uses emitted-style `.js` specifiers. Metro does not
     // resolve an explicit `.js` suffix to the corresponding `.ts` file, so
