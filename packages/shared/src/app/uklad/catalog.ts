@@ -26,6 +26,7 @@ export const stateKeys = {
 
   practiceUserAnswers: "practiceUserAnswers",
   practiceFavorites: "practiceFavorites",
+  practiceGlobalIndex: "practiceGlobalIndex",
 
   testSessionQuestions: "testSessionQuestions",
   testSessionAnswers: "testSessionAnswers",
@@ -96,6 +97,7 @@ export const appIds = {
 
     practiceUserAnswers: "practice/user-answers",
     practiceFavorites: "practice/favorites",
+    practiceGlobalIndex: "practice/global-index",
     testSessionQuestions: "test-session/questions",
     testSessionAnswers: "test-session/answers",
 

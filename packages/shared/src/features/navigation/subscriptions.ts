@@ -47,9 +47,22 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
     () => [
       [appIds.subscriptions.practiceFilteredQuestions],
       [appIds.subscriptions.navigationCurrentQuestionIndex],
+      [appIds.subscriptions.practiceGlobalIndex],
+      [appIds.subscriptions.navigationSelectedCategory],
     ],
-    ([filteredQuestions, currentQuestionIndex]) => {
+    ([
+      filteredQuestions,
+      currentQuestionIndex,
+      practiceGlobalIndex,
+      selectedCategory,
+    ]) => {
       if (filteredQuestions.length === 0) return null;
+      if (selectedCategory === null && practiceGlobalIndex !== null) {
+        const savedQuestion = filteredQuestions.find(
+          (question) => question.globalIndex === practiceGlobalIndex,
+        );
+        if (savedQuestion) return savedQuestion;
+      }
       const index = Math.max(
         0,
         Math.min(currentQuestionIndex || 0, filteredQuestions.length - 1),

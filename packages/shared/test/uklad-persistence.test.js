@@ -152,7 +152,7 @@ describe("Uklad Persist application boundary", () => {
     expect(harness.getState()[stateKeys.practiceFavorites]).toEqual([1, 4]);
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("dark");
     expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
-    // Web intentionally does not restore the native navigation roots.
+    // Released navigation keys are intentionally not part of the migration.
     expect(harness.getState()[stateKeys.navigationSelectedCategory]).toBe(null);
     expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
       0,
@@ -171,9 +171,17 @@ describe("Uklad Persist application boundary", () => {
     }
     expect(storage.values.get("userAnswers")).toBe(legacy({ 1: 2 }));
     expect(storage.values.get("theme")).toBe(legacy("dark"));
+    expect(
+      storage.values.has(canonicalKey(stateKeys.navigationSelectedCategory)),
+    ).toBe(false);
+    expect(
+      storage.values.has(
+        canonicalKey(stateKeys.navigationCurrentQuestionIndex),
+      ),
+    ).toBe(false);
   });
 
-  it("imports all durable roots for native AsyncStorage and keeps navigation", async () => {
+  it("imports released native data but deliberately ignores old navigation", async () => {
     const storage = createAsyncStorage({
       userAnswers: legacy({ 2: 1 }),
       favorites: legacy([2]),
@@ -193,12 +201,11 @@ describe("Uklad Persist application boundary", () => {
     expect(harness.getState()[stateKeys.practiceFavorites]).toEqual([2]);
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
     expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
-    expect(harness.getState()[stateKeys.navigationSelectedCategory]).toBe(
-      "test",
-    );
+    expect(harness.getState()[stateKeys.navigationSelectedCategory]).toBe(null);
     expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
-      3,
+      0,
     );
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(null);
     await handle.flush();
 
     expect(storage.values.get("userAnswers")).toBe(legacy({ 2: 1 }));
@@ -207,10 +214,46 @@ describe("Uklad Persist application boundary", () => {
     expect(storage.values.get("selectedCategory")).toBe(legacy("test"));
     expect(storage.values.get("currentQuestionIndex")).toBe(legacy(3));
     expect(
+      storage.values.has(canonicalKey(stateKeys.navigationSelectedCategory)),
+    ).toBe(false);
+    expect(
+      storage.values.has(
+        canonicalKey(stateKeys.navigationCurrentQuestionIndex),
+      ),
+    ).toBe(false);
+    expect(
       JSON.parse(
         storage.values.get(canonicalKey(stateKeys.practiceUserAnswers)),
       ),
     ).toEqual(JSON.parse(envelope({ 2: 1 })));
+  });
+
+  it("hydrates and persists the Practice global-index cursor", async () => {
+    const storage = createSyncStorage({
+      [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(17),
+    });
+    const { handle, harness } = createFixture({ target: "web", storage });
+
+    await hydrateSync(handle);
+
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(17);
+    expect(
+      storage.values.get(canonicalKey(stateKeys.practiceGlobalIndex)),
+    ).toBe(envelope(17));
+  });
+
+  it("does not import an unreleased practice item-id key", async () => {
+    const storage = createSyncStorage({
+      [canonicalKey("practiceItemId")]: envelope(17),
+    });
+    const { handle, harness } = createFixture({ target: "web", storage });
+
+    await hydrateSync(handle);
+
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(null);
+    expect(storage.values.get(canonicalKey("practiceItemId"))).toBe(
+      envelope(17),
+    );
   });
 
   it("leaves the system-theme default enabled when the legacy theme is absent", async () => {
@@ -395,6 +438,7 @@ describe("Uklad Persist application boundary", () => {
     const storage = createSyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 0 }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
+      [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
     });
@@ -493,6 +537,7 @@ describe("Uklad Persist application boundary", () => {
     const storage = createAsyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 0 }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
+      [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
       [canonicalKey(stateKeys.navigationSelectedCategory)]: envelope("Politik"),
@@ -522,22 +567,27 @@ describe("Uklad Persist application boundary", () => {
     for (const key of [
       stateKeys.practiceUserAnswers,
       stateKeys.practiceFavorites,
+      stateKeys.practiceGlobalIndex,
       stateKeys.preferencesTheme,
       stateKeys.preferencesUseSystemTheme,
-      stateKeys.navigationSelectedCategory,
-      stateKeys.navigationCurrentQuestionIndex,
     ]) {
       expect(storage.values.has(canonicalKey(key))).toBe(false);
     }
-    for (const key of [
-      "userAnswers",
-      "favorites",
-      "theme",
-      "selectedCategory",
-      "currentQuestionIndex",
-    ]) {
+    for (const key of ["userAnswers", "favorites", "theme"]) {
       expect(storage.values.has(key)).toBe(false);
     }
+    // Navigation is no longer owned by persistence, so purge leaves both old
+    // raw values and any unreleased canonical values alone.
+    expect(
+      storage.values.has(canonicalKey(stateKeys.navigationSelectedCategory)),
+    ).toBe(true);
+    expect(
+      storage.values.has(
+        canonicalKey(stateKeys.navigationCurrentQuestionIndex),
+      ),
+    ).toBe(true);
+    expect(storage.values.has("selectedCategory")).toBe(true);
+    expect(storage.values.has("currentQuestionIndex")).toBe(true);
 
     harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 1]);
     await handle.flush();

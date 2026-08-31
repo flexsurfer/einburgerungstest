@@ -276,7 +276,7 @@ describe("Uklad pure event/subscription parity", () => {
       harness.getSubscriptionValue([
         appIds.subscriptions.practiceFilteredQuestions,
       ]),
-    ).toHaveLength(3);
+    ).toHaveLength(2);
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationSelectedCategoryCount,
@@ -286,7 +286,7 @@ describe("Uklad pure event/subscription parity", () => {
       harness.getSubscriptionValue([
         appIds.subscriptions.practiceFilteredQuestionsCount,
       ]),
-    ).toBe(3);
+    ).toBe(2);
 
     harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 0]);
     harness.dispatchSync([appIds.events.practiceQuestionAnswered, 2, 0]);
@@ -312,7 +312,7 @@ describe("Uklad pure event/subscription parity", () => {
       correct: 1,
       incorrect: 1,
       totalAnswered: 2,
-      totalVisible: 3,
+      totalVisible: 2,
       accuracy: "50.0",
       passed: false,
     });

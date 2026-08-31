@@ -91,6 +91,7 @@ export interface AppContracts extends UkladContracts {
 
     [stateKeys.practiceUserAnswers]: UserAnswers;
     [stateKeys.practiceFavorites]: Favorites;
+    [stateKeys.practiceGlobalIndex]: number | null;
 
     [stateKeys.testSessionQuestions]: Question[];
     [stateKeys.testSessionAnswers]: UserAnswers;
@@ -206,6 +207,10 @@ export interface AppContracts extends UkladContracts {
       result: UserAnswers;
     };
     [appIds.subscriptions.practiceFavorites]: { params: []; result: Favorites };
+    [appIds.subscriptions.practiceGlobalIndex]: {
+      params: [];
+      result: number | null;
+    };
     [appIds.subscriptions.testSessionQuestions]: {
       params: [];
       result: Question[];

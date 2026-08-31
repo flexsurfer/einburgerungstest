@@ -1,16 +1,12 @@
 import { useCallback, memo, useState, useEffect, useRef } from "react";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { FavoritesButton } from "./FavoritesButton.jsx";
 import "../styles/Header.css";
 
 export const Categories = memo(() => {
   const runtime = useRuntime();
-  const questions = useSubscription(
-    [appIds.subscriptions.questionsItems],
+  const practiceQuestionCount = useSubscription(
+    [appIds.subscriptions.practiceFilteredQuestionsCount],
     "Categories",
   );
   const categories = useSubscription(
@@ -83,7 +79,7 @@ export const Categories = memo(() => {
           onClick={() => setIsPopupOpen(!isPopupOpen)}
         >
           {selectedCategory === null
-            ? `All Questions (${questions.length})`
+            ? `All Questions (${practiceQuestionCount})`
             : selectedCategory === "favorites"
               ? `Favorites (${favoriteCount})`
               : selectedCategory === "wrong"
@@ -103,7 +99,7 @@ export const Categories = memo(() => {
               }}
               className={`category-button ${selectedCategory === null ? "active" : ""}`}
             >
-              All Questions ({questions.length})
+              All Questions ({practiceQuestionCount})
             </button>
             <button
               key="test"

@@ -8,23 +8,18 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
 } from "react-native";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { FavoritesButton } from "./FavoritesButton";
-import { Question } from "../types";
 
 type Group = { title: string; items: [string, number][] };
 
 export const Categories = () => {
   const runtime = useRuntime();
-  const questions = useSubscription(
-    [appIds.subscriptions.questionsItems],
+  const practiceQuestionCount = useSubscription(
+    [appIds.subscriptions.practiceFilteredQuestionsCount],
     "Categories",
-  ) as Question[];
+  );
   const categories = useSubscription(
     [appIds.subscriptions.questionsCategories],
     "Categories",
@@ -78,7 +73,7 @@ export const Categories = () => {
 
   const displayText =
     selectedCategory === null
-      ? `All Questions (${questions?.length ?? 0})`
+      ? `All Questions (${practiceQuestionCount})`
       : selectedCategory === "favorites"
         ? `Favorites (${favoriteCount})`
         : selectedCategory === "wrong"
@@ -135,7 +130,7 @@ export const Categories = () => {
                             styles(colors).activeText,
                         ]}
                       >
-                        All Questions ({questions?.length ?? 0})
+                        All Questions ({practiceQuestionCount})
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity

@@ -42,10 +42,15 @@ afterEach(async () => {
 
 function createRuntime(
   platform: MobilePlatform = { applySystemBarTheme: vi.fn() },
+  withBundledQuestions = false,
 ) {
-  const runtime = createAppRuntime({
-    runtimeId: `mobile-platform-${runtimes.length + 1}`,
-  });
+  const runtime = withBundledQuestions
+    ? createMobileAppRuntime({
+        runtimeId: `mobile-platform-${runtimes.length + 1}`,
+      })
+    : createAppRuntime({
+        runtimeId: `mobile-platform-${runtimes.length + 1}`,
+      });
   runtimes.push(runtime);
   registerSharedModules(runtime);
   registerMobilePlatform(runtime, platform);
@@ -68,6 +73,56 @@ describe("Uklad mobile platform", () => {
     harness.dispatchSync([appIds.events.vocabularyFetchRequested]);
     await harness.flush();
     expect(harness.getState()[stateKeys.vocabularyData]).not.toBeNull();
+  });
+
+  it("uses 300 general questions for practice and resumes by global index", () => {
+    const { harness } = createRuntime(undefined, true);
+
+    const practiceQuestions = harness.getSubscriptionValue([
+      appIds.subscriptions.practiceFilteredQuestions,
+    ]);
+    expect(practiceQuestions).toHaveLength(300);
+    expect(practiceQuestions[0].globalIndex).toBe(1);
+    expect(practiceQuestions[practiceQuestions.length - 1]?.globalIndex).toBe(
+      300,
+    );
+    expect(
+      harness
+        .getState()
+        [stateKeys.questionsItems].filter(
+          (question) => question.globalIndex > 300,
+        ),
+    ).toHaveLength(160);
+
+    harness.dispatchSync([appIds.events.navigationCategorySelected, null]);
+    harness.dispatchSync([appIds.events.navigationQuestionSelected, 123]);
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
+
+    harness.dispatchSync([appIds.events.navigationCategorySelected, "Politik"]);
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      0,
+    );
+    harness.dispatchSync([appIds.events.navigationNext]);
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      1,
+    );
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
+    harness.dispatchSync([appIds.events.navigationCategorySelected, "Politik"]);
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      0,
+    );
+
+    harness.dispatchSync([appIds.events.navigationHomeOpened]);
+    harness.dispatchSync([appIds.events.navigationPracticeResumed]);
+    expect(harness.getState()[stateKeys.navigationSelectedCategory]).toBe(null);
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      123,
+    );
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationCurrentQuestion,
+      ]).globalIndex,
+    ).toBe(124);
   });
 
   it("applies the persisted/system theme through the host platform", () => {

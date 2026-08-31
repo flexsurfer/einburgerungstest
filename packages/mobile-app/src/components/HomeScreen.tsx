@@ -412,20 +412,16 @@ export const HomeScreen = memo(() => {
     [appIds.subscriptions.questionsCategories],
     "HomeScreen",
   ) as CategoryGroup[];
-  const selectedCategory = useSubscription(
-    [appIds.subscriptions.navigationSelectedCategory],
-    "HomeScreen",
-  );
-  const selectedQuestionCount = useSubscription(
-    [appIds.subscriptions.practiceFilteredQuestionsCount],
-    "HomeScreen",
-  );
   const favoriteCount = useSubscription(
     [appIds.subscriptions.practiceFavoriteCount],
     "HomeScreen",
   );
   const wrongCount = useSubscription(
     [appIds.subscriptions.practiceWrongCount],
+    "HomeScreen",
+  );
+  const practiceGlobalIndex = useSubscription(
+    [appIds.subscriptions.practiceGlobalIndex],
     "HomeScreen",
   );
 
@@ -436,9 +432,7 @@ export const HomeScreen = memo(() => {
     [runtime],
   );
 
-  const canResume =
-    selectedQuestionCount > 0 &&
-    (overview.totalAnswered > 0 || selectedCategory !== null);
+  const canResume = practiceGlobalIndex !== null;
 
   const handlePrimaryAction = useCallback(() => {
     if (canResume) {

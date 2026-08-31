@@ -1,5 +1,7 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
+import { isPracticeQuestion } from "../questions/state.js";
+import { selectPracticeQuestions } from "./selection.js";
 
 export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
@@ -9,6 +11,10 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
     appIds.subscriptions.practiceFavorites,
     stateKeys.practiceFavorites,
+  );
+  registrar.regRootSub(
+    appIds.subscriptions.practiceGlobalIndex,
+    stateKeys.practiceGlobalIndex,
   );
 
   registrar.regSub(
@@ -39,28 +45,14 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       [appIds.subscriptions.practiceUserAnswers],
       [appIds.subscriptions.testSessionQuestions],
     ],
-    ([questions, selectedCategory, favorites, userAnswers, testQuestions]) => {
-      if (selectedCategory === "favorites") {
-        return questions.filter((question) =>
-          favorites.includes(question.globalIndex),
-        );
-      }
-      if (selectedCategory === "wrong") {
-        return questions.filter((question) => {
-          const answer = userAnswers[question.globalIndex];
-          return answer !== undefined && answer !== question.correct;
-        });
-      }
-      if (selectedCategory === "unanswered") {
-        return questions.filter(
-          (question) => userAnswers[question.globalIndex] === undefined,
-        );
-      }
-      if (selectedCategory === "test") return testQuestions;
-      return selectedCategory
-        ? questions.filter((question) => question.category === selectedCategory)
-        : questions;
-    },
+    ([questions, selectedCategory, favorites, userAnswers, testQuestions]) =>
+      selectPracticeQuestions({
+        questionsItems: questions,
+        navigationSelectedCategory: selectedCategory,
+        practiceFavorites: favorites,
+        practiceUserAnswers: userAnswers,
+        testSessionQuestions: testQuestions,
+      }),
   );
 
   registrar.regSub(
@@ -127,14 +119,15 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       [appIds.subscriptions.practiceUserAnswers],
     ],
     ([questions, userAnswers]) => {
-      const answeredQuestions = questions.filter(
+      const practiceQuestions = questions.filter(isPracticeQuestion);
+      const answeredQuestions = practiceQuestions.filter(
         (question) => userAnswers[question.globalIndex] !== undefined,
       );
       const correct = answeredQuestions.filter(
         (question) => userAnswers[question.globalIndex] === question.correct,
       ).length;
       const totalAnswered = answeredQuestions.length;
-      const totalQuestions = questions.length;
+      const totalQuestions = practiceQuestions.length;
       const accuracy =
         totalAnswered === 0 ? 0 : Math.round((correct / totalAnswered) * 100);
       const progress =

@@ -237,10 +237,10 @@ describe("Uklad shared domain graph", () => {
       correct: 0,
       incorrect: 1,
       totalAnswered: 1,
-      totalQuestions: 3,
-      remaining: 2,
+      totalQuestions: 2,
+      remaining: 1,
       accuracy: 0,
-      progress: 33,
+      progress: 50,
     });
     expect(
       harness.getSubscriptionValue([appIds.subscriptions.practiceStatistics]),
@@ -354,13 +354,18 @@ describe("Uklad shared domain graph", () => {
         appIds.subscriptions.navigationActiveScreen,
       ]),
     ).toBe("questions");
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationSelectedCategory,
+      ]),
+    ).toBe(null);
 
     harness.dispatchSync([appIds.events.navigationQuestionSelected, 2]);
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationCurrentQuestionIndex,
       ]),
-    ).toBe(2);
+    ).toBe(1);
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationQuestionPickerVisible,
@@ -372,13 +377,13 @@ describe("Uklad shared domain graph", () => {
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationCurrentQuestionIndex,
       ]),
-    ).toBe(2);
+    ).toBe(1);
     harness.dispatchSync([appIds.events.navigationPrevious]);
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationCurrentQuestionIndex,
       ]),
-    ).toBe(1);
+    ).toBe(0);
     harness.dispatchSync([appIds.events.navigationQuestionPickerShown, true]);
     expect(
       harness.getSubscriptionValue([

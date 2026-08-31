@@ -12,12 +12,7 @@ import {
 import type { UkladRuntime } from "@ukladjs/core/vanilla";
 import { stateKeys } from "./catalog.js";
 import type { AppContracts } from "./contracts.js";
-import type {
-  CategorySelection,
-  Favorites,
-  Theme,
-  UserAnswers,
-} from "./contracts.js";
+import type { Favorites, Theme, UserAnswers } from "./contracts.js";
 import {
   createLegacyCompatibleAsyncStorage,
   createLegacyCompatibleSyncStorage,
@@ -56,7 +51,7 @@ type PersistedKey<TKey extends keyof AppState & string> = PersistKeyConfig<
 >;
 
 export interface AppPersistenceAttachOptions {
-  /** Web leaves navigation roots in memory; native restores them. */
+  /** Only domain data is durable; screen/category navigation stays transient. */
   readonly target?: AppPersistenceTarget;
   readonly prefix?: string;
   readonly onError?: (diagnostic: PersistDiagnostic) => void;
@@ -111,17 +106,12 @@ function deserializeUseSystemTheme(data: unknown): boolean {
   throw new Error("useSystemTheme must be a boolean");
 }
 
-function deserializeCategory(data: unknown): CategorySelection {
-  if (data === null || typeof data === "string")
-    return data as CategorySelection;
-  throw new Error("selectedCategory must be a string or null");
-}
-
-function deserializeQuestionIndex(data: unknown): number {
-  if (typeof data === "number" && Number.isInteger(data) && data >= 0) {
+function deserializePracticeGlobalIndex(data: unknown): number | null {
+  if (data === null) return null;
+  if (typeof data === "number" && Number.isInteger(data) && data > 0) {
     return data;
   }
-  throw new Error("currentQuestionIndex must be a non-negative integer");
+  throw new Error("practiceGlobalIndex must be a positive integer or null");
 }
 
 const userAnswersKey: PersistedKey<typeof stateKeys.practiceUserAnswers> = {
@@ -146,49 +136,33 @@ const useSystemThemeKey: PersistedKey<
   deserialize: deserializeUseSystemTheme,
 };
 
-const selectedCategoryKey: PersistedKey<
-  typeof stateKeys.navigationSelectedCategory
+const practiceGlobalIndexKey: PersistedKey<
+  typeof stateKeys.practiceGlobalIndex
 > = {
-  key: stateKeys.navigationSelectedCategory,
-  deserialize: deserializeCategory,
-};
-
-const currentQuestionIndexKey: PersistedKey<
-  typeof stateKeys.navigationCurrentQuestionIndex
-> = {
-  key: stateKeys.navigationCurrentQuestionIndex,
-  deserialize: deserializeQuestionIndex,
+  key: stateKeys.practiceGlobalIndex,
+  deserialize: deserializePracticeGlobalIndex,
 };
 
 /** Explicit durable root configurations. Keep this map tied to `stateKeys`. */
 export const appPersistenceKeys = Object.freeze({
   practiceUserAnswers: userAnswersKey,
   practiceFavorites: favoritesKey,
+  practiceGlobalIndex: practiceGlobalIndexKey,
   preferencesTheme: themeKey,
   preferencesUseSystemTheme: useSystemThemeKey,
-  navigationSelectedCategory: selectedCategoryKey,
-  navigationCurrentQuestionIndex: currentQuestionIndexKey,
 });
 
-/** Return the durable roots for a particular execution platform. */
+/** Return the domain roots that are durable on every execution platform. */
 export function getAppPersistenceKeys(
-  target: AppPersistenceTarget,
+  _target: AppPersistenceTarget,
 ): readonly PersistKey<AppState>[] {
-  const keys: PersistKey<AppState>[] = [
+  return [
     appPersistenceKeys.practiceUserAnswers,
     appPersistenceKeys.practiceFavorites,
+    appPersistenceKeys.practiceGlobalIndex,
     appPersistenceKeys.preferencesTheme,
     appPersistenceKeys.preferencesUseSystemTheme,
   ];
-
-  if (target === "native") {
-    keys.push(
-      appPersistenceKeys.navigationSelectedCategory,
-      appPersistenceKeys.navigationCurrentQuestionIndex,
-    );
-  }
-
-  return keys;
 }
 
 function persistenceOptions(

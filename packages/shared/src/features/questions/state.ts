@@ -25,6 +25,18 @@ const federalStates: ReadonlySet<string> = new Set([
   "Thüringen",
 ]);
 
+/** Return whether a question belongs to a German federal state. */
+export function isFederalState(category: string): boolean {
+  return federalStates.has(category);
+}
+
+/** Return whether a question belongs to the 300-question practice pool. */
+export function isPracticeQuestion(
+  question: Pick<QuestionInput, "category">,
+): boolean {
+  return !isFederalState(question.category);
+}
+
 function createCategoryGroups(questions: readonly Question[]): CategoryGroup[] {
   const categoryCount = questions.reduce<Record<string, number>>(
     (counts, question) => {

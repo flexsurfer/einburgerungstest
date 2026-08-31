@@ -25,8 +25,6 @@ const legacyStorageKeys: LegacyStorageMap = Object.freeze({
   // stored theme therefore means `useSystemTheme === false`; no stored theme
   // leaves the new default (`true`) untouched.
   [stateKeys.preferencesUseSystemTheme]: "theme",
-  [stateKeys.navigationSelectedCategory]: "selectedCategory",
-  [stateKeys.navigationCurrentQuestionIndex]: "currentQuestionIndex",
 });
 
 /** Public read-only map used by migration diagnostics and fixture builders. */

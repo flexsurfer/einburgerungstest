@@ -1,6 +1,72 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
+import type {
+  CategorySelection,
+  Favorites,
+  Question,
+  UserAnswers,
+} from "../../app/uklad/contracts.js";
 import { generateTest } from "../test-session/generate.js";
+import { selectPracticeQuestions } from "../practice/selection.js";
+
+interface NavigationDraftState {
+  [stateKeys.questionsItems]: Question[];
+  [stateKeys.navigationSelectedCategory]: CategorySelection;
+  [stateKeys.practiceFavorites]: Favorites;
+  [stateKeys.practiceUserAnswers]: UserAnswers;
+  [stateKeys.testSessionQuestions]: Question[];
+  [stateKeys.practiceGlobalIndex]: number | null;
+  [stateKeys.navigationCurrentQuestionIndex]: number;
+}
+
+function selectedQuestions(draftState: NavigationDraftState): Question[] {
+  return selectPracticeQuestions({
+    questionsItems: draftState[stateKeys.questionsItems],
+    navigationSelectedCategory:
+      draftState[stateKeys.navigationSelectedCategory],
+    practiceFavorites: draftState[stateKeys.practiceFavorites],
+    practiceUserAnswers: draftState[stateKeys.practiceUserAnswers],
+    testSessionQuestions: draftState[stateKeys.testSessionQuestions],
+  });
+}
+
+function syncPracticeGlobalIndex(
+  draftState: NavigationDraftState,
+  questionIndex: number,
+): void {
+  if (draftState[stateKeys.navigationSelectedCategory] !== null) return;
+
+  const question = selectedQuestions(draftState)[questionIndex];
+  if (question !== undefined) {
+    draftState[stateKeys.practiceGlobalIndex] = question.globalIndex;
+  }
+}
+
+function resumePracticePosition(draftState: NavigationDraftState): void {
+  draftState[stateKeys.navigationSelectedCategory] = null;
+
+  const questions = selectedQuestions(draftState);
+  if (questions.length === 0) {
+    draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
+    return;
+  }
+
+  const savedGlobalIndex = draftState[stateKeys.practiceGlobalIndex];
+  if (savedGlobalIndex !== null && savedGlobalIndex !== undefined) {
+    const savedIndex = questions.findIndex(
+      (question) => question.globalIndex === savedGlobalIndex,
+    );
+    if (savedIndex >= 0) {
+      draftState[stateKeys.navigationCurrentQuestionIndex] = savedIndex;
+      return;
+    }
+  }
+
+  // Old navigation/global indexes are intentionally not migrated. If the new
+  // Practice cursor is missing or stale, start the 300-question flow at item 1.
+  draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
+  syncPracticeGlobalIndex(draftState, 0);
+}
 
 export const registerNavigationEvents: AppModule = (registrar) => {
   registrar.regEvent(
@@ -10,6 +76,7 @@ export const registerNavigationEvents: AppModule = (registrar) => {
       if (category === "test") generateTest(draftState, 30, random);
 
       draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
+      if (category === null) syncPracticeGlobalIndex(draftState, 0);
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
       draftState[stateKeys.navigationActiveScreen] = "questions";
       return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
@@ -24,24 +91,23 @@ export const registerNavigationEvents: AppModule = (registrar) => {
 
   registrar.regEvent(
     appIds.events.navigationPracticeResumed,
-    ({ draftState, coeffects: { random } }) => {
-      if (
-        draftState[stateKeys.navigationSelectedCategory] === "test" &&
-        draftState[stateKeys.testSessionQuestions].length === 0
-      ) {
-        generateTest(draftState, 30, random);
-        draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
-      }
+    ({ draftState }) => {
+      resumePracticePosition(draftState);
       draftState[stateKeys.navigationActiveScreen] = "questions";
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
     },
-    { coeffects: { random: appIds.coeffects.systemRandom } },
   );
 
   registrar.regEvent(
     appIds.events.navigationQuestionSelected,
     ({ draftState }, questionIndex) => {
-      draftState[stateKeys.navigationCurrentQuestionIndex] = questionIndex;
+      const questions = selectedQuestions(draftState);
+      const safeIndex = Math.max(
+        0,
+        Math.min(questionIndex, Math.max(questions.length - 1, 0)),
+      );
+      draftState[stateKeys.navigationCurrentQuestionIndex] = safeIndex;
+      syncPracticeGlobalIndex(draftState, safeIndex);
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
     },
   );
@@ -49,11 +115,10 @@ export const registerNavigationEvents: AppModule = (registrar) => {
   registrar.regEvent(appIds.events.navigationNext, ({ draftState }) => {
     const currentIndex =
       draftState[stateKeys.navigationCurrentQuestionIndex] || 0;
-    const nextIndex = Math.min(
-      currentIndex + 1,
-      draftState[stateKeys.questionsItems].length - 1,
-    );
+    const maxIndex = Math.max(selectedQuestions(draftState).length - 1, 0);
+    const nextIndex = Math.min(currentIndex + 1, maxIndex);
     draftState[stateKeys.navigationCurrentQuestionIndex] = nextIndex;
+    syncPracticeGlobalIndex(draftState, nextIndex);
   });
 
   registrar.regEvent(appIds.events.navigationPrevious, ({ draftState }) => {
@@ -62,6 +127,10 @@ export const registerNavigationEvents: AppModule = (registrar) => {
     draftState[stateKeys.navigationCurrentQuestionIndex] = Math.max(
       currentIndex - 1,
       0,
+    );
+    syncPracticeGlobalIndex(
+      draftState,
+      draftState[stateKeys.navigationCurrentQuestionIndex],
     );
   });
 
