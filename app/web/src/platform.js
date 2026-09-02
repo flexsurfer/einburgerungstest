@@ -1,8 +1,4 @@
-import {
-  appIds,
-  registerAppModules,
-  stateKeys,
-} from "@ebtest/shared/uklad";
+import { appIds, registerAppModules, stateKeys } from "@ebtest/shared/uklad";
 
 const DATA_URLS = Object.freeze({
   questions: "/assets/data.json",
@@ -72,12 +68,12 @@ export function registerWebPlatform(runtime) {
         appIds.coeffects.systemColorScheme,
         themeFromMediaQuery,
       );
+      registrar.regCoeffect(appIds.coeffects.systemNow, () => Date.now());
 
       registrar.regEvent(
         appIds.events.appInitialize,
         ({ draftState, coeffects: { system } }) => {
-          const followsSystem =
-            draftState[stateKeys.preferencesUseSystemTheme];
+          const followsSystem = draftState[stateKeys.preferencesUseSystemTheme];
           const theme = followsSystem
             ? system || draftState[stateKeys.preferencesTheme]
             : draftState[stateKeys.preferencesTheme];

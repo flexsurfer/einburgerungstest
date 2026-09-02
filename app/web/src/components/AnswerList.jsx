@@ -1,9 +1,5 @@
 import { useCallback } from "react";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { AnswerButton } from "./AnswerButton.jsx";
 
 export const AnswerList = ({ question }) => {
@@ -27,9 +23,22 @@ export const AnswerList = ({ question }) => {
     [appIds.subscriptions.navigationSelectedCategory],
     "AnswerList",
   );
+  const testSessionStatus = useSubscription(
+    [appIds.subscriptions.testSessionStatus],
+    "AnswerList",
+  );
 
   const handleAnswerClick = useCallback(
     (index) => {
+      if (isTestMode && testSessionStatus === "in-progress") {
+        runtime.dispatch([
+          appIds.events.testSessionAnswerSelected,
+          question.globalIndex,
+          index,
+        ]);
+        return;
+      }
+
       if (!showAnswers && userAnswer === undefined) {
         runtime.dispatch([
           appIds.events.practiceQuestionAnswered,
@@ -38,7 +47,14 @@ export const AnswerList = ({ question }) => {
         ]);
       }
     },
-    [runtime, showAnswers, userAnswer, question.globalIndex],
+    [
+      runtime,
+      showAnswers,
+      userAnswer,
+      isTestMode,
+      testSessionStatus,
+      question.globalIndex,
+    ],
   );
 
   const isIncorrect =
@@ -58,7 +74,12 @@ export const AnswerList = ({ question }) => {
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
           showAnswers={showAnswers}
-          disabled={userAnswer !== undefined || showAnswers}
+          disabled={
+            isTestMode
+              ? testSessionStatus !== "in-progress" || showAnswers
+              : userAnswer !== undefined || showAnswers
+          }
+          isExamMode={isTestMode}
           onClick={handleAnswerClick}
           userAnswer={userAnswer}
         />

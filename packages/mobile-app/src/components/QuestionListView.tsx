@@ -1,13 +1,11 @@
 import React, { memo, useCallback, useMemo, useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
-import {
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { QuestionCard } from "./QuestionCard";
 import { Question } from "../types";
 import { questionListRef } from "../refs";
+import { TabletExamControls } from "./ExamSessionControls";
 
 // Calculate number of columns and gap based on screen width
 const calculateLayout = (
@@ -33,6 +31,10 @@ export const QuestionListView = memo(() => {
     [appIds.subscriptions.practiceFilteredQuestions],
     "QuestionView",
   ) as Question[];
+  const isTestMode = useSubscription(
+    [appIds.subscriptions.navigationIsTestMode],
+    "QuestionListView",
+  );
 
   const [dimensions, setDimensions] = useState(Dimensions.get("window"));
   const minCardWidth = 280; // Minimum card width in pixels
@@ -87,29 +89,35 @@ export const QuestionListView = memo(() => {
   }
 
   return (
-    <FlatList
-      ref={questionListRef}
-      data={filteredQuestions}
-      renderItem={renderQuestion}
-      keyExtractor={keyExtractor}
-      numColumns={numColumns}
-      key={numColumns} // Force re-render when numColumns changes
-      columnWrapperStyle={styles(colors, padding).row}
-      contentContainerStyle={styles(colors, padding).listContainer}
-      ItemSeparatorComponent={ItemSeparatorComponent}
-      showsVerticalScrollIndicator={false}
-      removeClippedSubviews={true}
-      maxToRenderPerBatch={20}
-      windowSize={10}
-      initialNumToRender={20}
-      updateCellsBatchingPeriod={50}
-      maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
-    />
+    <View style={styles(colors, gap).screen}>
+      {isTestMode && <TabletExamControls />}
+      <FlatList
+        ref={questionListRef}
+        data={filteredQuestions}
+        renderItem={renderQuestion}
+        keyExtractor={keyExtractor}
+        numColumns={numColumns}
+        key={numColumns} // Force re-render when numColumns changes
+        columnWrapperStyle={styles(colors, padding).row}
+        contentContainerStyle={styles(colors, padding).listContainer}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        showsVerticalScrollIndicator={false}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={20}
+        windowSize={10}
+        initialNumToRender={20}
+        updateCellsBatchingPeriod={50}
+        maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+      />
+    </View>
   );
 });
 
 const styles = (colors: Colors, padding = 40) =>
   StyleSheet.create({
+    screen: {
+      flex: 1,
+    },
     listContainer: {
       paddingHorizontal: 0,
       paddingVertical: 16,

@@ -341,7 +341,7 @@ function MockExamCard({
           <View style={styleSheet.mockExamMeta}>
             <Text style={styleSheet.mockExamDetail}>33 questions</Text>
             <View style={styleSheet.mockExamDot} />
-            <Text style={styleSheet.mockExamDetail}>Exam-style practice</Text>
+            <Text style={styleSheet.mockExamDetail}>60 minutes</Text>
           </View>
         </View>
       </View>
@@ -597,7 +597,11 @@ export const HomeScreen = memo(() => {
   ) as FederalLand | null;
   const openCategory = useCallback(
     (category: CategorySelection) => {
-      runtime.dispatch([appIds.events.navigationCategorySelected, category]);
+      runtime.dispatch(
+        category === "test"
+          ? [appIds.events.testSessionStarted]
+          : [appIds.events.navigationCategorySelected, category],
+      );
     },
     [runtime],
   );

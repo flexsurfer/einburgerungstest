@@ -1,10 +1,11 @@
 import { memo, useCallback } from "react";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { LeftArrow, RightArrow, DownArrow } from "./Icons";
+import {
+  ExamAnsweredProgress,
+  ExamTimer,
+  FinishExamButton,
+} from "./ExamControls.jsx";
 import "../styles/NavigationControls.css";
 
 export const NavigationControls = memo(({ isVisible = true }) => {
@@ -15,6 +16,10 @@ export const NavigationControls = memo(({ isVisible = true }) => {
   );
   const filteredQuestionsCount = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestionsCount],
+    "NavigationControls",
+  );
+  const isTestMode = useSubscription(
+    [appIds.subscriptions.navigationIsTestMode],
     "NavigationControls",
   );
 
@@ -42,7 +47,7 @@ export const NavigationControls = memo(({ isVisible = true }) => {
     return null;
   }
 
-  return (
+  const navigationRow = (
     <div className="navigation-controls">
       <button
         className={`nav-button ${isFirstQuestion ? "disabled" : ""}`}
@@ -54,15 +59,19 @@ export const NavigationControls = memo(({ isVisible = true }) => {
         Prev
       </button>
 
-      <button
-        className="question-number-button"
-        onClick={handleQuestionNumberPress}
-      >
-        <span className="question-number-text">
-          {currentIndex + 1} of {filteredQuestionsCount}
-        </span>
-        <DownArrow />
-      </button>
+      {isTestMode ? (
+        <ExamTimer />
+      ) : (
+        <button
+          className="question-number-button"
+          onClick={handleQuestionNumberPress}
+        >
+          <span className="question-number-text">
+            {currentIndex + 1} of {filteredQuestionsCount}
+          </span>
+          <DownArrow />
+        </button>
+      )}
 
       <button
         className={`nav-button ${isLastQuestion ? "disabled" : ""}`}
@@ -75,4 +84,16 @@ export const NavigationControls = memo(({ isVisible = true }) => {
       </button>
     </div>
   );
+
+  if (isTestMode) {
+    return (
+      <div className="mobile-exam-controls">
+        {navigationRow}
+        <ExamAnsweredProgress />
+        <FinishExamButton />
+      </div>
+    );
+  }
+
+  return navigationRow;
 });

@@ -3,6 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { LeftArrow, RightArrow, DownArrow } from "./Icons";
+import {
+  ExamAnsweredProgress,
+  ExamTimer,
+  FinishExamButton,
+} from "./ExamSessionControls";
 
 interface NavigationControlsProps {
   isVisible?: boolean;
@@ -19,6 +24,10 @@ export const NavigationControls = memo<NavigationControlsProps>(
     );
     const filteredQuestionsCount = useSubscription(
       [appIds.subscriptions.practiceFilteredQuestionsCount],
+      "NavigationControls",
+    );
+    const isTestMode = useSubscription(
+      [appIds.subscriptions.navigationIsTestMode],
       "NavigationControls",
     );
 
@@ -46,7 +55,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
       return null;
     }
 
-    return (
+    const navigationRow = (
       <View style={styles(colors).container}>
         <TouchableOpacity
           style={[
@@ -74,15 +83,19 @@ export const NavigationControls = memo<NavigationControlsProps>(
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles(colors).questionNumberButton}
-          onPress={handleQuestionNumberPress}
-        >
-          <Text style={styles(colors).questionNumberText}>
-            {currentIndex + 1} of {filteredQuestionsCount}
-          </Text>
-          <DownArrow color={colors.primaryColor} />
-        </TouchableOpacity>
+        {isTestMode ? (
+          <ExamTimer />
+        ) : (
+          <TouchableOpacity
+            style={styles(colors).questionNumberButton}
+            onPress={handleQuestionNumberPress}
+          >
+            <Text style={styles(colors).questionNumberText}>
+              {currentIndex + 1} of {filteredQuestionsCount}
+            </Text>
+            <DownArrow color={colors.primaryColor} />
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
           style={[
@@ -111,11 +124,27 @@ export const NavigationControls = memo<NavigationControlsProps>(
         </TouchableOpacity>
       </View>
     );
+
+    if (isTestMode) {
+      return (
+        <View style={styles(colors).examContainer}>
+          {navigationRow}
+          <ExamAnsweredProgress />
+          <FinishExamButton />
+        </View>
+      );
+    }
+
+    return navigationRow;
   },
 );
 
 const styles = (colors: Colors) =>
   StyleSheet.create({
+    examContainer: {
+      paddingBottom: 14,
+      backgroundColor: "transparent",
+    },
     container: {
       flexDirection: "row",
       alignItems: "center",

@@ -1,5 +1,10 @@
 import { useCallback, memo, useState, useEffect, useRef } from "react";
-import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
+import {
+  appIds,
+  FEDERAL_LANDS,
+  useRuntime,
+  useSubscription,
+} from "@ebtest/shared/uklad";
 import { FavoritesButton } from "./FavoritesButton.jsx";
 import "../styles/Header.css";
 
@@ -29,14 +34,31 @@ export const Categories = memo(() => {
     [appIds.subscriptions.navigationSelectedCategoryCount],
     "Categories",
   );
+  const selectedLand = useSubscription(
+    [appIds.subscriptions.preferencesSelectedLand],
+    "Categories",
+  );
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isLandPickerOpen, setIsLandPickerOpen] = useState(false);
 
   const popupRef = useRef(null);
 
   const handleCategoryClick = useCallback(
     (category) => {
+      if (category === "test") {
+        setIsLandPickerOpen(true);
+        return;
+      }
       runtime.dispatch([appIds.events.navigationCategorySelected, category]);
+    },
+    [runtime],
+  );
+  const startExam = useCallback(
+    (land) => {
+      runtime.dispatch([appIds.events.preferencesLandSelected, land]);
+      runtime.dispatch([appIds.events.testSessionStarted]);
+      setIsLandPickerOpen(false);
     },
     [runtime],
   );
@@ -48,12 +70,12 @@ export const Categories = memo(() => {
   );
 
   useEffect(() => {
-    if (isPopupOpen) {
+    if (isPopupOpen || isLandPickerOpen) {
       setOverFlow("hidden");
     } else {
       setOverFlow("auto");
     }
-  }, [isPopupOpen, setOverFlow]);
+  }, [isLandPickerOpen, isPopupOpen, setOverFlow]);
 
   useEffect(() => {
     if (!isPopupOpen) return;
@@ -71,6 +93,16 @@ export const Categories = memo(() => {
     };
   }, [isPopupOpen]);
 
+  useEffect(() => {
+    if (!isLandPickerOpen) return;
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setIsLandPickerOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isLandPickerOpen]);
+
   return (
     <div className="categories-container">
       <div className="category-select-wrapper">
@@ -85,7 +117,7 @@ export const Categories = memo(() => {
               : selectedCategory === "wrong"
                 ? `Wrong answers (${wrongCount})`
                 : selectedCategory === "test"
-                  ? `Test (30)`
+                  ? `Test (33)`
                   : `${selectedCategory} (${selectedCount})`}
           <span className="filter-icon">▼</span>
         </button>
@@ -109,7 +141,7 @@ export const Categories = memo(() => {
               }}
               className={`category-button ${selectedCategory === "test" ? "active" : ""}`}
             >
-              Start Test (30)
+              Start Test (33)
             </button>
             <FavoritesButton
               key="favorites"
@@ -149,6 +181,55 @@ export const Categories = memo(() => {
           </div>
         )}
       </div>
+
+      {isLandPickerOpen && (
+        <div
+          className="exam-land-overlay"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) {
+              setIsLandPickerOpen(false);
+            }
+          }}
+        >
+          <div
+            aria-labelledby="exam-land-title"
+            aria-modal="true"
+            className="exam-land-dialog"
+            role="dialog"
+          >
+            <div className="exam-land-header">
+              <div>
+                <p>MOCK EXAM</p>
+                <h2 id="exam-land-title">Choose your Bundesland</h2>
+              </div>
+              <button
+                aria-label="Close Bundesland selection"
+                className="exam-land-close"
+                onClick={() => setIsLandPickerOpen(false)}
+                type="button"
+              >
+                ×
+              </button>
+            </div>
+            <p className="exam-land-copy">
+              The official exam includes three questions for the Land where you
+              live.
+            </p>
+            <div className="exam-land-grid">
+              {FEDERAL_LANDS.map((land) => (
+                <button
+                  className={`exam-land-option ${selectedLand === land ? "selected" : ""}`}
+                  key={land}
+                  onClick={() => startExam(land)}
+                  type="button"
+                >
+                  {land}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

@@ -1,0 +1,130 @@
+.exam-timer {
+  min-width: 104px;
+  height: 42px;
+  padding: 0 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam-timer.urgent {
+  border-color: var(--error-color);
+  background: var(--error-light);
+  color: var(--error-color);
+}
+
+.exam-timer-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.exam-answered-progress {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.exam-progress-track {
+  height: 7px;
+  min-width: 60px;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--exam-progress-track);
+}
+
+.exam-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--exam-progress-color);
+  transition: width 180ms ease;
+}
+
+.exam-progress-value {
+  min-width: 44px;
+  color: var(--exam-progress-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.finish-exam-button {
+  min-height: 42px;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-color);
+  color: #1f2937;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.finish-exam-button:hover {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.desktop-exam-controls {
+  position: sticky;
+  top: 48px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 2rem 1rem;
+  padding: 0.7rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-color) 94%, transparent);
+  box-shadow: 0 6px 18px var(--shadow-color);
+  backdrop-filter: blur(10px);
+}
+
+.mobile-exam-controls {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 0.55rem;
+  padding-bottom: calc(0.65rem + env(safe-area-inset-bottom, 0));
+  background: var(--bg-color);
+}
+
+.mobile-exam-controls > .navigation-controls {
+  padding-bottom: 0;
+}
+
+.mobile-exam-controls > .exam-answered-progress,
+.mobile-exam-controls > .finish-exam-button {
+  margin: 0 1rem;
+}
+
+@media (max-width: 600px) {
+  .desktop-exam-controls {
+    display: none;
+  }
+
+  .exam-timer {
+    min-width: 92px;
+    height: 38px;
+    padding: 0 0.55rem;
+    font-size: 0.9rem;
+  }
+
+  .finish-exam-button {
+    min-height: 40px;
+  }
+}

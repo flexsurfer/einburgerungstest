@@ -53,7 +53,19 @@ export interface Question extends QuestionInput {
 export type UserAnswers = Record<number, number>;
 export type Favorites = number[];
 export type TestUsedQuestions = Record<string, Record<string, boolean>>;
+export type TestSessionStatus = "idle" | "in-progress" | "completed";
+export type TestSessionFinishReason = "finished" | "time-expired";
 export type VocabularyData = Record<string, unknown>;
+
+export interface TestSessionResult {
+  correct: number;
+  incorrect: number;
+  unanswered: number;
+  answered: number;
+  total: number;
+  requiredCorrect: number;
+  passed: boolean;
+}
 
 export interface CategoryGroup {
   title: string;
@@ -128,6 +140,9 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.testSessionQuestions]: Question[];
     [stateKeys.testSessionAnswers]: UserAnswers;
     [stateKeys.testSessionUsedQuestions]: TestUsedQuestions;
+    [stateKeys.testSessionStatus]: TestSessionStatus;
+    [stateKeys.testSessionEndsAt]: number | null;
+    [stateKeys.testSessionFinishReason]: TestSessionFinishReason | null;
 
     [stateKeys.navigationSelectedCategory]: CategorySelection;
     [stateKeys.navigationCurrentQuestionIndex]: number;
@@ -171,6 +186,13 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.preferencesSystemThemeChanged]: [scheme: ColorScheme];
     [appIds.events.practiceQuestionAnswerCleared]: [questionIndex: number];
 
+    [appIds.events.testSessionStarted]: [];
+    [appIds.events.testSessionAnswerSelected]: [
+      questionIndex: number,
+      answerIndex: number,
+    ];
+    [appIds.events.testSessionFinished]: [reason: TestSessionFinishReason];
+
     [appIds.events.navigationQuestionSelected]: [questionIndex: number];
     [appIds.events.navigationNext]: [];
     [appIds.events.navigationPrevious]: [];
@@ -193,6 +215,7 @@ export interface AppContracts extends UkladContracts {
   readonly coeffects: {
     [appIds.coeffects.systemColorScheme]: { arg: void; value: ColorScheme };
     [appIds.coeffects.systemRandom]: { arg: void; value: () => number };
+    [appIds.coeffects.systemNow]: { arg: void; value: number };
   };
 
   readonly subscriptions: {
@@ -271,6 +294,22 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.testSessionAnswers]: {
       params: [];
       result: UserAnswers;
+    };
+    [appIds.subscriptions.testSessionStatus]: {
+      params: [];
+      result: TestSessionStatus;
+    };
+    [appIds.subscriptions.testSessionEndsAt]: {
+      params: [];
+      result: number | null;
+    };
+    [appIds.subscriptions.testSessionFinishReason]: {
+      params: [];
+      result: TestSessionFinishReason | null;
+    };
+    [appIds.subscriptions.testSessionResult]: {
+      params: [];
+      result: TestSessionResult;
     };
 
     [appIds.subscriptions.practiceFavoriteCount]: {

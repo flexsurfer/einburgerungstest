@@ -2,11 +2,7 @@ import React, { memo, useCallback } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { AnswerButton } from "./AnswerButton";
 import { Question } from "../types";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors } from "../theme";
 
 interface AnswerListProps {
@@ -35,9 +31,22 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
     [appIds.subscriptions.navigationSelectedCategory],
     "AnswerList",
   );
+  const testSessionStatus = useSubscription(
+    [appIds.subscriptions.testSessionStatus],
+    "AnswerList",
+  );
 
   const handleAnswerClick = useCallback(
     (index: number) => {
+      if (isTestMode && testSessionStatus === "in-progress") {
+        runtime.dispatch([
+          appIds.events.testSessionAnswerSelected,
+          question.globalIndex,
+          index,
+        ]);
+        return;
+      }
+
       if (!showAnswers && userAnswer === undefined) {
         runtime.dispatch([
           appIds.events.practiceQuestionAnswered,
@@ -46,7 +55,14 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
         ]);
       }
     },
-    [runtime, showAnswers, userAnswer, question.globalIndex],
+    [
+      runtime,
+      showAnswers,
+      userAnswer,
+      isTestMode,
+      testSessionStatus,
+      question.globalIndex,
+    ],
   );
 
   const handleClearAnswer = useCallback(() => {
@@ -74,7 +90,12 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
           showAnswers={showAnswers}
-          disabled={userAnswer !== undefined || showAnswers}
+          disabled={
+            isTestMode
+              ? testSessionStatus !== "in-progress" || showAnswers
+              : userAnswer !== undefined || showAnswers
+          }
+          isExamMode={isTestMode}
           onClick={handleAnswerClick}
           userAnswer={userAnswer}
         />

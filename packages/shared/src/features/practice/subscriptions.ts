@@ -4,6 +4,7 @@ import {
   isSelectedPracticeQuestion,
   selectPracticeQuestions,
 } from "./selection.js";
+import { EINBUERGERUNGSTEST_RULES } from "../test-session/rules.js";
 
 export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
@@ -122,7 +123,10 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
         totalAnswered,
         totalVisible,
         accuracy,
-        passed: Number(accuracy) > 51.5,
+        passed:
+          selectedCategory === "test"
+            ? correct >= EINBUERGERUNGSTEST_RULES.passingCorrectAnswerCount
+            : Number(accuracy) > 51.5,
       };
     },
   );

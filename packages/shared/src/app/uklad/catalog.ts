@@ -33,6 +33,9 @@ export const stateKeys = {
   testSessionQuestions: "testSessionQuestions",
   testSessionAnswers: "testSessionAnswers",
   testSessionUsedQuestions: "testSessionUsedQuestions",
+  testSessionStatus: "testSessionStatus",
+  testSessionEndsAt: "testSessionEndsAt",
+  testSessionFinishReason: "testSessionFinishReason",
 
   navigationSelectedCategory: "navigationSelectedCategory",
   navigationCurrentQuestionIndex: "navigationCurrentQuestionIndex",
@@ -74,6 +77,10 @@ export const appIds = {
     preferencesSystemThemeChanged: "preferences/system-theme-changed",
     practiceQuestionAnswerCleared: "practice/question-answer-cleared",
 
+    testSessionStarted: "test-session/started",
+    testSessionAnswerSelected: "test-session/answer-selected",
+    testSessionFinished: "test-session/finished",
+
     navigationQuestionSelected: "navigation/question-selected",
     navigationNext: "navigation/next",
     navigationPrevious: "navigation/previous",
@@ -111,6 +118,10 @@ export const appIds = {
     practiceLearnGlobalIndex: "practice/learn-global-index",
     testSessionQuestions: "test-session/questions",
     testSessionAnswers: "test-session/answers",
+    testSessionStatus: "test-session/status",
+    testSessionEndsAt: "test-session/ends-at",
+    testSessionFinishReason: "test-session/finish-reason",
+    testSessionResult: "test-session/result",
 
     practiceFavoriteCount: "practice/favorite-count",
     practiceWrongCount: "practice/wrong-count",
@@ -138,5 +149,6 @@ export const appIds = {
   coeffects: {
     systemColorScheme: "system/color-scheme",
     systemRandom: "system/random",
+    systemNow: "system/now",
   },
 } as const;

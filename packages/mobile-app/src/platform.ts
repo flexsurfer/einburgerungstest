@@ -64,6 +64,7 @@ export function registerMobilePlatform(
         appIds.coeffects.systemColorScheme,
         (): ColorScheme => Appearance.getColorScheme(),
       );
+      registrar.regCoeffect(appIds.coeffects.systemNow, () => Date.now());
 
       registrar.regEvent(
         appIds.events.appInitialize,

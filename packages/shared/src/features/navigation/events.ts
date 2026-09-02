@@ -9,6 +9,7 @@ import type {
 } from "../../app/uklad/contracts.js";
 import { generateTest } from "../test-session/generate.js";
 import { selectPracticeQuestions } from "../practice/selection.js";
+import { EINBUERGERUNGSTEST_RULES } from "../test-session/rules.js";
 
 interface NavigationDraftState {
   [stateKeys.questionsItems]: Question[];
@@ -98,7 +99,13 @@ export const registerNavigationEvents: AppModule = (registrar) => {
       }
       draftState[stateKeys.navigationIsLearnMode] = false;
       draftState[stateKeys.navigationSelectedCategory] = category;
-      if (category === "test") generateTest(draftState, 30, random);
+      if (category === "test") {
+        generateTest(
+          draftState,
+          EINBUERGERUNGSTEST_RULES.generalQuestionCount,
+          random,
+        );
+      }
 
       draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
       if (category === null) {
@@ -121,6 +128,14 @@ export const registerNavigationEvents: AppModule = (registrar) => {
   });
 
   registrar.regEvent(appIds.events.navigationHomeOpened, ({ draftState }) => {
+    if (
+      draftState[stateKeys.navigationSelectedCategory] === "test" &&
+      draftState[stateKeys.testSessionStatus] === "in-progress"
+    ) {
+      draftState[stateKeys.testSessionStatus] = "idle";
+      draftState[stateKeys.testSessionEndsAt] = null;
+      draftState[stateKeys.testSessionFinishReason] = null;
+    }
     draftState[stateKeys.navigationActiveScreen] = "home";
     draftState[stateKeys.navigationIsLearnMode] = false;
     draftState[stateKeys.uiShowAnswers] = false;

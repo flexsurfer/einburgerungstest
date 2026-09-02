@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef, memo, useCallback } from "react";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { QuestionCard } from "./QuestionCard.jsx";
+import { DesktopExamControls } from "./ExamControls.jsx";
 import "../styles/QuestionList.css";
 
 export const QuestionListView = memo(() => {
   const runtime = useRuntime();
   const filteredQuestions = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestions],
+    "QuestionList",
+  );
+  const isTestMode = useSubscription(
+    [appIds.subscriptions.navigationIsTestMode],
     "QuestionList",
   );
 
@@ -73,6 +74,7 @@ export const QuestionListView = memo(() => {
 
   return (
     <div className="question-list-container">
+      {isTestMode && <DesktopExamControls />}
       <div className="questions-grid">
         {visibleQuestions.map((question) => (
           <QuestionCard key={question.globalIndex} question={question} />

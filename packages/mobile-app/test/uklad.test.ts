@@ -13,6 +13,7 @@ import {
   type MobilePlatform,
 } from "../src/platform";
 import { bootstrapMobileApp, createMobileAppRuntime } from "../src/bootstrap";
+import { examSecondsRemaining, formatExamTime } from "../src/exam-time";
 
 vi.mock("@react-native-async-storage/async-storage", () => ({
   default: {
@@ -217,6 +218,91 @@ describe("Uklad mobile platform", () => {
     expect(
       new Set(examQuestions.map((question) => question.globalIndex)).size,
     ).toBe(33);
+  });
+
+  it("runs the official 60-minute mobile exam lifecycle and evaluates 17 correct answers as passed", () => {
+    vi.spyOn(Date, "now").mockReturnValue(1_000_000);
+    const { harness } = createRuntime(undefined, true);
+
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Bayern"]);
+    harness.dispatchSync([appIds.events.testSessionStarted]);
+
+    const state = harness.getState();
+    const examQuestions = state[stateKeys.testSessionQuestions];
+    expect(examQuestions).toHaveLength(33);
+    expect(state[stateKeys.testSessionStatus]).toBe("in-progress");
+    expect(state[stateKeys.testSessionEndsAt]).toBe(1_000_000 + 60 * 60_000);
+    expect(state[stateKeys.navigationSelectedCategory]).toBe("test");
+
+    const firstQuestion = examQuestions[0];
+    const firstWrongAnswer = (firstQuestion.correct + 1) % 4;
+    harness.dispatchSync([
+      appIds.events.testSessionAnswerSelected,
+      firstQuestion.globalIndex,
+      firstWrongAnswer,
+    ]);
+    harness.dispatchSync([
+      appIds.events.testSessionAnswerSelected,
+      firstQuestion.globalIndex,
+      firstQuestion.correct,
+    ]);
+    expect(
+      harness.getState()[stateKeys.testSessionAnswers][
+        firstQuestion.globalIndex
+      ],
+    ).toBe(firstQuestion.correct);
+
+    for (const question of examQuestions.slice(1, 16)) {
+      harness.dispatchSync([
+        appIds.events.testSessionAnswerSelected,
+        question.globalIndex,
+        question.correct,
+      ]);
+    }
+
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.testSessionResult])
+        .passed,
+    ).toBe(false);
+
+    harness.dispatchSync([
+      appIds.events.testSessionAnswerSelected,
+      examQuestions[16].globalIndex,
+      examQuestions[16].correct,
+    ]);
+
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.testSessionResult]),
+    ).toEqual({
+      correct: 17,
+      incorrect: 0,
+      unanswered: 16,
+      answered: 17,
+      total: 33,
+      requiredCorrect: 17,
+      passed: true,
+    });
+
+    harness.dispatchSync([appIds.events.testSessionFinished, "time-expired"]);
+    expect(harness.getState()[stateKeys.testSessionStatus]).toBe("completed");
+    expect(harness.getState()[stateKeys.testSessionFinishReason]).toBe(
+      "time-expired",
+    );
+
+    harness.dispatchSync([appIds.events.testSessionStarted]);
+    harness.dispatchSync([appIds.events.testSessionFinished, "finished"]);
+    expect(harness.getState()[stateKeys.testSessionStatus]).toBe("completed");
+    expect(harness.getState()[stateKeys.testSessionFinishReason]).toBe(
+      "finished",
+    );
+  });
+
+  it("formats the exam countdown without going below zero", () => {
+    expect(examSecondsRemaining(61_001, 1_000)).toBe(61);
+    expect(examSecondsRemaining(999, 1_000)).toBe(0);
+    expect(formatExamTime(3_600)).toBe("60:00");
+    expect(formatExamTime(61)).toBe("01:01");
+    expect(formatExamTime(-1)).toBe("00:00");
   });
 
   it("applies the persisted/system theme through the host platform", () => {

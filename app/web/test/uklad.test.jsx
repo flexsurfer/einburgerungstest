@@ -42,6 +42,38 @@ function createFixture() {
 }
 
 describe("Uklad web platform", () => {
+  it("provides the browser clock for the official timed exam session", async () => {
+    vi.spyOn(Date, "now").mockReturnValue(2_000_000);
+    vi.stubGlobal("scrollTo", vi.fn());
+    const { harness, runtime } = createFixture();
+    const generalQuestions = Array.from({ length: 30 }, (_, index) => ({
+      question: `General question ${index + 1}`,
+      category: "Politik",
+      correct: 0,
+      answers: ["A", "B", "C", "D"],
+    }));
+    const landQuestions = Array.from({ length: 10 }, (_, index) => ({
+      question: `Bayern question ${index + 1}`,
+      category: "Bayern",
+      correct: 0,
+      answers: ["A", "B", "C", "D"],
+    }));
+
+    harness.dispatchSync([
+      appIds.events.questionsFetchSucceeded,
+      [...generalQuestions, ...landQuestions],
+    ]);
+    runtime.dispatch([appIds.events.preferencesLandSelected, "Bayern"]);
+    runtime.dispatch([appIds.events.testSessionStarted]);
+    await harness.flush();
+
+    expect(harness.getState()[stateKeys.testSessionQuestions]).toHaveLength(33);
+    expect(harness.getState()[stateKeys.testSessionStatus]).toBe("in-progress");
+    expect(harness.getState()[stateKeys.testSessionEndsAt]).toBe(
+      2_000_000 + 60 * 60_000,
+    );
+  });
+
   it("applies the restored manual theme during app initialization", () => {
     const { harness } = createFixture();
     harness.dispatchSync([appIds.events.preferencesThemeToggled]);

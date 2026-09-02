@@ -52,7 +52,11 @@ export const Categories = () => {
 
   const handleCategoryClick = useCallback(
     (category) => {
-      runtime.dispatch([appIds.events.navigationCategorySelected, category]);
+      runtime.dispatch(
+        category === "test"
+          ? [appIds.events.testSessionStarted]
+          : [appIds.events.navigationCategorySelected, category],
+      );
       setIsPopupOpen(false);
     },
     [runtime],
@@ -79,7 +83,7 @@ export const Categories = () => {
         : selectedCategory === "wrong"
           ? `Wrong answers (${wrongCount})`
           : selectedCategory === "test"
-            ? `Test (30)`
+            ? `Test (33)`
             : `${selectedCategory} (${selectedCount})`;
 
   const colors = useColors();
@@ -148,7 +152,7 @@ export const Categories = () => {
                             styles(colors).activeText,
                         ]}
                       >
-                        Start Test (30)
+                        Start Test (33)
                       </Text>
                     </TouchableOpacity>
                     <FavoritesButton

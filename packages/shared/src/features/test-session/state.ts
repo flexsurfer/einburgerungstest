@@ -10,5 +10,8 @@ export function createTestSessionState() {
     [stateKeys.testSessionQuestions]: [] as Question[],
     [stateKeys.testSessionAnswers]: {} as UserAnswers,
     [stateKeys.testSessionUsedQuestions]: {} as TestUsedQuestions,
+    [stateKeys.testSessionStatus]: "idle" as const,
+    [stateKeys.testSessionEndsAt]: null as number | null,
+    [stateKeys.testSessionFinishReason]: null,
   } as const;
 }

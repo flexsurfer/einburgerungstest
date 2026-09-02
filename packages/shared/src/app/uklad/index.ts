@@ -46,6 +46,9 @@ export type {
   QuestionPickerItem,
   ScrollMode,
   Statistics,
+  TestSessionFinishReason,
+  TestSessionResult,
+  TestSessionStatus,
   TestUsedQuestions,
   Theme,
   ThemePreference,
@@ -53,3 +56,7 @@ export type {
   VocabularyData,
 } from "./contracts.js";
 export { FEDERAL_LANDS } from "./contracts.js";
+export {
+  EINBUERGERUNGSTEST_DURATION_MS,
+  EINBUERGERUNGSTEST_RULES,
+} from "../../features/test-session/rules.js";

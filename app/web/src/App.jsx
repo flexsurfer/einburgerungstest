@@ -1,7 +1,4 @@
-import {
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { Header } from "./components/Header.jsx";
 import { QuestionView } from "./components/QuestionView.jsx";
 import { Vocabulary } from "./components/Vocabulary.jsx";
@@ -17,6 +14,10 @@ function App() {
     [appIds.subscriptions.questionsLoaded],
     "App",
   );
+  const isTestMode = useSubscription(
+    [appIds.subscriptions.navigationIsTestMode],
+    "App",
+  );
 
   if (!questionsLoaded) return null;
 
@@ -24,7 +25,7 @@ function App() {
     <div className="app-container">
       <Header />
       <QuestionView />
-      <Statistics />
+      {!isTestMode && <Statistics />}
       {vocabularyRender && <Vocabulary />}
     </div>
   );

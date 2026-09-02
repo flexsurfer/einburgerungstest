@@ -15,6 +15,13 @@
   cursor: default;
 }
 
+.answer-button.exam-mode.selected {
+  border: 2px solid var(--selection-border-color);
+  color: var(--text-color);
+  background-color: var(--selection-bg-color);
+  font-weight: 600;
+}
+
 /* Review mode styles */
 .answer-button.review-mode.correct {
   border-color: var(--success-color);
@@ -47,4 +54,4 @@
 
 .try-again-button:hover {
   background-color: var(--accent-light);
-} 
+}
