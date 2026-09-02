@@ -19,44 +19,49 @@ import {
   appIds,
   useRuntime,
   useSubscription,
+  type CategoryProgress,
   type CategoryGroup,
   type CategorySelection,
+  type FederalLand,
+  type PracticeCategoryProgress,
   type PracticeOverview,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
 import {
+  ArrowRight,
   BookmarkIcon,
   BookOpenIcon,
   BuildingIcon,
-  CheckCircleIcon,
   ChevronRight,
+  ClockIcon,
   DocumentIcon,
   ExamIcon,
   MenuIcon,
   PlayIcon,
   PeopleIcon,
-  ReviewIcon,
   ScaleIcon,
   TargetIcon,
+  XCircleIcon,
 } from "./Icons";
 
-type ActionCardWidth = "48.2%" | "100%";
+type ActionCardWidth = "48.5%" | "100%";
 
 type Tone = {
-  backgroundColor: string;
-  color: string;
+  accentColor: string;
+  iconColor: string;
 };
 
 type ActionCardProps = {
   title: string;
-  detail: string;
   icon: ReactNode;
   tone: Tone;
   width: ActionCardWidth;
   colors: Colors;
+  isWide: boolean;
   onPress: () => void;
   disabled?: boolean;
+  count?: number;
 };
 
 const TOPIC_LABELS: Record<string, string> = {
@@ -145,13 +150,13 @@ function HeroGradient({ colors }: { colors: Colors }) {
 }
 
 function ProgressRing({
-  value,
+  answered,
   correct,
   incorrect,
   totalQuestions,
   colors,
 }: {
-  value: number;
+  answered: number;
   correct: number;
   incorrect: number;
   totalQuestions: number;
@@ -161,8 +166,8 @@ function ProgressRing({
   const strokeWidth = 11;
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const normalizedValue = Math.max(0, Math.min(value, 100));
   const normalizedTotal = Math.max(0, totalQuestions);
+  const normalizedAnswered = Math.max(0, Math.min(answered, normalizedTotal));
   const normalizedCorrect = Math.max(0, Math.min(correct, normalizedTotal));
   const normalizedIncorrect = Math.max(
     0,
@@ -179,7 +184,7 @@ function ProgressRing({
   return (
     <View
       accessible
-      accessibilityLabel={`${normalizedValue}% overall progress, ${normalizedCorrect} correct, ${normalizedIncorrect} incorrect`}
+      accessibilityLabel={`${normalizedAnswered} of ${normalizedTotal} questions answered, ${normalizedCorrect} correct, ${normalizedIncorrect} incorrect`}
       style={staticStyles.progressRing}
     >
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -221,8 +226,9 @@ function ProgressRing({
         />
       </Svg>
       <View pointerEvents="none" style={staticStyles.progressValueWrap}>
-        <Text style={staticStyles.progressValue}>{normalizedValue}%</Text>
-        <Text style={staticStyles.progressLabel}>Overall Progress</Text>
+        <Text style={staticStyles.progressValue}>
+          {normalizedAnswered}/{normalizedTotal}
+        </Text>
       </View>
     </View>
   );
@@ -251,15 +257,16 @@ function ProgressStat({
 
 function ActionCard({
   title,
-  detail,
   icon,
   tone,
   width,
   colors,
+  isWide,
   onPress,
   disabled = false,
+  count,
 }: ActionCardProps) {
-  const styleSheet = styles(colors);
+  const styleSheet = styles(colors, isWide);
   return (
     <TouchableOpacity
       accessibilityRole="button"
@@ -269,82 +276,151 @@ function ActionCard({
       onPress={onPress}
       style={[
         styleSheet.actionCard,
+        styleSheet.actionCardCentered,
         { width },
         disabled ? styleSheet.disabledCard : null,
       ]}
     >
-      <View style={styleSheet.actionIconWrap}>
-        <View
-          style={[
-            styleSheet.actionIcon,
-            { backgroundColor: tone.backgroundColor },
-          ]}
-        >
-          {icon}
-        </View>
+      <View
+        style={[styleSheet.actionIcon, { backgroundColor: tone.accentColor }]}
+      >
+        {icon}
       </View>
-      <View style={styleSheet.actionCopy}>
-        <Text numberOfLines={2} style={styleSheet.actionTitle}>
+      <View style={styleSheet.actionCopyCentered}>
+        <Text numberOfLines={2} style={styleSheet.actionTitleCentered}>
           {title}
         </Text>
-        <Text numberOfLines={1} style={styleSheet.actionDetail}>
-          {detail}
-        </Text>
       </View>
-      <ChevronRight
-        color={disabled ? colors.disabledText : colors.textMutedColor}
-      />
+      {count !== undefined ? (
+        <View
+          style={[
+            styleSheet.actionCount,
+            {
+              backgroundColor: disabled
+                ? colors.disabledBg
+                : colors.surfaceColor,
+            },
+          ]}
+        >
+          <Text style={[styleSheet.actionCountText, { color: tone.iconColor }]}>
+            {count}
+          </Text>
+        </View>
+      ) : null}
+      <View style={styleSheet.actionArrow}>
+        <ChevronRight
+          color={disabled ? colors.disabledText : colors.textMutedColor}
+          size={isWide ? 20 : 17}
+        />
+      </View>
     </TouchableOpacity>
+  );
+}
+
+function MockExamCard({
+  colors,
+  isWide,
+  onPress,
+}: {
+  colors: Colors;
+  isWide: boolean;
+  onPress: () => void;
+}) {
+  const styleSheet = styles(colors, isWide);
+  return (
+    <View style={styleSheet.mockExamCard}>
+      <View style={styleSheet.mockExamLeading}>
+        <View style={styleSheet.mockExamIcon}>
+          <ExamIcon color={colors.primaryColor} size={32} />
+          <View style={styleSheet.mockExamClock}>
+            <ClockIcon color={colors.primaryColor} size={17} />
+          </View>
+        </View>
+        <View style={styleSheet.mockExamCopy}>
+          <Text style={styleSheet.mockExamTitle}>Mock Exam</Text>
+          <View style={styleSheet.mockExamMeta}>
+            <Text style={styleSheet.mockExamDetail}>33 questions</Text>
+            <View style={styleSheet.mockExamDot} />
+            <Text style={styleSheet.mockExamDetail}>Exam-style practice</Text>
+          </View>
+        </View>
+      </View>
+      <TouchableOpacity
+        accessibilityLabel="Start mock exam"
+        accessibilityRole="button"
+        activeOpacity={0.84}
+        onPress={onPress}
+        style={styleSheet.mockExamButton}
+      >
+        <Text style={styleSheet.mockExamButtonText}>Start Exam</Text>
+        <ArrowRight color={colors.primaryTextColor} size={21} />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 function TopicRow({
   category,
-  count,
+  progress,
   index,
   colors,
+  isWide,
   divider,
   onPress,
 }: {
   category: string;
-  count: number;
+  progress: CategoryProgress;
   index: number;
   colors: Colors;
+  isWide: boolean;
   divider: boolean;
   onPress: () => void;
 }) {
-  const styleSheet = styles(colors);
+  const styleSheet = styles(colors, isWide);
   const tones: Tone[] = [
-    { backgroundColor: colors.blueLight, color: colors.blueColor },
-    { backgroundColor: colors.primaryPale, color: colors.primaryColor },
-    { backgroundColor: colors.orangeLight, color: colors.orangeColor },
-    { backgroundColor: colors.yellowLight, color: colors.yellowColor },
+    {
+      accentColor: colors.primaryPale,
+      iconColor: colors.primaryColor,
+    },
+    {
+      accentColor: colors.blueLight,
+      iconColor: colors.blueColor,
+    },
+    {
+      accentColor: colors.orangeLight,
+      iconColor: colors.orangeColor,
+    },
+    {
+      accentColor: colors.yellowLight,
+      iconColor: colors.yellowColor,
+    },
   ];
   const tone = tones[index % tones.length];
+  const progressWidth = `${Math.max(
+    0,
+    Math.min(progress.progress, 100),
+  )}%` as `${number}%`;
   const topicIcon =
     category === "Recht" ? (
-      <ScaleIcon color={tone.color} />
+      <ScaleIcon color={tone.iconColor} />
     ) : category === "Geschichte" ? (
-      <BuildingIcon color={tone.color} />
+      <BuildingIcon color={tone.iconColor} />
     ) : category === "Gesellschaft und Familie" ? (
-      <PeopleIcon color={tone.color} />
+      <PeopleIcon color={tone.iconColor} />
     ) : (
-      <DocumentIcon color={tone.color} />
+      <DocumentIcon color={tone.iconColor} />
     );
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`${TOPIC_LABELS[category] ?? category}, ${count} questions`}
+      accessibilityLabel={`${TOPIC_LABELS[category] ?? category}, ${progress.answered} of ${progress.total} questions answered`}
       accessibilityRole="button"
       activeOpacity={0.78}
       onPress={onPress}
       style={[styleSheet.topicRow, divider ? styleSheet.topicRowDivider : null]}
     >
       <View
-        style={[
-          styleSheet.topicIcon,
-          { backgroundColor: tone.backgroundColor },
-        ]}
+        style={[styleSheet.topicIcon, { backgroundColor: tone.accentColor }]}
       >
         {topicIcon}
       </View>
@@ -352,42 +428,128 @@ function TopicRow({
         <Text numberOfLines={1} style={styleSheet.topicTitle}>
           {TOPIC_LABELS[category] ?? category}
         </Text>
-        <Text style={styleSheet.topicCount}>{count} questions</Text>
+        <View style={styleSheet.topicProgressRow}>
+          <View style={styleSheet.topicProgressTrack}>
+            <View
+              style={[styleSheet.topicProgressFill, { width: progressWidth }]}
+            />
+          </View>
+          <Text style={styleSheet.topicCount}>
+            {progress.answered} / {progress.total}
+          </Text>
+        </View>
       </View>
       <ChevronRight color={colors.textMutedColor} size={20} />
     </TouchableOpacity>
   );
 }
 
-function StateCard({
+function StateRow({
   category,
-  count,
+  progress,
+  index,
   colors,
+  isWide,
+  divider,
+  selected,
   onPress,
 }: {
   category: string;
-  count: number;
+  progress: CategoryProgress;
+  index: number;
   colors: Colors;
+  isWide: boolean;
+  divider: boolean;
+  selected: boolean;
   onPress: () => void;
 }) {
-  const styleSheet = styles(colors);
+  const styleSheet = styles(colors, isWide);
+  const tones: Tone[] = [
+    {
+      accentColor: colors.primaryPale,
+      iconColor: colors.primaryColor,
+    },
+    {
+      accentColor: colors.blueLight,
+      iconColor: colors.blueColor,
+    },
+    {
+      accentColor: colors.orangeLight,
+      iconColor: colors.orangeColor,
+    },
+    {
+      accentColor: colors.yellowLight,
+      iconColor: colors.yellowColor,
+    },
+  ];
+  const tone = tones[index % tones.length];
+  const progressWidth = `${Math.max(
+    0,
+    Math.min(progress.progress, 100),
+  )}%` as `${number}%`;
+
   return (
     <TouchableOpacity
-      accessibilityLabel={`${STATE_LABELS[category] ?? category}, ${count} questions`}
+      accessibilityLabel={`${STATE_LABELS[category] ?? category}, ${progress.answered} of ${progress.total} questions answered`}
       accessibilityRole="button"
+      accessibilityState={{ selected }}
       activeOpacity={0.78}
       onPress={onPress}
-      style={styleSheet.stateCard}
+      style={[
+        styleSheet.topicRow,
+        divider ? styleSheet.topicRowDivider : null,
+        selected ? styleSheet.stateSelectedRow : null,
+      ]}
     >
-      <View style={styleSheet.stateBadge}>
-        <Text style={styleSheet.stateBadgeText}>
+      <View
+        style={[
+          styleSheet.topicIcon,
+          {
+            backgroundColor: selected ? colors.primaryColor : tone.accentColor,
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styleSheet.stateIconText,
+            {
+              color: selected ? colors.primaryTextColor : tone.iconColor,
+            },
+          ]}
+        >
           {stateAbbreviations[category] ?? category.slice(0, 2).toUpperCase()}
         </Text>
       </View>
-      <Text numberOfLines={2} style={styleSheet.stateTitle}>
-        {STATE_LABELS[category] ?? category}
-      </Text>
-      <Text style={styleSheet.stateCount}>{count}</Text>
+      <View style={styleSheet.topicCopy}>
+        <View style={styleSheet.stateTitleRow}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styleSheet.topicTitle,
+              styleSheet.stateTitleText,
+              selected ? styleSheet.stateSelectedTitle : null,
+            ]}
+          >
+            {STATE_LABELS[category] ?? category}
+          </Text>
+          {selected ? (
+            <View style={styleSheet.stateSelectedBadge}>
+              <Text style={styleSheet.stateSelectedBadgeText}>Your state</Text>
+            </View>
+          ) : null}
+        </View>
+        <View style={styleSheet.topicProgressRow}>
+          <View style={styleSheet.topicProgressTrack}>
+            <View
+              style={[styleSheet.topicProgressFill, { width: progressWidth }]}
+            />
+          </View>
+          <Text style={styleSheet.topicCount}>
+            {progress.answered} / {progress.total}
+          </Text>
+        </View>
+      </View>
+      <ChevronRight color={colors.textMutedColor} size={20} />
     </TouchableOpacity>
   );
 }
@@ -401,6 +563,7 @@ export const HomeScreen = memo(() => {
   const contentWidth = Math.max(0, width - insets.left - insets.right);
   const coverImageHeight = contentWidth / HOME_IMAGE_ASPECT_RATIO;
   const styleSheet = styles(colors, isWide);
+  const reviewCardWidth: ActionCardWidth = "100%";
   const [showAllCoreTopics, setShowAllCoreTopics] = useState(false);
   const [showAllStates, setShowAllStates] = useState(false);
 
@@ -408,6 +571,10 @@ export const HomeScreen = memo(() => {
     [appIds.subscriptions.practiceOverview],
     "HomeScreen",
   ) as PracticeOverview;
+  const categoryProgress = useSubscription(
+    [appIds.subscriptions.practiceCategoryProgress],
+    "HomeScreen",
+  ) as PracticeCategoryProgress;
   const categories = useSubscription(
     [appIds.subscriptions.questionsCategories],
     "HomeScreen",
@@ -424,11 +591,10 @@ export const HomeScreen = memo(() => {
     [appIds.subscriptions.practiceGlobalIndex],
     "HomeScreen",
   );
-  const practiceLearnGlobalIndex = useSubscription(
-    [appIds.subscriptions.practiceLearnGlobalIndex],
+  const selectedLand = useSubscription(
+    [appIds.subscriptions.preferencesSelectedLand],
     "HomeScreen",
-  );
-
+  ) as FederalLand | null;
   const openCategory = useCallback(
     (category: CategorySelection) => {
       runtime.dispatch([appIds.events.navigationCategorySelected, category]);
@@ -473,9 +639,16 @@ export const HomeScreen = memo(() => {
   const visibleCoreTopics = showAllCoreTopics
     ? orderedCoreTopics
     : orderedCoreTopics.slice(0, 3);
+  const orderedStates = [...(federalStates?.items ?? [])].sort(
+    ([left], [right]) => {
+      if (left === selectedLand) return -1;
+      if (right === selectedLand) return 1;
+      return 0;
+    },
+  );
   const visibleStates = showAllStates
-    ? (federalStates?.items ?? [])
-    : (federalStates?.items ?? []).slice(0, 3);
+    ? orderedStates
+    : orderedStates.slice(0, 3);
 
   return (
     <View style={styleSheet.root}>
@@ -515,20 +688,13 @@ export const HomeScreen = memo(() => {
           <HeroGradient colors={colors} />
           <View style={styleSheet.progressTopRow}>
             <ProgressRing
+              answered={overview.totalAnswered}
               colors={colors}
               correct={overview.correct}
               incorrect={overview.incorrect}
               totalQuestions={overview.totalQuestions}
-              value={overview.progress}
             />
             <View style={styleSheet.progressStats}>
-              <ProgressStat
-                colors={colors}
-                icon={<CheckCircleIcon color={colors.heroTextColor} />}
-                label="Correct answers"
-                value={overview.correct}
-              />
-              <View style={styleSheet.progressDivider} />
               <ProgressStat
                 colors={colors}
                 icon={<TargetIcon color={colors.heroTextColor} />}
@@ -544,106 +710,118 @@ export const HomeScreen = memo(() => {
               />
             </View>
           </View>
-          <TouchableOpacity
-            accessibilityRole="button"
-            activeOpacity={0.84}
-            onPress={handlePrimaryAction}
-            style={styleSheet.continueButton}
-          >
-            <PlayIcon color={colors.primaryColor} />
-            <Text style={styleSheet.continueText}>
-              {canResume ? "Continue Practice" : "Start Practice"}
-            </Text>
-          </TouchableOpacity>
+          <View style={styleSheet.progressActions}>
+            <TouchableOpacity
+              accessibilityLabel="Study questions"
+              accessibilityRole="button"
+              activeOpacity={0.84}
+              onPress={openLearnMode}
+              style={[styleSheet.continueButton, styleSheet.studyButton]}
+            >
+              <BookOpenIcon color={colors.heroTextColor} size={19} />
+              <Text style={styleSheet.studyText}>Study</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              accessibilityRole="button"
+              activeOpacity={0.84}
+              onPress={handlePrimaryAction}
+              style={styleSheet.continueButton}
+            >
+              <PlayIcon color={colors.primaryColor} />
+              <Text style={styleSheet.continueText}>
+                {canResume ? "Continue Practice" : "Start Practice"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styleSheet.content}>
           <View style={styleSheet.sectionHeader}>
-            <Text style={styleSheet.sectionTitle}>Practice Modes</Text>
+            <Text style={styleSheet.sectionTitle}>Review</Text>
           </View>
-
-          <View style={styleSheet.actionGrid}>
+          <View style={styleSheet.reviewGrid}>
             <ActionCard
               colors={colors}
-              detail={
-                practiceLearnGlobalIndex === null
-                  ? "Answers shown"
-                  : "Continue learning"
-              }
-              icon={<BookOpenIcon color={colors.blueColor} />}
-              onPress={openLearnMode}
-              title="Learn"
-              tone={{
-                backgroundColor: colors.blueLight,
-                color: colors.blueColor,
-              }}
-              width="100%"
-            />
-            <ActionCard
-              colors={colors}
-              detail="33 questions"
-              icon={<ExamIcon color={colors.primaryColor} />}
-              onPress={() => openCategory("test")}
-              title="Mock Exam"
-              tone={{
-                backgroundColor: colors.primaryPale,
-                color: colors.primaryColor,
-              }}
-              width="48.2%"
-            />
-            <ActionCard
-              colors={colors}
-              detail={`${favoriteCount} questions`}
+              count={favoriteCount}
               disabled={favoriteCount === 0}
-              icon={<BookmarkIcon color={colors.yellowColor} />}
+              icon={
+                <BookmarkIcon
+                  color={colors.primaryTextColor}
+                  size={isWide ? 34 : 30}
+                />
+              }
               onPress={() => openCategory("favorites")}
+              isWide={isWide}
               title="Saved Questions"
               tone={{
-                backgroundColor: colors.yellowLight,
-                color: colors.yellowColor,
+                accentColor: colors.orangeColor,
+                iconColor: colors.orangeColor,
               }}
-              width="48.2%"
+              width={reviewCardWidth}
             />
             <ActionCard
               colors={colors}
-              detail={`${wrongCount} questions`}
+              count={wrongCount}
               disabled={wrongCount === 0}
-              icon={<ReviewIcon color={colors.errorColor} />}
+              icon={
+                <XCircleIcon
+                  color={colors.primaryTextColor}
+                  size={isWide ? 35 : 31}
+                />
+              }
               onPress={() => openCategory("wrong")}
-              title="Incorrect Questions"
+              isWide={isWide}
+              title="Mistakes"
               tone={{
-                backgroundColor: colors.redLight,
-                color: colors.errorColor,
+                accentColor: colors.errorColor,
+                iconColor: colors.errorColor,
               }}
-              width="48.2%"
+              width={reviewCardWidth}
+            />
+          </View>
+
+          <View style={styleSheet.sectionBlock}>
+            <View style={styleSheet.sectionHeader}>
+              <Text style={styleSheet.sectionTitle}>Mock Exam</Text>
+            </View>
+            <MockExamCard
+              colors={colors}
+              isWide={isWide}
+              onPress={() => openCategory("test")}
             />
           </View>
 
           {coreTopics && (
             <View style={styleSheet.sectionBlock}>
               <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>Core Topics</Text>
+                <Text style={styleSheet.sectionTitle}>Focus Areas</Text>
                 <TouchableOpacity
                   accessibilityRole="button"
                   onPress={() => setShowAllCoreTopics((visible) => !visible)}
                   style={styleSheet.seeAllButton}
                 >
                   <Text style={styleSheet.seeAllText}>
-                    {showAllCoreTopics ? "Show less" : "See all"}
+                    {showAllCoreTopics ? "Show less" : "View all"}
                   </Text>
-                  <ChevronRight color={colors.primaryColor} size={17} />
                 </TouchableOpacity>
               </View>
               <View style={styleSheet.topicListCard}>
                 {visibleCoreTopics.map(([category, count], index) => (
                   <TopicRow
                     category={category}
-                    count={count}
                     divider={index > 0}
                     index={index}
                     key={category}
                     colors={colors}
+                    isWide={isWide}
                     onPress={() => openCategory(category)}
+                    progress={
+                      categoryProgress[category] ?? {
+                        answered: 0,
+                        total: count,
+                        progress: 0,
+                      }
+                    }
                   />
                 ))}
               </View>
@@ -660,26 +838,31 @@ export const HomeScreen = memo(() => {
                   style={styleSheet.seeAllButton}
                 >
                   <Text style={styleSheet.seeAllText}>
-                    {showAllStates ? "Show less" : "See all"}
+                    {showAllStates ? "Show less" : "View all"}
                   </Text>
-                  <ChevronRight color={colors.primaryColor} size={17} />
                 </TouchableOpacity>
               </View>
-              <ScrollView
-                contentContainerStyle={styleSheet.statesRow}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-              >
-                {visibleStates.map(([category, count]) => (
-                  <StateCard
+              <View style={styleSheet.topicListCard}>
+                {visibleStates.map(([category, count], index) => (
+                  <StateRow
                     category={category}
-                    count={count}
+                    divider={index > 0}
+                    index={index}
                     key={category}
                     colors={colors}
+                    isWide={isWide}
                     onPress={() => openCategory(category)}
+                    selected={selectedLand === category}
+                    progress={
+                      categoryProgress[category] ?? {
+                        answered: 0,
+                        total: count,
+                        progress: 0,
+                      }
+                    }
                   />
                 ))}
-              </ScrollView>
+              </View>
             </View>
           )}
         </View>
@@ -703,16 +886,9 @@ const staticStyles = StyleSheet.create({
   },
   progressValue: {
     color: "#FFFFFF",
-    fontSize: 30,
-    lineHeight: 35,
+    fontSize: 24,
+    lineHeight: 29,
     fontWeight: "800",
-  },
-  progressLabel: {
-    color: "rgba(255,255,255,0.9)",
-    fontSize: 11,
-    lineHeight: 15,
-    fontWeight: "600",
-    textAlign: "center",
   },
 });
 
@@ -821,50 +997,67 @@ const styles = (colors: Colors, isWide = false) =>
       backgroundColor: "rgba(255,255,255,0.18)",
       marginVertical: 12,
     },
+    progressActions: {
+      flexDirection: "row",
+      gap: isWide ? 12 : 8,
+      marginTop: 18,
+    },
     continueButton: {
+      flex: 1,
       minHeight: 52,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
-      gap: 7,
-      marginTop: 18,
+      gap: isWide ? 7 : 5,
+      paddingHorizontal: isWide ? 12 : 7,
       borderRadius: 17,
       backgroundColor: colors.surfaceColor,
     },
+    studyButton: {
+      backgroundColor: "rgba(255,255,255,0.14)",
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.32)",
+    },
+    studyText: {
+      color: colors.heroTextColor,
+      fontSize: isWide ? 16 : 14,
+      lineHeight: isWide ? 21 : 18,
+      fontWeight: "800",
+    },
     continueText: {
       color: colors.primaryColor,
-      fontSize: 16,
-      lineHeight: 21,
+      fontSize: isWide ? 16 : 13.5,
+      lineHeight: isWide ? 21 : 18,
       fontWeight: "800",
+      textAlign: "center",
     },
     content: {
       width: "100%",
       maxWidth: 900,
       alignSelf: "center",
       paddingHorizontal: isWide ? 28 : 18,
+      paddingTop: isWide ? 24 : 22,
     },
     sectionBlock: {
-      marginTop: 28,
+      marginTop: isWide ? 24 : 22,
     },
     sectionHeader: {
-      minHeight: 31,
+      minHeight: isWide ? 27 : 25,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginTop: 28,
-      marginBottom: 12,
+      marginBottom: isWide ? 10 : 8,
     },
     sectionTitle: {
       color: colors.textColor,
-      fontSize: isWide ? 21 : 20,
-      lineHeight: isWide ? 26 : 25,
-      fontWeight: "800",
-      letterSpacing: -0.35,
+      fontSize: isWide ? 19 : 18,
+      lineHeight: isWide ? 24 : 23,
+      fontWeight: "500",
+      letterSpacing: -0.2,
     },
     seeAllButton: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 1,
       paddingVertical: 5,
       paddingLeft: 8,
     },
@@ -874,57 +1067,175 @@ const styles = (colors: Colors, isWide = false) =>
       lineHeight: 18,
       fontWeight: "700",
     },
-    actionGrid: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 10,
+    reviewGrid: {
+      flexDirection: "column",
+      gap: isWide ? 12 : 10,
     },
     actionCard: {
-      minHeight: isWide ? 80 : 76,
+      minHeight: isWide ? 94 : 82,
       flexDirection: "row",
-      alignItems: "center",
-      paddingHorizontal: isWide ? 14 : 10,
-      paddingVertical: isWide ? 10 : 8,
-      borderRadius: 15,
+      alignItems: "flex-start",
+      paddingHorizontal: isWide ? 18 : 8,
+      paddingVertical: isWide ? 15 : 10,
+      borderRadius: isWide ? 22 : 16,
       backgroundColor: colors.surfaceColor,
       borderWidth: 1,
       borderColor: colors.borderColor,
       shadowColor: colors.shadowColor,
-      shadowOffset: { width: 0, height: 5 },
-      shadowOpacity: 0.12,
-      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 7 },
+      shadowOpacity: 0.1,
+      shadowRadius: 16,
       elevation: 3,
+    },
+    actionCardCentered: {
+      alignItems: "center",
     },
     disabledCard: {
       backgroundColor: colors.disabledBg,
       borderColor: colors.disabledBg,
       opacity: 0.78,
     },
-    actionIconWrap: {
-      marginRight: isWide ? 10 : 8,
-    },
     actionIcon: {
-      width: isWide ? 42 : 36,
-      height: isWide ? 42 : 36,
-      borderRadius: 11,
+      width: isWide ? 54 : 44,
+      height: isWide ? 54 : 44,
+      borderRadius: isWide ? 17 : 13,
       alignItems: "center",
       justifyContent: "center",
+      alignSelf: "center",
+      marginRight: isWide ? 12 : 10,
     },
     actionCopy: {
       flex: 1,
       minWidth: 0,
     },
-    actionTitle: {
-      color: colors.textColor,
-      fontSize: isWide ? 15 : 13,
-      lineHeight: isWide ? 19 : 17,
-      fontWeight: "700",
+    actionCopyCentered: {
+      flex: 1,
+      minWidth: 0,
+      alignSelf: "stretch",
+      alignItems: "flex-start",
+      justifyContent: "center",
     },
-    actionDetail: {
+    actionTitleCentered: {
+      color: colors.textColor,
+      fontSize: isWide ? 18 : 15.5,
+      lineHeight: isWide ? 23 : 20,
+      fontWeight: "800",
+      textAlign: "left",
+      letterSpacing: -0.2,
+    },
+    actionCount: {
+      width: isWide ? 48 : 30,
+      minWidth: isWide ? 48 : 30,
+      height: isWide ? 48 : 30,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: isWide ? 15 : 8,
+      marginLeft: isWide ? 14 : 0,
+      paddingHorizontal: isWide ? 9 : 0,
+      borderWidth: 1,
+      borderColor: colors.borderColor,
+      position: "relative",
+      alignSelf: "center",
+    },
+    actionCountText: {
+      fontSize: isWide ? 18 : 13,
+      lineHeight: isWide ? 23 : 16,
+      fontWeight: "800",
+    },
+    actionArrow: {
+      width: isWide ? 22 : 18,
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+    },
+    mockExamCard: {
+      minHeight: isWide ? 112 : 166,
+      flexDirection: isWide ? "row" : "column",
+      alignItems: isWide ? "center" : "stretch",
+      gap: isWide ? 22 : 16,
+      paddingHorizontal: isWide ? 22 : 18,
+      paddingVertical: isWide ? 17 : 18,
+      borderRadius: isWide ? 22 : 19,
+      backgroundColor: colors.surfaceColor,
+      borderWidth: 1,
+      borderColor: colors.borderColor,
+      shadowColor: colors.shadowColor,
+      shadowOffset: { width: 0, height: 7 },
+      shadowOpacity: 0.1,
+      shadowRadius: 16,
+      elevation: 3,
+    },
+    mockExamLeading: {
+      flex: 1,
+      minWidth: 0,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    mockExamIcon: {
+      width: isWide ? 64 : 58,
+      height: isWide ? 64 : 58,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: isWide ? 32 : 29,
+      backgroundColor: colors.primaryPale,
+    },
+    mockExamClock: {
+      position: "absolute",
+      right: -3,
+      bottom: -3,
+      width: 23,
+      height: 23,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 12,
+      backgroundColor: colors.surfaceColor,
+    },
+    mockExamCopy: {
+      flex: 1,
+      minWidth: 0,
+      marginLeft: isWide ? 18 : 14,
+    },
+    mockExamTitle: {
+      color: colors.textColor,
+      fontSize: isWide ? 20 : 18,
+      lineHeight: isWide ? 25 : 23,
+      fontWeight: "800",
+      letterSpacing: -0.25,
+    },
+    mockExamMeta: {
+      flexDirection: "row",
+      alignItems: "center",
+      flexWrap: "wrap",
+      gap: 9,
+      marginTop: 7,
+    },
+    mockExamDetail: {
       color: colors.textMutedColor,
-      fontSize: isWide ? 12 : 11,
-      lineHeight: 15,
-      marginTop: 2,
+      fontSize: isWide ? 14 : 13,
+      lineHeight: isWide ? 19 : 18,
+    },
+    mockExamDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: colors.accentColor,
+    },
+    mockExamButton: {
+      minHeight: 50,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+      alignSelf: isWide ? "auto" : "stretch",
+      paddingHorizontal: isWide ? 28 : 20,
+      borderRadius: 25,
+      backgroundColor: colors.primaryColor,
+    },
+    mockExamButtonText: {
+      color: colors.primaryTextColor,
+      fontSize: isWide ? 17 : 16,
+      lineHeight: isWide ? 22 : 21,
+      fontWeight: "800",
     },
     topicListCard: {
       overflow: "hidden",
@@ -939,88 +1250,96 @@ const styles = (colors: Colors, isWide = false) =>
       elevation: 2,
     },
     topicRow: {
-      minHeight: 76,
+      minHeight: isWide ? 86 : 80,
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: isWide ? 17 : 13,
-      paddingVertical: 11,
+      paddingHorizontal: isWide ? 19 : 14,
+      paddingVertical: isWide ? 14 : 12,
     },
     topicRowDivider: {
       borderTopWidth: 1,
       borderTopColor: colors.borderColor,
     },
+    stateSelectedRow: {
+      backgroundColor: colors.primaryPale,
+      borderLeftWidth: 3,
+      borderLeftColor: colors.primaryColor,
+    },
     topicIcon: {
-      width: isWide ? 45 : 40,
-      height: isWide ? 45 : 40,
-      borderRadius: 13,
+      width: isWide ? 54 : 48,
+      height: isWide ? 54 : 48,
+      borderRadius: isWide ? 27 : 24,
       alignItems: "center",
       justifyContent: "center",
-      marginRight: isWide ? 13 : 11,
+      marginRight: isWide ? 16 : 13,
     },
     topicCopy: {
       flex: 1,
       minWidth: 0,
+      marginRight: isWide ? 16 : 12,
     },
     topicTitle: {
       color: colors.textColor,
-      fontSize: isWide ? 16 : 14,
-      lineHeight: isWide ? 21 : 19,
+      fontSize: isWide ? 16 : 15,
+      lineHeight: isWide ? 21 : 20,
       fontWeight: "700",
+    },
+    stateTitleRow: {
+      minWidth: 0,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: isWide ? 8 : 6,
+    },
+    stateTitleText: {
+      flex: 1,
+      minWidth: 0,
+    },
+    stateSelectedTitle: {
+      color: colors.primaryColor,
+    },
+    stateSelectedBadge: {
+      flexShrink: 0,
+      paddingHorizontal: isWide ? 8 : 6,
+      paddingVertical: 3,
+      borderRadius: 9,
+      backgroundColor: colors.primaryColor,
+    },
+    stateSelectedBadgeText: {
+      color: colors.primaryTextColor,
+      fontSize: isWide ? 10 : 9,
+      lineHeight: isWide ? 13 : 12,
+      fontWeight: "800",
+      letterSpacing: 0.15,
+    },
+    topicProgressRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: isWide ? 7 : 5,
+      marginTop: 8,
+    },
+    topicProgressTrack: {
+      flex: 1,
+      height: 8,
+      overflow: "hidden",
+      borderRadius: 4,
+      backgroundColor: colors.surfaceSoftColor,
+    },
+    topicProgressFill: {
+      height: "100%",
+      borderRadius: 4,
+      backgroundColor: colors.accentColor,
     },
     topicCount: {
       color: colors.textMutedColor,
       fontSize: isWide ? 13 : 12,
       lineHeight: 17,
-      marginTop: 2,
+      minWidth: isWide ? 48 : 42,
+      textAlign: "right",
     },
-    statesRow: {
-      gap: 12,
-      paddingHorizontal: 3,
-      paddingBottom: 3,
-    },
-    stateCard: {
-      width: isWide ? 132 : 108,
-      minHeight: 139,
-      alignItems: "center",
-      justifyContent: "flex-start",
-      paddingHorizontal: 7,
-      paddingTop: 5,
-    },
-    stateBadge: {
-      width: isWide ? 78 : 70,
-      height: isWide ? 78 : 70,
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 39,
-      backgroundColor: colors.surfaceColor,
-      borderWidth: 1,
-      borderColor: colors.borderColor,
-      shadowColor: colors.shadowColor,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.15,
-      shadowRadius: 9,
-      elevation: 3,
-    },
-    stateBadgeText: {
-      color: colors.primaryColor,
-      fontSize: isWide ? 20 : 17,
-      lineHeight: 24,
-      fontWeight: "900",
-      letterSpacing: 0.7,
-    },
-    stateTitle: {
-      color: colors.primaryColor,
-      fontSize: isWide ? 13 : 11,
-      lineHeight: isWide ? 17 : 14,
-      fontWeight: "700",
-      textAlign: "center",
-      marginTop: 8,
-    },
-    stateCount: {
-      color: colors.primaryColor,
-      fontSize: 12,
-      lineHeight: 16,
-      fontWeight: "700",
-      marginTop: 2,
+    stateIconText: {
+      fontSize: isWide ? 15 : 13,
+      lineHeight: isWide ? 19 : 17,
+      fontWeight: "800",
+      letterSpacing: 0.4,
     },
   });

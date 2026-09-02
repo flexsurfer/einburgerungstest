@@ -62,6 +62,18 @@ export const ChevronRight = ({ color, size = 18 }: IconProps) => (
   </Svg>
 );
 
+export const ArrowRight = ({ color, size = 20 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M5 12h14M14 7l5 5-5 5"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
 export const ChevronUp = ({ color, size = 22 }: IconProps) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Path
@@ -246,6 +258,43 @@ export const BookOpenIcon = ({ color, size = 24 }: IconProps) => (
       d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5v-16ZM21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"
       stroke={color}
       strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const EditIcon = ({ color, size = 24 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M13.5 5.5 18.5 10.5M4 20h4.2L19.4 8.8a2 2 0 0 0 0-2.8L18 4.6a2 2 0 0 0-2.8 0L4 15.8V20Z"
+      stroke={color}
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
+export const XCircleIcon = ({ color, size = 24 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx="12" cy="12" r="9" stroke={color} strokeWidth={1.9} />
+    <Path
+      d="m9 9 6 6M15 9l-6 6"
+      stroke={color}
+      strokeWidth={2.1}
+      strokeLinecap="round"
+    />
+  </Svg>
+);
+
+export const ClockIcon = ({ color, size = 21 }: IconProps) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Circle cx="12" cy="12" r="9" stroke={color} strokeWidth={1.9} />
+    <Path
+      d="M12 7v5l3.5 2"
+      stroke={color}
+      strokeWidth={1.9}
       strokeLinecap="round"
       strokeLinejoin="round"
     />

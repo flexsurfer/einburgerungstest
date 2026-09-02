@@ -164,4 +164,40 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       };
     },
   );
+
+  registrar.regSub(
+    appIds.subscriptions.practiceCategoryProgress,
+    () => [
+      [appIds.subscriptions.questionsItems],
+      [appIds.subscriptions.practiceUserAnswers],
+    ],
+    ([questions, userAnswers]) => {
+      const categoryProgress: Record<
+        string,
+        { answered: number; total: number; progress: number }
+      > = {};
+
+      for (const question of questions) {
+        const current = categoryProgress[question.category] ?? {
+          answered: 0,
+          total: 0,
+          progress: 0,
+        };
+        current.total += 1;
+        if (userAnswers[question.globalIndex] !== undefined) {
+          current.answered += 1;
+        }
+        categoryProgress[question.category] = current;
+      }
+
+      for (const progress of Object.values(categoryProgress)) {
+        progress.progress =
+          progress.total === 0
+            ? 0
+            : Math.round((progress.answered / progress.total) * 100);
+      }
+
+      return categoryProgress;
+    },
+  );
 };

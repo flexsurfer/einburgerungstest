@@ -243,6 +243,15 @@ describe("Uklad shared domain graph", () => {
       progress: 50,
     });
     expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.practiceCategoryProgress,
+      ]),
+    ).toEqual({
+      Bayern: { answered: 0, total: 1, progress: 0 },
+      Geschichte: { answered: 0, total: 1, progress: 0 },
+      Politik: { answered: 1, total: 1, progress: 100 },
+    });
+    expect(
       harness.getSubscriptionValue([appIds.subscriptions.practiceStatistics]),
     ).toEqual({
       correct: 0,

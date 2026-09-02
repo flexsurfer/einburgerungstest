@@ -120,6 +120,7 @@ export const appIds = {
     practiceIsFavoriteByGlobalIndex: "practice/is-favorite-by-global-index",
     practiceStatistics: "practice/statistics",
     practiceOverview: "practice/overview",
+    practiceCategoryProgress: "practice/category-progress",
     navigationSelectedCategoryCount: "navigation/selected-category-count",
     navigationCurrentQuestion: "navigation/current-question",
     navigationQuestionPickerItems: "navigation/question-picker-items",

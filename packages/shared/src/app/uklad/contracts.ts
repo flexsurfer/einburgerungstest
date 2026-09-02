@@ -79,6 +79,14 @@ export interface PracticeOverview {
   progress: number;
 }
 
+export interface CategoryProgress {
+  answered: number;
+  total: number;
+  progress: number;
+}
+
+export type PracticeCategoryProgress = Record<string, CategoryProgress>;
+
 export interface QuestionPickerItem {
   key: number;
   className: string;
@@ -293,6 +301,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.practiceOverview]: {
       params: [];
       result: PracticeOverview;
+    };
+    [appIds.subscriptions.practiceCategoryProgress]: {
+      params: [];
+      result: PracticeCategoryProgress;
     };
     [appIds.subscriptions.navigationSelectedCategoryCount]: {
       params: [];
