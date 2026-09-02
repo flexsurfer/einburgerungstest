@@ -9,6 +9,7 @@ export const stateKeys = {
   uiShowAnswers: "uiShowAnswers",
 
   preferencesSelectedLanguage: "preferencesSelectedLanguage",
+  preferencesSelectedLand: "preferencesSelectedLand",
   preferencesTheme: "preferencesTheme",
   preferencesUseSystemTheme: "preferencesUseSystemTheme",
 
@@ -50,6 +51,7 @@ export const appIds = {
     navigationSettingsOpened: "navigation/settings-opened",
     navigationPracticeResumed: "navigation/practice-resumed",
     preferencesLanguageSelected: "preferences/language-selected",
+    preferencesLandSelected: "preferences/land-selected",
     preferencesThemeSelected: "preferences/theme-selected",
     preferencesThemeToggled: "preferences/theme-toggled",
     uiScrollToTop: "ui/scroll-to-top",
@@ -95,6 +97,7 @@ export const appIds = {
     vocabularyRendered: "vocabulary/rendered",
 
     preferencesSelectedLanguage: "preferences/selected-language",
+    preferencesSelectedLand: "preferences/selected-land",
     preferencesTheme: "preferences/theme",
     preferencesUseSystemTheme: "preferences/use-system-theme",
     preferencesThemeSelection: "preferences/theme-selection",

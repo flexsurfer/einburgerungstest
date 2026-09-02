@@ -1,7 +1,9 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
-import { isPracticeQuestion } from "../questions/state.js";
-import { selectPracticeQuestions } from "./selection.js";
+import {
+  isSelectedPracticeQuestion,
+  selectPracticeQuestions,
+} from "./selection.js";
 
 export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
@@ -44,14 +46,23 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       [appIds.subscriptions.practiceFavorites],
       [appIds.subscriptions.practiceUserAnswers],
       [appIds.subscriptions.testSessionQuestions],
+      [appIds.subscriptions.preferencesSelectedLand],
     ],
-    ([questions, selectedCategory, favorites, userAnswers, testQuestions]) =>
+    ([
+      questions,
+      selectedCategory,
+      favorites,
+      userAnswers,
+      testQuestions,
+      selectedLand,
+    ]) =>
       selectPracticeQuestions({
         questionsItems: questions,
         navigationSelectedCategory: selectedCategory,
         practiceFavorites: favorites,
         practiceUserAnswers: userAnswers,
         testSessionQuestions: testQuestions,
+        preferencesSelectedLand: selectedLand,
       }),
   );
 
@@ -117,9 +128,12 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
     () => [
       [appIds.subscriptions.questionsItems],
       [appIds.subscriptions.practiceUserAnswers],
+      [appIds.subscriptions.preferencesSelectedLand],
     ],
-    ([questions, userAnswers]) => {
-      const practiceQuestions = questions.filter(isPracticeQuestion);
+    ([questions, userAnswers, selectedLand]) => {
+      const practiceQuestions = questions.filter((question) =>
+        isSelectedPracticeQuestion(question, selectedLand),
+      );
       const answeredQuestions = practiceQuestions.filter(
         (question) => userAnswers[question.globalIndex] !== undefined,
       );

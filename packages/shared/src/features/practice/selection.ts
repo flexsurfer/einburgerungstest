@@ -1,5 +1,6 @@
 import type {
   CategorySelection,
+  FederalLand,
   Question,
   UserAnswers,
 } from "../../app/uklad/contracts.js";
@@ -12,14 +13,22 @@ export interface PracticeSelectionState {
   readonly practiceFavorites: readonly number[];
   readonly practiceUserAnswers: Readonly<UserAnswers>;
   readonly testSessionQuestions: readonly Question[];
+  readonly preferencesSelectedLand: FederalLand | null;
+}
+
+/** Return whether a question belongs to the personalized practice pool. */
+export function isSelectedPracticeQuestion(
+  question: Question,
+  selectedLand: FederalLand | null,
+): boolean {
+  return isPracticeQuestion(question) || question.category === selectedLand;
 }
 
 /**
  * Select questions for the existing navigation categories.
  *
- * The unscoped practice pool deliberately contains only the 300 general
- * questions. Explicit Länder categories remain available for the current
- * catalogue browser until Learn gets its own navigation surface.
+ * The unscoped practice pool contains the 300 general questions plus all ten
+ * questions for the user's selected Land.
  */
 export function selectPracticeQuestions(
   state: PracticeSelectionState,
@@ -42,7 +51,11 @@ export function selectPracticeQuestions(
     });
   }
 
-  if (selectedCategory === null) return practiceQuestions.filter(isPracticeQuestion);
+  if (selectedCategory === null) {
+    return practiceQuestions.filter((question) =>
+      isSelectedPracticeQuestion(question, state.preferencesSelectedLand),
+    );
+  }
 
   // Preserve direct category browsing, including Länder, while the app is
   // still using one question screen for both the catalogue and practice.

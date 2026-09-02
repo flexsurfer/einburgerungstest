@@ -88,6 +88,59 @@ describe("generateTest", () => {
   };
   const mockUsed = { Topic1: { 1: true, 2: true }, Topic2: {} };
 
+  it("appends exactly three questions from the selected Land", () => {
+    const general = Array.from({ length: 30 }, (_, index) => ({
+      id: index + 1,
+      globalIndex: index + 1,
+      category: "General",
+    }));
+    const bayern = Array.from({ length: 10 }, (_, index) => ({
+      id: index + 31,
+      globalIndex: index + 31,
+      category: "Bayern",
+    }));
+    const hessen = Array.from({ length: 10 }, (_, index) => ({
+      id: index + 41,
+      globalIndex: index + 41,
+      category: "Hessen",
+    }));
+    const draftDb = {
+      [stateKeys.questionsCategories]: [
+        { title: "Themes", items: [["General", 30]] },
+        {
+          title: "Bundesländer",
+          items: [
+            ["Bayern", 10],
+            ["Hessen", 10],
+          ],
+        },
+      ],
+      [stateKeys.questionsItems]: [...general, ...bayern, ...hessen],
+      [stateKeys.preferencesSelectedLand]: "Bayern",
+      [stateKeys.testSessionUsedQuestions]: {},
+      [stateKeys.testSessionQuestions]: [],
+      [stateKeys.testSessionAnswers]: {},
+    };
+
+    generateTest(draftDb, 30, () => 0.5);
+
+    expect(draftDb[stateKeys.testSessionQuestions]).toHaveLength(33);
+    expect(
+      draftDb[stateKeys.testSessionQuestions]
+        .slice(0, 30)
+        .every((question) => question.category === "General"),
+    ).toBe(true);
+    expect(
+      draftDb[stateKeys.testSessionQuestions]
+        .slice(30)
+        .every((question) => question.category === "Bayern"),
+    ).toBe(true);
+    expect(draftDb[stateKeys.testSessionUsedQuestions].Bayern).toBeDefined();
+    expect(
+      Object.keys(draftDb[stateKeys.testSessionUsedQuestions].Bayern),
+    ).toHaveLength(3);
+  });
+
   it("generates test with fresh questions", () => {
     const draftDb = createMockDraftDb(mockQuestions, mockUsed);
     generateTest(draftDb, 4);

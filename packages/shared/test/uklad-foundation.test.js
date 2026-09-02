@@ -34,6 +34,7 @@ describe("Uklad application foundation", () => {
     expect(firstState[stateKeys.questionsItems]).toEqual([]);
     expect(firstState[stateKeys.navigationCurrentQuestionIndex]).toBe(0);
     expect(firstState[stateKeys.navigationActiveScreen]).toBe("home");
+    expect(firstState[stateKeys.preferencesSelectedLand]).toBeNull();
     expect(first.runtimeId).toBe("foundation-first");
     expect(second.runtimeId).toBe("foundation-second");
   });

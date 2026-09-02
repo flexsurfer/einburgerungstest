@@ -557,7 +557,7 @@ export const HomeScreen = memo(() => {
           <View style={styleSheet.actionGrid}>
             <ActionCard
               colors={colors}
-              detail="30 questions"
+              detail="33 questions"
               icon={<ExamIcon color={colors.primaryColor} />}
               onPress={() => openCategory("test")}
               title="Mock Exam"

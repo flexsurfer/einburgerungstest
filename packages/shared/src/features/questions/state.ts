@@ -1,29 +1,13 @@
 import { stateKeys } from "../../app/uklad/catalog.js";
-import type {
-  AppError,
-  CategoryGroup,
-  Question,
-  QuestionInput,
+import {
+  FEDERAL_LANDS,
+  type AppError,
+  type CategoryGroup,
+  type Question,
+  type QuestionInput,
 } from "../../app/uklad/contracts.js";
 
-const federalStates: ReadonlySet<string> = new Set([
-  "Baden-Württemberg",
-  "Bayern",
-  "Berlin",
-  "Brandenburg",
-  "Bremen",
-  "Hamburg",
-  "Hessen",
-  "Mecklenburg-Vorpommern",
-  "Niedersachsen",
-  "Nordrhein-Westfalen",
-  "Rheinland-Pfalz",
-  "Saarland",
-  "Sachsen",
-  "Sachsen-Anhalt",
-  "Schleswig-Holstein",
-  "Thüringen",
-]);
+const federalStates: ReadonlySet<string> = new Set(FEDERAL_LANDS);
 
 /** Return whether a question belongs to a German federal state. */
 export function isFederalState(category: string): boolean {

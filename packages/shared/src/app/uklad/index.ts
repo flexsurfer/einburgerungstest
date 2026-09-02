@@ -34,6 +34,7 @@ export type {
   ColorScheme,
   DataKind,
   Favorites,
+  FederalLand,
   HttpMethod,
   NavigationScreen,
   PracticeOverview,
@@ -49,3 +50,4 @@ export type {
   UserAnswers,
   VocabularyData,
 } from "./contracts.js";
+export { FEDERAL_LANDS } from "./contracts.js";

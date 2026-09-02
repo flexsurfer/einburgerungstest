@@ -25,6 +25,7 @@ import { QuestionView } from "./components/QuestionView";
 import { Header } from "./components/Header";
 import { HomeScreen } from "./components/HomeScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
+import { OnboardingScreen } from "./components/OnboardingScreen";
 import { AppBackground } from "./components/AppBackground";
 
 export interface AppProps {
@@ -48,6 +49,10 @@ export function AppContent({
     [appIds.subscriptions.navigationActiveScreen],
     "App",
   );
+  const selectedLand = useSubscription(
+    [appIds.subscriptions.preferencesSelectedLand],
+    "App",
+  );
   const themeColors = useColors();
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
@@ -65,9 +70,22 @@ export function AppContent({
     }).start();
   }, [activeScreen, screenProgress]);
 
+  const styleSheet = styles(themeColors, insets);
   if (!questionsLoaded) return null;
 
-  const styleSheet = styles(themeColors, insets);
+  if (selectedLand === null) {
+    return (
+      <View
+        pointerEvents={interactive ? "auto" : "none"}
+        style={styleSheet.appContainer}
+      >
+        <StatusBar animated />
+        <AppBackground />
+        <OnboardingScreen />
+      </View>
+    );
+  }
+
   const translateY = screenProgress.interpolate({
     inputRange: [0, 1, 2],
     outputRange: [0, -height, -height * 2],

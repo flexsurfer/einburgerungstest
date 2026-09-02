@@ -11,8 +11,13 @@ import {
 } from "@ukladjs/persist";
 import type { UkladRuntime } from "@ukladjs/core/vanilla";
 import { stateKeys } from "./catalog.js";
-import type { AppContracts } from "./contracts.js";
-import type { Favorites, Theme, UserAnswers } from "./contracts.js";
+import { FEDERAL_LANDS, type AppContracts } from "./contracts.js";
+import type {
+  Favorites,
+  FederalLand,
+  Theme,
+  UserAnswers,
+} from "./contracts.js";
 import {
   createLegacyCompatibleAsyncStorage,
   createLegacyCompatibleSyncStorage,
@@ -106,6 +111,14 @@ function deserializeUseSystemTheme(data: unknown): boolean {
   throw new Error("useSystemTheme must be a boolean");
 }
 
+function deserializeSelectedLand(data: unknown): FederalLand | null {
+  if (data === null) return null;
+  if (typeof data === "string" && FEDERAL_LANDS.includes(data as FederalLand)) {
+    return data as FederalLand;
+  }
+  throw new Error("selectedLand must be a German federal state or null");
+}
+
 function deserializePracticeGlobalIndex(data: unknown): number | null {
   if (data === null) return null;
   if (typeof data === "number" && Number.isInteger(data) && data > 0) {
@@ -136,6 +149,12 @@ const useSystemThemeKey: PersistedKey<
   deserialize: deserializeUseSystemTheme,
 };
 
+const selectedLandKey: PersistedKey<typeof stateKeys.preferencesSelectedLand> =
+  {
+    key: stateKeys.preferencesSelectedLand,
+    deserialize: deserializeSelectedLand,
+  };
+
 const practiceGlobalIndexKey: PersistedKey<
   typeof stateKeys.practiceGlobalIndex
 > = {
@@ -150,6 +169,7 @@ export const appPersistenceKeys = Object.freeze({
   practiceGlobalIndex: practiceGlobalIndexKey,
   preferencesTheme: themeKey,
   preferencesUseSystemTheme: useSystemThemeKey,
+  preferencesSelectedLand: selectedLandKey,
 });
 
 /** Return the domain roots that are durable on every execution platform. */
@@ -162,6 +182,7 @@ export function getAppPersistenceKeys(
     appPersistenceKeys.practiceGlobalIndex,
     appPersistenceKeys.preferencesTheme,
     appPersistenceKeys.preferencesUseSystemTheme,
+    appPersistenceKeys.preferencesSelectedLand,
   ];
 }
 

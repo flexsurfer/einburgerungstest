@@ -2,6 +2,7 @@ import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
 import type {
   CategorySelection,
+  FederalLand,
   Favorites,
   Question,
   UserAnswers,
@@ -17,6 +18,7 @@ interface NavigationDraftState {
   [stateKeys.testSessionQuestions]: Question[];
   [stateKeys.practiceGlobalIndex]: number | null;
   [stateKeys.navigationCurrentQuestionIndex]: number;
+  [stateKeys.preferencesSelectedLand]: FederalLand | null;
 }
 
 function selectedQuestions(draftState: NavigationDraftState): Question[] {
@@ -27,6 +29,7 @@ function selectedQuestions(draftState: NavigationDraftState): Question[] {
     practiceFavorites: draftState[stateKeys.practiceFavorites],
     practiceUserAnswers: draftState[stateKeys.practiceUserAnswers],
     testSessionQuestions: draftState[stateKeys.testSessionQuestions],
+    preferencesSelectedLand: draftState[stateKeys.preferencesSelectedLand],
   });
 }
 
@@ -62,8 +65,8 @@ function resumePracticePosition(draftState: NavigationDraftState): void {
     }
   }
 
-  // Old navigation/global indexes are intentionally not migrated. If the new
-  // Practice cursor is missing or stale, start the 300-question flow at item 1.
+  // If the cursor is missing or belongs to a previously selected Land, restart
+  // the personalized practice flow at item 1.
   draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
   syncPracticeGlobalIndex(draftState, 0);
 }

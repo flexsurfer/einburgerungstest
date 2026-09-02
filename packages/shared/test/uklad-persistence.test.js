@@ -242,6 +242,23 @@ describe("Uklad Persist application boundary", () => {
     ).toBe(envelope(17));
   });
 
+  it("hydrates and persists the selected Land", async () => {
+    const storage = createSyncStorage({
+      [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Bayern"),
+    });
+    const { handle, harness } = createFixture({ target: "web", storage });
+
+    await hydrateSync(handle);
+
+    expect(harness.getState()[stateKeys.preferencesSelectedLand]).toBe(
+      "Bayern",
+    );
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Hessen"]);
+    expect(
+      storage.values.get(canonicalKey(stateKeys.preferencesSelectedLand)),
+    ).toBe(envelope("Hessen"));
+  });
+
   it("does not import an unreleased practice item-id key", async () => {
     const storage = createSyncStorage({
       [canonicalKey("practiceItemId")]: envelope(17),
@@ -372,6 +389,7 @@ describe("Uklad Persist application boundary", () => {
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("sepia"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
+      [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Atlantis"),
     });
     const { handle, harness } = createFixture({
       target: "web",
@@ -388,6 +406,7 @@ describe("Uklad Persist application boundary", () => {
     expect(harness.getState()[stateKeys.practiceFavorites]).toEqual([1]);
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
     expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
+    expect(harness.getState()[stateKeys.preferencesSelectedLand]).toBeNull();
     expect(diagnostics).toContainEqual({
       code: "deserialize-failed",
       phase: "deserialize",
@@ -397,6 +416,11 @@ describe("Uklad Persist application boundary", () => {
       code: "deserialize-failed",
       phase: "deserialize",
       key: stateKeys.preferencesTheme,
+    });
+    expect(diagnostics).toContainEqual({
+      code: "deserialize-failed",
+      phase: "deserialize",
+      key: stateKeys.preferencesSelectedLand,
     });
     expect(storage.calls.set).toEqual([]);
   });
@@ -441,6 +465,7 @@ describe("Uklad Persist application boundary", () => {
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
+      [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Bayern"),
     });
     const { handle } = createFixture({ target: "web", storage });
 
@@ -540,6 +565,7 @@ describe("Uklad Persist application boundary", () => {
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
+      [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Bayern"),
       [canonicalKey(stateKeys.navigationSelectedCategory)]: envelope("Politik"),
       [canonicalKey(stateKeys.navigationCurrentQuestionIndex)]: envelope(2),
       userAnswers: legacy({ 1: 0 }),
@@ -570,6 +596,7 @@ describe("Uklad Persist application boundary", () => {
       stateKeys.practiceGlobalIndex,
       stateKeys.preferencesTheme,
       stateKeys.preferencesUseSystemTheme,
+      stateKeys.preferencesSelectedLand,
     ]) {
       expect(storage.values.has(canonicalKey(key))).toBe(false);
     }

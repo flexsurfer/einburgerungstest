@@ -7,6 +7,10 @@ export const registerPreferencesSubscriptions: AppModule = (registrar) => {
     stateKeys.preferencesSelectedLanguage,
   );
   registrar.regRootSub(
+    appIds.subscriptions.preferencesSelectedLand,
+    stateKeys.preferencesSelectedLand,
+  );
+  registrar.regRootSub(
     appIds.subscriptions.preferencesTheme,
     stateKeys.preferencesTheme,
   );

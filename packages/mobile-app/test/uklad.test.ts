@@ -125,6 +125,55 @@ describe("Uklad mobile platform", () => {
     ).toBe(124);
   });
 
+  it("adds the selected Land to Practice and appends three Land questions to mock exams", () => {
+    const { harness } = createRuntime(undefined, true);
+
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.preferencesSelectedLand,
+      ]),
+    ).toBeNull();
+
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Bayern"]);
+
+    const practiceQuestions = harness.getSubscriptionValue([
+      appIds.subscriptions.practiceFilteredQuestions,
+    ]);
+    expect(practiceQuestions).toHaveLength(310);
+    expect(
+      practiceQuestions
+        .slice(0, 300)
+        .every((question) => question.globalIndex <= 300),
+    ).toBe(true);
+    expect(
+      practiceQuestions
+        .slice(300)
+        .every((question) => question.category === "Bayern"),
+    ).toBe(true);
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceOverview])
+        .totalQuestions,
+    ).toBe(310);
+
+    harness.dispatchSync([appIds.events.navigationCategorySelected, "test"]);
+    const examQuestions = harness.getState()[stateKeys.testSessionQuestions];
+
+    expect(examQuestions).toHaveLength(33);
+    expect(
+      examQuestions
+        .slice(0, 30)
+        .every((question) => question.globalIndex <= 300),
+    ).toBe(true);
+    expect(
+      examQuestions
+        .slice(30)
+        .every((question) => question.category === "Bayern"),
+    ).toBe(true);
+    expect(
+      new Set(examQuestions.map((question) => question.globalIndex)).size,
+    ).toBe(33);
+  });
+
   it("applies the persisted/system theme through the host platform", () => {
     const applySystemBarTheme = vi.fn();
     const { harness } = createRuntime({ applySystemBarTheme });

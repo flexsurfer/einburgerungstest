@@ -11,6 +11,27 @@ export type CategorySelection = string | null;
 export type NavigationScreen = "settings" | "home" | "questions";
 export type AppError = string | null;
 
+export const FEDERAL_LANDS = [
+  "Baden-Württemberg",
+  "Bayern",
+  "Berlin",
+  "Brandenburg",
+  "Bremen",
+  "Hamburg",
+  "Hessen",
+  "Mecklenburg-Vorpommern",
+  "Niedersachsen",
+  "Nordrhein-Westfalen",
+  "Rheinland-Pfalz",
+  "Saarland",
+  "Sachsen",
+  "Sachsen-Anhalt",
+  "Schleswig-Holstein",
+  "Thüringen",
+] as const;
+
+export type FederalLand = (typeof FEDERAL_LANDS)[number];
+
 export interface QuestionImage {
   url: string;
   text?: string;
@@ -75,6 +96,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.uiShowAnswers]: boolean;
 
     [stateKeys.preferencesSelectedLanguage]: string;
+    [stateKeys.preferencesSelectedLand]: FederalLand | null;
     [stateKeys.preferencesTheme]: Theme;
     [stateKeys.preferencesUseSystemTheme]: boolean;
 
@@ -115,6 +137,7 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.navigationSettingsOpened]: [];
     [appIds.events.navigationPracticeResumed]: [];
     [appIds.events.preferencesLanguageSelected]: [language: string];
+    [appIds.events.preferencesLandSelected]: [land: FederalLand];
     [appIds.events.preferencesThemeSelected]: [theme: ThemePreference];
     [appIds.events.preferencesThemeToggled]: [];
     [appIds.events.uiScrollToTop]: [behavior?: ScrollMode];
@@ -202,6 +225,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.preferencesSelectedLanguage]: {
       params: [];
       result: string;
+    };
+    [appIds.subscriptions.preferencesSelectedLand]: {
+      params: [];
+      result: FederalLand | null;
     };
     [appIds.subscriptions.preferencesTheme]: { params: []; result: Theme };
     [appIds.subscriptions.preferencesUseSystemTheme]: {
