@@ -18,6 +18,10 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
     appIds.subscriptions.navigationActiveScreen,
     stateKeys.navigationActiveScreen,
   );
+  registrar.regRootSub(
+    appIds.subscriptions.navigationIsLearnMode,
+    stateKeys.navigationIsLearnMode,
+  );
 
   registrar.regSub(
     appIds.subscriptions.navigationSelectedCategoryCount,
@@ -48,18 +52,25 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
       [appIds.subscriptions.practiceFilteredQuestions],
       [appIds.subscriptions.navigationCurrentQuestionIndex],
       [appIds.subscriptions.practiceGlobalIndex],
+      [appIds.subscriptions.practiceLearnGlobalIndex],
       [appIds.subscriptions.navigationSelectedCategory],
+      [appIds.subscriptions.navigationIsLearnMode],
     ],
     ([
       filteredQuestions,
       currentQuestionIndex,
       practiceGlobalIndex,
+      practiceLearnGlobalIndex,
       selectedCategory,
+      isLearnMode,
     ]) => {
       if (filteredQuestions.length === 0) return null;
-      if (selectedCategory === null && practiceGlobalIndex !== null) {
+      const savedGlobalIndex = isLearnMode
+        ? practiceLearnGlobalIndex
+        : practiceGlobalIndex;
+      if (selectedCategory === null && savedGlobalIndex !== null) {
         const savedQuestion = filteredQuestions.find(
-          (question) => question.globalIndex === practiceGlobalIndex,
+          (question) => question.globalIndex === savedGlobalIndex,
         );
         if (savedQuestion) return savedQuestion;
       }

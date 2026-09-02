@@ -21,6 +21,10 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
     [appIds.subscriptions.practiceFilteredQuestionsCount],
     "Header",
   );
+  const isLearnMode = useSubscription(
+    [appIds.subscriptions.navigationIsLearnMode],
+    "Header",
+  );
 
   const openHome = useCallback(() => {
     runtime.dispatch([appIds.events.navigationHomeOpened]);
@@ -52,7 +56,11 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
 
       <View style={styles(colors).titleContainer}>
         <Text style={styles(colors).eyebrow}>
-          {selectedCategory === "test" ? "EXAM MODE" : "PRACTICE"}
+          {isLearnMode
+            ? "LEARN MODE"
+            : selectedCategory === "test"
+              ? "EXAM MODE"
+              : "PRACTICE"}
         </Text>
         <Text numberOfLines={1} style={styles(colors).title}>
           {title} · {questionCount}

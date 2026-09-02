@@ -28,6 +28,7 @@ export const stateKeys = {
   practiceUserAnswers: "practiceUserAnswers",
   practiceFavorites: "practiceFavorites",
   practiceGlobalIndex: "practiceGlobalIndex",
+  practiceLearnGlobalIndex: "practiceLearnGlobalIndex",
 
   testSessionQuestions: "testSessionQuestions",
   testSessionAnswers: "testSessionAnswers",
@@ -37,6 +38,7 @@ export const stateKeys = {
   navigationCurrentQuestionIndex: "navigationCurrentQuestionIndex",
   navigationQuestionPickerVisible: "navigationQuestionPickerVisible",
   navigationActiveScreen: "navigationActiveScreen",
+  navigationIsLearnMode: "navigationIsLearnMode",
 } as const;
 
 export const appIds = {
@@ -47,6 +49,7 @@ export const appIds = {
     vocabularyToggled: "vocabulary/toggled",
     vocabularyUnmounted: "vocabulary/unmounted",
     navigationCategorySelected: "navigation/category-selected",
+    navigationLearnOpened: "navigation/learn-opened",
     navigationHomeOpened: "navigation/home-opened",
     navigationSettingsOpened: "navigation/settings-opened",
     navigationPracticeResumed: "navigation/practice-resumed",
@@ -105,6 +108,7 @@ export const appIds = {
     practiceUserAnswers: "practice/user-answers",
     practiceFavorites: "practice/favorites",
     practiceGlobalIndex: "practice/global-index",
+    practiceLearnGlobalIndex: "practice/learn-global-index",
     testSessionQuestions: "test-session/questions",
     testSessionAnswers: "test-session/answers",
 
@@ -119,6 +123,7 @@ export const appIds = {
     navigationSelectedCategoryCount: "navigation/selected-category-count",
     navigationCurrentQuestion: "navigation/current-question",
     navigationQuestionPickerItems: "navigation/question-picker-items",
+    navigationIsLearnMode: "navigation/is-learn-mode",
     navigationIsTestMode: "navigation/is-test-mode",
   },
   effects: {

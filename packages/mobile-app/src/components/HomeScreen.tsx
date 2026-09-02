@@ -41,7 +41,7 @@ import {
   TargetIcon,
 } from "./Icons";
 
-type ActionCardWidth = "48.2%";
+type ActionCardWidth = "48.2%" | "100%";
 
 type Tone = {
   backgroundColor: string;
@@ -424,6 +424,10 @@ export const HomeScreen = memo(() => {
     [appIds.subscriptions.practiceGlobalIndex],
     "HomeScreen",
   );
+  const practiceLearnGlobalIndex = useSubscription(
+    [appIds.subscriptions.practiceLearnGlobalIndex],
+    "HomeScreen",
+  );
 
   const openCategory = useCallback(
     (category: CategorySelection) => {
@@ -434,6 +438,10 @@ export const HomeScreen = memo(() => {
 
   const openSettings = useCallback(() => {
     runtime.dispatch([appIds.events.navigationSettingsOpened]);
+  }, [runtime]);
+
+  const openLearnMode = useCallback(() => {
+    runtime.dispatch([appIds.events.navigationLearnOpened]);
   }, [runtime]);
 
   const canResume = practiceGlobalIndex !== null;
@@ -557,6 +565,22 @@ export const HomeScreen = memo(() => {
           <View style={styleSheet.actionGrid}>
             <ActionCard
               colors={colors}
+              detail={
+                practiceLearnGlobalIndex === null
+                  ? "Answers shown"
+                  : "Continue learning"
+              }
+              icon={<BookOpenIcon color={colors.blueColor} />}
+              onPress={openLearnMode}
+              title="Learn"
+              tone={{
+                backgroundColor: colors.blueLight,
+                color: colors.blueColor,
+              }}
+              width="100%"
+            />
+            <ActionCard
+              colors={colors}
               detail="33 questions"
               icon={<ExamIcon color={colors.primaryColor} />}
               onPress={() => openCategory("test")}
@@ -564,18 +588,6 @@ export const HomeScreen = memo(() => {
               tone={{
                 backgroundColor: colors.primaryPale,
                 color: colors.primaryColor,
-              }}
-              width="48.2%"
-            />
-            <ActionCard
-              colors={colors}
-              detail={`${overview.totalQuestions} questions`}
-              icon={<BookOpenIcon color={colors.blueColor} />}
-              onPress={() => openCategory(null)}
-              title="All Questions"
-              tone={{
-                backgroundColor: colors.blueLight,
-                color: colors.blueColor,
               }}
               width="48.2%"
             />

@@ -6,5 +6,6 @@ export function createPracticeState() {
     [stateKeys.practiceUserAnswers]: {} as UserAnswers,
     [stateKeys.practiceFavorites]: [] as Favorites,
     [stateKeys.practiceGlobalIndex]: null as number | null,
+    [stateKeys.practiceLearnGlobalIndex]: null as number | null,
   } as const;
 }

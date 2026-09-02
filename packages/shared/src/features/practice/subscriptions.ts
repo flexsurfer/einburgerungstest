@@ -18,6 +18,10 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
     appIds.subscriptions.practiceGlobalIndex,
     stateKeys.practiceGlobalIndex,
   );
+  registrar.regRootSub(
+    appIds.subscriptions.practiceLearnGlobalIndex,
+    stateKeys.practiceLearnGlobalIndex,
+  );
 
   registrar.regSub(
     appIds.subscriptions.practiceFavoriteCount,

@@ -115,6 +115,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.practiceUserAnswers]: UserAnswers;
     [stateKeys.practiceFavorites]: Favorites;
     [stateKeys.practiceGlobalIndex]: number | null;
+    [stateKeys.practiceLearnGlobalIndex]: number | null;
 
     [stateKeys.testSessionQuestions]: Question[];
     [stateKeys.testSessionAnswers]: UserAnswers;
@@ -124,6 +125,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.navigationCurrentQuestionIndex]: number;
     [stateKeys.navigationQuestionPickerVisible]: boolean;
     [stateKeys.navigationActiveScreen]: NavigationScreen;
+    [stateKeys.navigationIsLearnMode]: boolean;
   };
 
   readonly events: {
@@ -133,6 +135,7 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.vocabularyToggled]: [];
     [appIds.events.vocabularyUnmounted]: [];
     [appIds.events.navigationCategorySelected]: [category: CategorySelection];
+    [appIds.events.navigationLearnOpened]: [];
     [appIds.events.navigationHomeOpened]: [];
     [appIds.events.navigationSettingsOpened]: [];
     [appIds.events.navigationPracticeResumed]: [];
@@ -249,6 +252,10 @@ export interface AppContracts extends UkladContracts {
       params: [];
       result: number | null;
     };
+    [appIds.subscriptions.practiceLearnGlobalIndex]: {
+      params: [];
+      result: number | null;
+    };
     [appIds.subscriptions.testSessionQuestions]: {
       params: [];
       result: Question[];
@@ -298,6 +305,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.navigationQuestionPickerItems]: {
       params: [];
       result: QuestionPickerItem[];
+    };
+    [appIds.subscriptions.navigationIsLearnMode]: {
+      params: [];
+      result: boolean;
     };
     [appIds.subscriptions.navigationIsTestMode]: {
       params: [];

@@ -10,5 +10,6 @@ export function createNavigationState() {
     [stateKeys.navigationCurrentQuestionIndex]: 0,
     [stateKeys.navigationQuestionPickerVisible]: false,
     [stateKeys.navigationActiveScreen]: "home" as NavigationScreen,
+    [stateKeys.navigationIsLearnMode]: false,
   } as const;
 }

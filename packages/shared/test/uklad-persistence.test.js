@@ -228,9 +228,10 @@ describe("Uklad Persist application boundary", () => {
     ).toEqual(JSON.parse(envelope({ 2: 1 })));
   });
 
-  it("hydrates and persists the Practice global-index cursor", async () => {
+  it("hydrates and persists the independent Practice and Learn cursors", async () => {
     const storage = createSyncStorage({
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(17),
+      [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(29),
     });
     const { handle, harness } = createFixture({ target: "web", storage });
 
@@ -240,6 +241,49 @@ describe("Uklad Persist application boundary", () => {
     expect(
       storage.values.get(canonicalKey(stateKeys.practiceGlobalIndex)),
     ).toBe(envelope(17));
+    expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBe(29);
+    expect(
+      storage.values.get(canonicalKey(stateKeys.practiceLearnGlobalIndex)),
+    ).toBe(envelope(29));
+  });
+
+  it("writes the Learn cursor through native async persistence", async () => {
+    const storage = createAsyncStorage({
+      [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(17),
+      [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(29),
+    });
+    const { handle, harness } = createFixture({ target: "native", storage });
+
+    await hydrateAsync(handle);
+    harness.dispatchSync([
+      appIds.events.questionsFetchSucceeded,
+      [
+        {
+          question: "Question one",
+          category: "Politik",
+          correct: 0,
+          answers: ["One", "Two"],
+        },
+        {
+          question: "Question two",
+          category: "Geschichte",
+          correct: 1,
+          answers: ["One", "Two"],
+        },
+      ],
+    ]);
+    harness.dispatchSync([appIds.events.navigationLearnOpened]);
+    harness.dispatchSync([appIds.events.navigationNext]);
+    await handle.flush();
+
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(17);
+    expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBe(2);
+    expect(
+      storage.values.get(canonicalKey(stateKeys.practiceGlobalIndex)),
+    ).toBe(envelope(17));
+    expect(
+      storage.values.get(canonicalKey(stateKeys.practiceLearnGlobalIndex)),
+    ).toBe(envelope(2));
   });
 
   it("hydrates and persists the selected Land", async () => {
@@ -387,6 +431,7 @@ describe("Uklad Persist application boundary", () => {
     const storage = createSyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope(["bad"]),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
+      [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(0),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("sepia"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
       [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Atlantis"),
@@ -404,6 +449,7 @@ describe("Uklad Persist application boundary", () => {
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
     // Valid entries may still overlay while the attachment remains failed.
     expect(harness.getState()[stateKeys.practiceFavorites]).toEqual([1]);
+    expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBeNull();
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
     expect(harness.getState()[stateKeys.preferencesUseSystemTheme]).toBe(false);
     expect(harness.getState()[stateKeys.preferencesSelectedLand]).toBeNull();
@@ -411,6 +457,11 @@ describe("Uklad Persist application boundary", () => {
       code: "deserialize-failed",
       phase: "deserialize",
       key: stateKeys.practiceUserAnswers,
+    });
+    expect(diagnostics).toContainEqual({
+      code: "deserialize-failed",
+      phase: "deserialize",
+      key: stateKeys.practiceLearnGlobalIndex,
     });
     expect(diagnostics).toContainEqual({
       code: "deserialize-failed",
@@ -463,6 +514,7 @@ describe("Uklad Persist application boundary", () => {
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 0 }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
+      [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(11),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
       [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Bayern"),
@@ -563,6 +615,7 @@ describe("Uklad Persist application boundary", () => {
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 0 }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
+      [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(11),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("dark"),
       [canonicalKey(stateKeys.preferencesUseSystemTheme)]: envelope(false),
       [canonicalKey(stateKeys.preferencesSelectedLand)]: envelope("Bayern"),
@@ -594,6 +647,7 @@ describe("Uklad Persist application boundary", () => {
       stateKeys.practiceUserAnswers,
       stateKeys.practiceFavorites,
       stateKeys.practiceGlobalIndex,
+      stateKeys.practiceLearnGlobalIndex,
       stateKeys.preferencesTheme,
       stateKeys.preferencesUseSystemTheme,
       stateKeys.preferencesSelectedLand,

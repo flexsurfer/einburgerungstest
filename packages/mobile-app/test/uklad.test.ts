@@ -125,6 +125,51 @@ describe("Uklad mobile platform", () => {
     ).toBe(124);
   });
 
+  it("resumes Learn independently from the saved Practice position", () => {
+    const { harness } = createRuntime(undefined, true);
+
+    harness.dispatchSync([appIds.events.navigationCategorySelected, null]);
+    harness.dispatchSync([appIds.events.navigationQuestionSelected, 123]);
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Bayern"]);
+    harness.dispatchSync([appIds.events.navigationLearnOpened]);
+
+    expect(harness.getState()[stateKeys.navigationActiveScreen]).toBe(
+      "questions",
+    );
+    expect(harness.getState()[stateKeys.navigationSelectedCategory]).toBeNull();
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      0,
+    );
+    expect(harness.getState()[stateKeys.uiShowAnswers]).toBe(true);
+    expect(harness.getState()[stateKeys.navigationIsLearnMode]).toBe(true);
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
+    expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBe(1);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.practiceFilteredQuestionsCount,
+      ]),
+    ).toBe(310);
+
+    harness.dispatchSync([appIds.events.navigationQuestionSelected, 208]);
+    expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBe(209);
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
+
+    harness.dispatchSync([appIds.events.navigationHomeOpened]);
+    expect(harness.getState()[stateKeys.uiShowAnswers]).toBe(false);
+    expect(harness.getState()[stateKeys.navigationIsLearnMode]).toBe(false);
+
+    harness.dispatchSync([appIds.events.navigationLearnOpened]);
+    expect(harness.getState()[stateKeys.navigationCurrentQuestionIndex]).toBe(
+      208,
+    );
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationCurrentQuestion,
+      ]).globalIndex,
+    ).toBe(209);
+    expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
+  });
+
   it("adds the selected Land to Practice and appends three Land questions to mock exams", () => {
     const { harness } = createRuntime(undefined, true);
 

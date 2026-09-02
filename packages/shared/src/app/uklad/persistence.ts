@@ -127,6 +127,16 @@ function deserializePracticeGlobalIndex(data: unknown): number | null {
   throw new Error("practiceGlobalIndex must be a positive integer or null");
 }
 
+function deserializePracticeLearnGlobalIndex(data: unknown): number | null {
+  if (data === null) return null;
+  if (typeof data === "number" && Number.isInteger(data) && data > 0) {
+    return data;
+  }
+  throw new Error(
+    "practiceLearnGlobalIndex must be a positive integer or null",
+  );
+}
+
 const userAnswersKey: PersistedKey<typeof stateKeys.practiceUserAnswers> = {
   key: stateKeys.practiceUserAnswers,
   deserialize: deserializeUserAnswers,
@@ -162,11 +172,19 @@ const practiceGlobalIndexKey: PersistedKey<
   deserialize: deserializePracticeGlobalIndex,
 };
 
+const practiceLearnGlobalIndexKey: PersistedKey<
+  typeof stateKeys.practiceLearnGlobalIndex
+> = {
+  key: stateKeys.practiceLearnGlobalIndex,
+  deserialize: deserializePracticeLearnGlobalIndex,
+};
+
 /** Explicit durable root configurations. Keep this map tied to `stateKeys`. */
 export const appPersistenceKeys = Object.freeze({
   practiceUserAnswers: userAnswersKey,
   practiceFavorites: favoritesKey,
   practiceGlobalIndex: practiceGlobalIndexKey,
+  practiceLearnGlobalIndex: practiceLearnGlobalIndexKey,
   preferencesTheme: themeKey,
   preferencesUseSystemTheme: useSystemThemeKey,
   preferencesSelectedLand: selectedLandKey,
@@ -180,6 +198,7 @@ export function getAppPersistenceKeys(
     appPersistenceKeys.practiceUserAnswers,
     appPersistenceKeys.practiceFavorites,
     appPersistenceKeys.practiceGlobalIndex,
+    appPersistenceKeys.practiceLearnGlobalIndex,
     appPersistenceKeys.preferencesTheme,
     appPersistenceKeys.preferencesUseSystemTheme,
     appPersistenceKeys.preferencesSelectedLand,
