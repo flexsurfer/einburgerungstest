@@ -15,6 +15,7 @@ import { FEDERAL_LANDS, type AppContracts } from "./contracts.js";
 import type {
   Favorites,
   FederalLand,
+  PracticeMistakes,
   Theme,
   UserAnswers,
 } from "./contracts.js";
@@ -88,6 +89,36 @@ function deserializeUserAnswers(data: unknown): UserAnswers {
   return result;
 }
 
+function deserializePracticeMistakes(data: unknown): PracticeMistakes {
+  if (!isRecord(data)) throw new Error("practiceMistakes must be an object");
+
+  const result: PracticeMistakes = {};
+  for (const [key, value] of Object.entries(data)) {
+    const questionIndex = Number(key);
+    if (
+      !Number.isInteger(questionIndex) ||
+      questionIndex < 0 ||
+      !Array.isArray(value)
+    ) {
+      throw new Error("practiceMistakes contains an invalid question");
+    }
+
+    const attempts: number[] = [];
+    for (const answerIndex of value) {
+      if (
+        typeof answerIndex !== "number" ||
+        !Number.isInteger(answerIndex) ||
+        answerIndex < 0
+      ) {
+        throw new Error("practiceMistakes contains an invalid answer");
+      }
+      attempts.push(answerIndex);
+    }
+    result[questionIndex] = attempts;
+  }
+  return result;
+}
+
 function deserializeFavorites(data: unknown): Favorites {
   if (!Array.isArray(data)) throw new Error("favorites must be an array");
 
@@ -142,6 +173,11 @@ const userAnswersKey: PersistedKey<typeof stateKeys.practiceUserAnswers> = {
   deserialize: deserializeUserAnswers,
 };
 
+const mistakesKey: PersistedKey<typeof stateKeys.practiceMistakes> = {
+  key: stateKeys.practiceMistakes,
+  deserialize: deserializePracticeMistakes,
+};
+
 const favoritesKey: PersistedKey<typeof stateKeys.practiceFavorites> = {
   key: stateKeys.practiceFavorites,
   deserialize: deserializeFavorites,
@@ -182,6 +218,7 @@ const practiceLearnGlobalIndexKey: PersistedKey<
 /** Explicit durable root configurations. Keep this map tied to `stateKeys`. */
 export const appPersistenceKeys = Object.freeze({
   practiceUserAnswers: userAnswersKey,
+  practiceMistakes: mistakesKey,
   practiceFavorites: favoritesKey,
   practiceGlobalIndex: practiceGlobalIndexKey,
   practiceLearnGlobalIndex: practiceLearnGlobalIndexKey,
@@ -196,6 +233,7 @@ export function getAppPersistenceKeys(
 ): readonly PersistKey<AppState>[] {
   return [
     appPersistenceKeys.practiceUserAnswers,
+    appPersistenceKeys.practiceMistakes,
     appPersistenceKeys.practiceFavorites,
     appPersistenceKeys.practiceGlobalIndex,
     appPersistenceKeys.practiceLearnGlobalIndex,

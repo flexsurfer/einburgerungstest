@@ -11,6 +11,8 @@ export const AnswerButton = ({
   isExamMode,
   onClick,
   userAnswer,
+  mistakeCount = 0,
+  revealCorrectAnswer = false,
 }) => {
   const getClassName = useCallback(() => {
     const classes = ["answer-button"];
@@ -20,7 +22,7 @@ export const AnswerButton = ({
       if (isSelected) {
         classes.push("selected");
       }
-    } else if (showAnswers) {
+    } else if (showAnswers || revealCorrectAnswer) {
       classes.push("review-mode");
       if (isCorrect) {
         classes.push("correct");
@@ -34,8 +36,20 @@ export const AnswerButton = ({
       }
     }
 
+    if (!isCorrect && mistakeCount > 0) {
+      classes.push("mistake");
+    }
+
     return classes.join(" ");
-  }, [showAnswers, isCorrect, userAnswer, isSelected, isExamMode]);
+  }, [
+    showAnswers,
+    isCorrect,
+    userAnswer,
+    isSelected,
+    isExamMode,
+    mistakeCount,
+    revealCorrectAnswer,
+  ]);
 
   const handleClick = useCallback(() => {
     if (
@@ -53,7 +67,12 @@ export const AnswerButton = ({
       disabled={disabled}
       aria-pressed={isSelected}
     >
-      {answer}
+      <span>{answer}</span>
+      {mistakeCount > 0 && (
+        <span className="mistake-count">
+          {mistakeCount} {mistakeCount === 1 ? "mistake" : "mistakes"}
+        </span>
+      )}
     </button>
   );
 };

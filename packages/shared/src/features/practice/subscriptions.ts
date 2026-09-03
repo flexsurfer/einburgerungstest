@@ -3,6 +3,7 @@ import { appIds, stateKeys } from "../../app/uklad/catalog.js";
 import {
   isSelectedPracticeQuestion,
   selectPracticeQuestions,
+  selectWrongAnswerAttempts,
 } from "./selection.js";
 import { EINBUERGERUNGSTEST_RULES } from "../test-session/rules.js";
 
@@ -10,6 +11,10 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
     appIds.subscriptions.practiceUserAnswers,
     stateKeys.practiceUserAnswers,
+  );
+  registrar.regRootSub(
+    appIds.subscriptions.practiceMistakes,
+    stateKeys.practiceMistakes,
   );
   registrar.regRootSub(
     appIds.subscriptions.practiceFavorites,
@@ -33,14 +38,13 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
   registrar.regSub(
     appIds.subscriptions.practiceWrongCount,
     () => [
-      [appIds.subscriptions.practiceUserAnswers],
+      [appIds.subscriptions.practiceMistakes],
       [appIds.subscriptions.questionsItems],
     ],
-    ([userAnswers, questions]) =>
-      questions.filter((question) => {
-        const answer = userAnswers[question.globalIndex];
-        return answer !== undefined && answer !== question.correct;
-      }).length,
+    ([mistakes, questions]) =>
+      questions.filter(
+        (question) => selectWrongAnswerAttempts(question, mistakes).length > 0,
+      ).length,
   );
 
   registrar.regSub(
@@ -49,7 +53,7 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       [appIds.subscriptions.questionsItems],
       [appIds.subscriptions.navigationSelectedCategory],
       [appIds.subscriptions.practiceFavorites],
-      [appIds.subscriptions.practiceUserAnswers],
+      [appIds.subscriptions.practiceMistakes],
       [appIds.subscriptions.testSessionQuestions],
       [appIds.subscriptions.preferencesSelectedLand],
     ],
@@ -57,7 +61,7 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       questions,
       selectedCategory,
       favorites,
-      userAnswers,
+      mistakes,
       testQuestions,
       selectedLand,
     ]) =>
@@ -65,7 +69,7 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
         questionsItems: questions,
         navigationSelectedCategory: selectedCategory,
         practiceFavorites: favorites,
-        practiceUserAnswers: userAnswers,
+        practiceMistakes: mistakes,
         testSessionQuestions: testQuestions,
         preferencesSelectedLand: selectedLand,
       }),
@@ -88,6 +92,29 @@ export const registerPracticeSubscriptions: AppModule = (registrar) => {
       selectedCategory === "test"
         ? testAnswers[questionIndex]
         : userAnswers[questionIndex],
+  );
+
+  registrar.regSub(
+    appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+    () => [
+      [appIds.subscriptions.practiceMistakes],
+      [appIds.subscriptions.questionsItems],
+    ],
+    ([mistakes, questions], questionIndex) => {
+      const question = questions.find(
+        (item) => item.globalIndex === questionIndex,
+      );
+      if (question === undefined) {
+        return { totalAttempts: 0, answerCounts: {} };
+      }
+
+      const attempts = selectWrongAnswerAttempts(question, mistakes);
+      const answerCounts: Record<number, number> = {};
+      for (const answerIndex of attempts) {
+        answerCounts[answerIndex] = (answerCounts[answerIndex] ?? 0) + 1;
+      }
+      return { totalAttempts: attempts.length, answerCounts };
+    },
   );
 
   registrar.regSub(

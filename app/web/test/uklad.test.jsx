@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { renderToStaticMarkup } from "react-dom/server";
 import { createUkladTestHarness } from "@ukladjs/core/testing";
 import {
   appIds,
@@ -8,6 +9,7 @@ import {
 } from "@ebtest/shared/uklad";
 import { createWebApp } from "../src/bootstrap.js";
 import { registerWebPlatform, watchWebSystemTheme } from "../src/platform.js";
+import { AnswerButton } from "../src/components/AnswerButton.jsx";
 
 const runtimes = [];
 const apps = [];
@@ -42,6 +44,26 @@ function createFixture() {
 }
 
 describe("Uklad web platform", () => {
+  it("reveals the correct option in mistake review without a current answer", () => {
+    const markup = renderToStaticMarkup(
+      <AnswerButton
+        answer="Correct answer"
+        index={0}
+        isCorrect
+        isSelected={false}
+        showAnswers={false}
+        revealCorrectAnswer
+        disabled
+        isExamMode={false}
+        onClick={() => {}}
+        userAnswer={undefined}
+      />,
+    );
+
+    expect(markup).toContain('class="answer-button review-mode correct"');
+    expect(markup).toContain("disabled");
+  });
+
   it("provides the browser clock for the official timed exam session", async () => {
     vi.spyOn(Date, "now").mockReturnValue(2_000_000);
     vi.stubGlobal("scrollTo", vi.fn());
@@ -221,6 +243,7 @@ describe("Uklad web platform", () => {
       "Are you sure you want to clear ALL your progress?",
     );
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
   });
 
   it("does not dispatch boot actions until persistence hydration resolves", async () => {

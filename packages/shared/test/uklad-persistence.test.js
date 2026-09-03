@@ -247,6 +247,59 @@ describe("Uklad Persist application boundary", () => {
     ).toBe(envelope(29));
   });
 
+  it("hydrates the separate per-question mistake attempt history", async () => {
+    const storage = createSyncStorage({
+      [canonicalKey(stateKeys.practiceMistakes)]: envelope({
+        4: [1, 2, 1],
+        5: [],
+      }),
+    });
+    const { handle, harness } = createFixture({ target: "web", storage });
+
+    await hydrateSync(handle);
+
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      4: [1, 2, 1],
+      5: [],
+    });
+  });
+
+  it("migrates and persists a pre-history wrong answer when questions load", async () => {
+    const storage = createSyncStorage({
+      [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 1 }),
+    });
+    const { handle, harness } = createFixture({ target: "web", storage });
+
+    await hydrateSync(handle);
+    harness.dispatchSync([
+      appIds.events.questionsFetchSucceeded,
+      [
+        {
+          question: "Question",
+          category: "Politik",
+          correct: 0,
+          answers: ["A", "B"],
+        },
+      ],
+    ]);
+
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+        1,
+      ]),
+    ).toEqual({ totalAttempts: 1, answerCounts: { 1: 1 } });
+
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({ 1: [1] });
+    expect(storage.values.get(canonicalKey(stateKeys.practiceMistakes))).toBe(
+      envelope({ 1: [1] }),
+    );
+
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({ 1: [1] });
+  });
+
   it("writes the Learn cursor through native async persistence", async () => {
     const storage = createAsyncStorage({
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(17),
@@ -430,6 +483,7 @@ describe("Uklad Persist application boundary", () => {
     const diagnostics = [];
     const storage = createSyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope(["bad"]),
+      [canonicalKey(stateKeys.practiceMistakes)]: envelope({ 1: [0, "bad"] }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
       [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(0),
       [canonicalKey(stateKeys.preferencesTheme)]: envelope("sepia"),
@@ -447,6 +501,7 @@ describe("Uklad Persist application boundary", () => {
 
     expect(harness.getSubscriptionValue([PERSIST_IDS.STATUS])).toBe("failed");
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
     // Valid entries may still overlay while the attachment remains failed.
     expect(harness.getState()[stateKeys.practiceFavorites]).toEqual([1]);
     expect(harness.getState()[stateKeys.practiceLearnGlobalIndex]).toBeNull();
@@ -457,6 +512,11 @@ describe("Uklad Persist application boundary", () => {
       code: "deserialize-failed",
       phase: "deserialize",
       key: stateKeys.practiceUserAnswers,
+    });
+    expect(diagnostics).toContainEqual({
+      code: "deserialize-failed",
+      phase: "deserialize",
+      key: stateKeys.practiceMistakes,
     });
     expect(diagnostics).toContainEqual({
       code: "deserialize-failed",
@@ -613,6 +673,7 @@ describe("Uklad Persist application boundary", () => {
   it("purges configured entries without resetting state and reopens writes", async () => {
     const storage = createAsyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 0 }),
+      [canonicalKey(stateKeys.practiceMistakes)]: envelope({ 1: [1, 2] }),
       [canonicalKey(stateKeys.practiceFavorites)]: envelope([1]),
       [canonicalKey(stateKeys.practiceGlobalIndex)]: envelope(7),
       [canonicalKey(stateKeys.practiceLearnGlobalIndex)]: envelope(11),
@@ -645,6 +706,7 @@ describe("Uklad Persist application boundary", () => {
     expect(harness.getSubscriptionValue([PERSIST_IDS.STATUS])).toBe("hydrated");
     for (const key of [
       stateKeys.practiceUserAnswers,
+      stateKeys.practiceMistakes,
       stateKeys.practiceFavorites,
       stateKeys.practiceGlobalIndex,
       stateKeys.practiceLearnGlobalIndex,

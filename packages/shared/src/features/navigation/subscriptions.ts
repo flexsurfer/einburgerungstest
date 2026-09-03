@@ -1,5 +1,6 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
+import { selectWrongAnswerAttempts } from "../practice/selection.js";
 
 export const registerNavigationSubscriptions: AppModule = (registrar) => {
   registrar.regRootSub(
@@ -87,6 +88,7 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
     () => [
       [appIds.subscriptions.practiceFilteredQuestions],
       [appIds.subscriptions.practiceUserAnswers],
+      [appIds.subscriptions.practiceMistakes],
       [appIds.subscriptions.testSessionAnswers],
       [appIds.subscriptions.navigationCurrentQuestionIndex],
       [appIds.subscriptions.navigationSelectedCategory],
@@ -94,6 +96,7 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
     ([
       filteredQuestions,
       userAnswers,
+      mistakes,
       testAnswers,
       currentQuestionIndex,
       selectedCategory,
@@ -103,8 +106,12 @@ export const registerNavigationSubscriptions: AppModule = (registrar) => {
           selectedCategory === "test"
             ? testAnswers[question.globalIndex]
             : userAnswers[question.globalIndex];
-        const isAnswered = answer !== undefined;
-        const isCorrect = isAnswered && answer === question.correct;
+        const isMistake =
+          selectedCategory === "wrong" &&
+          selectWrongAnswerAttempts(question, mistakes).length > 0;
+        const isAnswered = answer !== undefined || isMistake;
+        const isCorrect =
+          !isMistake && answer !== undefined && answer === question.correct;
         const isSelected = index === (currentQuestionIndex || 0);
         let className = "question-picker-item";
         if (isSelected) className += " selected";

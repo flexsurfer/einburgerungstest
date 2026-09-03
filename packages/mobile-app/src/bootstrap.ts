@@ -95,6 +95,9 @@ export function bootstrapMobileApp(options: MobileBootstrapOptions): MobileApp {
   const initialize = () => {
     if (initialized || disposed) return;
     initialized = true;
+    // Questions are already present on native, so hydrated legacy answers can
+    // be normalized immediately before the remaining boot actions are queued.
+    runtime.dispatch([appIds.events.practiceLegacyMistakesMigrated]);
     stopSystemThemeWatch = watchMobileSystemTheme(runtime);
     runtime.dispatch([appIds.events.appInitialize]);
   };

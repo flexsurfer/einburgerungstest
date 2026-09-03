@@ -1,8 +1,8 @@
 import type {
   CategorySelection,
   FederalLand,
+  PracticeMistakes,
   Question,
-  UserAnswers,
 } from "../../app/uklad/contracts.js";
 import { isPracticeQuestion } from "../questions/state.js";
 
@@ -11,9 +11,22 @@ export interface PracticeSelectionState {
   readonly questionsItems: readonly Question[];
   navigationSelectedCategory: CategorySelection;
   readonly practiceFavorites: readonly number[];
-  readonly practiceUserAnswers: Readonly<UserAnswers>;
+  readonly practiceMistakes: Readonly<PracticeMistakes>;
   readonly testSessionQuestions: readonly Question[];
   readonly preferencesSelectedLand: FederalLand | null;
+}
+
+/**
+ * Return durable mistake attempts, excluding an answer that may have become
+ * correct after a question-data update.
+ */
+export function selectWrongAnswerAttempts(
+  question: Question,
+  mistakes: Readonly<PracticeMistakes>,
+): number[] {
+  return (mistakes[question.globalIndex] ?? []).filter(
+    (answerIndex) => answerIndex !== question.correct,
+  );
 }
 
 /** Return whether a question belongs to the personalized practice pool. */
@@ -45,10 +58,10 @@ export function selectPracticeQuestions(
   }
 
   if (selectedCategory === "wrong") {
-    return practiceQuestions.filter((question) => {
-      const answer = state.practiceUserAnswers[question.globalIndex];
-      return answer !== undefined && answer !== question.correct;
-    });
+    return practiceQuestions.filter(
+      (question) =>
+        selectWrongAnswerAttempts(question, state.practiceMistakes).length > 0,
+    );
   }
 
   if (selectedCategory === null) {

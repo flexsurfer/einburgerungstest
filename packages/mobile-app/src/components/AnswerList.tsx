@@ -23,6 +23,13 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
     ],
     "AnswerList",
   );
+  const mistakeSummary = useSubscription(
+    [
+      appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+      question.globalIndex,
+    ],
+    "AnswerList",
+  );
   const isTestMode = useSubscription(
     [appIds.subscriptions.navigationIsTestMode],
     "AnswerList",
@@ -65,23 +72,33 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
     ],
   );
 
-  const handleClearAnswer = useCallback(() => {
+  const wrongAnswersMode = selectedCategory === "wrong";
+
+  const handleAnswerAction = useCallback(() => {
     runtime.dispatch([
-      appIds.events.practiceQuestionAnswerCleared,
+      wrongAnswersMode
+        ? appIds.events.practiceMistakeRemoved
+        : appIds.events.practiceQuestionAnswerCleared,
       question.globalIndex,
     ]);
-  }, [runtime, question.globalIndex]);
+  }, [runtime, wrongAnswersMode, question.globalIndex]);
 
   const themeColors = useColors();
-  const isIncorrect =
+  const showAnswerAction =
     !isTestMode &&
-    userAnswer !== undefined &&
-    userAnswer !== question.correct &&
-    !showAnswers;
-  const wrongAnswersMode = selectedCategory === "wrong";
+    (wrongAnswersMode
+      ? mistakeSummary.totalAttempts > 0
+      : userAnswer !== undefined);
 
   return (
     <View style={styles.answerList}>
+      {wrongAnswersMode && mistakeSummary.totalAttempts > 0 ? (
+        <Text
+          style={[styles.mistakeSummary, { color: themeColors.errorColor }]}
+        >
+          Wrong attempts: {mistakeSummary.totalAttempts}
+        </Text>
+      ) : null}
       {question.answers.map((answer, index) => (
         <AnswerButton
           key={index}
@@ -90,31 +107,44 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
           showAnswers={showAnswers}
+          revealCorrectAnswer={wrongAnswersMode}
           disabled={
             isTestMode
               ? testSessionStatus !== "in-progress" || showAnswers
-              : userAnswer !== undefined || showAnswers
+              : wrongAnswersMode || userAnswer !== undefined || showAnswers
           }
           isExamMode={isTestMode}
           onClick={handleAnswerClick}
           userAnswer={userAnswer}
+          mistakeCount={
+            wrongAnswersMode ? (mistakeSummary.answerCounts[index] ?? 0) : 0
+          }
         />
       ))}
-      {isIncorrect && (
+      {showAnswerAction && (
         <TouchableOpacity
           style={[
             styles.clearButton,
             {
-              borderColor: themeColors.accentColor,
+              borderColor: wrongAnswersMode
+                ? themeColors.errorColor
+                : themeColors.accentColor,
               backgroundColor: "transparent",
             },
           ]}
-          onPress={handleClearAnswer}
+          onPress={handleAnswerAction}
         >
           <Text
-            style={[styles.clearButtonText, { color: themeColors.accentColor }]}
+            style={[
+              styles.clearButtonText,
+              {
+                color: wrongAnswersMode
+                  ? themeColors.errorColor
+                  : themeColors.accentColor,
+              },
+            ]}
           >
-            {wrongAnswersMode ? "Clear answer" : "Try again"}
+            {wrongAnswersMode ? "Remove from mistakes" : "Clear answer"}
           </Text>
         </TouchableOpacity>
       )}
@@ -135,5 +165,10 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: 14,
+  },
+  mistakeSummary: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 10,
   },
 });

@@ -51,6 +51,11 @@ export interface Question extends QuestionInput {
 }
 
 export type UserAnswers = Record<number, number>;
+/**
+ * Ordered incorrect answer indexes for every failed practice attempt.
+ * An empty entry records an explicit removal and suppresses legacy inference.
+ */
+export type PracticeMistakes = Record<number, number[]>;
 export type Favorites = number[];
 export type TestUsedQuestions = Record<string, Record<string, boolean>>;
 export type TestSessionStatus = "idle" | "in-progress" | "completed";
@@ -89,6 +94,11 @@ export interface PracticeOverview {
   remaining: number;
   accuracy: number;
   progress: number;
+}
+
+export interface PracticeMistakeSummary {
+  totalAttempts: number;
+  answerCounts: Record<number, number>;
 }
 
 export interface CategoryProgress {
@@ -133,6 +143,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.questionsError]: AppError;
 
     [stateKeys.practiceUserAnswers]: UserAnswers;
+    [stateKeys.practiceMistakes]: PracticeMistakes;
     [stateKeys.practiceFavorites]: Favorites;
     [stateKeys.practiceGlobalIndex]: number | null;
     [stateKeys.practiceLearnGlobalIndex]: number | null;
@@ -180,6 +191,8 @@ export interface AppContracts extends UkladContracts {
       questionIndex: number,
       answerIndex: number,
     ];
+    [appIds.events.practiceLegacyMistakesMigrated]: [];
+    [appIds.events.practiceMistakeRemoved]: [questionIndex: number];
     [appIds.events.practiceFavoriteToggled]: [questionIndex: number];
     [appIds.events.practiceAnswersCleared]: [];
     [appIds.events.practiceClearAnswersRequested]: [];
@@ -278,6 +291,10 @@ export interface AppContracts extends UkladContracts {
       params: [];
       result: UserAnswers;
     };
+    [appIds.subscriptions.practiceMistakes]: {
+      params: [];
+      result: PracticeMistakes;
+    };
     [appIds.subscriptions.practiceFavorites]: { params: []; result: Favorites };
     [appIds.subscriptions.practiceGlobalIndex]: {
       params: [];
@@ -328,6 +345,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.practiceUserAnswerByQuestionIndex]: {
       params: [questionIndex: number];
       result: number | undefined;
+    };
+    [appIds.subscriptions.practiceMistakeSummaryByQuestionIndex]: {
+      params: [questionIndex: number];
+      result: PracticeMistakeSummary;
     };
     [appIds.subscriptions.practiceIsFavoriteByGlobalIndex]: {
       params: [globalIndex: number];

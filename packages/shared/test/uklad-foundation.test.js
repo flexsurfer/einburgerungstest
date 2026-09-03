@@ -28,6 +28,9 @@ describe("Uklad application foundation", () => {
     expect(firstState[stateKeys.practiceUserAnswers]).not.toBe(
       secondState[stateKeys.practiceUserAnswers],
     );
+    expect(firstState[stateKeys.practiceMistakes]).not.toBe(
+      secondState[stateKeys.practiceMistakes],
+    );
     expect(firstState[stateKeys.practiceFavorites]).not.toBe(
       secondState[stateKeys.practiceFavorites],
     );

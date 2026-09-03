@@ -26,6 +26,7 @@ export const stateKeys = {
   questionsError: "questionsError",
 
   practiceUserAnswers: "practiceUserAnswers",
+  practiceMistakes: "practiceMistakes",
   practiceFavorites: "practiceFavorites",
   practiceGlobalIndex: "practiceGlobalIndex",
   practiceLearnGlobalIndex: "practiceLearnGlobalIndex",
@@ -71,6 +72,8 @@ export const appIds = {
     vocabularyFetchFailed: "vocabulary/fetch-failed",
 
     practiceQuestionAnswered: "practice/question-answered",
+    practiceLegacyMistakesMigrated: "practice/legacy-mistakes-migrated",
+    practiceMistakeRemoved: "practice/mistake-removed",
     practiceFavoriteToggled: "practice/favorite-toggled",
     practiceAnswersCleared: "practice/answers-cleared",
     practiceClearAnswersRequested: "practice/clear-answers-requested",
@@ -113,6 +116,7 @@ export const appIds = {
     preferencesThemeSelection: "preferences/theme-selection",
 
     practiceUserAnswers: "practice/user-answers",
+    practiceMistakes: "practice/mistakes",
     practiceFavorites: "practice/favorites",
     practiceGlobalIndex: "practice/global-index",
     practiceLearnGlobalIndex: "practice/learn-global-index",
@@ -128,6 +132,8 @@ export const appIds = {
     practiceFilteredQuestions: "practice/filtered-questions",
     practiceFilteredQuestionsCount: "practice/filtered-questions-count",
     practiceUserAnswerByQuestionIndex: "practice/user-answer-by-question-index",
+    practiceMistakeSummaryByQuestionIndex:
+      "practice/mistake-summary-by-question-index",
     practiceIsFavoriteByGlobalIndex: "practice/is-favorite-by-global-index",
     practiceStatistics: "practice/statistics",
     practiceOverview: "practice/overview",

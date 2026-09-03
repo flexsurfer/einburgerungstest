@@ -302,6 +302,128 @@ describe("Uklad shared domain graph", () => {
     ).toBe(0);
   });
 
+  it("stores every wrong practice attempt separately until it is removed", () => {
+    const { harness } = createDomainHarness();
+    harness.dispatchSync([
+      appIds.events.questionsFetchSucceeded,
+      [
+        {
+          question: "Choose A",
+          category: "Politik",
+          correct: 0,
+          answers: ["A", "B", "C"],
+        },
+      ],
+    ]);
+
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 2]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 1]);
+
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({ 1: 1 });
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1, 2, 1],
+    });
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+        1,
+      ]),
+    ).toEqual({ totalAttempts: 3, answerCounts: { 1: 2, 2: 1 } });
+    // Clearing only the latest answer keeps the durable mistake history.
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1, 2, 1],
+    });
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceWrongCount]),
+    ).toBe(1);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+        1,
+      ]),
+    ).toEqual({ totalAttempts: 3, answerCounts: { 1: 2, 2: 1 } });
+
+    // A correct retry does not erase or add to the mistake history.
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 0]);
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1, 2, 1],
+    });
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 2]);
+    harness.dispatchSync([appIds.events.navigationCategorySelected, "wrong"]);
+    expect(
+      harness.getSubscriptionValue([
+        appIds.subscriptions.navigationQuestionPickerItems,
+      ])[0],
+    ).toMatchObject({ isAnswered: true, isCorrect: false });
+
+    harness.dispatchSync([appIds.events.practiceMistakeRemoved, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({ 1: 2 });
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({ 1: [] });
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceWrongCount]),
+    ).toBe(0);
+
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({ 1: [] });
+  });
+
+  it("migrates legacy wrong answers once the question catalog is loaded", () => {
+    const { harness } = createDomainHarness();
+
+    // These answers simulate hydrated data from before mistake history existed.
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 2, 1]);
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 3, 1]);
+    harness.dispatchSync([appIds.events.practiceMistakeRemoved, 3]);
+
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({ 3: [] });
+    loadQuestions(harness);
+
+    // Question 1 was wrong, question 2 was correct, and question 3 has an
+    // explicit removal tombstone that the migration must preserve.
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1],
+      3: [],
+    });
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceWrongCount]),
+    ).toBe(1);
+
+    harness.dispatchSync([appIds.events.practiceLegacyMistakesMigrated]);
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1],
+      3: [],
+    });
+
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({
+      2: 1,
+      3: 1,
+    });
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [1],
+      3: [],
+    });
+  });
+
+  it("clears a correct practice answer without creating a mistake", () => {
+    const { harness } = createDomainHarness();
+    loadQuestions(harness);
+
+    harness.dispatchSync([appIds.events.practiceQuestionAnswered, 1, 0]);
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
+    harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);
+    expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
+  });
+
   it("isolates test answers and generates a test selection when test mode is selected", () => {
     const { harness } = createDomainHarness();
     loadQuestions(harness);
@@ -320,6 +442,9 @@ describe("Uklad shared domain graph", () => {
     ).toEqual({ 1: 0 });
     expect(
       harness.getSubscriptionValue([appIds.subscriptions.practiceUserAnswers]),
+    ).toEqual({});
+    expect(
+      harness.getSubscriptionValue([appIds.subscriptions.practiceMistakes]),
     ).toEqual({});
 
     harness.dispatchSync([appIds.events.practiceQuestionAnswerCleared, 1]);

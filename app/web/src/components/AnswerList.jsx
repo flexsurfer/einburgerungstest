@@ -15,6 +15,13 @@ export const AnswerList = ({ question }) => {
     ],
     "AnswerList",
   );
+  const mistakeSummary = useSubscription(
+    [
+      appIds.subscriptions.practiceMistakeSummaryByQuestionIndex,
+      question.globalIndex,
+    ],
+    "AnswerList",
+  );
   const isTestMode = useSubscription(
     [appIds.subscriptions.navigationIsTestMode],
     "AnswerList",
@@ -57,15 +64,29 @@ export const AnswerList = ({ question }) => {
     ],
   );
 
-  const isIncorrect =
-    !isTestMode &&
-    userAnswer !== undefined &&
-    userAnswer !== question.correct &&
-    !showAnswers;
   const wrongAnswersMode = selectedCategory === "wrong";
+  const showAnswerAction =
+    !isTestMode &&
+    (wrongAnswersMode
+      ? mistakeSummary.totalAttempts > 0
+      : userAnswer !== undefined);
+
+  const handleAnswerAction = useCallback(() => {
+    runtime.dispatch([
+      wrongAnswersMode
+        ? appIds.events.practiceMistakeRemoved
+        : appIds.events.practiceQuestionAnswerCleared,
+      question.globalIndex,
+    ]);
+  }, [runtime, wrongAnswersMode, question.globalIndex]);
 
   return (
     <div className="answers-container">
+      {wrongAnswersMode && mistakeSummary.totalAttempts > 0 && (
+        <div className="mistake-summary">
+          Wrong attempts: <strong>{mistakeSummary.totalAttempts}</strong>
+        </div>
+      )}
       {question.answers.map((answer, index) => (
         <AnswerButton
           key={index}
@@ -74,27 +95,28 @@ export const AnswerList = ({ question }) => {
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
           showAnswers={showAnswers}
+          revealCorrectAnswer={wrongAnswersMode}
           disabled={
             isTestMode
               ? testSessionStatus !== "in-progress" || showAnswers
-              : userAnswer !== undefined || showAnswers
+              : wrongAnswersMode || userAnswer !== undefined || showAnswers
           }
           isExamMode={isTestMode}
           onClick={handleAnswerClick}
           userAnswer={userAnswer}
+          mistakeCount={
+            wrongAnswersMode ? mistakeSummary.answerCounts[index] || 0 : 0
+          }
         />
       ))}
-      {isIncorrect && (
+      {showAnswerAction && (
         <button
-          className="try-again-button"
-          onClick={() =>
-            runtime.dispatch([
-              appIds.events.practiceQuestionAnswerCleared,
-              question.globalIndex,
-            ])
-          }
+          className={`answer-action-button ${
+            wrongAnswersMode ? "remove-mistake" : "clear-answer"
+          }`}
+          onClick={handleAnswerAction}
         >
-          {wrongAnswersMode ? "Clear answer" : "Try again"}
+          {wrongAnswersMode ? "Remove from mistakes" : "Clear answer"}
         </button>
       )}
     </div>

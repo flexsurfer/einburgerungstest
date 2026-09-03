@@ -38,6 +38,8 @@ export type {
   HttpMethod,
   NavigationScreen,
   PracticeOverview,
+  PracticeMistakes,
+  PracticeMistakeSummary,
   PracticeCategoryProgress,
   CategoryProgress,
   Question,

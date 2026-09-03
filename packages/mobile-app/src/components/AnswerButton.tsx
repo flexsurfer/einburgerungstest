@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { Answer } from "../types";
 import { type Colors, useColors } from "../theme";
 
@@ -13,6 +13,8 @@ interface AnswerButtonProps {
   isExamMode: boolean;
   onClick: (index: number) => void;
   userAnswer: number | undefined;
+  mistakeCount?: number;
+  revealCorrectAnswer?: boolean;
 }
 
 export const AnswerButton = memo<AnswerButtonProps>(
@@ -26,6 +28,8 @@ export const AnswerButton = memo<AnswerButtonProps>(
     isExamMode,
     onClick,
     userAnswer,
+    mistakeCount = 0,
+    revealCorrectAnswer = false,
   }) => {
     const handlePress = () => {
       if (!disabled) {
@@ -38,16 +42,19 @@ export const AnswerButton = memo<AnswerButtonProps>(
         return isSelected
           ? styles(themeColors).selectedButton
           : styles(themeColors).defaultButton;
-      } else if (showAnswers) {
-        return isCorrect
-          ? styles(themeColors).correctButton
-          : styles(themeColors).defaultButton;
+      } else if (showAnswers || revealCorrectAnswer) {
+        if (isCorrect) return styles(themeColors).correctButton;
+        if (mistakeCount > 0) return styles(themeColors).mistakeButton;
       } else if (userAnswer !== undefined) {
         if (isSelected && !isCorrect) {
           return styles(themeColors).incorrectButton;
         } else if (isCorrect) {
           return styles(themeColors).correctButton;
+        } else if (mistakeCount > 0) {
+          return styles(themeColors).mistakeButton;
         }
+      } else if (mistakeCount > 0) {
+        return styles(themeColors).mistakeButton;
       }
       return styles(themeColors).defaultButton;
     };
@@ -57,16 +64,19 @@ export const AnswerButton = memo<AnswerButtonProps>(
         return isSelected
           ? styles(themeColors).selectedText
           : styles(themeColors).defaultText;
-      } else if (showAnswers) {
-        return isCorrect
-          ? styles(themeColors).correctText
-          : styles(themeColors).defaultText;
+      } else if (showAnswers || revealCorrectAnswer) {
+        if (isCorrect) return styles(themeColors).correctText;
+        if (mistakeCount > 0) return styles(themeColors).mistakeText;
       } else if (userAnswer !== undefined) {
         if (isSelected && !isCorrect) {
           return styles(themeColors).incorrectText;
         } else if (isCorrect) {
           return styles(themeColors).correctText;
+        } else if (mistakeCount > 0) {
+          return styles(themeColors).mistakeText;
         }
+      } else if (mistakeCount > 0) {
+        return styles(themeColors).mistakeText;
       }
       return styles(themeColors).defaultText;
     };
@@ -85,6 +95,13 @@ export const AnswerButton = memo<AnswerButtonProps>(
         <Text style={[styles(themeColors).answerText, getTextStyle()]}>
           {answer}
         </Text>
+        {mistakeCount > 0 ? (
+          <View style={styles(themeColors).mistakeCount}>
+            <Text style={styles(themeColors).mistakeCountText}>
+              {mistakeCount} {mistakeCount === 1 ? "mistake" : "mistakes"}
+            </Text>
+          </View>
+        ) : null}
       </TouchableOpacity>
     );
   },
@@ -99,11 +116,16 @@ const styles = (colors: Colors) =>
       marginBottom: 10,
       borderWidth: 1,
       borderColor: colors.borderColor,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 10,
     },
     answerText: {
       fontSize: 16,
       lineHeight: 22,
       color: colors.textColor,
+      flex: 1,
     },
     defaultButton: {
       backgroundColor: colors.bgColor,
@@ -131,5 +153,23 @@ const styles = (colors: Colors) =>
     },
     incorrectText: {
       color: colors.errorColor,
+    },
+    mistakeButton: {
+      backgroundColor: colors.errorLight,
+      borderColor: colors.errorColor,
+    },
+    mistakeText: {
+      color: colors.errorColor,
+    },
+    mistakeCount: {
+      backgroundColor: colors.errorColor,
+      borderRadius: 999,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+    },
+    mistakeCountText: {
+      color: colors.primaryTextColor,
+      fontSize: 11,
+      fontWeight: "700",
     },
   });

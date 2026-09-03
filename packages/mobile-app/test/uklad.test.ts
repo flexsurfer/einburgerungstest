@@ -1,13 +1,17 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createUkladTestHarness } from "@ukladjs/core/testing";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert, AppState, Appearance } from "react-native";
 import {
+  APP_PERSISTENCE_PREFIX,
+  APP_PERSISTENCE_VERSION,
   appIds,
   createAppRuntime,
   registerSharedModules,
   stateKeys,
 } from "@ebtest/shared/uklad";
 import {
+  mobileQuestionsData,
   registerMobilePlatform,
   watchMobileSystemTheme,
   type MobilePlatform,
@@ -396,6 +400,7 @@ describe("Uklad mobile platform", () => {
     await harness.flush();
 
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
     expect(Alert.alert).toHaveBeenCalledWith(
       "Clear progress",
       "Are you sure you want to clear ALL your progress?",
@@ -447,6 +452,41 @@ describe("Uklad mobile platform", () => {
 
     expect(harness.getState()[stateKeys.questionsLoaded]).toBe(true);
     expect(applySystemBarTheme).toHaveBeenCalledWith("light");
+  });
+
+  it("migrates hydrated legacy answers after native questions are available", async () => {
+    const question = mobileQuestionsData[0];
+    const wrongAnswer = question.correct === 0 ? 1 : 0;
+    const userAnswersKey = `${APP_PERSISTENCE_PREFIX}/${encodeURIComponent(
+      stateKeys.practiceUserAnswers,
+    )}`;
+    const mistakesKey = `${APP_PERSISTENCE_PREFIX}/${encodeURIComponent(
+      stateKeys.practiceMistakes,
+    )}`;
+    const envelope = (data: unknown) =>
+      JSON.stringify({ v: APP_PERSISTENCE_VERSION, data });
+
+    vi.mocked(AsyncStorage.getItem).mockImplementation(async (key) =>
+      key === userAnswersKey ? envelope({ 1: wrongAnswer }) : null,
+    );
+
+    const app = bootstrapMobileApp({
+      platform: { applySystemBarTheme: vi.fn() },
+    });
+    apps.push(app);
+    const harness = createUkladTestHarness(app.runtime);
+
+    expect((await app.hydration).ok).toBe(true);
+    await harness.flush();
+    await app.persistence.flush();
+
+    expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({
+      1: [wrongAnswer],
+    });
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      mistakesKey,
+      envelope({ 1: [wrongAnswer] }),
+    );
   });
 
   it("does not purge stored data when hydration fails", async () => {

@@ -4,8 +4,8 @@ import type {
   CategorySelection,
   FederalLand,
   Favorites,
+  PracticeMistakes,
   Question,
-  UserAnswers,
 } from "../../app/uklad/contracts.js";
 import { generateTest } from "../test-session/generate.js";
 import { selectPracticeQuestions } from "../practice/selection.js";
@@ -15,7 +15,7 @@ interface NavigationDraftState {
   [stateKeys.questionsItems]: Question[];
   [stateKeys.navigationSelectedCategory]: CategorySelection;
   [stateKeys.practiceFavorites]: Favorites;
-  [stateKeys.practiceUserAnswers]: UserAnswers;
+  [stateKeys.practiceMistakes]: PracticeMistakes;
   [stateKeys.testSessionQuestions]: Question[];
   [stateKeys.practiceGlobalIndex]: number | null;
   [stateKeys.practiceLearnGlobalIndex]: number | null;
@@ -34,7 +34,7 @@ function selectedQuestions(draftState: NavigationDraftState): Question[] {
     navigationSelectedCategory:
       draftState[stateKeys.navigationSelectedCategory],
     practiceFavorites: draftState[stateKeys.practiceFavorites],
-    practiceUserAnswers: draftState[stateKeys.practiceUserAnswers],
+    practiceMistakes: draftState[stateKeys.practiceMistakes],
     testSessionQuestions: draftState[stateKeys.testSessionQuestions],
     preferencesSelectedLand: draftState[stateKeys.preferencesSelectedLand],
   });

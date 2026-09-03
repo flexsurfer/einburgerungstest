@@ -1,5 +1,6 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
+import { migrateLegacyPracticeMistakes } from "../practice/migration.js";
 import { createQuestionsState } from "./state.js";
 
 export const registerQuestionsEvents: AppModule = (registrar) => {
@@ -27,6 +28,7 @@ export const registerQuestionsEvents: AppModule = (registrar) => {
         loadedState[stateKeys.questionsItems];
       draftState[stateKeys.questionsCategories] =
         loadedState[stateKeys.questionsCategories];
+      migrateLegacyPracticeMistakes(draftState);
     },
   );
 
