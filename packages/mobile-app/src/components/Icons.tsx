@@ -225,17 +225,18 @@ export const PeopleIcon = ({ color, size = 24 }: IconProps) => (
   </Svg>
 );
 
-export const BookmarkIcon = ({ color, size = 25 }: IconProps) => (
+export const BookmarkIcon = ({
+  color,
+  size = 25,
+  filled = false,
+}: IconProps & { filled?: boolean }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Path
       d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18l-6-3.5L6 22V4Z"
       stroke={color}
       strokeWidth={1.8}
       strokeLinejoin="round"
-    />
-    <Path
-      d="m12 6 .8 1.7 1.9.3-1.4 1.4.3 1.9-1.6-.9-1.6.9.3-1.9-1.4-1.4 1.9-.3L12 6Z"
-      fill={color}
+      fill={filled ? color : "none"}
     />
   </Svg>
 );

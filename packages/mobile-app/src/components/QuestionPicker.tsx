@@ -1,23 +1,40 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import {
-  View,
+  Animated,
+  FlatList,
+  Modal,
+  PanResponder,
+  type PanResponderGestureState,
+  Platform,
+  Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Pressable,
-  Modal,
-  FlatList,
-  StyleSheet,
-  Dimensions,
+  useWindowDimensions,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   appIds,
+  type QuestionPickerItem,
   useRuntime,
   useSubscription,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 
+const MOBILE_COLUMNS = 4;
+const WIDE_COLUMNS = 5;
+const ITEM_HEIGHT = 78;
+const ITEM_GAP = 10;
+
 export const QuestionPicker = memo(() => {
   const runtime = useRuntime();
+  const colors = useColors();
+  const { width, height } = useWindowDimensions();
+  const sheetTranslateY = useRef(new Animated.Value(0)).current;
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const dragStartY = useRef(0);
+  const scrollOffsetY = useRef(0);
   const pickerItems = useSubscription(
     [appIds.subscriptions.navigationQuestionPickerItems],
     "QuestionPicker",
@@ -26,10 +43,62 @@ export const QuestionPicker = memo(() => {
     [appIds.subscriptions.navigationQuestionPickerVisible],
     "QuestionPicker",
   );
-  const colors = useColors();
 
-  // Memoize styles to avoid recreation on every render
-  const styleSheet = useMemo(() => createStyles(colors), [colors]);
+  const usesNativeIosSheet = Platform.OS === "ios";
+  const numColumns = width >= 600 ? WIDE_COLUMNS : MOBILE_COLUMNS;
+  const sheetHeight = usesNativeIosSheet
+    ? height
+    : Math.min(height * 0.88, 780);
+  const styleSheet = useMemo(
+    () => createStyles(colors, width, height, numColumns, usesNativeIosSheet),
+    [colors, height, numColumns, usesNativeIosSheet, width],
+  );
+  const selectedIndex = useMemo(
+    () => pickerItems.findIndex((item) => item.isSelected),
+    [pickerItems],
+  );
+  const initialRowIndex = Math.max(0, Math.floor(selectedIndex / numColumns));
+  const pickerRows = useMemo(() => {
+    const rows: QuestionPickerItem[][] = [];
+    for (let index = 0; index < pickerItems.length; index += numColumns) {
+      rows.push(pickerItems.slice(index, index + numColumns));
+    }
+    return rows;
+  }, [numColumns, pickerItems]);
+
+  useEffect(() => {
+    if (!showQuestionPicker) return;
+
+    scrollOffsetY.current = initialRowIndex * (ITEM_HEIGHT + ITEM_GAP);
+    if (usesNativeIosSheet) return;
+
+    sheetTranslateY.setValue(sheetHeight);
+    backdropOpacity.setValue(0);
+    const frame = requestAnimationFrame(() => {
+      Animated.parallel([
+        Animated.spring(sheetTranslateY, {
+          toValue: 0,
+          speed: 24,
+          bounciness: 0,
+          useNativeDriver: true,
+        }),
+        Animated.timing(backdropOpacity, {
+          toValue: 1,
+          duration: 180,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [
+    backdropOpacity,
+    initialRowIndex,
+    sheetHeight,
+    sheetTranslateY,
+    showQuestionPicker,
+    usesNativeIosSheet,
+  ]);
 
   const handleQuestionSelect = useCallback(
     (index: number) => {
@@ -38,313 +107,640 @@ export const QuestionPicker = memo(() => {
     [runtime],
   );
 
-  const handleClose = useCallback(() => {
+  const hidePicker = useCallback(() => {
     runtime.dispatch([appIds.events.navigationQuestionPickerShown, false]);
   }, [runtime]);
 
-  // Pre-calculate style combinations for better performance
-  const questionItemStyles = useMemo(
-    () => ({
-      base: styleSheet.questionItem,
-      selected: [styleSheet.questionItem, styleSheet.selectedQuestionItem],
-      correct: [styleSheet.questionItem, styleSheet.correctQuestionItem],
-      incorrect: [styleSheet.questionItem, styleSheet.incorrectQuestionItem],
-      selectedCorrect: [
-        styleSheet.questionItem,
-        styleSheet.selectedQuestionItem,
-        styleSheet.correctQuestionItem,
-      ],
-      selectedIncorrect: [
-        styleSheet.questionItem,
-        styleSheet.selectedQuestionItem,
-        styleSheet.incorrectQuestionItem,
-      ],
-    }),
-    [styleSheet],
-  );
+  const springSheetBack = useCallback(() => {
+    Animated.parallel([
+      Animated.spring(sheetTranslateY, {
+        toValue: 0,
+        speed: 24,
+        bounciness: 0,
+        useNativeDriver: true,
+      }),
+      Animated.timing(backdropOpacity, {
+        toValue: 1,
+        duration: 140,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [backdropOpacity, sheetTranslateY]);
 
-  const textStyles = useMemo(
-    () => ({
-      base: styleSheet.questionItemText,
-      selected: [
-        styleSheet.questionItemText,
-        styleSheet.selectedQuestionItemText,
-      ],
-      answered: [
-        styleSheet.questionItemText,
-        styleSheet.answeredQuestionItemText,
-      ],
-      selectedAnswered: [
-        styleSheet.questionItemText,
-        styleSheet.selectedQuestionItemText,
-        styleSheet.answeredQuestionItemText,
-      ],
-    }),
-    [styleSheet],
-  );
+  const handleClose = useCallback(() => {
+    if (usesNativeIosSheet) {
+      hidePicker();
+      return;
+    }
 
-  const getQuestionItemStyle = useCallback(
-    (item) => {
-      if (item.isSelected && item.isAnswered) {
-        return item.isCorrect
-          ? questionItemStyles.selectedCorrect
-          : questionItemStyles.selectedIncorrect;
+    Animated.parallel([
+      Animated.timing(sheetTranslateY, {
+        toValue: sheetHeight,
+        duration: 210,
+        useNativeDriver: true,
+      }),
+      Animated.timing(backdropOpacity, {
+        toValue: 0,
+        duration: 180,
+        useNativeDriver: true,
+      }),
+    ]).start(({ finished }) => {
+      if (finished) hidePicker();
+    });
+  }, [
+    backdropOpacity,
+    hidePicker,
+    sheetHeight,
+    sheetTranslateY,
+    usesNativeIosSheet,
+  ]);
+
+  const panResponders = useMemo(() => {
+    const startDrag = () => {
+      sheetTranslateY.stopAnimation((value) => {
+        dragStartY.current = value;
+      });
+      backdropOpacity.stopAnimation();
+    };
+    const moveDrag = (gesture: PanResponderGestureState) => {
+      const distance = Math.max(0, dragStartY.current + gesture.dy);
+      sheetTranslateY.setValue(distance);
+      backdropOpacity.setValue(Math.max(0, 1 - distance / sheetHeight));
+    };
+    const finishDrag = (gesture: PanResponderGestureState) => {
+      const distance = Math.max(0, dragStartY.current + gesture.dy);
+      if (distance > 96 || gesture.vy > 0.8) {
+        handleClose();
+      } else {
+        springSheetBack();
       }
-      if (item.isSelected) return questionItemStyles.selected;
-      if (item.isAnswered) {
-        return item.isCorrect
-          ? questionItemStyles.correct
-          : questionItemStyles.incorrect;
-      }
-      return questionItemStyles.base;
+    };
+    const responderHandlers = {
+      onPanResponderGrant: startDrag,
+      onPanResponderMove: (
+        _event: unknown,
+        gesture: PanResponderGestureState,
+      ) => moveDrag(gesture),
+      onPanResponderRelease: (
+        _event: unknown,
+        gesture: PanResponderGestureState,
+      ) => finishDrag(gesture),
+      onPanResponderTerminationRequest: () => false,
+      onPanResponderTerminate: springSheetBack,
+    };
+    const shouldPullFromList = (gesture: PanResponderGestureState) =>
+      !usesNativeIosSheet &&
+      scrollOffsetY.current <= 0 &&
+      gesture.dy > 5 &&
+      Math.abs(gesture.dy) > Math.abs(gesture.dx);
+
+    return {
+      handle: PanResponder.create({
+        onStartShouldSetPanResponder: () => !usesNativeIosSheet,
+        onStartShouldSetPanResponderCapture: () => !usesNativeIosSheet,
+        ...responderHandlers,
+      }),
+      list: PanResponder.create({
+        onMoveShouldSetPanResponder: (_event, gesture) =>
+          shouldPullFromList(gesture),
+        onMoveShouldSetPanResponderCapture: (_event, gesture) =>
+          shouldPullFromList(gesture),
+        ...responderHandlers,
+      }),
+    };
+  }, [
+    backdropOpacity,
+    handleClose,
+    sheetHeight,
+    sheetTranslateY,
+    springSheetBack,
+    usesNativeIosSheet,
+  ]);
+
+  const getItemLayout = useCallback(
+    (
+      _data: ArrayLike<QuestionPickerItem[]> | null | undefined,
+      index: number,
+    ) => {
+      return {
+        index,
+        length: ITEM_HEIGHT + ITEM_GAP,
+        offset: index * (ITEM_HEIGHT + ITEM_GAP),
+      };
     },
-    [questionItemStyles],
+    [],
   );
 
-  const getTextStyle = useCallback(
-    (item) => {
-      if (item.isSelected && item.isAnswered)
-        return textStyles.selectedAnswered;
-      if (item.isSelected) return textStyles.selected;
-      if (item.isAnswered) return textStyles.answered;
-      return textStyles.base;
-    },
-    [textStyles],
-  );
-
-  const renderQuestionItem = useCallback(
-    ({ item }) => {
+  const renderQuestionRow = useCallback(
+    ({ item }: { item: QuestionPickerItem[] }) => {
       return (
-        <Pressable
-          style={({ pressed }) => [
-            getQuestionItemStyle(item),
-            pressed && !item.isSelected && styleSheet.pressedQuestionItem,
-          ]}
-          onPress={() => handleQuestionSelect(item.filteredIndex)}
-          accessibilityLabel={item.ariaLabel}
-          android_ripple={{ color: colors.accentMedium, borderless: false }}
-          hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-          pressRetentionOffset={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          onStartShouldSetResponderCapture={() => true}
-        >
-          <Text style={getTextStyle(item)}>{item.number}</Text>
-          {item.isAnswered && (
-            <View
-              style={[
-                styleSheet.answerIndicator,
-                item.isCorrect
-                  ? styleSheet.correctIndicator
-                  : styleSheet.incorrectIndicator,
-              ]}
-            />
-          )}
-        </Pressable>
+        <QuestionPickerRow
+          items={item}
+          onSelect={handleQuestionSelect}
+          rippleColor={colors.accentMedium}
+          styleSheet={styleSheet}
+        />
       );
     },
-    [getQuestionItemStyle, getTextStyle, handleQuestionSelect, styleSheet],
+    [colors.accentMedium, handleQuestionSelect, styleSheet],
   );
 
-  const keyExtractor = useCallback((item, index: number) => item.key, []);
+  const keyExtractor = useCallback(
+    (row: QuestionPickerItem[]) => row.map((item) => item.key).join(":"),
+    [],
+  );
 
-  if (!showQuestionPicker || !pickerItems || pickerItems.length === 0) {
-    return null;
-  }
+  if (!pickerItems.length) return null;
 
   return (
     <Modal
-      visible={showQuestionPicker}
-      transparent={true}
-      animationType="slide"
+      allowSwipeDismissal={usesNativeIosSheet}
+      animationType={usesNativeIosSheet ? "slide" : "none"}
       onRequestClose={handleClose}
+      presentationStyle={usesNativeIosSheet ? "pageSheet" : "overFullScreen"}
+      statusBarTranslucent={!usesNativeIosSheet}
+      transparent={!usesNativeIosSheet}
+      visible={showQuestionPicker}
     >
-      <View style={styleSheet.modalOverlay}>
-        <View style={styleSheet.modalContent}>
-          <View style={styleSheet.modalHeader}>
-            <Text style={styleSheet.modalTitle}>Select Question</Text>
-            <TouchableOpacity
-              style={styleSheet.closeButton}
-              onPress={handleClose}
+      <View style={styleSheet.modalRoot}>
+        {!usesNativeIosSheet && (
+          <>
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                StyleSheet.absoluteFill,
+                styleSheet.backdrop,
+                { opacity: backdropOpacity },
+              ]}
+            />
+            <Pressable
               accessibilityLabel="Close question picker"
-            >
-              <Text style={styleSheet.closeButtonText}>✕</Text>
-            </TouchableOpacity>
-          </View>
+              accessibilityRole="button"
+              onPress={handleClose}
+              style={StyleSheet.absoluteFill}
+            />
+          </>
+        )}
+        <Animated.View
+          style={[
+            styleSheet.sheet,
+            !usesNativeIosSheet && {
+              transform: [{ translateY: sheetTranslateY }],
+            },
+          ]}
+        >
+          <SafeAreaView
+            accessibilityViewIsModal
+            edges={["bottom"]}
+            style={styleSheet.sheetContent}
+          >
+            <View style={styleSheet.dragRegion}>
+              <View
+                style={styleSheet.grabberTouchArea}
+                {...(!usesNativeIosSheet
+                  ? panResponders.handle.panHandlers
+                  : {})}
+              >
+                <View style={styleSheet.grabber} />
+              </View>
+              <View style={styleSheet.header}>
+                <View
+                  style={styleSheet.headerCopy}
+                  {...(!usesNativeIosSheet
+                    ? panResponders.handle.panHandlers
+                    : {})}
+                >
+                  <Text style={styleSheet.title}>Select question</Text>
+                  <Text style={styleSheet.subtitle}>
+                    Jump to any question in this list
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  accessibilityLabel="Close question picker"
+                  accessibilityRole="button"
+                  activeOpacity={0.7}
+                  onPress={handleClose}
+                  style={styleSheet.closeButton}
+                >
+                  <Text style={styleSheet.closeButtonText}>×</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
 
-          <View style={styleSheet.legendContainer}>
-            <View style={styleSheet.legendItem}>
-              <View
-                style={[styleSheet.legendDot, styleSheet.correctIndicator]}
+            <View style={styleSheet.legend}>
+              <LegendItem
+                colors={colors}
+                label="Correct"
+                symbol="✓"
+                tone="correct"
               />
-              <Text style={styleSheet.legendText}>Correct</Text>
-            </View>
-            <View style={styleSheet.legendItem}>
-              <View
-                style={[styleSheet.legendDot, styleSheet.incorrectIndicator]}
+              <LegendItem
+                colors={colors}
+                label="Incorrect"
+                symbol="×"
+                tone="incorrect"
               />
-              <Text style={styleSheet.legendText}>Incorrect</Text>
-            </View>
-            <View style={styleSheet.legendItem}>
-              <View
-                style={[styleSheet.legendDot, styleSheet.unansweredIndicator]}
+              <LegendItem
+                colors={colors}
+                label="Unanswered"
+                symbol=""
+                tone="unanswered"
               />
-              <Text style={styleSheet.legendText}>Unanswered</Text>
+              <LegendItem
+                colors={colors}
+                label="Current"
+                symbol="•"
+                tone="current"
+              />
             </View>
-          </View>
 
-          <FlatList
-            data={pickerItems}
-            renderItem={renderQuestionItem}
-            keyExtractor={keyExtractor}
-            numColumns={5}
-            contentContainerStyle={styleSheet.questionsGrid}
-            keyboardShouldPersistTaps="always"
-            showsVerticalScrollIndicator={false}
-            // Performance optimizations for Android - tuned for fast scrolling without gaps
-            removeClippedSubviews={false} // Disabled to prevent gaps during fast scroll
-            initialNumToRender={30} // Render more items initially to cover viewport + buffer
-            maxToRenderPerBatch={40} // Larger batches to keep up with fast scrolling
-            windowSize={20} // Larger window to keep more items rendered around viewport
-            updateCellsBatchingPeriod={100} // Slower updates to prevent rendering conflicts
-            disableVirtualization={false}
-            scrollEventThrottle={16}
-          />
-        </View>
+            {showQuestionPicker && (
+              <View
+                style={styleSheet.listContainer}
+                {...(!usesNativeIosSheet ? panResponders.list.panHandlers : {})}
+              >
+                <FlatList
+                  contentContainerStyle={styleSheet.grid}
+                  data={pickerRows}
+                  getItemLayout={getItemLayout}
+                  initialNumToRender={8}
+                  initialScrollIndex={initialRowIndex}
+                  key={numColumns}
+                  keyExtractor={keyExtractor}
+                  maxToRenderPerBatch={10}
+                  onScroll={({ nativeEvent }) => {
+                    scrollOffsetY.current = Math.max(
+                      0,
+                      nativeEvent.contentOffset.y,
+                    );
+                  }}
+                  removeClippedSubviews={false}
+                  renderItem={renderQuestionRow}
+                  scrollEventThrottle={16}
+                  showsVerticalScrollIndicator={false}
+                  updateCellsBatchingPeriod={16}
+                  windowSize={13}
+                />
+              </View>
+            )}
+          </SafeAreaView>
+        </Animated.View>
       </View>
     </Modal>
   );
 });
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+type LegendTone = "correct" | "incorrect" | "unanswered" | "current";
+type PickerStyles = ReturnType<typeof createStyles>;
 
-const createStyles = (colors: Colors) => {
-  const modalWidth = Math.min(screenWidth - 40, 400);
-  const numColumns = 5;
-  const gridPadding = 40; // 20px padding on each side
-  const itemMargin = 5;
-  const availableWidth = modalWidth - gridPadding;
-  const itemSize = (availableWidth - itemMargin * 2 * numColumns) / numColumns;
+const QuestionPickerRow = memo(
+  ({
+    items,
+    onSelect,
+    rippleColor,
+    styleSheet,
+  }: {
+    items: QuestionPickerItem[];
+    onSelect: (index: number) => void;
+    rippleColor: string;
+    styleSheet: PickerStyles;
+  }) => (
+    <View style={styleSheet.gridRow}>
+      {items.map((item) => (
+        <QuestionPickerTile
+          item={item}
+          key={item.key}
+          onSelect={onSelect}
+          rippleColor={rippleColor}
+          styleSheet={styleSheet}
+        />
+      ))}
+    </View>
+  ),
+);
+
+const QuestionPickerTile = memo(
+  ({
+    item,
+    onSelect,
+    rippleColor,
+    styleSheet,
+  }: {
+    item: QuestionPickerItem;
+    onSelect: (index: number) => void;
+    rippleColor: string;
+    styleSheet: PickerStyles;
+  }) => {
+    const statusStyle = item.isAnswered
+      ? item.isCorrect
+        ? styleSheet.correctQuestionItem
+        : styleSheet.incorrectQuestionItem
+      : undefined;
+
+    return (
+      <Pressable
+        accessibilityLabel={`Question ${item.filteredIndex + 1} in this list, official question ${item.number}${
+          item.isAnswered
+            ? item.isCorrect
+              ? ", answered correctly"
+              : ", answered incorrectly"
+            : ", unanswered"
+        }${item.isSelected ? ", current question" : ""}`}
+        accessibilityRole="button"
+        accessibilityState={{ selected: item.isSelected }}
+        android_ripple={{ color: rippleColor, borderless: false }}
+        onPress={() => onSelect(item.filteredIndex)}
+        style={({ pressed }) => [
+          styleSheet.questionItem,
+          statusStyle,
+          item.isSelected && styleSheet.selectedQuestionItem,
+          pressed && styleSheet.pressedQuestionItem,
+        ]}
+      >
+        <Text style={styleSheet.listNumber}>{item.filteredIndex + 1}</Text>
+        <Text style={styleSheet.globalNumber}>#{item.number}</Text>
+        {item.isAnswered ? (
+          <View
+            style={[
+              styleSheet.statusBadge,
+              item.isCorrect
+                ? styleSheet.correctStatusBadge
+                : styleSheet.incorrectStatusBadge,
+            ]}
+          >
+            <Text style={styleSheet.statusBadgeText}>
+              {item.isCorrect ? "✓" : "×"}
+            </Text>
+          </View>
+        ) : item.isSelected ? (
+          <View style={styleSheet.currentStatusBadge}>
+            <View style={styleSheet.currentStatusDot} />
+          </View>
+        ) : null}
+      </Pressable>
+    );
+  },
+);
+
+const LegendItem = ({
+  colors,
+  label,
+  symbol,
+  tone,
+}: {
+  colors: Colors;
+  label: string;
+  symbol: string;
+  tone: LegendTone;
+}) => {
+  const toneStyles: Record<LegendTone, { bg: string; border: string }> = {
+    correct: { bg: colors.successLight, border: colors.successColor },
+    incorrect: { bg: colors.errorLight, border: colors.errorColor },
+    unanswered: { bg: colors.surfaceColor, border: colors.textMutedColor },
+    current: { bg: colors.orangeLight, border: colors.orangeColor },
+  };
+  const toneStyle = toneStyles[tone];
+
+  return (
+    <View style={[styles.legendItem, { borderColor: toneStyle.border }]}>
+      <View
+        style={[
+          styles.legendIcon,
+          { backgroundColor: toneStyle.bg, borderColor: toneStyle.border },
+        ]}
+      >
+        <Text style={[styles.legendSymbol, { color: toneStyle.border }]}>
+          {symbol}
+        </Text>
+      </View>
+      <Text style={[styles.legendText, { color: colors.textColor }]}>
+        {label}
+      </Text>
+    </View>
+  );
+};
+
+const createStyles = (
+  colors: Colors,
+  screenWidth: number,
+  screenHeight: number,
+  numColumns: number,
+  usesNativeIosSheet: boolean,
+) => {
+  const contentWidth = Math.min(screenWidth, 660) - 32;
+  const itemWidth = (contentWidth - ITEM_GAP * (numColumns - 1)) / numColumns;
 
   return StyleSheet.create({
-    modalOverlay: {
+    modalRoot: {
       flex: 1,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "flex-end",
+      backgroundColor: usesNativeIosSheet ? colors.surfaceColor : "transparent",
+    },
+    backdrop: {
+      backgroundColor: "rgba(5, 18, 12, 0.48)",
+    },
+    sheet: {
+      width: "100%",
+      height: usesNativeIosSheet ? "100%" : Math.min(screenHeight * 0.88, 780),
+      backgroundColor: colors.surfaceColor,
+      borderTopLeftRadius: usesNativeIosSheet ? 0 : 28,
+      borderTopRightRadius: usesNativeIosSheet ? 0 : 28,
+      overflow: "hidden",
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: -8 },
+      shadowOpacity: usesNativeIosSheet ? 0 : 0.18,
+      shadowRadius: 24,
+      elevation: 18,
+    },
+    sheetContent: {
+      flex: 1,
+    },
+    dragRegion: {
+      backgroundColor: colors.surfaceColor,
+    },
+    grabberTouchArea: {
+      height: 28,
+      alignItems: "center",
       justifyContent: "center",
-      alignItems: "center",
     },
-    modalContent: {
-      backgroundColor: colors.bgColor,
-      borderRadius: 16,
-      width: modalWidth,
-      maxHeight: screenHeight * 0.8,
-      paddingBottom: 20,
+    grabber: {
+      width: 42,
+      height: 5,
+      borderRadius: 3,
+      backgroundColor: colors.borderColor,
     },
-    modalHeader: {
+    header: {
       flexDirection: "row",
-      justifyContent: "space-between",
       alignItems: "center",
-      padding: 20,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.borderColor,
+      paddingHorizontal: 20,
+      paddingTop: 13,
+      paddingBottom: 14,
     },
-    modalTitle: {
-      fontSize: 18,
-      fontWeight: "bold",
+    headerCopy: {
+      flex: 1,
+      paddingRight: 12,
+    },
+    title: {
       color: colors.textColor,
+      fontSize: 24,
+      fontWeight: "800",
+      letterSpacing: -0.4,
+    },
+    subtitle: {
+      color: colors.textMutedColor,
+      fontSize: 14,
+      lineHeight: 20,
+      marginTop: 3,
     },
     closeButton: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: colors.borderColor,
-      justifyContent: "center",
+      width: 44,
+      height: 44,
+      borderRadius: 14,
       alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.surfaceSoftColor,
+      borderColor: colors.borderColor,
+      borderWidth: 1,
     },
     closeButtonText: {
-      fontSize: 16,
       color: colors.textColor,
-      fontWeight: "bold",
+      fontSize: 28,
+      fontWeight: "300",
+      lineHeight: 30,
+      marginTop: -2,
     },
-    legendContainer: {
+    legend: {
       flexDirection: "row",
-      justifyContent: "space-around",
+      flexWrap: "wrap",
+      gap: 8,
       paddingHorizontal: 20,
-      paddingVertical: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.borderColor,
+      paddingBottom: 14,
     },
-    legendItem: {
+    listContainer: {
+      flex: 1,
+    },
+    grid: {
+      width: Math.min(screenWidth, 660),
+      alignSelf: "center",
+      paddingHorizontal: 16,
+      paddingTop: 4,
+      paddingBottom: 24,
+    },
+    gridRow: {
       flexDirection: "row",
-      alignItems: "center",
-    },
-    legendDot: {
-      width: 12,
-      height: 12,
-      borderRadius: 6,
-      marginRight: 6,
-    },
-    legendText: {
-      fontSize: 12,
-      color: colors.textColor,
-      opacity: 0.7,
-    },
-    questionsGrid: {
-      padding: 20,
-      paddingBottom: 0,
+      gap: ITEM_GAP,
+      marginBottom: ITEM_GAP,
     },
     questionItem: {
-      width: itemSize,
-      height: itemSize,
-      margin: itemMargin,
-      borderRadius: 8,
-      backgroundColor: colors.bgColor,
+      width: itemWidth,
+      height: ITEM_HEIGHT,
+      borderRadius: 14,
+      backgroundColor: colors.surfaceColor,
       borderWidth: 1,
       borderColor: colors.borderColor,
-      justifyContent: "center",
       alignItems: "center",
+      justifyContent: "center",
       position: "relative",
     },
     pressedQuestionItem: {
-      backgroundColor: colors.accentLight,
+      opacity: 0.72,
+      transform: [{ scale: 0.97 }],
     },
     selectedQuestionItem: {
-      backgroundColor: colors.accentColor,
-      borderColor: colors.accentColor,
+      borderColor: colors.orangeColor,
+      borderWidth: 2,
+      backgroundColor: colors.orangeLight,
     },
     correctQuestionItem: {
-      borderColor: "#4CAF50",
-      borderWidth: 2,
+      borderColor: colors.successColor,
+      backgroundColor: colors.successLight,
     },
     incorrectQuestionItem: {
-      borderColor: "#F44336",
-      borderWidth: 2,
+      borderColor: colors.errorColor,
+      backgroundColor: colors.errorLight,
     },
-    questionItemText: {
-      fontSize: 16,
-      fontWeight: "600",
+    listNumber: {
       color: colors.textColor,
+      fontSize: 21,
+      fontWeight: "800",
+      fontVariant: ["tabular-nums"],
+      lineHeight: 25,
     },
-    selectedQuestionItemText: {
-      color: colors.bgColor,
+    globalNumber: {
+      color: colors.textMutedColor,
+      fontSize: 11,
+      fontWeight: "600",
+      fontVariant: ["tabular-nums"],
+      lineHeight: 16,
     },
-    answeredQuestionItemText: {
-      fontWeight: "bold",
-    },
-    answerIndicator: {
+    statusBadge: {
       position: "absolute",
-      top: 2,
-      right: 2,
-      width: 8,
-      height: 8,
-      borderRadius: 4,
+      top: 5,
+      right: 5,
+      width: 18,
+      height: 18,
+      borderRadius: 9,
+      alignItems: "center",
+      justifyContent: "center",
     },
-    correctIndicator: {
-      backgroundColor: "#4CAF50",
+    correctStatusBadge: {
+      backgroundColor: colors.successColor,
     },
-    incorrectIndicator: {
-      backgroundColor: "#F44336",
+    incorrectStatusBadge: {
+      backgroundColor: colors.errorColor,
     },
-    unansweredIndicator: {
-      backgroundColor: colors.borderColor,
+    statusBadgeText: {
+      color: colors.primaryTextColor,
+      fontSize: 13,
+      fontWeight: "800",
+      lineHeight: 15,
+    },
+    currentStatusBadge: {
+      position: "absolute",
+      top: 5,
+      right: 5,
+      width: 18,
+      height: 18,
+      borderRadius: 9,
+      borderWidth: 2,
+      borderColor: colors.orangeColor,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    currentStatusDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: colors.orangeColor,
     },
   });
 };
+
+const styles = StyleSheet.create({
+  legendItem: {
+    minHeight: 34,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 17,
+  },
+  legendIcon: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1.5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 6,
+  },
+  legendSymbol: {
+    fontSize: 12,
+    fontWeight: "800",
+    lineHeight: 14,
+  },
+  legendText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+});

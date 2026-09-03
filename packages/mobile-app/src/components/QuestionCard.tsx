@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import { View, Text, Image, Dimensions, StyleSheet } from 'react-native'
 import { useColors, type Colors } from '../theme'
-import { StarButton } from './StarButton'
+import { BookmarkButton } from './BookmarkButton'
 import { AnswerList } from './AnswerList'
 import { Question } from '../types'
 import images from '../assets/images'
@@ -14,25 +14,25 @@ interface QuestionCardProps {
   gap?: number
 }
 
-export const QuestionCard = memo<QuestionCardProps>(({ 
-  question, 
-  isTablet = false, 
-  numColumns = 1, 
+export const QuestionCard = memo<QuestionCardProps>(({
+  question,
+  isTablet = false,
+  numColumns = 1,
   screenWidth: propScreenWidth,
   gap = 0
 }) => {
-  
-  const [height, setHeight] = useState(null);
+
+  const [height, setHeight] = useState<number | null>(null);
   const uri = question.img?.url ?? undefined;
 
   // Calculate card width based on screen size and number of columns
   const screenWidth = propScreenWidth || Dimensions.get('window').width;
   const horizontalPadding = isTablet ? 40 : 32;
-  
-  const cardWidth = isTablet 
+
+  const cardWidth = isTablet
     ? (screenWidth - horizontalPadding - (gap * (numColumns - 1))) / numColumns
     : screenWidth - horizontalPadding;
-  
+
   const imageWidth = cardWidth - (isTablet ? 32 : 40); // Account for card padding
 
   useEffect(() => {
@@ -44,13 +44,18 @@ export const QuestionCard = memo<QuestionCardProps>(({
   const colors = useColors();
 
   return (
-    <View style={[styles(colors, isTablet).questionCard, isTablet && { width: cardWidth }]}>
-      <View style={styles(colors, isTablet).questionBadge}>
-        <Text style={styles(colors, isTablet).questionBadgeText}>{question.globalIndex}</Text>
+    <View
+      style={[
+        styles(colors, isTablet).questionCard,
+        isTablet && { width: cardWidth },
+      ]}
+    >
+      <View style={styles(colors, isTablet).questionMetaRow}>
+        <Text style={styles(colors, isTablet).globalNumberValue}>#{question.globalIndex}</Text>
+        <BookmarkButton globalIndex={question.globalIndex} />
       </View>
       <View style={styles(colors, isTablet).questionHeader}>
         <Text style={styles(colors, isTablet).questionText}>{question.question}</Text>
-        <StarButton globalIndex={question.globalIndex} />
       </View>
 
       {height && (
@@ -90,35 +95,25 @@ const styles = (colors: Colors, isTablet = false) => StyleSheet.create({
     position: 'relative',
     flexDirection: 'column',
     minHeight: isTablet ? 240 : 200,
-    marginVertical: isTablet ? 0 : 20,
+    marginVertical: isTablet ? 0 : 14,
+  },
+  questionMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: isTablet ? 14 : 18,
+  },
+  globalNumberValue: {
+    color: colors.primaryColor,
+    fontSize: isTablet ? 18 : 24,
+    lineHeight: isTablet ? 22 : 28,
+    fontWeight: '800',
+    fontVariant: ['tabular-nums'],
   },
   questionHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: isTablet ? 16 : 20,
-  },
-  questionBadge: {
-    position: 'absolute',
-    top: -10,
-    left: -10,
-    backgroundColor: colors.bgColor,
-    borderRadius: 16,
-    width: 32,
-    height: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: colors.accentColor,
-    shadowColor: colors.shadowColor,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  questionBadgeText: {
-    color: colors.accentColor,
-    fontSize: 12,
-    fontWeight: '600',
   },
   questionContent: {
     paddingHorizontal: 16,
@@ -155,4 +150,4 @@ const styles = (colors: Colors, isTablet = false) => StyleSheet.create({
     opacity: 0.5,
     textAlign: 'right',
   },
-}) 
+})
