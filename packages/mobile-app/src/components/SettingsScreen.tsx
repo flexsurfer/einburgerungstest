@@ -29,6 +29,7 @@ import {
   DeviceIcon,
   MoonIcon,
   SunIcon,
+  XCircleIcon,
 } from "./Icons";
 import { LandSelection } from "./LandSelection";
 
@@ -180,6 +181,10 @@ export const SettingsScreen = memo(() => {
     },
     [runtime],
   );
+
+  const clearProgress = useCallback(() => {
+    runtime.dispatch([appIds.events.practiceClearAnswersRequested]);
+  }, [runtime]);
 
   return (
     <View style={styleSheet.root}>
@@ -342,6 +347,23 @@ export const SettingsScreen = memo(() => {
                   },
                 )}
               </View>
+            </View>
+
+            <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
+              <TouchableOpacity
+                accessibilityLabel={t("clearProgress")}
+                accessibilityRole="button"
+                activeOpacity={0.72}
+                onPress={clearProgress}
+                style={styleSheet.clearProgressButton}
+              >
+                <View style={styleSheet.clearProgressIcon}>
+                  <XCircleIcon color={colors.errorColor} size={23} />
+                </View>
+                <Text style={styleSheet.clearProgressText}>
+                  {t("clearProgress")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -548,6 +570,32 @@ const styles = (colors: Colors, isWide = false) =>
       lineHeight: 18,
       paddingHorizontal: 5,
       marginTop: 10,
+    },
+    clearProgressButton: {
+      minHeight: 62,
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: colors.errorColor,
+      backgroundColor: colors.errorLight,
+    },
+    clearProgressIcon: {
+      width: 42,
+      height: 42,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 12,
+      backgroundColor: colors.surfaceColor,
+      marginRight: 13,
+    },
+    clearProgressText: {
+      color: colors.errorColor,
+      fontSize: 15,
+      lineHeight: 20,
+      fontWeight: "800",
     },
     landRow: {
       minHeight: 74,
