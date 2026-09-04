@@ -3,6 +3,7 @@ import { Pressable, StyleSheet } from "react-native";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors } from "../theme";
 import { BookmarkIcon } from "./Icons";
+import { useI18n } from "../i18n";
 
 interface BookmarkButtonProps {
   globalIndex: number;
@@ -11,6 +12,7 @@ interface BookmarkButtonProps {
 export const BookmarkButton = memo<BookmarkButtonProps>(({ globalIndex }) => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("BookmarkButton");
   const isBookmarked = useSubscription(
     [appIds.subscriptions.practiceIsFavoriteByGlobalIndex, globalIndex],
     "BookmarkButton",
@@ -22,9 +24,7 @@ export const BookmarkButton = memo<BookmarkButtonProps>(({ globalIndex }) => {
 
   return (
     <Pressable
-      accessibilityLabel={
-        isBookmarked ? "Remove question bookmark" : "Bookmark question"
-      }
+      accessibilityLabel={isBookmarked ? t("removeBookmark") : t("addBookmark")}
       accessibilityRole="button"
       accessibilityState={{ selected: isBookmarked }}
       hitSlop={10}

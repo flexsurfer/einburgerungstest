@@ -25,11 +25,12 @@ export function createAppRuntime(
     runtimeId = "einburgerungstest",
     name = "Einbürgerungstest",
     initialQuestions,
+    initialLanguage,
     ...runtimeOptions
   } = options;
 
   return createUkladRuntime<AppContracts>({
-    initialState: createAppState({ initialQuestions }),
+    initialState: createAppState({ initialQuestions, initialLanguage }),
     runtimeId,
     name,
     ...runtimeOptions,

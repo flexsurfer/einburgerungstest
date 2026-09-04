@@ -6,6 +6,7 @@ import { QuestionCard } from "./QuestionCard";
 import { Question } from "../types";
 import { questionListRef } from "../refs";
 import { TabletExamControls } from "./ExamSessionControls";
+import { useI18n } from "../i18n";
 
 // Calculate number of columns and gap based on screen width
 const calculateLayout = (
@@ -26,6 +27,7 @@ const calculateLayout = (
 
 export const QuestionListView = memo(() => {
   const colors = useColors();
+  const { t } = useI18n("QuestionListView");
 
   const filteredQuestions = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestions],
@@ -81,9 +83,7 @@ export const QuestionListView = memo(() => {
   if (!filteredQuestions || filteredQuestions.length === 0) {
     return (
       <View style={styles(colors, gap).emptyContainer}>
-        <Text style={styles(colors, gap).emptyText}>
-          No questions available
-        </Text>
+        <Text style={styles(colors, gap).emptyText}>{t("noQuestions")}</Text>
       </View>
     );
   }

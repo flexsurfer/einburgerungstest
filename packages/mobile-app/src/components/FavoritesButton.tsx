@@ -5,8 +5,10 @@ import {
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { Star } from "./Star";
+import { useI18n } from "../i18n";
 
 export const FavoritesButton = ({ onPress }) => {
+  const { t } = useI18n("FavoritesButtonI18n");
   const selectedCategory = useSubscription(
     [appIds.subscriptions.navigationSelectedCategory],
     "FavoritesButton",
@@ -29,7 +31,7 @@ export const FavoritesButton = ({ onPress }) => {
       <Text
         style={[styles(colors).text, isActive && styles(colors).activeText]}
       >
-        Favorites ({favoriteCount})
+        {t("savedQuestionsLower")} ({favoriteCount})
       </Text>
     </TouchableOpacity>
   );

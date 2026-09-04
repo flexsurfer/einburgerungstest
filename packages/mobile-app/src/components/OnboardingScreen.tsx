@@ -12,10 +12,12 @@ import { appIds, useRuntime, type FederalLand } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { CheckIcon } from "./Icons";
 import { LandSelection } from "./LandSelection";
+import { useI18n } from "../i18n";
 
 export const OnboardingScreen = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("OnboardingScreen");
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
@@ -61,7 +63,7 @@ export const OnboardingScreen = memo(() => {
               selectedLand === null ? styleSheet.continueTextDisabled : null,
             ]}
           >
-            Continue
+            {t("continue")}
           </Text>
           <CheckIcon
             color={
@@ -73,9 +75,7 @@ export const OnboardingScreen = memo(() => {
           />
         </TouchableOpacity>
 
-        <Text style={styleSheet.footer}>
-          You can change this later in Settings.
-        </Text>
+        <Text style={styleSheet.footer}>{t("onboardingFooter")}</Text>
       </View>
     </ScrollView>
   );

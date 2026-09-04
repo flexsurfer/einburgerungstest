@@ -247,7 +247,10 @@ describe("Uklad pure event/subscription parity", () => {
     harness.dispatchSync([appIds.events.practiceAnswersCleared]);
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({});
     harness.dispatchSync([appIds.events.practiceClearAnswersRequested]);
-    expect(effects.at(-1)).toEqual([appIds.effects.uiConfirmClear, undefined]);
+    expect(effects.at(-1)).toEqual([
+      appIds.effects.uiConfirmClear,
+      { language: "en" },
+    ]);
 
     harness.dispatchSync([appIds.events.navigationCategorySelected, null]);
     harness.dispatchSync([appIds.events.navigationQuestionSelected, 0]);

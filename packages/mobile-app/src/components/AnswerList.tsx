@@ -4,6 +4,7 @@ import { AnswerButton } from "./AnswerButton";
 import { Question } from "../types";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors } from "../theme";
+import { useI18n } from "../i18n";
 
 interface AnswerListProps {
   question: Question;
@@ -11,6 +12,7 @@ interface AnswerListProps {
 
 export const AnswerList = memo<AnswerListProps>(({ question }) => {
   const runtime = useRuntime();
+  const { t } = useI18n("AnswerList");
 
   const showAnswers = useSubscription(
     [appIds.subscriptions.uiShowAnswers],
@@ -96,7 +98,7 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
         <Text
           style={[styles.mistakeSummary, { color: themeColors.errorColor }]}
         >
-          Wrong attempts: {mistakeSummary.totalAttempts}
+          {t("wrongAttempts", { count: mistakeSummary.totalAttempts })}
         </Text>
       ) : null}
       {question.answers.map((answer, index) => (
@@ -144,7 +146,7 @@ export const AnswerList = memo<AnswerListProps>(({ question }) => {
               },
             ]}
           >
-            {wrongAnswersMode ? "Remove from mistakes" : "Clear answer"}
+            {wrongAnswersMode ? t("removeFromMistakes") : t("clearAnswer")}
           </Text>
         </TouchableOpacity>
       )}

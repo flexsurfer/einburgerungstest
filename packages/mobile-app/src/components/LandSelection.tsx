@@ -16,27 +16,9 @@ import Svg, {
 } from "react-native-svg";
 import { FEDERAL_LANDS, type FederalLand } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
+import { landDisplayName, useI18n } from "../i18n";
 import { GERMANY_MAP_PATHS } from "./GermanyMap.paths";
 import { CheckIcon } from "./Icons";
-
-const LAND_LABELS: Record<FederalLand, string> = {
-  "Baden-Württemberg": "Baden-Württemberg",
-  Bayern: "Bavaria",
-  Berlin: "Berlin",
-  Brandenburg: "Brandenburg",
-  Bremen: "Bremen",
-  Hamburg: "Hamburg",
-  Hessen: "Hesse",
-  "Mecklenburg-Vorpommern": "Mecklenburg-Vorpommern",
-  Niedersachsen: "Lower Saxony",
-  "Nordrhein-Westfalen": "North Rhine-Westphalia",
-  "Rheinland-Pfalz": "Rhineland-Palatinate",
-  Saarland: "Saarland",
-  Sachsen: "Saxony",
-  "Sachsen-Anhalt": "Saxony-Anhalt",
-  "Schleswig-Holstein": "Schleswig-Holstein",
-  Thüringen: "Thuringia",
-};
 
 const LAND_ABBREVIATIONS: Record<FederalLand, string> = {
   "Baden-Württemberg": "BW",
@@ -56,10 +38,6 @@ const LAND_ABBREVIATIONS: Record<FederalLand, string> = {
   "Schleswig-Holstein": "SH",
   Thüringen: "TH",
 };
-
-export function landDisplayName(land: FederalLand): string {
-  return LAND_LABELS[land];
-}
 
 export interface LandSelectionProps {
   readonly selectedLand: FederalLand | null;
@@ -153,6 +131,7 @@ function ModeIcon({
 export const LandSelection = memo(
   ({ selectedLand, onSelect }: LandSelectionProps) => {
     const colors = useColors();
+    const { language, t } = useI18n("LandSelection");
     const { width } = useWindowDimensions();
     const styleSheet = styles(colors);
     const [mode, setMode] = useState<SelectionMode>("map");
@@ -165,7 +144,7 @@ export const LandSelection = memo(
     return (
       <View>
         <View
-          accessibilityLabel="Federal state selection view"
+          accessibilityLabel={t("federalStateSelectionView")}
           style={styleSheet.modeSwitch}
         >
           {(["map", "list"] as const).map((selectionMode) => {
@@ -173,7 +152,7 @@ export const LandSelection = memo(
             return (
               <TouchableOpacity
                 accessibilityLabel={
-                  selectionMode === "map" ? "Map view" : "List view"
+                  selectionMode === "map" ? t("mapView") : t("listView")
                 }
                 accessibilityRole="button"
                 accessibilityState={{ selected: active }}
@@ -195,7 +174,7 @@ export const LandSelection = memo(
                     active ? styleSheet.modeLabelActive : null,
                   ]}
                 >
-                  {selectionMode === "list" ? "List" : "Map"}
+                  {selectionMode === "list" ? t("list") : t("map")}
                 </Text>
               </TouchableOpacity>
             );
@@ -215,18 +194,18 @@ export const LandSelection = memo(
               />
               <View style={styleSheet.mapSelectionCopy}>
                 <Text style={styleSheet.mapSelectionEyebrow}>
-                  {selectedLand === null ? "SELECT A LAND" : "SELECTED LAND"}
+                  {selectedLand === null ? t("selectALand") : t("selectedLand")}
                 </Text>
                 <Text style={styleSheet.mapSelectionName}>
                   {selectedLand === null
-                    ? "Tap a state on the map"
-                    : landDisplayName(selectedLand)}
+                    ? t("tapStateOnMap")
+                    : landDisplayName(selectedLand, language)}
                 </Text>
               </View>
             </View>
 
             <Svg
-              accessibilityLabel="Map of the federal states of Germany"
+              accessibilityLabel={t("germanyMap")}
               height={mapHeight}
               preserveAspectRatio="xMidYMid meet"
               style={styleSheet.map}
@@ -270,7 +249,9 @@ export const LandSelection = memo(
 
                   return (
                     <G
-                      accessibilityLabel={`Select ${landDisplayName(land)}`}
+                      accessibilityLabel={t("selectState", {
+                        state: landDisplayName(land, language),
+                      })}
                       key={land}
                       onPress={() => onSelect(land)}
                     >
@@ -320,7 +301,7 @@ export const LandSelection = memo(
                         x={x + buttonWidth / 2}
                         y={y + 36}
                       >
-                        {landDisplayName(land)}
+                        {landDisplayName(land, language)}
                       </SvgText>
                     </G>
                   );
@@ -334,7 +315,7 @@ export const LandSelection = memo(
               const selected = selectedLand === land;
               return (
                 <TouchableOpacity
-                  accessibilityLabel={`${landDisplayName(land)}, ${land}`}
+                  accessibilityLabel={`${landDisplayName(land, language)}, ${land}`}
                   accessibilityRole="radio"
                   accessibilityState={{ checked: selected }}
                   activeOpacity={0.74}
@@ -361,7 +342,7 @@ export const LandSelection = memo(
                     </Text>
                   </View>
                   <Text numberOfLines={2} style={styleSheet.label}>
-                    {landDisplayName(land)}
+                    {landDisplayName(land, language)}
                   </Text>
                   <View style={styleSheet.checkSlot}>
                     {selected ? (

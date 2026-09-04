@@ -27,6 +27,7 @@ import { HomeScreen } from "./components/HomeScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
 import { OnboardingScreen } from "./components/OnboardingScreen";
 import { AppBackground } from "./components/AppBackground";
+import { useI18n } from "./i18n";
 
 export interface AppProps {
   app: MobileApp;
@@ -54,6 +55,7 @@ export function AppContent({
     "App",
   );
   const themeColors = useColors();
+  const { isRtl } = useI18n("App");
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const screenProgress = useRef(
@@ -77,7 +79,7 @@ export function AppContent({
     return (
       <View
         pointerEvents={interactive ? "auto" : "none"}
-        style={styleSheet.appContainer}
+        style={[styleSheet.appContainer, { direction: isRtl ? "rtl" : "ltr" }]}
       >
         <StatusBar animated />
         <AppBackground />
@@ -94,7 +96,7 @@ export function AppContent({
   return (
     <View
       pointerEvents={interactive ? "auto" : "none"}
-      style={styleSheet.appContainer}
+      style={[styleSheet.appContainer, { direction: isRtl ? "rtl" : "ltr" }]}
     >
       <StatusBar animated />
       <AppBackground />
@@ -155,6 +157,7 @@ function resultToState(result: MobileHydrationResult): HydrationViewState {
 }
 
 function MobileHydrationGate({ app }: { app: MobileApp }) {
+  const { t } = useI18n("MobileHydrationGate");
   const [state, setState] = useState<HydrationViewState>({
     status: "loading",
   });
@@ -188,11 +191,8 @@ function MobileHydrationGate({ app }: { app: MobileApp }) {
         style={hydrationStyles.container}
         accessibilityLiveRegion="assertive"
       >
-        <Text style={hydrationStyles.message}>
-          We couldn’t restore your saved data. It has not been deleted. Please
-          try again.
-        </Text>
-        <Button title="Retry" onPress={retry} />
+        <Text style={hydrationStyles.message}>{t("restoreError")}</Text>
+        <Button title={t("retry")} onPress={retry} />
       </View>
     );
   }

@@ -533,6 +533,9 @@ describe("Uklad shared domain graph", () => {
     ).toEqual({});
 
     harness.dispatchSync([appIds.events.practiceClearAnswersRequested]);
-    expect(effects.at(-1)).toEqual([appIds.effects.uiConfirmClear, undefined]);
+    expect(effects.at(-1)).toEqual([
+      appIds.effects.uiConfirmClear,
+      { language: "en" },
+    ]);
   });
 });

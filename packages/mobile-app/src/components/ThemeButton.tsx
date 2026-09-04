@@ -3,10 +3,12 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { MoonIcon, SunIcon } from "./Icons";
+import { useI18n } from "../i18n";
 
 export const ThemeButton = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("ThemeButton");
   const theme = useSubscription(
     [appIds.subscriptions.preferencesTheme],
     "ThemeButton",
@@ -18,7 +20,9 @@ export const ThemeButton = memo(() => {
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      accessibilityLabel={t("switchTheme", {
+        theme: theme === "dark" ? t("light") : t("dark"),
+      })}
       accessibilityRole="button"
       onPress={toggleTheme}
       style={styles(colors).button}

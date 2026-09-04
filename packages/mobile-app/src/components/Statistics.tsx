@@ -1,14 +1,12 @@
 import { useCallback, memo } from "react";
-import {
-  appIds,
-  useRuntime,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useColors, type Colors } from "../theme";
+import { useI18n } from "../i18n";
 
 export const Statistics = memo(() => {
   const runtime = useRuntime();
+  const { t } = useI18n("Statistics");
   const stats = useSubscription(
     [appIds.subscriptions.practiceStatistics],
     "Statistics",
@@ -71,14 +69,14 @@ export const Statistics = memo(() => {
                 showAnswers ? { color: colors.bgColor } : null,
               ]}
             >
-              {showAnswers ? "🙈" : "👁️"} Answers
+              {showAnswers ? "🙈" : "👁️"} {t("answers")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles(colors).clearButton}
             onPress={handleClearAnswers}
           >
-            <Text style={styles(colors).buttonText}>Clear</Text>
+            <Text style={styles(colors).buttonText}>{t("clear")}</Text>
           </TouchableOpacity>
         </View>
       </View>

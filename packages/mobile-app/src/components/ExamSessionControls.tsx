@@ -9,6 +9,7 @@ import {
 import { useColors, type Colors } from "../theme";
 import { examSecondsRemaining, formatExamTime } from "../exam-time";
 import { ClockIcon } from "./Icons";
+import { useI18n } from "../i18n";
 
 function useExamCountdown(): number {
   const runtime = useRuntime();
@@ -48,13 +49,16 @@ function useExamCountdown(): number {
 
 export const ExamTimer = memo(() => {
   const colors = useColors();
+  const { t } = useI18n("ExamTimer");
   const remainingSeconds = useExamCountdown();
   const isUrgent = remainingSeconds <= 5 * 60;
   const styleSheet = styles(colors);
 
   return (
     <View
-      accessibilityLabel={`${formatExamTime(remainingSeconds)} remaining`}
+      accessibilityLabel={t("timeRemainingValue", {
+        time: formatExamTime(remainingSeconds),
+      })}
       accessibilityRole="timer"
       style={[styleSheet.timer, isUrgent && styleSheet.timerUrgent]}
     >
@@ -75,6 +79,7 @@ export const FinishExamButton = memo(
   ({ compact = false }: { compact?: boolean }) => {
     const runtime = useRuntime();
     const colors = useColors();
+    const { t } = useI18n("FinishExamButton");
     const styleSheet = styles(colors);
     const finishExam = useCallback(() => {
       runtime.dispatch([appIds.events.testSessionFinished, "finished"]);
@@ -82,7 +87,7 @@ export const FinishExamButton = memo(
 
     return (
       <TouchableOpacity
-        accessibilityLabel="Finish exam and show result"
+        accessibilityLabel={t("finishExamAccessibility")}
         accessibilityRole="button"
         activeOpacity={0.82}
         onPress={finishExam}
@@ -91,7 +96,7 @@ export const FinishExamButton = memo(
           compact && styleSheet.finishButtonCompact,
         ]}
       >
-        <Text style={styleSheet.finishButtonText}>Finish exam</Text>
+        <Text style={styleSheet.finishButtonText}>{t("finishExam")}</Text>
       </TouchableOpacity>
     );
   },
@@ -100,6 +105,7 @@ export const FinishExamButton = memo(
 export const ExamAnsweredProgress = memo(
   ({ compact = false }: { compact?: boolean }) => {
     const colors = useColors();
+    const { t } = useI18n("ExamAnsweredProgress");
     const result = useSubscription(
       [appIds.subscriptions.testSessionResult],
       "ExamAnsweredProgress",
@@ -112,13 +118,19 @@ export const ExamAnsweredProgress = memo(
 
     return (
       <View
-        accessibilityLabel={`${result.answered} of ${result.total} questions answered`}
+        accessibilityLabel={t("answeredProgress", {
+          answered: result.answered,
+          total: result.total,
+        })}
         accessibilityRole="progressbar"
         accessibilityValue={{
           min: 0,
           max: result.total,
           now: result.answered,
-          text: `${result.answered} of ${result.total} answered`,
+          text: t("answeredProgressShort", {
+            answered: result.answered,
+            total: result.total,
+          }),
         }}
         style={[
           styleSheet.progressContainer,
@@ -138,12 +150,13 @@ export const ExamAnsweredProgress = memo(
 
 export const TabletExamControls = memo(() => {
   const colors = useColors();
+  const { t } = useI18n("TabletExamControls");
   const styleSheet = styles(colors);
 
   return (
     <View style={styleSheet.tabletBar}>
       <View>
-        <Text style={styleSheet.tabletEyebrow}>TIME REMAINING</Text>
+        <Text style={styleSheet.tabletEyebrow}>{t("timeRemaining")}</Text>
         <ExamTimer />
       </View>
       <ExamAnsweredProgress compact />

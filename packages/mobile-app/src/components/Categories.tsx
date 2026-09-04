@@ -11,11 +11,13 @@ import {
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { FavoritesButton } from "./FavoritesButton";
+import { categoryDisplayName, useI18n } from "../i18n";
 
 type Group = { title: string; items: [string, number][] };
 
 export const Categories = () => {
   const runtime = useRuntime();
+  const { language, t } = useI18n("CategoriesI18n");
   const practiceQuestionCount = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestionsCount],
     "Categories",
@@ -77,14 +79,14 @@ export const Categories = () => {
 
   const displayText =
     selectedCategory === null
-      ? `All Questions (${practiceQuestionCount})`
+      ? `${t("allQuestions")} (${practiceQuestionCount})`
       : selectedCategory === "favorites"
-        ? `Favorites (${favoriteCount})`
+        ? `${t("savedQuestionsLower")} (${favoriteCount})`
         : selectedCategory === "wrong"
-          ? `Wrong answers (${wrongCount})`
+          ? `${t("reviewMistakes")} (${wrongCount})`
           : selectedCategory === "test"
-            ? `Test (33)`
-            : `${selectedCategory} (${selectedCount})`;
+            ? `${t("mockExamLower")} (33)`
+            : `${categoryDisplayName(selectedCategory, language)} (${selectedCount})`;
 
   const colors = useColors();
 
@@ -134,7 +136,7 @@ export const Categories = () => {
                             styles(colors).activeText,
                         ]}
                       >
-                        All Questions ({practiceQuestionCount})
+                        {t("allQuestions")} ({practiceQuestionCount})
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -152,7 +154,7 @@ export const Categories = () => {
                             styles(colors).activeText,
                         ]}
                       >
-                        Start Test (33)
+                        {t("startExam")} (33)
                       </Text>
                     </TouchableOpacity>
                     <FavoritesButton
@@ -173,14 +175,18 @@ export const Categories = () => {
                             styles(colors).activeText,
                         ]}
                       >
-                        Wrong answers ({wrongCount})
+                        {t("reviewMistakes")} ({wrongCount})
                       </Text>
                     </TouchableOpacity>
 
                     {categories?.map((group, groupIndex) => (
                       <React.Fragment key={groupIndex}>
                         <Text style={styles(colors).groupTitle}>
-                          {group.title}
+                          {group.title === "Themes"
+                            ? t("focusAreas")
+                            : group.title === "Bundesländer"
+                              ? t("federalStates")
+                              : group.title}
                         </Text>
                         {group.items.map(([category, count]) => (
                           <TouchableOpacity
@@ -199,7 +205,7 @@ export const Categories = () => {
                                   styles(colors).activeText,
                               ]}
                             >
-                              {category} ({count})
+                              {categoryDisplayName(category, language)} ({count})
                             </Text>
                           </TouchableOpacity>
                         ))}

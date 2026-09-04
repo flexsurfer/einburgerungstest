@@ -13,6 +13,7 @@ import {
   type TestSessionResult,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
+import { useI18n } from "../i18n";
 
 function ResultStat({
   color,
@@ -38,6 +39,7 @@ function ResultStat({
 export const ExamResultScreen = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("ExamResultScreen");
   const result = useSubscription(
     [appIds.subscriptions.testSessionResult],
     "ExamResultScreen",
@@ -63,7 +65,7 @@ export const ExamResultScreen = memo(() => {
       style={styleSheet.screen}
     >
       <View style={styleSheet.card}>
-        <Text style={styleSheet.eyebrow}>EXAM RESULT</Text>
+        <Text style={styleSheet.eyebrow}>{t("examResult")}</Text>
         <View
           style={[
             styleSheet.scoreCircle,
@@ -73,44 +75,44 @@ export const ExamResultScreen = memo(() => {
           ]}
         >
           <Text style={styleSheet.scoreValue}>{result.correct}</Text>
-          <Text style={styleSheet.scoreTotal}>of {result.total}</Text>
+          <Text style={styleSheet.scoreTotal}>
+            {t("scoreOf", { total: result.total })}
+          </Text>
         </View>
 
         <Text style={styleSheet.title}>
-          {result.passed ? "You passed" : "Not passed yet"}
+          {result.passed ? t("passed") : t("notPassed")}
         </Text>
         <Text style={styleSheet.message}>
           {finishReason === "time-expired"
-            ? "Time is up. Your saved answers have been evaluated."
-            : "Your saved answers have been evaluated."}
+            ? t("timeUp")
+            : t("answersEvaluated")}
         </Text>
 
         <View style={styleSheet.requirement}>
           <Text style={styleSheet.requirementValue}>
             {result.requiredCorrect}
           </Text>
-          <Text style={styleSheet.requirementText}>
-            correct answers are required to pass the official test.
-          </Text>
+          <Text style={styleSheet.requirementText}>{t("requiredCorrect")}</Text>
         </View>
 
         <View style={styleSheet.statsRow}>
           <ResultStat
             color={colors.successColor}
             colors={colors}
-            label="Correct"
+            label={t("correct")}
             value={result.correct}
           />
           <ResultStat
             color={colors.errorColor}
             colors={colors}
-            label="Incorrect"
+            label={t("incorrect")}
             value={result.incorrect}
           />
           <ResultStat
             color={colors.textMutedColor}
             colors={colors}
-            label="Unanswered"
+            label={t("unanswered")}
             value={result.unanswered}
           />
         </View>
@@ -121,7 +123,9 @@ export const ExamResultScreen = memo(() => {
           onPress={startAgain}
           style={styleSheet.primaryButton}
         >
-          <Text style={styleSheet.primaryButtonText}>Take another exam</Text>
+          <Text style={styleSheet.primaryButtonText}>
+            {t("takeAnotherExam")}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityRole="button"
@@ -129,7 +133,7 @@ export const ExamResultScreen = memo(() => {
           onPress={goHome}
           style={styleSheet.secondaryButton}
         >
-          <Text style={styleSheet.secondaryButtonText}>Back to home</Text>
+          <Text style={styleSheet.secondaryButtonText}>{t("backToHome")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

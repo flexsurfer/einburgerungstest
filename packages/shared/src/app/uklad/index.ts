@@ -28,6 +28,7 @@ export type {
 } from "./persistence.js";
 export type {
   AppContracts,
+  AppLanguage,
   AppError,
   CategoryGroup,
   CategorySelection,
@@ -58,6 +59,7 @@ export type {
   VocabularyData,
 } from "./contracts.js";
 export { FEDERAL_LANDS } from "./contracts.js";
+export { LANGUAGES } from "./contracts.js";
 export {
   EINBUERGERUNGSTEST_DURATION_MS,
   EINBUERGERUNGSTEST_RULES,

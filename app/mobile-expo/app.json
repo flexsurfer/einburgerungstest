@@ -18,6 +18,15 @@
     },
     "plugins": [
       [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": ["en", "de", "ru", "tr", "ar"],
+            "android": ["en", "de", "ru", "tr", "ar"]
+          }
+        }
+      ],
+      [
         "expo-navigation-bar",
         {
           "enforceContrast": false

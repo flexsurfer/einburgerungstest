@@ -38,8 +38,15 @@ describe("Uklad application foundation", () => {
     expect(firstState[stateKeys.navigationCurrentQuestionIndex]).toBe(0);
     expect(firstState[stateKeys.navigationActiveScreen]).toBe("home");
     expect(firstState[stateKeys.preferencesSelectedLand]).toBeNull();
+    expect(firstState[stateKeys.preferencesSelectedLanguage]).toBe("en");
     expect(first.runtimeId).toBe("foundation-first");
     expect(second.runtimeId).toBe("foundation-second");
+  });
+
+  it("seeds a supported device language into a fresh runtime", () => {
+    const state = createAppState({ initialLanguage: "tr" });
+
+    expect(state[stateKeys.preferencesSelectedLanguage]).toBe("tr");
   });
 
   it("injects detached questions into the first runtime snapshot", () => {

@@ -16,6 +16,7 @@ import {
   type MobilePersistenceOptions,
 } from "./persistence";
 import { createMobilePersistenceLifecycle } from "./persistence-lifecycle";
+import { resolveLanguage } from "./i18n";
 
 export interface MobileBootstrapOptions {
   readonly platform: MobilePlatform;
@@ -75,6 +76,7 @@ export function bootstrapMobileApp(options: MobileBootstrapOptions): MobileApp {
     options.runtime ??
     createMobileAppRuntime({
       runtimeId: options.runtimeId ?? "einburgerungstest-native",
+      initialLanguage: resolveLanguage(options.platform.getDeviceLanguage?.()),
     });
 
   registerSharedModules(runtime);

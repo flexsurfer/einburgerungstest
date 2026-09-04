@@ -63,6 +63,23 @@ function createRuntime(
 }
 
 describe("Uklad mobile platform", () => {
+  it("uses the supported device language for a fresh mobile runtime", async () => {
+    const app = bootstrapMobileApp({
+      platform: {
+        applySystemBarTheme: vi.fn(),
+        getDeviceLanguage: () => "de-DE",
+      },
+    });
+    apps.push(app);
+
+    await app.hydration;
+    expect(
+      createUkladTestHarness(app.runtime).getState()[
+        stateKeys.preferencesSelectedLanguage
+      ],
+    ).toBe("de");
+  });
+
   it("loads bundled questions through the shared request lifecycle", async () => {
     const { harness } = createRuntime();
 

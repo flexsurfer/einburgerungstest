@@ -3,6 +3,14 @@ import { appIds, stateKeys } from "./catalog.js";
 
 export type Theme = "light" | "dark";
 export type ThemePreference = Theme | "system";
+export const LANGUAGES = {
+  en: "English",
+  de: "Deutsch",
+  ru: "Русский",
+  tr: "Türkçe",
+  ar: "العربية",
+} as const;
+export type AppLanguage = keyof typeof LANGUAGES;
 export type ColorScheme = Theme | null;
 export type ScrollMode = "auto" | "smooth";
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -125,7 +133,7 @@ export interface AppContracts extends UkladContracts {
   readonly state: {
     [stateKeys.uiShowAnswers]: boolean;
 
-    [stateKeys.preferencesSelectedLanguage]: string;
+    [stateKeys.preferencesSelectedLanguage]: AppLanguage;
     [stateKeys.preferencesSelectedLand]: FederalLand | null;
     [stateKeys.preferencesTheme]: Theme;
     [stateKeys.preferencesUseSystemTheme]: boolean;
@@ -173,7 +181,7 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.navigationHomeOpened]: [];
     [appIds.events.navigationSettingsOpened]: [];
     [appIds.events.navigationPracticeResumed]: [];
-    [appIds.events.preferencesLanguageSelected]: [language: string];
+    [appIds.events.preferencesLanguageSelected]: [language: AppLanguage];
     [appIds.events.preferencesLandSelected]: [land: FederalLand];
     [appIds.events.preferencesThemeSelected]: [theme: ThemePreference];
     [appIds.events.preferencesThemeToggled]: [];
@@ -220,7 +228,7 @@ export interface AppContracts extends UkladContracts {
     };
     [appIds.effects.dataLoadLocal]: { dataType: DataKind };
     [appIds.effects.uiScrollToTop]: { behavior?: ScrollMode };
-    [appIds.effects.uiConfirmClear]: void;
+    [appIds.effects.uiConfirmClear]: { language: AppLanguage };
     [appIds.effects.uiSetBodyTheme]: { theme: Theme };
     [appIds.effects.uiSetBodyOverflow]: { value: string };
   };
@@ -271,7 +279,7 @@ export interface AppContracts extends UkladContracts {
 
     [appIds.subscriptions.preferencesSelectedLanguage]: {
       params: [];
-      result: string;
+      result: AppLanguage;
     };
     [appIds.subscriptions.preferencesSelectedLand]: {
       params: [];

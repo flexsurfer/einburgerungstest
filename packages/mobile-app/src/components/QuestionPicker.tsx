@@ -21,6 +21,7 @@ import {
   useSubscription,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
+import { useI18n } from "../i18n";
 
 const MOBILE_COLUMNS = 4;
 const WIDE_COLUMNS = 5;
@@ -30,6 +31,7 @@ const ITEM_GAP = 10;
 export const QuestionPicker = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("QuestionPicker");
   const { width, height } = useWindowDimensions();
   const sheetTranslateY = useRef(new Animated.Value(0)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -274,7 +276,7 @@ export const QuestionPicker = memo(() => {
               ]}
             />
             <Pressable
-              accessibilityLabel="Close question picker"
+              accessibilityLabel={t("closeQuestionPicker")}
               accessibilityRole="button"
               onPress={handleClose}
               style={StyleSheet.absoluteFill}
@@ -310,13 +312,11 @@ export const QuestionPicker = memo(() => {
                     ? panResponders.handle.panHandlers
                     : {})}
                 >
-                  <Text style={styleSheet.title}>Select question</Text>
-                  <Text style={styleSheet.subtitle}>
-                    Jump to any question in this list
-                  </Text>
+                  <Text style={styleSheet.title}>{t("selectQuestion")}</Text>
+                  <Text style={styleSheet.subtitle}>{t("jumpToQuestion")}</Text>
                 </View>
                 <TouchableOpacity
-                  accessibilityLabel="Close question picker"
+                  accessibilityLabel={t("closeQuestionPicker")}
                   accessibilityRole="button"
                   activeOpacity={0.7}
                   onPress={handleClose}
@@ -330,25 +330,25 @@ export const QuestionPicker = memo(() => {
             <View style={styleSheet.legend}>
               <LegendItem
                 colors={colors}
-                label="Correct"
+                label={t("correct")}
                 symbol="✓"
                 tone="correct"
               />
               <LegendItem
                 colors={colors}
-                label="Incorrect"
+                label={t("incorrect")}
                 symbol="×"
                 tone="incorrect"
               />
               <LegendItem
                 colors={colors}
-                label="Unanswered"
+                label={t("unanswered")}
                 symbol=""
                 tone="unanswered"
               />
               <LegendItem
                 colors={colors}
-                label="Current"
+                label={t("current")}
                 symbol="•"
                 tone="current"
               />
@@ -431,6 +431,7 @@ const QuestionPickerTile = memo(
     rippleColor: string;
     styleSheet: PickerStyles;
   }) => {
+    const { t } = useI18n("QuestionPickerTile");
     const statusStyle = item.isAnswered
       ? item.isCorrect
         ? styleSheet.correctQuestionItem
@@ -439,13 +440,16 @@ const QuestionPickerTile = memo(
 
     return (
       <Pressable
-        accessibilityLabel={`Question ${item.filteredIndex + 1} in this list, official question ${item.number}${
-          item.isAnswered
+        accessibilityLabel={t("questionPickerItem", {
+          index: item.filteredIndex + 1,
+          number: item.number,
+          status: item.isAnswered
             ? item.isCorrect
-              ? ", answered correctly"
-              : ", answered incorrectly"
-            : ", unanswered"
-        }${item.isSelected ? ", current question" : ""}`}
+              ? t("answeredCorrectly")
+              : t("answeredIncorrectly")
+            : t("unansweredStatus"),
+          current: item.isSelected ? t("currentQuestion") : "",
+        })}
         accessibilityRole="button"
         accessibilityState={{ selected: item.isSelected }}
         android_ripple={{ color: rippleColor, borderless: false }}

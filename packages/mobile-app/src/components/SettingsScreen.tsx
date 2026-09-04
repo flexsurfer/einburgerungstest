@@ -11,12 +11,15 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   appIds,
+  LANGUAGES,
   useRuntime,
   useSubscription,
+  type AppLanguage,
   type FederalLand,
   type ThemePreference,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
+import { landDisplayName, useI18n, type TranslationKey } from "../i18n";
 import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
 import {
   BuildingIcon,
@@ -27,12 +30,12 @@ import {
   MoonIcon,
   SunIcon,
 } from "./Icons";
-import { LandSelection, landDisplayName } from "./LandSelection";
+import { LandSelection } from "./LandSelection";
 
 type ThemeOption = {
   value: ThemePreference;
-  title: string;
-  description: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
   icon: (color: string) => ReactNode;
   tone: (colors: Colors) => { background: string; foreground: string };
 };
@@ -40,8 +43,8 @@ type ThemeOption = {
 const THEME_OPTIONS: readonly ThemeOption[] = [
   {
     value: "system",
-    title: "System",
-    description: "Match your device automatically",
+    titleKey: "system",
+    descriptionKey: "systemDescription",
     icon: (color) => <DeviceIcon color={color} size={22} />,
     tone: (colors) => ({
       background: colors.primaryPale,
@@ -50,8 +53,8 @@ const THEME_OPTIONS: readonly ThemeOption[] = [
   },
   {
     value: "light",
-    title: "Light",
-    description: "Use the light appearance",
+    titleKey: "light",
+    descriptionKey: "lightDescription",
     icon: (color) => <SunIcon color={color} size={22} />,
     tone: (colors) => ({
       background: colors.yellowLight,
@@ -60,8 +63,8 @@ const THEME_OPTIONS: readonly ThemeOption[] = [
   },
   {
     value: "dark",
-    title: "Dark",
-    description: "Use the dark appearance",
+    titleKey: "dark",
+    descriptionKey: "darkDescription",
     icon: (color) => <MoonIcon color={color} size={22} />,
     tone: (colors) => ({
       background: colors.blueLight,
@@ -75,12 +78,16 @@ function ThemeOptionRow({
   selected,
   divider,
   colors,
+  title,
+  description,
   onPress,
 }: {
   option: ThemeOption;
   selected: boolean;
   divider: boolean;
   colors: Colors;
+  title: string;
+  description: string;
   onPress: () => void;
 }) {
   const styleSheet = styles(colors);
@@ -88,7 +95,7 @@ function ThemeOptionRow({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`${option.title} theme. ${option.description}`}
+      accessibilityLabel={`${title}. ${description}`}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected }}
       activeOpacity={0.72}
@@ -105,8 +112,8 @@ function ThemeOptionRow({
         {option.icon(tone.foreground)}
       </View>
       <View style={styleSheet.optionCopy}>
-        <Text style={styleSheet.optionTitle}>{option.title}</Text>
-        <Text style={styleSheet.optionDescription}>{option.description}</Text>
+        <Text style={styleSheet.optionTitle}>{title}</Text>
+        <Text style={styleSheet.optionDescription}>{description}</Text>
       </View>
       <View style={styleSheet.selectionIndicator}>
         {selected ? (
@@ -122,6 +129,7 @@ function ThemeOptionRow({
 export const SettingsScreen = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { language, t } = useI18n("SettingsScreen");
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
@@ -139,6 +147,10 @@ export const SettingsScreen = memo(() => {
     [appIds.subscriptions.preferencesThemeSelection],
     "SettingsScreen",
   );
+  const selectedLanguage = useSubscription(
+    [appIds.subscriptions.preferencesSelectedLanguage],
+    "SettingsScreenLanguage",
+  );
   const [landPickerVisible, setLandPickerVisible] = useState(false);
 
   const closeSettings = useCallback(() => {
@@ -155,6 +167,16 @@ export const SettingsScreen = memo(() => {
   const selectLand = useCallback(
     (land: FederalLand) => {
       runtime.dispatch([appIds.events.preferencesLandSelected, land]);
+    },
+    [runtime],
+  );
+
+  const selectLanguage = useCallback(
+    (nextLanguage: AppLanguage) => {
+      runtime.dispatch([
+        appIds.events.preferencesLanguageSelected,
+        nextLanguage,
+      ]);
     },
     [runtime],
   );
@@ -177,7 +199,7 @@ export const SettingsScreen = memo(() => {
             ]}
           >
             <TouchableOpacity
-              accessibilityLabel="Back to home"
+              accessibilityLabel={t("backToHome")}
               accessibilityRole="button"
               activeOpacity={0.7}
               hitSlop={8}
@@ -186,7 +208,7 @@ export const SettingsScreen = memo(() => {
             >
               <ChevronUp color={colors.primaryColor} size={25} />
             </TouchableOpacity>
-            <Text style={styleSheet.headerTitle}>Settings</Text>
+            <Text style={styleSheet.headerTitle}>{t("settings")}</Text>
             <View style={styleSheet.topBarSlot} />
           </View>
         </View>
@@ -195,16 +217,16 @@ export const SettingsScreen = memo(() => {
           <View style={styleSheet.content}>
             <View style={styleSheet.sectionBlock}>
               <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>Federal state</Text>
+                <Text style={styleSheet.sectionTitle}>{t("federalState")}</Text>
                 <Text style={styleSheet.sectionDescription}>
-                  Used for Practice and the three regional exam questions.
+                  {t("federalStateDescription")}
                 </Text>
               </View>
               <TouchableOpacity
-                accessibilityLabel={`Federal state, ${
+                accessibilityLabel={`${t("federalState")}, ${
                   selectedLand === null
-                    ? "not selected"
-                    : landDisplayName(selectedLand)
+                    ? t("federalStateNotSelected")
+                    : landDisplayName(selectedLand, language)
                 }`}
                 accessibilityRole="button"
                 activeOpacity={0.72}
@@ -215,11 +237,13 @@ export const SettingsScreen = memo(() => {
                   <BuildingIcon color={colors.primaryColor} size={23} />
                 </View>
                 <View style={styleSheet.landCopy}>
-                  <Text style={styleSheet.landLabel}>Selected Land</Text>
+                  <Text style={styleSheet.landLabel}>
+                    {t("federalStateValue")}
+                  </Text>
                   <Text style={styleSheet.landValue}>
                     {selectedLand === null
-                      ? "Choose a federal state"
-                      : landDisplayName(selectedLand)}
+                      ? t("chooseFederalState")
+                      : landDisplayName(selectedLand, language)}
                   </Text>
                 </View>
                 <ChevronRight color={colors.textMutedColor} size={20} />
@@ -228,9 +252,68 @@ export const SettingsScreen = memo(() => {
 
             <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
               <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>Appearance</Text>
+                <Text style={styleSheet.sectionTitle}>{t("language")}</Text>
                 <Text style={styleSheet.sectionDescription}>
-                  Choose how the app looks on this device.
+                  {t("languageDescription")}
+                </Text>
+              </View>
+
+              <View
+                accessibilityRole="radiogroup"
+                style={styleSheet.optionsCard}
+              >
+                {(Object.entries(LANGUAGES) as [AppLanguage, string][]).map(
+                  ([optionLanguage, label], index) => {
+                    const selected = selectedLanguage === optionLanguage;
+                    return (
+                      <TouchableOpacity
+                        accessibilityLabel={label}
+                        accessibilityRole="radio"
+                        accessibilityState={{ checked: selected }}
+                        activeOpacity={0.72}
+                        key={optionLanguage}
+                        onPress={() => selectLanguage(optionLanguage)}
+                        style={[
+                          styleSheet.option,
+                          index > 0 ? styleSheet.optionDivider : null,
+                          selected ? styleSheet.optionSelected : null,
+                        ]}
+                      >
+                        <View
+                          style={[
+                            styleSheet.optionIcon,
+                            styleSheet.languageIcon,
+                          ]}
+                        >
+                          <Text style={styleSheet.languageCode}>
+                            {optionLanguage.toUpperCase()}
+                          </Text>
+                        </View>
+                        <View style={styleSheet.optionCopy}>
+                          <Text style={styleSheet.optionTitle}>{label}</Text>
+                        </View>
+                        <View style={styleSheet.selectionIndicator}>
+                          {selected ? (
+                            <View style={styleSheet.selectedCheck}>
+                              <CheckIcon
+                                color={colors.primaryTextColor}
+                                size={14}
+                              />
+                            </View>
+                          ) : null}
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  },
+                )}
+              </View>
+            </View>
+
+            <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
+              <View style={styleSheet.sectionHeader}>
+                <Text style={styleSheet.sectionTitle}>{t("appearance")}</Text>
+                <Text style={styleSheet.sectionDescription}>
+                  {t("appearanceDescription")}
                 </Text>
               </View>
 
@@ -246,13 +329,14 @@ export const SettingsScreen = memo(() => {
                     onPress={() => selectTheme(option.value)}
                     option={option}
                     selected={selectedTheme === option.value}
+                    title={t(option.titleKey)}
+                    description={t(option.descriptionKey)}
                   />
                 ))}
               </View>
 
               <Text style={styleSheet.sectionFooter}>
-                System follows your phone’s light or dark appearance. Changes
-                are saved automatically.
+                {t("appearanceFooter")}
               </Text>
             </View>
           </View>
@@ -270,14 +354,14 @@ export const SettingsScreen = memo(() => {
             style={[styleSheet.modalHeader, { paddingTop: insets.top + 10 }]}
           >
             <View style={styleSheet.modalHeaderSlot} />
-            <Text style={styleSheet.modalHeaderTitle}>Federal state</Text>
+            <Text style={styleSheet.modalHeaderTitle}>{t("federalState")}</Text>
             <TouchableOpacity
-              accessibilityLabel="Close federal state selection"
+              accessibilityLabel={t("closeFederalState")}
               accessibilityRole="button"
               onPress={() => setLandPickerVisible(false)}
               style={styleSheet.modalDoneButton}
             >
-              <Text style={styleSheet.modalDoneText}>Done</Text>
+              <Text style={styleSheet.modalDoneText}>{t("done")}</Text>
             </TouchableOpacity>
           </View>
           <ScrollView
@@ -413,6 +497,15 @@ const styles = (colors: Colors, isWide = false) =>
       justifyContent: "center",
       borderRadius: 12,
       marginRight: 13,
+    },
+    languageIcon: {
+      backgroundColor: colors.primaryPale,
+    },
+    languageCode: {
+      color: colors.primaryColor,
+      fontSize: 12,
+      fontWeight: "900",
+      letterSpacing: 0.5,
     },
     optionCopy: {
       flex: 1,

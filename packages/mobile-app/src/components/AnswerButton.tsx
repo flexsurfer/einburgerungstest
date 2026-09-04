@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { Answer } from "../types";
 import { type Colors, useColors } from "../theme";
+import { useI18n } from "../i18n";
 
 interface AnswerButtonProps {
   answer: Answer;
@@ -31,6 +32,7 @@ export const AnswerButton = memo<AnswerButtonProps>(
     mistakeCount = 0,
     revealCorrectAnswer = false,
   }) => {
+    const { t } = useI18n("AnswerButton");
     const handlePress = () => {
       if (!disabled) {
         onClick(index);
@@ -98,7 +100,8 @@ export const AnswerButton = memo<AnswerButtonProps>(
         {mistakeCount > 0 ? (
           <View style={styles(themeColors).mistakeCount}>
             <Text style={styles(themeColors).mistakeCountText}>
-              {mistakeCount} {mistakeCount === 1 ? "mistake" : "mistakes"}
+              {mistakeCount}{" "}
+              {mistakeCount === 1 ? t("mistake") : t("mistakesPlural")}
             </Text>
           </View>
         ) : null}

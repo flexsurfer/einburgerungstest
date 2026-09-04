@@ -76,9 +76,19 @@ export const registerPracticeEvents: AppModule = (registrar) => {
     draftState[stateKeys.practiceMistakes] = {};
   });
 
-  registrar.regEvent(appIds.events.practiceClearAnswersRequested, () => {
-    return [[appIds.effects.uiConfirmClear]];
-  });
+  registrar.regEvent(
+    appIds.events.practiceClearAnswersRequested,
+    ({ draftState }) => {
+      return [
+        [
+          appIds.effects.uiConfirmClear,
+          {
+            language: draftState[stateKeys.preferencesSelectedLanguage],
+          },
+        ],
+      ];
+    },
+  );
 
   registrar.regEvent(
     appIds.events.practiceQuestionAnswerCleared,

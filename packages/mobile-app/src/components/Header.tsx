@@ -9,10 +9,12 @@ import {
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { HomeIcon } from "./Icons";
+import { categoryDisplayName, useI18n } from "../i18n";
 
 export const Header = memo(({ style }: { style?: ViewStyle }) => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { language, t } = useI18n("Header");
   const selectedCategory = useSubscription(
     [appIds.subscriptions.navigationSelectedCategory],
     "Header",
@@ -32,21 +34,21 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
 
   const title =
     selectedCategory === null
-      ? "All questions"
+      ? t("allQuestions")
       : selectedCategory === "favorites"
-        ? "Saved questions"
+        ? t("savedQuestionsLower")
         : selectedCategory === "wrong"
-          ? "Review mistakes"
+          ? t("reviewMistakes")
           : selectedCategory === "unanswered"
-            ? "Unattempted questions"
+            ? t("unattemptedQuestions")
             : selectedCategory === "test"
-              ? "Mock exam"
-              : selectedCategory;
+              ? t("mockExamLower")
+              : categoryDisplayName(selectedCategory, language);
 
   return (
     <View style={[styles(colors).header, style]}>
       <TouchableOpacity
-        accessibilityLabel="Back to home"
+        accessibilityLabel={t("backToHome")}
         accessibilityRole="button"
         onPress={openHome}
         style={styles(colors).homeButton}
@@ -57,10 +59,10 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
       <View style={styles(colors).titleContainer}>
         <Text style={styles(colors).eyebrow}>
           {isLearnMode
-            ? "LEARN MODE"
+            ? t("learnMode")
             : selectedCategory === "test"
-              ? "EXAM MODE"
-              : "PRACTICE"}
+              ? t("examMode")
+              : t("practiceMode")}
         </Text>
         <Text numberOfLines={1} style={styles(colors).title}>
           {title} · {questionCount}

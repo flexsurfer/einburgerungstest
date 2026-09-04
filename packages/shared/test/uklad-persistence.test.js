@@ -264,6 +264,25 @@ describe("Uklad Persist application boundary", () => {
     });
   });
 
+  it("hydrates and persists the selected application language", async () => {
+    const storage = createAsyncStorage({
+      [canonicalKey(stateKeys.preferencesSelectedLanguage)]: envelope("tr"),
+    });
+    const { handle, harness } = createFixture({ target: "native", storage });
+
+    await hydrateAsync(handle);
+    expect(harness.getState()[stateKeys.preferencesSelectedLanguage]).toBe(
+      "tr",
+    );
+
+    harness.dispatchSync([appIds.events.preferencesLanguageSelected, "ar"]);
+    await handle.flush();
+
+    expect(
+      storage.values.get(canonicalKey(stateKeys.preferencesSelectedLanguage)),
+    ).toBe(envelope("ar"));
+  });
+
   it("migrates and persists a pre-history wrong answer when questions load", async () => {
     const storage = createSyncStorage({
       [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 1: 1 }),

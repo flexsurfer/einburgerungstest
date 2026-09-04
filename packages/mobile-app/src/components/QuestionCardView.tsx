@@ -6,6 +6,7 @@ import { QuestionCard } from "./QuestionCard";
 import { NavigationControls } from "./NavigationControls";
 import { QuestionPicker } from "./QuestionPicker";
 import { Question } from "../types";
+import { useI18n } from "../i18n";
 
 export const QuestionCardView = memo(() => {
   const currentQuestion = useSubscription(
@@ -13,6 +14,7 @@ export const QuestionCardView = memo(() => {
     "QuestionCardView",
   ) as Question | null;
   const colors = useColors();
+  const { t } = useI18n("QuestionCardView");
   const dimensions = Dimensions.get("window");
 
   const filteredQuestions = useSubscription(
@@ -23,7 +25,7 @@ export const QuestionCardView = memo(() => {
   if (!filteredQuestions || filteredQuestions.length === 0) {
     return (
       <View style={styles(colors).emptyContainer}>
-        <Text style={styles(colors).emptyText}>No questions available</Text>
+        <Text style={styles(colors).emptyText}>{t("noQuestions")}</Text>
       </View>
     );
   }
@@ -31,7 +33,7 @@ export const QuestionCardView = memo(() => {
   if (!currentQuestion) {
     return (
       <View style={styles(colors).emptyContainer}>
-        <Text style={styles(colors).emptyText}>Loading question...</Text>
+        <Text style={styles(colors).emptyText}>{t("loadingQuestion")}</Text>
       </View>
     );
   }

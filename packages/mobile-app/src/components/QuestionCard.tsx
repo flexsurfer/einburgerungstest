@@ -5,6 +5,7 @@ import { BookmarkButton } from './BookmarkButton'
 import { AnswerList } from './AnswerList'
 import { Question } from '../types'
 import images from '../assets/images'
+import { categoryDisplayName, useI18n } from '../i18n'
 
 interface QuestionCardProps {
   question: Question
@@ -42,6 +43,7 @@ export const QuestionCard = memo<QuestionCardProps>(({
   }, [uri, imageWidth, numColumns, screenWidth, gap]);
 
   const colors = useColors();
+  const { language } = useI18n('QuestionCard');
 
   return (
     <View
@@ -74,7 +76,9 @@ export const QuestionCard = memo<QuestionCardProps>(({
       <AnswerList question={question} />
 
       <View style={styles(colors, isTablet).questionFooter}>
-        <Text style={styles(colors, isTablet).questionCategory}>{question.category}</Text>
+        <Text style={styles(colors, isTablet).questionCategory}>
+          {categoryDisplayName(question.category, language)}
+        </Text>
       </View>
     </View>
   )

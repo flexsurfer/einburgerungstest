@@ -14,9 +14,11 @@ import {
 import questionsData from "../assets/data.json";
 import vocabularyData from "../assets/vocabulary_multilang.json";
 import { questionListRef } from "./refs";
+import { translate } from "./i18n";
 
 export interface MobilePlatform {
   applySystemBarTheme(theme: Theme): void | Promise<void>;
+  getDeviceLanguage?(): string | null;
 }
 
 export const mobileQuestionsData = questionsData as QuestionInput[];
@@ -134,14 +136,14 @@ export function registerMobilePlatform(
 
       registrar.regEffect(
         appIds.effects.uiConfirmClear,
-        (_payload, effectRuntime) => {
+        ({ language }, effectRuntime) => {
           Alert.alert(
-            "Clear progress",
-            "Are you sure you want to clear ALL your progress?",
+            translate(language, "clearProgress"),
+            translate(language, "clearProgressMessage"),
             [
-              { text: "Cancel", style: "cancel" },
+              { text: translate(language, "cancel"), style: "cancel" },
               {
-                text: "OK",
+                text: translate(language, "ok"),
                 onPress: () =>
                   effectRuntime.dispatch([
                     appIds.events.practiceAnswersCleared,

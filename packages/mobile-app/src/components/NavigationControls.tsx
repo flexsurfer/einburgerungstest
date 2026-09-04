@@ -8,6 +8,7 @@ import {
   ExamTimer,
   FinishExamButton,
 } from "./ExamSessionControls";
+import { useI18n } from "../i18n";
 
 interface NavigationControlsProps {
   isVisible?: boolean;
@@ -17,6 +18,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
   ({ isVisible = true }) => {
     const runtime = useRuntime();
     const colors = useColors();
+    const { t } = useI18n("NavigationControls");
 
     const currentQuestionIndex = useSubscription(
       [appIds.subscriptions.navigationCurrentQuestionIndex],
@@ -64,7 +66,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
           ]}
           onPress={handlePrevious}
           disabled={isFirstQuestion}
-          accessibilityLabel="Previous question"
+          accessibilityLabel={t("previousQuestion")}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <LeftArrow
@@ -78,7 +80,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
                 isFirstQuestion && styles(colors).disabledButtonText,
               ]}
             >
-              Prev
+              {t("previous")}
             </Text>
           </View>
         </TouchableOpacity>
@@ -91,7 +93,10 @@ export const NavigationControls = memo<NavigationControlsProps>(
             onPress={handleQuestionNumberPress}
           >
             <Text style={styles(colors).questionNumberText}>
-              {currentIndex + 1} of {filteredQuestionsCount}
+              {t("itemOfTotal", {
+                current: currentIndex + 1,
+                total: filteredQuestionsCount,
+              })}
             </Text>
             <DownArrow color={colors.primaryColor} />
           </TouchableOpacity>
@@ -104,7 +109,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
           ]}
           onPress={handleNext}
           disabled={isLastQuestion}
-          accessibilityLabel="Next question"
+          accessibilityLabel={t("nextQuestion")}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text
@@ -113,7 +118,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
                 isLastQuestion && styles(colors).disabledButtonText,
               ]}
             >
-              Next
+              {t("next")}
             </Text>
             <RightArrow
               color={

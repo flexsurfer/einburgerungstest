@@ -11,7 +11,12 @@ import {
 } from "@ukladjs/persist";
 import type { UkladRuntime } from "@ukladjs/core/vanilla";
 import { stateKeys } from "./catalog.js";
-import { FEDERAL_LANDS, type AppContracts } from "./contracts.js";
+import {
+  FEDERAL_LANDS,
+  LANGUAGES,
+  type AppContracts,
+  type AppLanguage,
+} from "./contracts.js";
 import type {
   Favorites,
   FederalLand,
@@ -137,6 +142,13 @@ function deserializeTheme(data: unknown): Theme {
   throw new Error("theme must be light or dark");
 }
 
+function deserializeLanguage(data: unknown): AppLanguage {
+  if (typeof data === "string" && data in LANGUAGES) {
+    return data as AppLanguage;
+  }
+  throw new Error("language must be a supported language code");
+}
+
 function deserializeUseSystemTheme(data: unknown): boolean {
   if (typeof data === "boolean") return data;
   throw new Error("useSystemTheme must be a boolean");
@@ -188,6 +200,12 @@ const themeKey: PersistedKey<typeof stateKeys.preferencesTheme> = {
   deserialize: deserializeTheme,
 };
 
+const languageKey: PersistedKey<typeof stateKeys.preferencesSelectedLanguage> =
+  {
+    key: stateKeys.preferencesSelectedLanguage,
+    deserialize: deserializeLanguage,
+  };
+
 const useSystemThemeKey: PersistedKey<
   typeof stateKeys.preferencesUseSystemTheme
 > = {
@@ -223,6 +241,7 @@ export const appPersistenceKeys = Object.freeze({
   practiceGlobalIndex: practiceGlobalIndexKey,
   practiceLearnGlobalIndex: practiceLearnGlobalIndexKey,
   preferencesTheme: themeKey,
+  preferencesSelectedLanguage: languageKey,
   preferencesUseSystemTheme: useSystemThemeKey,
   preferencesSelectedLand: selectedLandKey,
 });
@@ -238,6 +257,7 @@ export function getAppPersistenceKeys(
     appPersistenceKeys.practiceGlobalIndex,
     appPersistenceKeys.practiceLearnGlobalIndex,
     appPersistenceKeys.preferencesTheme,
+    appPersistenceKeys.preferencesSelectedLanguage,
     appPersistenceKeys.preferencesUseSystemTheme,
     appPersistenceKeys.preferencesSelectedLand,
   ];

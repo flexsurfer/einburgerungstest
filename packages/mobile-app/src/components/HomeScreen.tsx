@@ -27,6 +27,7 @@ import {
   type PracticeOverview,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
+import { categoryDisplayName, landDisplayName, useI18n } from "../i18n";
 import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
 import {
   ArrowRight,
@@ -64,19 +65,6 @@ type ActionCardProps = {
   count?: number;
 };
 
-const TOPIC_LABELS: Record<string, string> = {
-  "Bildung und Arbeit": "Education & Work",
-  "Bund und Länder": "Democracy & Government",
-  "Europa und Welt": "Europe & World",
-  Geschichte: "History & Responsibility",
-  "Gesellschaft und Familie": "Society",
-  Politik: "Politics",
-  Recht: "Democracy & Law",
-  "Religion und Kultur": "Religion & Culture",
-  Staat: "The German State",
-  Wirtschaft: "Economy",
-};
-
 const CORE_TOPIC_ORDER = [
   "Recht",
   "Geschichte",
@@ -89,25 +77,6 @@ const CORE_TOPIC_ORDER = [
   "Europa und Welt",
   "Religion und Kultur",
 ];
-
-const STATE_LABELS: Record<string, string> = {
-  "Baden-Württemberg": "Baden-Württemberg",
-  Bayern: "Bavaria",
-  Berlin: "Berlin",
-  Brandenburg: "Brandenburg",
-  Bremen: "Bremen",
-  Hamburg: "Hamburg",
-  Hessen: "Hesse",
-  "Mecklenburg-Vorpommern": "Mecklenburg-Vorpommern",
-  Niedersachsen: "Lower Saxony",
-  "Nordrhein-Westfalen": "North Rhine-Westphalia",
-  "Rheinland-Pfalz": "Rhineland-Palatinate",
-  Saarland: "Saarland",
-  Sachsen: "Saxony",
-  "Sachsen-Anhalt": "Saxony-Anhalt",
-  "Schleswig-Holstein": "Schleswig-Holstein",
-  Thüringen: "Thuringia",
-};
 
 const stateAbbreviations: Record<string, string> = {
   "Baden-Württemberg": "BW",
@@ -162,6 +131,7 @@ function ProgressRing({
   totalQuestions: number;
   colors: Colors;
 }) {
+  const { t } = useI18n("ProgressRing");
   const size = 128;
   const strokeWidth = 11;
   const radius = (size - strokeWidth) / 2;
@@ -184,7 +154,12 @@ function ProgressRing({
   return (
     <View
       accessible
-      accessibilityLabel={`${normalizedAnswered} of ${normalizedTotal} questions answered, ${normalizedCorrect} correct, ${normalizedIncorrect} incorrect`}
+      accessibilityLabel={t("progressSummary", {
+        answered: normalizedAnswered,
+        total: normalizedTotal,
+        correct: normalizedCorrect,
+        incorrect: normalizedIncorrect,
+      })}
       style={staticStyles.progressRing}
     >
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -326,6 +301,7 @@ function MockExamCard({
   isWide: boolean;
   onPress: () => void;
 }) {
+  const { t } = useI18n("MockExamCard");
   const styleSheet = styles(colors, isWide);
   return (
     <View style={styleSheet.mockExamCard}>
@@ -337,22 +313,26 @@ function MockExamCard({
           </View>
         </View>
         <View style={styleSheet.mockExamCopy}>
-          <Text style={styleSheet.mockExamTitle}>Mock Exam</Text>
+          <Text style={styleSheet.mockExamTitle}>{t("mockExam")}</Text>
           <View style={styleSheet.mockExamMeta}>
-            <Text style={styleSheet.mockExamDetail}>33 questions</Text>
+            <Text style={styleSheet.mockExamDetail}>
+              {t("questionsCount", { count: 33 })}
+            </Text>
             <View style={styleSheet.mockExamDot} />
-            <Text style={styleSheet.mockExamDetail}>60 minutes</Text>
+            <Text style={styleSheet.mockExamDetail}>
+              {t("minutesCount", { count: 60 })}
+            </Text>
           </View>
         </View>
       </View>
       <TouchableOpacity
-        accessibilityLabel="Start mock exam"
+        accessibilityLabel={t("startMockExam")}
         accessibilityRole="button"
         activeOpacity={0.84}
         onPress={onPress}
         style={styleSheet.mockExamButton}
       >
-        <Text style={styleSheet.mockExamButtonText}>Start Exam</Text>
+        <Text style={styleSheet.mockExamButtonText}>{t("startExam")}</Text>
         <ArrowRight color={colors.primaryTextColor} size={21} />
       </TouchableOpacity>
     </View>
@@ -376,7 +356,9 @@ function TopicRow({
   divider: boolean;
   onPress: () => void;
 }) {
+  const { language, t } = useI18n("TopicRow");
   const styleSheet = styles(colors, isWide);
+  const categoryLabel = categoryDisplayName(category, language);
   const tones: Tone[] = [
     {
       accentColor: colors.primaryPale,
@@ -413,7 +395,11 @@ function TopicRow({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`${TOPIC_LABELS[category] ?? category}, ${progress.answered} of ${progress.total} questions answered`}
+      accessibilityLabel={t("categoryProgress", {
+        category: categoryLabel,
+        answered: progress.answered,
+        total: progress.total,
+      })}
       accessibilityRole="button"
       activeOpacity={0.78}
       onPress={onPress}
@@ -426,7 +412,7 @@ function TopicRow({
       </View>
       <View style={styleSheet.topicCopy}>
         <Text numberOfLines={1} style={styleSheet.topicTitle}>
-          {TOPIC_LABELS[category] ?? category}
+          {categoryLabel}
         </Text>
         <View style={styleSheet.topicProgressRow}>
           <View style={styleSheet.topicProgressTrack}>
@@ -463,7 +449,9 @@ function StateRow({
   selected: boolean;
   onPress: () => void;
 }) {
+  const { language, t } = useI18n("StateRow");
   const styleSheet = styles(colors, isWide);
+  const stateLabel = landDisplayName(category as FederalLand, language);
   const tones: Tone[] = [
     {
       accentColor: colors.primaryPale,
@@ -490,7 +478,11 @@ function StateRow({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={`${STATE_LABELS[category] ?? category}, ${progress.answered} of ${progress.total} questions answered`}
+      accessibilityLabel={t("categoryProgress", {
+        category: stateLabel,
+        answered: progress.answered,
+        total: progress.total,
+      })}
       accessibilityRole="button"
       accessibilityState={{ selected }}
       activeOpacity={0.78}
@@ -530,11 +522,13 @@ function StateRow({
               selected ? styleSheet.stateSelectedTitle : null,
             ]}
           >
-            {STATE_LABELS[category] ?? category}
+            {stateLabel}
           </Text>
           {selected ? (
             <View style={styleSheet.stateSelectedBadge}>
-              <Text style={styleSheet.stateSelectedBadgeText}>Your state</Text>
+              <Text style={styleSheet.stateSelectedBadgeText}>
+                {t("yourState")}
+              </Text>
             </View>
           ) : null}
         </View>
@@ -557,6 +551,7 @@ function StateRow({
 export const HomeScreen = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
+  const { t } = useI18n("HomeScreen");
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
@@ -672,7 +667,7 @@ export const HomeScreen = memo(() => {
             ]}
           >
             <TouchableOpacity
-              accessibilityLabel="Open settings"
+              accessibilityLabel={t("openSettings")}
               accessibilityRole="button"
               activeOpacity={0.7}
               hitSlop={8}
@@ -702,28 +697,28 @@ export const HomeScreen = memo(() => {
               <ProgressStat
                 colors={colors}
                 icon={<TargetIcon color={colors.heroTextColor} />}
-                label="Accuracy"
+                label={t("accuracy")}
                 value={`${overview.accuracy}%`}
               />
               <View style={styleSheet.progressDivider} />
               <ProgressStat
                 colors={colors}
                 icon={<DocumentIcon color={colors.heroTextColor} />}
-                label="Remaining questions"
+                label={t("remainingQuestions")}
                 value={overview.remaining}
               />
             </View>
           </View>
           <View style={styleSheet.progressActions}>
             <TouchableOpacity
-              accessibilityLabel="Study questions"
+              accessibilityLabel={t("studyQuestions")}
               accessibilityRole="button"
               activeOpacity={0.84}
               onPress={openLearnMode}
               style={[styleSheet.continueButton, styleSheet.studyButton]}
             >
               <BookOpenIcon color={colors.heroTextColor} size={19} />
-              <Text style={styleSheet.studyText}>Study</Text>
+              <Text style={styleSheet.studyText}>{t("study")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               accessibilityRole="button"
@@ -733,7 +728,7 @@ export const HomeScreen = memo(() => {
             >
               <PlayIcon color={colors.primaryColor} />
               <Text style={styleSheet.continueText}>
-                {canResume ? "Continue Practice" : "Start Practice"}
+                {canResume ? t("continuePractice") : t("startPractice")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -741,7 +736,7 @@ export const HomeScreen = memo(() => {
 
         <View style={styleSheet.content}>
           <View style={styleSheet.sectionHeader}>
-            <Text style={styleSheet.sectionTitle}>Review</Text>
+            <Text style={styleSheet.sectionTitle}>{t("review")}</Text>
           </View>
           <View style={styleSheet.reviewGrid}>
             <ActionCard
@@ -756,7 +751,7 @@ export const HomeScreen = memo(() => {
               }
               onPress={() => openCategory("favorites")}
               isWide={isWide}
-              title="Saved Questions"
+              title={t("savedQuestions")}
               tone={{
                 accentColor: colors.orangeColor,
                 iconColor: colors.orangeColor,
@@ -775,7 +770,7 @@ export const HomeScreen = memo(() => {
               }
               onPress={() => openCategory("wrong")}
               isWide={isWide}
-              title="Mistakes"
+              title={t("mistakes")}
               tone={{
                 accentColor: colors.errorColor,
                 iconColor: colors.errorColor,
@@ -786,7 +781,7 @@ export const HomeScreen = memo(() => {
 
           <View style={styleSheet.sectionBlock}>
             <View style={styleSheet.sectionHeader}>
-              <Text style={styleSheet.sectionTitle}>Mock Exam</Text>
+              <Text style={styleSheet.sectionTitle}>{t("mockExam")}</Text>
             </View>
             <MockExamCard
               colors={colors}
@@ -798,14 +793,14 @@ export const HomeScreen = memo(() => {
           {coreTopics && (
             <View style={styleSheet.sectionBlock}>
               <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>Focus Areas</Text>
+                <Text style={styleSheet.sectionTitle}>{t("focusAreas")}</Text>
                 <TouchableOpacity
                   accessibilityRole="button"
                   onPress={() => setShowAllCoreTopics((visible) => !visible)}
                   style={styleSheet.seeAllButton}
                 >
                   <Text style={styleSheet.seeAllText}>
-                    {showAllCoreTopics ? "Show less" : "View all"}
+                    {showAllCoreTopics ? t("showLess") : t("viewAll")}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -835,14 +830,16 @@ export const HomeScreen = memo(() => {
           {federalStates && (
             <View style={styleSheet.sectionBlock}>
               <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>Federal States</Text>
+                <Text style={styleSheet.sectionTitle}>
+                  {t("federalStates")}
+                </Text>
                 <TouchableOpacity
                   accessibilityRole="button"
                   onPress={() => setShowAllStates((visible) => !visible)}
                   style={styleSheet.seeAllButton}
                 >
                   <Text style={styleSheet.seeAllText}>
-                    {showAllStates ? "Show less" : "View all"}
+                    {showAllStates ? t("showLess") : t("viewAll")}
                   </Text>
                 </TouchableOpacity>
               </View>
