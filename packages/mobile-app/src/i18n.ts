@@ -3,7 +3,6 @@ import {
   appIds,
   useSubscription,
   type AppLanguage,
-  type FederalLand,
 } from "@ebtest/shared/uklad";
 
 export const DEFAULT_LANGUAGE: AppLanguage = "en";
@@ -650,17 +649,6 @@ export function translate(
   );
 }
 
-const ENGLISH_LAND_NAMES: Partial<Record<FederalLand, string>> = {
-  Bayern: "Bavaria",
-  Hessen: "Hesse",
-  Niedersachsen: "Lower Saxony",
-  "Nordrhein-Westfalen": "North Rhine-Westphalia",
-  "Rheinland-Pfalz": "Rhineland-Palatinate",
-  Sachsen: "Saxony",
-  "Sachsen-Anhalt": "Saxony-Anhalt",
-  Thüringen: "Thuringia",
-};
-
 const CATEGORY_KEYS: Record<string, Record<AppLanguage, string>> = {
   "Bildung und Arbeit": {
     en: "Education & Work",
@@ -734,23 +722,11 @@ const CATEGORY_KEYS: Record<string, Record<AppLanguage, string>> = {
   },
 };
 
-export function landDisplayName(
-  land: FederalLand,
-  language: AppLanguage,
-): string {
-  return language === "en" ? (ENGLISH_LAND_NAMES[land] ?? land) : land;
-}
-
 export function categoryDisplayName(
   category: string,
   language: AppLanguage,
 ): string {
-  return (
-    CATEGORY_KEYS[category]?.[language] ??
-    (language === "en"
-      ? (ENGLISH_LAND_NAMES[category as FederalLand] ?? category)
-      : category)
-  );
+  return CATEGORY_KEYS[category]?.[language] ?? category;
 }
 
 export function useI18n(owner: string) {

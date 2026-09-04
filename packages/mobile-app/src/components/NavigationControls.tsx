@@ -18,7 +18,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
   ({ isVisible = true }) => {
     const runtime = useRuntime();
     const colors = useColors();
-    const { t } = useI18n("NavigationControls");
+    const { isRtl, t } = useI18n("NavigationControls");
 
     const currentQuestionIndex = useSubscription(
       [appIds.subscriptions.navigationCurrentQuestionIndex],
@@ -73,6 +73,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
               color={
                 isFirstQuestion ? colors.disabledText : colors.primaryTextColor
               }
+              isRtl={isRtl}
             />
             <Text
               style={[
@@ -124,6 +125,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
               color={
                 isLastQuestion ? colors.disabledText : colors.primaryTextColor
               }
+              isRtl={isRtl}
             />
           </View>
         </TouchableOpacity>

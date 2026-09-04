@@ -16,7 +16,7 @@ import Svg, {
 } from "react-native-svg";
 import { FEDERAL_LANDS, type FederalLand } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
-import { landDisplayName, useI18n } from "../i18n";
+import { useI18n } from "../i18n";
 import { GERMANY_MAP_PATHS } from "./GermanyMap.paths";
 import { CheckIcon } from "./Icons";
 
@@ -131,7 +131,7 @@ function ModeIcon({
 export const LandSelection = memo(
   ({ selectedLand, onSelect }: LandSelectionProps) => {
     const colors = useColors();
-    const { language, t } = useI18n("LandSelection");
+    const { t } = useI18n("LandSelection");
     const { width } = useWindowDimensions();
     const styleSheet = styles(colors);
     const [mode, setMode] = useState<SelectionMode>("map");
@@ -197,9 +197,7 @@ export const LandSelection = memo(
                   {selectedLand === null ? t("selectALand") : t("selectedLand")}
                 </Text>
                 <Text style={styleSheet.mapSelectionName}>
-                  {selectedLand === null
-                    ? t("tapStateOnMap")
-                    : landDisplayName(selectedLand, language)}
+                  {selectedLand === null ? t("tapStateOnMap") : selectedLand}
                 </Text>
               </View>
             </View>
@@ -250,7 +248,7 @@ export const LandSelection = memo(
                   return (
                     <G
                       accessibilityLabel={t("selectState", {
-                        state: landDisplayName(land, language),
+                        state: land,
                       })}
                       key={land}
                       onPress={() => onSelect(land)}
@@ -301,7 +299,7 @@ export const LandSelection = memo(
                         x={x + buttonWidth / 2}
                         y={y + 36}
                       >
-                        {landDisplayName(land, language)}
+                        {land}
                       </SvgText>
                     </G>
                   );
@@ -315,7 +313,7 @@ export const LandSelection = memo(
               const selected = selectedLand === land;
               return (
                 <TouchableOpacity
-                  accessibilityLabel={`${landDisplayName(land, language)}, ${land}`}
+                  accessibilityLabel={land}
                   accessibilityRole="radio"
                   accessibilityState={{ checked: selected }}
                   activeOpacity={0.74}
@@ -342,7 +340,7 @@ export const LandSelection = memo(
                     </Text>
                   </View>
                   <Text numberOfLines={2} style={styleSheet.label}>
-                    {landDisplayName(land, language)}
+                    {land}
                   </Text>
                   <View style={styleSheet.checkSlot}>
                     {selected ? (

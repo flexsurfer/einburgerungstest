@@ -19,7 +19,7 @@ import {
   type ThemePreference,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
-import { landDisplayName, useI18n, type TranslationKey } from "../i18n";
+import { useI18n, type TranslationKey } from "../i18n";
 import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
 import {
   BuildingIcon,
@@ -129,7 +129,7 @@ function ThemeOptionRow({
 export const SettingsScreen = memo(() => {
   const runtime = useRuntime();
   const colors = useColors();
-  const { language, t } = useI18n("SettingsScreen");
+  const { isRtl, t } = useI18n("SettingsScreen");
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
@@ -226,7 +226,7 @@ export const SettingsScreen = memo(() => {
                 accessibilityLabel={`${t("federalState")}, ${
                   selectedLand === null
                     ? t("federalStateNotSelected")
-                    : landDisplayName(selectedLand, language)
+                    : selectedLand
                 }`}
                 accessibilityRole="button"
                 activeOpacity={0.72}
@@ -243,11 +243,46 @@ export const SettingsScreen = memo(() => {
                   <Text style={styleSheet.landValue}>
                     {selectedLand === null
                       ? t("chooseFederalState")
-                      : landDisplayName(selectedLand, language)}
+                      : selectedLand}
                   </Text>
                 </View>
-                <ChevronRight color={colors.textMutedColor} size={20} />
+                <ChevronRight
+                  color={colors.textMutedColor}
+                  size={20}
+                  isRtl={isRtl}
+                />
               </TouchableOpacity>
+            </View>
+
+            <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
+              <View style={styleSheet.sectionHeader}>
+                <Text style={styleSheet.sectionTitle}>{t("appearance")}</Text>
+                <Text style={styleSheet.sectionDescription}>
+                  {t("appearanceDescription")}
+                </Text>
+              </View>
+
+              <View
+                accessibilityRole="radiogroup"
+                style={styleSheet.optionsCard}
+              >
+                {THEME_OPTIONS.map((option, index) => (
+                  <ThemeOptionRow
+                    colors={colors}
+                    divider={index > 0}
+                    key={option.value}
+                    onPress={() => selectTheme(option.value)}
+                    option={option}
+                    selected={selectedTheme === option.value}
+                    title={t(option.titleKey)}
+                    description={t(option.descriptionKey)}
+                  />
+                ))}
+              </View>
+
+              <Text style={styleSheet.sectionFooter}>
+                {t("appearanceFooter")}
+              </Text>
             </View>
 
             <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
@@ -307,37 +342,6 @@ export const SettingsScreen = memo(() => {
                   },
                 )}
               </View>
-            </View>
-
-            <View style={[styleSheet.sectionBlock, styleSheet.sectionSpacing]}>
-              <View style={styleSheet.sectionHeader}>
-                <Text style={styleSheet.sectionTitle}>{t("appearance")}</Text>
-                <Text style={styleSheet.sectionDescription}>
-                  {t("appearanceDescription")}
-                </Text>
-              </View>
-
-              <View
-                accessibilityRole="radiogroup"
-                style={styleSheet.optionsCard}
-              >
-                {THEME_OPTIONS.map((option, index) => (
-                  <ThemeOptionRow
-                    colors={colors}
-                    divider={index > 0}
-                    key={option.value}
-                    onPress={() => selectTheme(option.value)}
-                    option={option}
-                    selected={selectedTheme === option.value}
-                    title={t(option.titleKey)}
-                    description={t(option.descriptionKey)}
-                  />
-                ))}
-              </View>
-
-              <Text style={styleSheet.sectionFooter}>
-                {t("appearanceFooter")}
-              </Text>
             </View>
           </View>
         </View>

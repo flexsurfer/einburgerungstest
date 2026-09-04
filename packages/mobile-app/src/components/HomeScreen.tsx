@@ -27,7 +27,7 @@ import {
   type PracticeOverview,
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
-import { categoryDisplayName, landDisplayName, useI18n } from "../i18n";
+import { categoryDisplayName, useI18n } from "../i18n";
 import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
 import {
   ArrowRight,
@@ -241,6 +241,7 @@ function ActionCard({
   disabled = false,
   count,
 }: ActionCardProps) {
+  const { isRtl } = useI18n("ActionCard");
   const styleSheet = styles(colors, isWide);
   return (
     <TouchableOpacity
@@ -286,6 +287,7 @@ function ActionCard({
         <ChevronRight
           color={disabled ? colors.disabledText : colors.textMutedColor}
           size={isWide ? 20 : 17}
+          isRtl={isRtl}
         />
       </View>
     </TouchableOpacity>
@@ -301,7 +303,7 @@ function MockExamCard({
   isWide: boolean;
   onPress: () => void;
 }) {
-  const { t } = useI18n("MockExamCard");
+  const { isRtl, t } = useI18n("MockExamCard");
   const styleSheet = styles(colors, isWide);
   return (
     <View style={styleSheet.mockExamCard}>
@@ -333,7 +335,7 @@ function MockExamCard({
         style={styleSheet.mockExamButton}
       >
         <Text style={styleSheet.mockExamButtonText}>{t("startExam")}</Text>
-        <ArrowRight color={colors.primaryTextColor} size={21} />
+        <ArrowRight color={colors.primaryTextColor} size={21} isRtl={isRtl} />
       </TouchableOpacity>
     </View>
   );
@@ -356,7 +358,7 @@ function TopicRow({
   divider: boolean;
   onPress: () => void;
 }) {
-  const { language, t } = useI18n("TopicRow");
+  const { isRtl, language, t } = useI18n("TopicRow");
   const styleSheet = styles(colors, isWide);
   const categoryLabel = categoryDisplayName(category, language);
   const tones: Tone[] = [
@@ -425,7 +427,7 @@ function TopicRow({
           </Text>
         </View>
       </View>
-      <ChevronRight color={colors.textMutedColor} size={20} />
+      <ChevronRight color={colors.textMutedColor} size={20} isRtl={isRtl} />
     </TouchableOpacity>
   );
 }
@@ -449,9 +451,9 @@ function StateRow({
   selected: boolean;
   onPress: () => void;
 }) {
-  const { language, t } = useI18n("StateRow");
+  const { isRtl, t } = useI18n("StateRow");
   const styleSheet = styles(colors, isWide);
-  const stateLabel = landDisplayName(category as FederalLand, language);
+  const stateLabel = category;
   const tones: Tone[] = [
     {
       accentColor: colors.primaryPale,
@@ -543,7 +545,7 @@ function StateRow({
           </Text>
         </View>
       </View>
-      <ChevronRight color={colors.textMutedColor} size={20} />
+      <ChevronRight color={colors.textMutedColor} size={20} isRtl={isRtl} />
     </TouchableOpacity>
   );
 }
@@ -727,7 +729,7 @@ export const HomeScreen = memo(() => {
               style={styleSheet.continueButton}
             >
               <PlayIcon color={colors.primaryColor} />
-              <Text style={styleSheet.continueText}>
+              <Text numberOfLines={2} style={styleSheet.continueText}>
                 {canResume ? t("continuePractice") : t("startPractice")}
               </Text>
             </TouchableOpacity>
@@ -1010,7 +1012,8 @@ const styles = (colors: Colors, isWide = false) =>
       alignItems: "center",
       justifyContent: "center",
       gap: isWide ? 7 : 5,
-      paddingHorizontal: isWide ? 12 : 7,
+      paddingHorizontal: isWide ? 16 : 12,
+      paddingVertical: 8,
       borderRadius: 17,
       backgroundColor: colors.surfaceColor,
     },
@@ -1026,6 +1029,7 @@ const styles = (colors: Colors, isWide = false) =>
       fontWeight: "800",
     },
     continueText: {
+      flexShrink: 1,
       color: colors.primaryColor,
       fontSize: isWide ? 16 : 13.5,
       lineHeight: isWide ? 21 : 18,
