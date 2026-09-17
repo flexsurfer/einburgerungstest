@@ -74,6 +74,16 @@ The app is available as a web application and a mobile app (Android/iOS) built w
 - Run on iOS: `pnpm dev:run-ios`
 - For iOS, ensure Pods are installed: `cd app/mobile/ios && bundle exec pod install`
 
+The Android app compiles against and targets Android 16 (API 36), meeting the
+[Google Play target API requirement for updates from August 31, 2026](https://support.google.com/googleplay/android-developer/answer/11926878).
+Install Android SDK Platform 36 and Build Tools 36.0.0 through Android Studio's SDK Manager.
+
+To release this change, increment `versionCode` in `app/mobile/android/app/build.gradle`
+to a value higher than any previously uploaded build, configure the existing release
+signing properties, and run `pnpm --filter mobile build:android:bundle`. Upload the
+generated `app/mobile/android/app/build/outputs/bundle/release/app-release.aab` to
+Google Play Console; changing the source configuration alone does not update the published app.
+
 ### Shared Package
 
 The shared package contains common Uklad state, data, events, subscriptions, and platform-neutral feature modules used by both web and mobile apps.
