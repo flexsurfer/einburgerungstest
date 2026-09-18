@@ -6,6 +6,7 @@ import { useI18n } from "../i18n";
 
 interface AnswerButtonProps {
   answer: Answer;
+  translation?: string;
   index: number;
   isCorrect: boolean;
   isSelected: boolean;
@@ -21,6 +22,7 @@ interface AnswerButtonProps {
 export const AnswerButton = memo<AnswerButtonProps>(
   ({
     answer,
+    translation,
     index,
     isCorrect,
     isSelected,
@@ -94,9 +96,16 @@ export const AnswerButton = memo<AnswerButtonProps>(
         accessibilityRole="button"
         accessibilityState={{ disabled, selected: isSelected }}
       >
-        <Text style={[styles(themeColors).answerText, getTextStyle()]}>
-          {answer}
-        </Text>
+        <View style={styles(themeColors).answerContent}>
+          <Text style={[styles(themeColors).answerText, getTextStyle()]}>
+            {answer}
+          </Text>
+          {translation ? (
+            <Text style={styles(themeColors).translationText}>
+              {translation}
+            </Text>
+          ) : null}
+        </View>
         {mistakeCount > 0 ? (
           <View style={styles(themeColors).mistakeCount}>
             <Text style={styles(themeColors).mistakeCountText}>
@@ -124,11 +133,19 @@ const styles = (colors: Colors) =>
       justifyContent: "space-between",
       gap: 10,
     },
+    answerContent: {
+      flex: 1,
+    },
     answerText: {
       fontSize: 16,
       lineHeight: 22,
       color: colors.textColor,
-      flex: 1,
+    },
+    translationText: {
+      fontSize: 13,
+      lineHeight: 19,
+      color: colors.textMutedColor,
+      marginTop: 4,
     },
     defaultButton: {
       backgroundColor: colors.bgColor,

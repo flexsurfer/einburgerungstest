@@ -5,6 +5,7 @@ import {
   type CategoryGroup,
   type Question,
   type QuestionInput,
+  type QuestionTranslation,
 } from "../../app/uklad/contracts.js";
 
 const federalStates: ReadonlySet<string> = new Set(FEDERAL_LANDS);
@@ -43,11 +44,26 @@ function createCategoryGroups(questions: readonly Question[]): CategoryGroup[] {
   ];
 }
 
+function copyTranslation(
+  translation: QuestionTranslation,
+): QuestionTranslation {
+  return {
+    ...translation,
+    ...(translation.answers === undefined
+      ? {}
+      : { answers: [...translation.answers] }),
+  };
+}
+
 function prepareQuestions(data: readonly QuestionInput[]): Question[] {
   return data.map((question, index) => ({
     ...question,
     answers: [...question.answers],
     ...(question.img === undefined ? {} : { img: { ...question.img } }),
+    ...(question.ru === undefined ? {} : { ru: copyTranslation(question.ru) }),
+    ...(question.en === undefined ? {} : { en: copyTranslation(question.en) }),
+    ...(question.ar === undefined ? {} : { ar: copyTranslation(question.ar) }),
+    ...(question.tr === undefined ? {} : { tr: copyTranslation(question.tr) }),
     globalIndex: index + 1,
   }));
 }

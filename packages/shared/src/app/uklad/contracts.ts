@@ -45,6 +45,12 @@ export interface QuestionImage {
   text?: string;
 }
 
+export interface QuestionTranslation {
+  question?: string;
+  answers?: string[];
+  explanation?: string;
+}
+
 export interface QuestionInput {
   id?: number;
   question: string;
@@ -52,6 +58,11 @@ export interface QuestionInput {
   correct: number;
   answers: string[];
   img?: QuestionImage;
+  explanation?: string;
+  ru?: QuestionTranslation;
+  en?: QuestionTranslation;
+  ar?: QuestionTranslation;
+  tr?: QuestionTranslation;
 }
 
 export interface Question extends QuestionInput {

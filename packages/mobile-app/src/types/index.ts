@@ -1,21 +1,11 @@
-export type Answer = string
+export type Answer = string;
 
-export interface Question {
-  globalIndex: number
-  question: string
-  category: string
-  correct: number
-  img?: {
-    url: string
-    text?: string
-  }
-  answers: Answer[]
-}
+export type { Question } from "@ebtest/shared/uklad";
 
 export interface UserAnswers {
-  [questionIndex: number]: number
+  [questionIndex: number]: number;
 }
 
 export interface Favorites {
-  [questionIndex: number]: boolean
-} 
+  [questionIndex: number]: boolean;
+}
