@@ -19,6 +19,7 @@ import { useColors, type Colors } from "../theme";
 import { useI18n } from "../i18n";
 import { GERMANY_MAP_PATHS } from "./GermanyMap.paths";
 import { CheckIcon } from "./Icons";
+import { MAP_ASPECT_RATIO, TABLET_BREAKPOINT, tabletMapWidth } from "../layout";
 
 const LAND_ABBREVIATIONS: Record<FederalLand, string> = {
   "Baden-Württemberg": "BW",
@@ -46,7 +47,6 @@ export interface LandSelectionProps {
 
 type SelectionMode = "list" | "map";
 
-const MAP_ASPECT_RATIO = 800.504 / 591.504;
 const SMALL_LAND_BUTTON_HEIGHT = 58;
 
 const SMALL_LAND_CALLOUTS: readonly {
@@ -132,17 +132,25 @@ export const LandSelection = memo(
   ({ selectedLand, onSelect }: LandSelectionProps) => {
     const colors = useColors();
     const { t } = useI18n("LandSelection");
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
+    const [containerWidth, setContainerWidth] = useState(0);
     const styleSheet = styles(colors);
     const [mode, setMode] = useState<SelectionMode>("map");
-    const mapWidth = Math.min(width, 680);
+    const mapWidth =
+      width >= TABLET_BREAKPOINT
+        ? tabletMapWidth(containerWidth, height)
+        : Math.min(width, 680);
     const mapHeight = Math.round(mapWidth * MAP_ASPECT_RATIO);
     const selectedPath = GERMANY_MAP_PATHS.find(
       ({ land }) => land === selectedLand,
     );
 
     return (
-      <View>
+      <View
+        onLayout={({ nativeEvent }) =>
+          setContainerWidth(nativeEvent.layout.width)
+        }
+      >
         <View
           accessibilityLabel={t("federalStateSelectionView")}
           style={styleSheet.modeSwitch}

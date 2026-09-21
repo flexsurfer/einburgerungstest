@@ -1,5 +1,12 @@
 import React, { memo, useEffect, useState } from "react";
-import { View, Text, Image, Dimensions, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { BookmarkButton } from "./BookmarkButton";
@@ -14,6 +21,7 @@ interface QuestionCardProps {
   numColumns?: number;
   screenWidth?: number;
   gap?: number;
+  scrollable?: boolean;
 }
 
 export const QuestionCard = memo<QuestionCardProps>(
@@ -23,6 +31,7 @@ export const QuestionCard = memo<QuestionCardProps>(
     numColumns = 1,
     screenWidth: propScreenWidth,
     gap = 0,
+    scrollable = false,
   }) => {
     const [height, setHeight] = useState<number | null>(null);
     const uri = question.img?.url ?? undefined;
@@ -53,65 +62,90 @@ export const QuestionCard = memo<QuestionCardProps>(
     );
     const translation =
       isLearnMode && language !== "de" ? question[language] : undefined;
+    const explanation = translation?.explanation || question.explanation;
     const styleSheet = styles(colors, isTablet);
+
+    const metadata = (
+      <View
+        style={[styleSheet.questionMetaRow, scrollable && styleSheet.cardTop]}
+      >
+        <Text style={styleSheet.globalNumberValue}>
+          #{question.globalIndex}
+        </Text>
+        <BookmarkButton globalIndex={question.globalIndex} />
+      </View>
+    );
+    const header = (
+      <View
+        style={[
+          styleSheet.questionHeader,
+          scrollable && styleSheet.stickyHeader,
+        ]}
+      >
+        <Text style={styleSheet.questionText}>{question.question}</Text>
+        {translation?.question ? (
+          <Text style={styleSheet.translationText}>{translation.question}</Text>
+        ) : null}
+      </View>
+    );
+    const body = (
+      <View style={scrollable && styleSheet.cardBottom}>
+        {height && (
+          <View style={styleSheet.questionImageContainer}>
+            <Image
+              source={images[uri]}
+              style={{ width: imageWidth, height, borderRadius: 8 }}
+              resizeMode="contain"
+            />
+            {question.img.text && (
+              <Text style={styleSheet.questionImageText}>
+                {question.img.text}
+              </Text>
+            )}
+          </View>
+        )}
+        <AnswerList
+          question={question}
+          translatedAnswers={translation?.answers}
+        />
+        <View style={styleSheet.questionFooter}>
+          <Text style={styleSheet.questionCategory}>
+            {categoryDisplayName(question.category, language)}
+          </Text>
+        </View>
+      </View>
+    );
+    const explanationContent =
+      isLearnMode && explanation ? (
+        <View style={styleSheet.explanation}>
+          <Text style={styleSheet.explanationTitle}>{t("explanation")}</Text>
+          <Text style={styleSheet.explanationText}>{explanation}</Text>
+        </View>
+      ) : null;
+
+    if (scrollable) {
+      return (
+        <ScrollView
+          style={styleSheet.scrollContainer}
+          contentContainerStyle={styleSheet.scrollContent}
+          stickyHeaderIndices={[1]}
+        >
+          {metadata}
+          {header}
+          {body}
+          {explanationContent}
+        </ScrollView>
+      );
+    }
 
     return (
       <View style={[styleSheet.container, isTablet && { width: cardWidth }]}>
         <View style={styleSheet.questionCard}>
-          <View style={styleSheet.questionMetaRow}>
-            <Text style={styleSheet.globalNumberValue}>
-              #{question.globalIndex}
-            </Text>
-            <BookmarkButton globalIndex={question.globalIndex} />
-          </View>
-          <View style={styleSheet.questionHeader}>
-            <Text style={styleSheet.questionText}>{question.question}</Text>
-            {translation?.question ? (
-              <Text style={styleSheet.translationText}>
-                {translation.question}
-              </Text>
-            ) : null}
-          </View>
-
-          {height && (
-            <View style={styleSheet.questionImageContainer}>
-              <Image
-                source={images[uri]}
-                style={{ width: imageWidth, height: height, borderRadius: 8 }}
-                resizeMode="contain"
-              />
-              {question.img.text && (
-                <Text style={styleSheet.questionImageText}>
-                  {question.img.text}
-                </Text>
-              )}
-            </View>
-          )}
-
-          <AnswerList
-            question={question}
-            translatedAnswers={translation?.answers}
-          />
-
-          <View style={styleSheet.questionFooter}>
-            <Text style={styleSheet.questionCategory}>
-              {categoryDisplayName(question.category, language)}
-            </Text>
-          </View>
+          {metadata}
+          {header}
+          {body}
         </View>
-        {isLearnMode && question.explanation ? (
-          <View style={styleSheet.explanation}>
-            <Text style={styleSheet.explanationTitle}>{t("explanation")}</Text>
-            <Text style={styleSheet.explanationText}>
-              {question.explanation}
-            </Text>
-            {translation?.explanation ? (
-              <Text style={styleSheet.translationText}>
-                {translation.explanation}
-              </Text>
-            ) : null}
-          </View>
-        ) : null}
+        {explanationContent}
       </View>
     );
   },
@@ -133,6 +167,7 @@ const styles = (colors: Colors, isTablet = false) =>
       shadowRadius: 12,
       elevation: 5,
       padding: isTablet ? 16 : 20,
+      paddingTop: 8,
       position: "relative",
       flexDirection: "column",
       minHeight: isTablet ? 240 : 200,
@@ -141,32 +176,57 @@ const styles = (colors: Colors, isTablet = false) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: isTablet ? 14 : 18,
+      marginBottom: 4,
     },
     globalNumberValue: {
-      color: colors.primaryColor,
-      fontSize: isTablet ? 18 : 24,
-      lineHeight: isTablet ? 22 : 28,
-      fontWeight: "800",
+      color: colors.textMutedColor,
+      fontSize: 12,
+      lineHeight: 16,
+      fontWeight: "500",
       fontVariant: ["tabular-nums"],
     },
     questionHeader: {
       flexDirection: "column",
       marginBottom: isTablet ? 16 : 20,
     },
-    questionContent: {
+    scrollContainer: {
+      flex: 1,
+    },
+    scrollContent: {
       paddingHorizontal: 16,
+      paddingVertical: 14,
+    },
+    cardTop: {
+      backgroundColor: colors.bgColor,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      paddingHorizontal: 20,
+      paddingTop: 8,
+      marginBottom: 0,
+    },
+    stickyHeader: {
+      backgroundColor: colors.bgColor,
+      paddingHorizontal: 20,
+      paddingTop: 4,
       paddingBottom: 16,
+      marginBottom: 0,
+    },
+    cardBottom: {
+      backgroundColor: colors.bgColor,
+      borderBottomLeftRadius: 12,
+      borderBottomRightRadius: 12,
+      paddingHorizontal: 20,
+      paddingBottom: 20,
     },
     questionText: {
-      fontSize: isTablet ? 15 : 17,
-      fontWeight: "500",
+      fontSize: 18,
+      fontWeight: "600",
       color: colors.textColor,
-      lineHeight: isTablet ? 22 : 24,
+      lineHeight: 26,
     },
     translationText: {
-      fontSize: 13,
-      lineHeight: 19,
+      fontSize: isTablet ? 15 : 13,
+      lineHeight: isTablet ? 23 : 19,
       color: colors.textMutedColor,
       marginTop: 6,
     },

@@ -71,7 +71,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <LeftArrow
               color={
-                isFirstQuestion ? colors.disabledText : colors.primaryTextColor
+                isFirstQuestion ? colors.disabledText : colors.textMutedColor
               }
               isRtl={isRtl}
             />
@@ -99,7 +99,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
                 total: filteredQuestionsCount,
               })}
             </Text>
-            <DownArrow color={colors.primaryColor} />
+            <DownArrow color={colors.textMutedColor} />
           </TouchableOpacity>
         )}
 
@@ -123,7 +123,7 @@ export const NavigationControls = memo<NavigationControlsProps>(
             </Text>
             <RightArrow
               color={
-                isLastQuestion ? colors.disabledText : colors.primaryTextColor
+                isLastQuestion ? colors.disabledText : colors.textMutedColor
               }
               isRtl={isRtl}
             />
@@ -166,29 +166,21 @@ const styles = (colors: Colors) =>
       paddingHorizontal: 10,
       paddingVertical: 9,
       borderRadius: 14,
-      backgroundColor: colors.primaryColor,
+      backgroundColor: colors.surfaceColor,
       minWidth: 80,
       alignItems: "center",
       justifyContent: "center",
-      shadowColor: colors.primaryDarkColor,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.18,
-      shadowRadius: 8,
-      elevation: 3,
     },
     disabledButton: {
-      backgroundColor: colors.disabledBg,
-      opacity: 0.82,
-      shadowOpacity: 0,
-      elevation: 0,
+      backgroundColor: "transparent",
     },
     navButtonText: {
-      color: colors.primaryTextColor,
-      fontSize: 16,
-      fontWeight: "600",
+      color: colors.textMutedColor,
+      fontSize: 14,
+      fontWeight: "500",
     },
     disabledButtonText: {
-      color: colors.textColor,
+      color: colors.disabledText,
     },
     questionNumberButton: {
       justifyContent: "center",
@@ -197,21 +189,14 @@ const styles = (colors: Colors) =>
       paddingHorizontal: 10,
       paddingVertical: 9,
       borderRadius: 14,
-      backgroundColor: colors.surfaceColor,
-      borderWidth: 1,
-      borderColor: colors.borderColor,
+      backgroundColor: "transparent",
       minWidth: 100,
       minHeight: 44,
-      shadowColor: colors.shadowColor,
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.12,
-      shadowRadius: 7,
-      elevation: 2,
     },
     questionNumberText: {
-      color: colors.primaryColor,
-      fontSize: 14,
-      fontWeight: "bold",
+      color: colors.textMutedColor,
+      fontSize: 13,
+      fontWeight: "400",
       marginRight: 4,
     },
     totalQuestionsText: {

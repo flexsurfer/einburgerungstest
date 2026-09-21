@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import Svg, {
@@ -12,7 +12,7 @@ import Svg, {
 import images from "../assets/images";
 import { useColors, type Colors } from "../theme";
 
-export const HOME_IMAGE_ASPECT_RATIO = 1774 / 887;
+import { backgroundImageWidth, HOME_IMAGE_ASPECT_RATIO } from "../layout";
 
 function PageGradient({ colors }: { colors: Colors }) {
   return (
@@ -45,6 +45,43 @@ function ImageBottomFade({ colors }: { colors: Colors }) {
         </LinearGradient>
       </Defs>
       <Rect width="100%" height="100%" fill="url(#appImageBottomFade)" />
+    </Svg>
+  );
+}
+
+function ImageSideFade({ colors }: { colors: Colors }) {
+  return (
+    <Svg
+      pointerEvents="none"
+      width="100%"
+      height="100%"
+      style={StyleSheet.absoluteFill}
+    >
+      <Defs>
+        <LinearGradient id="appImageSideFade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <Stop
+            offset="0%"
+            stopColor={colors.pageGradientStart}
+            stopOpacity={1}
+          />
+          <Stop
+            offset="18%"
+            stopColor={colors.pageGradientStart}
+            stopOpacity={0}
+          />
+          <Stop
+            offset="82%"
+            stopColor={colors.pageGradientStart}
+            stopOpacity={0}
+          />
+          <Stop
+            offset="100%"
+            stopColor={colors.pageGradientStart}
+            stopOpacity={1}
+          />
+        </LinearGradient>
+      </Defs>
+      <Rect width="100%" height="100%" fill="url(#appImageSideFade)" />
     </Svg>
   );
 }
@@ -82,13 +119,7 @@ function NightSky() {
       viewBox="0 0 100 50"
     >
       <Defs>
-        <LinearGradient
-          id="appNightTint"
-          x1="0%"
-          y1="0%"
-          x2="0%"
-          y2="100%"
-        >
+        <LinearGradient id="appNightTint" x1="0%" y1="0%" x2="0%" y2="100%">
           <Stop offset="0%" stopColor="#06152F" stopOpacity={0.9} />
           <Stop offset="58%" stopColor="#0A2541" stopOpacity={0.74} />
           <Stop offset="100%" stopColor="#0C2B38" stopOpacity={0.48} />
@@ -117,15 +148,25 @@ export function AppBackground() {
     "AppBackground",
   );
   const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const contentWidth = Math.max(0, width - insets.left - insets.right);
+  const imageWidth = backgroundImageWidth(contentWidth, height);
 
   return (
     <View pointerEvents="none" style={styles.root}>
       <PageGradient colors={colors} />
       <View
-        style={[styles.imageLayer, { left: insets.left, right: insets.right }]}
+        style={[
+          styles.imageLayer,
+          {
+            left: insets.left + (contentWidth - imageWidth) / 2,
+            width: imageWidth,
+          },
+        ]}
       >
         <Image resizeMode="contain" source={images.home} style={styles.image} />
         {theme === "dark" ? <NightSky /> : null}
+        {imageWidth < contentWidth ? <ImageSideFade colors={colors} /> : null}
         <View style={styles.imageFade}>
           <ImageBottomFade colors={colors} />
         </View>

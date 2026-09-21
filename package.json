@@ -22,6 +22,8 @@
     "dev:expo": "pnpm --filter ./app/mobile-expo exec expo start",
     "dev:expo-android": "pnpm --filter ./app/mobile-expo exec expo run:android",
     "dev:expo-ios": "pnpm --filter ./app/mobile-expo exec expo run:ios",
+    "build:expo-android": "pnpm --filter mobile-expo run build:android:release",
+    "run:expo-android-release": "pnpm --filter mobile-expo run run:android:release",
     "build:web": "pnpm --filter ./app/web exec vite build",
     "build": "pnpm build:web",
     "deploy:web": "gh-pages -d ./app/web/dist"

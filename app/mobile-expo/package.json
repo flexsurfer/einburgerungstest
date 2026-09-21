@@ -6,6 +6,8 @@
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
+    "build:android:release": "rm -rf android/app/.cxx android/app/build android/build && NODE_ENV=production ./android/gradlew -p android :app:assembleRelease --no-build-cache",
+    "run:android:release": "rm -rf android/app/.cxx android/app/build android/build && expo run:android --variant release --no-build-cache",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit"
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
+    "babel-preset-expo": "~57.0.8",
     "typescript": "^5.9.3"
   }
 }

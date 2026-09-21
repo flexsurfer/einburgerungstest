@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { QuestionCard } from "./QuestionCard";
@@ -15,7 +15,7 @@ export const QuestionCardView = memo(() => {
   ) as Question | null;
   const colors = useColors();
   const { t } = useI18n("QuestionCardView");
-  const dimensions = Dimensions.get("window");
+  const dimensions = useWindowDimensions();
 
   const filteredQuestions = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestions],
@@ -40,16 +40,15 @@ export const QuestionCardView = memo(() => {
 
   return (
     <View style={styles(colors).phoneContainer}>
-      <ScrollView style={styles(colors).singleCardContainer}>
-        <QuestionCard
-          key={currentQuestion.globalIndex}
-          question={currentQuestion}
-          isTablet={false}
-          numColumns={1}
-          screenWidth={dimensions.width}
-          gap={0}
-        />
-      </ScrollView>
+      <QuestionCard
+        key={currentQuestion.globalIndex}
+        question={currentQuestion}
+        isTablet={false}
+        numColumns={1}
+        screenWidth={dimensions.width}
+        gap={0}
+        scrollable
+      />
       <NavigationControls isVisible={true} />
       <QuestionPicker />
     </View>
@@ -60,11 +59,6 @@ const styles = (colors: Colors) =>
   StyleSheet.create({
     phoneContainer: {
       flex: 1,
-      backgroundColor: "transparent",
-    },
-    singleCardContainer: {
-      flex: 1,
-      paddingHorizontal: 16,
       backgroundColor: "transparent",
     },
     emptyContainer: {

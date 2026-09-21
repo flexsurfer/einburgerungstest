@@ -139,6 +139,7 @@ const styles = (colors: Colors) =>
     answerText: {
       fontSize: 16,
       lineHeight: 22,
+      fontWeight: "500",
       color: colors.textColor,
     },
     translationText: {
@@ -182,14 +183,14 @@ const styles = (colors: Colors) =>
       color: colors.errorColor,
     },
     mistakeCount: {
-      backgroundColor: colors.errorColor,
+      backgroundColor: colors.errorLight,
       borderRadius: 999,
       paddingHorizontal: 8,
       paddingVertical: 4,
     },
     mistakeCountText: {
-      color: colors.primaryTextColor,
+      color: colors.textMutedColor,
       fontSize: 11,
-      fontWeight: "700",
+      fontWeight: "500",
     },
   });

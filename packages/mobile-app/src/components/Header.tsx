@@ -53,7 +53,7 @@ export const Header = memo(({ style }: { style?: ViewStyle }) => {
         onPress={openHome}
         style={styles(colors).homeButton}
       >
-        <HomeIcon color={colors.primaryColor} size={28} />
+        <HomeIcon color={colors.textMutedColor} size={22} />
       </TouchableOpacity>
 
       <View style={styles(colors).titleContainer}>
@@ -94,17 +94,17 @@ const styles = (colors: Colors) =>
       minWidth: 0,
     },
     eyebrow: {
-      color: colors.primaryColor,
+      color: colors.textMutedColor,
       fontSize: 10,
       lineHeight: 14,
-      fontWeight: "800",
-      letterSpacing: 1.1,
+      fontWeight: "500",
+      letterSpacing: 0.4,
       marginBottom: 1,
     },
     title: {
-      color: colors.textColor,
-      fontSize: 16,
-      lineHeight: 21,
-      fontWeight: "700",
+      color: colors.textMutedColor,
+      fontSize: 14,
+      lineHeight: 20,
+      fontWeight: "500",
     },
   });

@@ -28,7 +28,11 @@ import {
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { categoryDisplayName, useI18n } from "../i18n";
-import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
+import {
+  backgroundImageWidth,
+  HOME_IMAGE_ASPECT_RATIO,
+  TABLET_BREAKPOINT,
+} from "../layout";
 import {
   ArrowRight,
   BookmarkIcon,
@@ -108,7 +112,7 @@ function HeroGradient({ colors }: { colors: Colors }) {
           x2="100%"
           y2="100%"
         >
-          <Stop offset="0%" stopColor={colors.primaryColor} />
+          <Stop offset="0%" stopColor={colors.heroColor} />
           <Stop offset="55%" stopColor={colors.primaryMidColor} />
           <Stop offset="100%" stopColor={colors.heroGradientEnd} />
         </LinearGradient>
@@ -555,10 +559,11 @@ export const HomeScreen = memo(() => {
   const colors = useColors();
   const { t } = useI18n("HomeScreen");
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isWide = width >= 720;
   const contentWidth = Math.max(0, width - insets.left - insets.right);
-  const coverImageHeight = contentWidth / HOME_IMAGE_ASPECT_RATIO;
+  const coverImageHeight =
+    backgroundImageWidth(contentWidth, height) / HOME_IMAGE_ASPECT_RATIO;
   const styleSheet = styles(colors, isWide);
   const reviewCardWidth: ActionCardWidth = "100%";
   const [showAllCoreTopics, setShowAllCoreTopics] = useState(false);
@@ -685,7 +690,15 @@ export const HomeScreen = memo(() => {
           </View>
         </View>
 
-        <View style={styleSheet.progressCard}>
+        <View
+          style={[
+            styleSheet.progressCard,
+            contentWidth >= TABLET_BREAKPOINT && {
+              width: Math.min(contentWidth, 900) - (isWide ? 56 : 36),
+              alignSelf: "center",
+            },
+          ]}
+        >
           <HeroGradient colors={colors} />
           <View style={styleSheet.progressTopRow}>
             <ProgressRing
@@ -954,7 +967,7 @@ const styles = (colors: Colors, isWide = false) =>
       paddingHorizontal: isWide ? 28 : 16,
       paddingVertical: isWide ? 24 : 18,
       borderRadius: 22,
-      backgroundColor: colors.primaryColor,
+      backgroundColor: colors.heroColor,
       shadowColor: colors.primaryDarkColor,
       shadowOffset: { width: 0, height: 10 },
       shadowOpacity: 0.24,

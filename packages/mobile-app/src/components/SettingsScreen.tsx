@@ -20,7 +20,7 @@ import {
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { useI18n, type TranslationKey } from "../i18n";
-import { HOME_IMAGE_ASPECT_RATIO } from "./AppBackground";
+import { backgroundImageWidth, HOME_IMAGE_ASPECT_RATIO } from "../layout";
 import {
   BuildingIcon,
   CheckIcon,
@@ -132,11 +132,11 @@ export const SettingsScreen = memo(() => {
   const colors = useColors();
   const { isRtl, t } = useI18n("SettingsScreen");
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isWide = width >= 720;
   const contentWidth = Math.max(0, width - insets.left - insets.right);
   const coverImageHeight = Math.max(
-    contentWidth / HOME_IMAGE_ASPECT_RATIO,
+    backgroundImageWidth(contentWidth, height) / HOME_IMAGE_ASPECT_RATIO,
     insets.top + 132,
   );
   const styleSheet = styles(colors, isWide);
@@ -387,7 +387,9 @@ export const SettingsScreen = memo(() => {
               onPress={() => setLandPickerVisible(false)}
               style={styleSheet.modalDoneButton}
             >
-              <Text style={styleSheet.modalDoneText}>{t("done")}</Text>
+              <Text numberOfLines={1} style={styleSheet.modalDoneText}>
+                {t("done")}
+              </Text>
             </TouchableOpacity>
           </View>
           <ScrollView
@@ -659,13 +661,17 @@ const styles = (colors: Colors, isWide = false) =>
       width: 52,
     },
     modalHeaderTitle: {
+      flexShrink: 1,
+      marginHorizontal: 8,
+      textAlign: "center",
       color: colors.textColor,
       fontSize: 17,
       lineHeight: 22,
       fontWeight: "800",
     },
     modalDoneButton: {
-      width: 52,
+      minWidth: 52,
+      flexShrink: 0,
       minHeight: 42,
       alignItems: "flex-end",
       justifyContent: "center",
