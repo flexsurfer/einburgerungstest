@@ -16,6 +16,7 @@ import {
 import {
   UkladProvider,
   appIds,
+  useRuntime,
   useSubscription,
   type NavigationScreen,
 } from "@ebtest/shared/uklad";
@@ -28,6 +29,7 @@ import { SettingsScreen } from "./components/SettingsScreen";
 import { OnboardingScreen } from "./components/OnboardingScreen";
 import { AppBackground } from "./components/AppBackground";
 import { useI18n } from "./i18n";
+import { watchMobileBack } from "./hardware-back";
 
 export interface AppProps {
   app: MobileApp;
@@ -42,6 +44,7 @@ const SCREEN_POSITION: Record<NavigationScreen, number> = {
 export function AppContent({
   interactive = true,
 }: { interactive?: boolean } = {}) {
+  const runtime = useRuntime();
   const questionsLoaded = useSubscription(
     [appIds.subscriptions.questionsLoaded],
     "App",
@@ -61,6 +64,14 @@ export function AppContent({
   const screenProgress = useRef(
     new Animated.Value(SCREEN_POSITION[activeScreen]),
   ).current;
+
+  const canGoBack =
+    interactive &&
+    questionsLoaded &&
+    selectedLand !== null &&
+    activeScreen !== "home";
+
+  useEffect(() => watchMobileBack(runtime, canGoBack), [runtime, canGoBack]);
 
   useEffect(() => {
     screenProgress.stopAnimation();

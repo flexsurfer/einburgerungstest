@@ -11,6 +11,19 @@ export const Alert = {
   alert: () => undefined,
 };
 
+export const Platform = {
+  get OS() {
+    return "android";
+  },
+};
+
+export const BackHandler = {
+  addEventListener: (
+    _event: "hardwareBackPress",
+    _listener: () => boolean | null | undefined,
+  ) => ({ remove: () => undefined }),
+};
+
 type AppStateListener = (state: "active" | "inactive" | "background") => void;
 const appStateListeners = new Set<AppStateListener>();
 
