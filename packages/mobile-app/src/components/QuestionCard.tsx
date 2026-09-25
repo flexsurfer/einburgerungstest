@@ -69,8 +69,14 @@ export const QuestionCard = memo<QuestionCardProps>(
       <View
         style={[styleSheet.questionMetaRow, scrollable && styleSheet.cardTop]}
       >
-        <Text style={styleSheet.globalNumberValue}>
-          #{question.globalIndex}
+        <Text style={styleSheet.questionMetaText}>
+          <Text style={styleSheet.globalNumberValue}>
+            #{String(question.globalIndex).padStart(3, "0")}
+          </Text>
+          <Text style={styleSheet.questionCategory}>
+            {" / "}
+            {categoryDisplayName(question.category, language)}
+          </Text>
         </Text>
         <BookmarkButton globalIndex={question.globalIndex} />
       </View>
@@ -108,11 +114,6 @@ export const QuestionCard = memo<QuestionCardProps>(
           question={question}
           translatedAnswers={translation?.answers}
         />
-        <View style={styleSheet.questionFooter}>
-          <Text style={styleSheet.questionCategory}>
-            {categoryDisplayName(question.category, language)}
-          </Text>
-        </View>
       </View>
     );
     const explanationContent =
@@ -177,6 +178,14 @@ const styles = (colors: Colors, isTablet = false) =>
       alignItems: "center",
       justifyContent: "space-between",
       marginBottom: 4,
+    },
+    questionMetaText: {
+      flex: 1,
+      minWidth: 0,
+      marginEnd: 12,
+      color: colors.textMutedColor,
+      fontSize: 12,
+      lineHeight: 16,
     },
     globalNumberValue: {
       color: colors.textMutedColor,
@@ -258,16 +267,7 @@ const styles = (colors: Colors, isTablet = false) =>
       fontStyle: "italic",
       lineHeight: isTablet ? 18 : 20,
     },
-    questionFooter: {
-      marginTop: isTablet ? 12 : 16,
-      paddingTop: 7,
-      borderTopWidth: 1,
-      borderTopColor: colors.borderColor,
-    },
     questionCategory: {
-      fontSize: isTablet ? 12 : 13,
-      color: colors.textColor,
-      opacity: 0.5,
-      textAlign: "right",
+      fontWeight: "400",
     },
   });

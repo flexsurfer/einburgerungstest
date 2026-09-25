@@ -208,11 +208,11 @@ describe("Uklad web platform", () => {
       }),
     );
 
-    harness.dispatchSync([appIds.events.vocabularyFetchRequested]);
+    harness.dispatchSync([appIds.events.questionsFetchRequested]);
     await vi.waitFor(async () => {
       await harness.flush();
       expect(
-        harness.getSubscriptionValue([appIds.subscriptions.vocabularyError]),
+        harness.getSubscriptionValue([appIds.subscriptions.questionsError]),
       ).toBe("HTTP 503: Unavailable");
     });
   });

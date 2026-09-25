@@ -68,7 +68,11 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
+*.jks
 !debug.keystore
+credentials.json
+*.aab
+*.apk
 
 # node.js
 #
@@ -112,3 +116,9 @@ vitest.config.*.timestamp*
 /.pnpm-store/
 artifacts/
 scripts/
+app/mobile-expo/assets/
+app/mobile-expo/plugins/
+app/mobile-expo/tools/
+app/web/public/
+app/web/seo/
+app/web/test/

@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
+import { useI18n } from "@ebtest/shared/i18n";
 import { AnswerButton } from "./AnswerButton.jsx";
 
-export const AnswerList = ({ question }) => {
+export const AnswerList = ({ question, translatedAnswers }) => {
   const runtime = useRuntime();
+  const { t } = useI18n("AnswerList");
   const showAnswers = useSubscription(
     [appIds.subscriptions.uiShowAnswers],
     "AnswerList",
@@ -84,13 +86,14 @@ export const AnswerList = ({ question }) => {
     <div className="answers-container">
       {wrongAnswersMode && mistakeSummary.totalAttempts > 0 && (
         <div className="mistake-summary">
-          Wrong attempts: <strong>{mistakeSummary.totalAttempts}</strong>
+          {t("wrongAttempts", { count: mistakeSummary.totalAttempts })}
         </div>
       )}
       {question.answers.map((answer, index) => (
         <AnswerButton
           key={index}
           answer={answer}
+          translation={translatedAnswers?.[index]}
           index={index}
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
@@ -116,7 +119,7 @@ export const AnswerList = ({ question }) => {
           }`}
           onClick={handleAnswerAction}
         >
-          {wrongAnswersMode ? "Remove from mistakes" : "Clear answer"}
+          {t(wrongAnswersMode ? "removeFromMistakes" : "clearAnswer")}
         </button>
       )}
     </div>

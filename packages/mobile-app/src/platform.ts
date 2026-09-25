@@ -9,10 +9,8 @@ import {
   type QuestionInput,
   type ScrollMode,
   type Theme,
-  type VocabularyData,
 } from "@ebtest/shared/uklad";
 import questionsData from "../assets/data.json";
-import vocabularyData from "../assets/vocabulary_multilang.json";
 import { questionListRef } from "./refs";
 import { translate } from "./i18n";
 
@@ -25,7 +23,6 @@ export const mobileQuestionsData = questionsData as QuestionInput[];
 
 const localData: Record<DataKind, unknown> = {
   questions: mobileQuestionsData,
-  vocabulary: vocabularyData,
 };
 
 function errorMessage(error: unknown): string {
@@ -36,16 +33,10 @@ function validateData(dataType: DataKind, data: unknown): void {
   if (dataType === "questions" && !Array.isArray(data)) {
     throw new Error("Questions data must be an array");
   }
-  if (
-    dataType === "vocabulary" &&
-    (typeof data !== "object" || data === null || Array.isArray(data))
-  ) {
-    throw new Error("Vocabulary data must be an object");
-  }
 }
 
 function localDataFor(dataType: DataKind): unknown {
-  if (dataType !== "questions" && dataType !== "vocabulary") {
+  if (dataType !== "questions") {
     throw new Error(`Unknown data type: ${String(dataType)}`);
   }
   const data = localData[dataType];
@@ -92,31 +83,18 @@ export function registerMobilePlatform(
         effectRuntime: MobileEffectRuntime,
       ) => {
         try {
-          if (payload.dataType === "questions") {
-            const data = localDataFor(payload.dataType) as QuestionInput[];
-            effectRuntime.dispatch([
-              appIds.events.questionsFetchSucceeded,
-              data,
-            ]);
-          } else {
-            const data = localDataFor(payload.dataType) as VocabularyData;
-            effectRuntime.dispatch([
-              appIds.events.vocabularyFetchSucceeded,
-              data,
-            ]);
-          }
+          const data = localDataFor(payload.dataType) as QuestionInput[];
+          effectRuntime.dispatch([appIds.events.questionsFetchSucceeded, data]);
         } catch (error) {
-          const event =
-            payload.dataType === "questions"
-              ? appIds.events.questionsFetchFailed
-              : appIds.events.vocabularyFetchFailed;
-          effectRuntime.dispatch([event, errorMessage(error)]);
+          effectRuntime.dispatch([
+            appIds.events.questionsFetchFailed,
+            errorMessage(error),
+          ]);
         }
       };
 
-      // Native ships the bundled data files. Keep both effects registered so
-      // shared request events remain platform-neutral and vocabulary can use
-      // the same lifecycle as the web implementation.
+      // Native ships bundled questions. Keep both effects registered so
+      // shared request events remain platform-neutral.
       registrar.regEffect(appIds.effects.dataFetch, loadLocalData);
       registrar.regEffect(appIds.effects.dataLoadLocal, loadLocalData);
 
@@ -164,7 +142,7 @@ export function registerMobilePlatform(
       );
 
       // There is no document body in React Native. The event remains
-      // registered because shared vocabulary/navigation modules are reused.
+      // registered because shared UI/navigation modules are reused.
       registrar.regEffect(appIds.effects.uiSetBodyOverflow, () => undefined);
     },
   ]);

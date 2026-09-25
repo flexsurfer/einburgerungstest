@@ -5,7 +5,6 @@ import { registerPracticeModule } from "../../features/practice/module.js";
 import { registerQuestionsModule } from "../../features/questions/module.js";
 import { registerTestSessionModule } from "../../features/test-session/module.js";
 import { registerUiModule } from "../../features/ui/module.js";
-import { registerVocabularyModule } from "../../features/vocabulary/module.js";
 import { registerAppModules, type AppModule } from "./register.js";
 import type { AppContracts } from "./contracts.js";
 
@@ -13,7 +12,6 @@ import type { AppContracts } from "./contracts.js";
 export const sharedAppModules: readonly AppModule[] = [
   registerUiModule,
   registerPreferencesModule,
-  registerVocabularyModule,
   registerQuestionsModule,
   registerTestSessionModule,
   registerPracticeModule,

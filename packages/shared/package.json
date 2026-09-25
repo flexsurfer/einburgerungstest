@@ -12,7 +12,8 @@
     "./uklad/bindings": "./src/app/uklad/bindings.ts",
     "./uklad/register": "./src/app/uklad/register.ts",
     "./uklad/modules": "./src/app/uklad/modules.ts",
-    "./uklad/persistence": "./src/app/uklad/persistence.ts"
+    "./uklad/persistence": "./src/app/uklad/persistence.ts",
+    "./i18n": "./src/i18n.ts"
   },
   "dependencies": {
     "@ukladjs/core": "catalog:",

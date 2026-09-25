@@ -56,7 +56,6 @@ export type {
   Theme,
   ThemePreference,
   UserAnswers,
-  VocabularyData,
 } from "./contracts.js";
 export { FEDERAL_LANDS } from "./contracts.js";
 export { LANGUAGES } from "./contracts.js";

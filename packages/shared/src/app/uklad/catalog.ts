@@ -13,12 +13,6 @@ export const stateKeys = {
   preferencesTheme: "preferencesTheme",
   preferencesUseSystemTheme: "preferencesUseSystemTheme",
 
-  vocabularyData: "vocabularyData",
-  vocabularyLoading: "vocabularyLoading",
-  vocabularyError: "vocabularyError",
-  vocabularyVisible: "vocabularyVisible",
-  vocabularyRendered: "vocabularyRendered",
-
   questionsItems: "questionsItems",
   questionsCategories: "questionsCategories",
   questionsLoading: "questionsLoading",
@@ -50,8 +44,6 @@ export const appIds = {
     appInitialize: "app/initialize",
 
     uiShowAnswersToggled: "ui/show-answers-toggled",
-    vocabularyToggled: "vocabulary/toggled",
-    vocabularyUnmounted: "vocabulary/unmounted",
     navigationCategorySelected: "navigation/category-selected",
     navigationLearnOpened: "navigation/learn-opened",
     navigationHomeOpened: "navigation/home-opened",
@@ -67,9 +59,6 @@ export const appIds = {
     questionsFetchRequested: "questions/fetch-requested",
     questionsFetchSucceeded: "questions/fetch-succeeded",
     questionsFetchFailed: "questions/fetch-failed",
-    vocabularyFetchRequested: "vocabulary/fetch-requested",
-    vocabularyFetchSucceeded: "vocabulary/fetch-succeeded",
-    vocabularyFetchFailed: "vocabulary/fetch-failed",
 
     practiceQuestionAnswered: "practice/question-answered",
     practiceLegacyMistakesMigrated: "practice/legacy-mistakes-migrated",
@@ -102,12 +91,6 @@ export const appIds = {
     questionsLoading: "questions/loading",
     questionsCategories: "questions/categories",
     questionsError: "questions/error",
-
-    vocabularyData: "vocabulary/data",
-    vocabularyLoading: "vocabulary/loading",
-    vocabularyError: "vocabulary/error",
-    vocabularyVisible: "vocabulary/visible",
-    vocabularyRendered: "vocabulary/rendered",
 
     preferencesSelectedLanguage: "preferences/selected-language",
     preferencesSelectedLand: "preferences/selected-land",

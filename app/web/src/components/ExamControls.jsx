@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { examSecondsRemaining, formatExamTime } from "../exam-time.js";
 import "../styles/ExamControls.css";
+import { useI18n } from "@ebtest/shared/i18n";
 
 function useExamCountdown() {
   const runtime = useRuntime();
@@ -40,12 +41,15 @@ function useExamCountdown() {
 }
 
 export const ExamTimer = memo(() => {
+  const { t } = useI18n("ExamTimer");
   const remainingSeconds = useExamCountdown();
   const isUrgent = remainingSeconds <= 5 * 60;
 
   return (
     <div
-      aria-label={`${formatExamTime(remainingSeconds)} remaining`}
+      aria-label={t("timeRemainingValue", {
+        time: formatExamTime(remainingSeconds),
+      })}
       className={`exam-timer ${isUrgent ? "urgent" : ""}`}
       role="timer"
     >
@@ -58,6 +62,7 @@ export const ExamTimer = memo(() => {
 });
 
 export const ExamAnsweredProgress = memo(() => {
+  const { t } = useI18n("ExamAnsweredProgress");
   const result = useSubscription(
     [appIds.subscriptions.testSessionResult],
     "ExamAnsweredProgress",
@@ -69,11 +74,17 @@ export const ExamAnsweredProgress = memo(() => {
 
   return (
     <div
-      aria-label={`${result.answered} of ${result.total} questions answered`}
+      aria-label={t("answeredProgress", {
+        answered: result.answered,
+        total: result.total,
+      })}
       aria-valuemax={result.total}
       aria-valuemin={0}
       aria-valuenow={result.answered}
-      aria-valuetext={`${result.answered} of ${result.total} answered`}
+      aria-valuetext={t("answeredProgressShort", {
+        answered: result.answered,
+        total: result.total,
+      })}
       className="exam-answered-progress"
       role="progressbar"
     >
@@ -88,6 +99,7 @@ export const ExamAnsweredProgress = memo(() => {
 });
 
 export const FinishExamButton = memo(() => {
+  const { t } = useI18n("FinishExamButton");
   const runtime = useRuntime();
   const finishExam = useCallback(() => {
     runtime.dispatch([appIds.events.testSessionFinished, "finished"]);
@@ -95,12 +107,12 @@ export const FinishExamButton = memo(() => {
 
   return (
     <button
-      aria-label="Finish exam and show result"
+      aria-label={t("finishExamAccessibility")}
       className="finish-exam-button"
       onClick={finishExam}
       type="button"
     >
-      Finish exam
+      {t("finishExam")}
     </button>
   );
 });

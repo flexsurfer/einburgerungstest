@@ -2,7 +2,6 @@ import { appIds, registerAppModules, stateKeys } from "@ebtest/shared/uklad";
 
 const DATA_URLS = Object.freeze({
   questions: "/assets/data.json",
-  vocabulary: "/assets/vocabulary_multilang.json",
 });
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
@@ -39,24 +38,9 @@ async function fetchJson({ dataType, url, method }, runtime) {
     if (dataType === "questions" && !Array.isArray(data)) {
       throw new Error("Questions response must be an array");
     }
-    if (
-      dataType === "vocabulary" &&
-      (typeof data !== "object" || data === null || Array.isArray(data))
-    ) {
-      throw new Error("Vocabulary response must be an object");
-    }
-
-    const event =
-      dataType === "questions"
-        ? appIds.events.questionsFetchSucceeded
-        : appIds.events.vocabularyFetchSucceeded;
-    runtime.dispatch([event, data]);
+    runtime.dispatch([appIds.events.questionsFetchSucceeded, data]);
   } catch (error) {
-    const event =
-      dataType === "questions"
-        ? appIds.events.questionsFetchFailed
-        : appIds.events.vocabularyFetchFailed;
-    runtime.dispatch([event, errorMessage(error)]);
+    runtime.dispatch([appIds.events.questionsFetchFailed, errorMessage(error)]);
   }
 }
 

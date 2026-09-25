@@ -1,86 +1,156 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&display=swap");
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
-
-html {
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-}
-
-body {
-  width: 100%;
-  min-width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
 :root {
-  /* Colors */
-  --bg-color: white;
-  --text-color: #2c3e50;
-  --accent-color: #f1c40f;
-  --accent-light: rgba(241, 196, 15, 0.1);
-  --accent-medium: rgba(241, 196, 15, 0.2);
-  --success-color: #28a745;
-  --success-light: rgba(40, 167, 69, 0.1);
-  --error-color: #e74c3c;
-  --error-light: rgba(220, 53, 69, 0.1);
-  --border-color: #e8e8e8;
-  --shadow-color: rgba(44, 62, 80, 0.08);
-  --selection-bg-color: #f2f4f7;
-  --selection-border-color: #7a8793;
-  --exam-progress-color: #3b82f6;
-  --exam-progress-track: #e7eefb;
-
-  /* Typography */
-  font-family: "Open Sans", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+  font-family:
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
   line-height: 1.5;
   font-weight: 400;
   color: var(--text-color);
+  --bg-color: #fff;
+  --page-color: #f8f6ec;
+  --text-color: #102c23;
+  --muted-color: #64756d;
+  --primary-color: #46775b;
+  --primary-text: #fff;
+  --primary-pale: #e9f1e9;
+  --accent-color: #46775b;
+  --lime-color: #8cbf3f;
+  --accent-light: #edf6dd;
+  --accent-medium: #e5f1d0;
+  --success-color: #46775b;
+  --success-light: #e9f1e9;
+  --error-color: #c64242;
+  --error-light: #ffe5e3;
+  --border-color: #e7e5dc;
+  --soft-color: #f3f1e7;
+  --shadow-color: rgba(16, 44, 35, 0.07);
+  --selection-bg-color: #e9f1e9;
+  --selection-border-color: #46775b;
+  --exam-progress-color: #46775b;
+  --exam-progress-track: #e9f1e9;
+  --hero-color: #46775b;
+  --hero-background: #46775b;
+  --hero-text: #fff;
+  --hero-muted: #ffffffbf;
+  --ring-correct: #c1dd90;
+  --ring-incorrect: #ee7770;
 }
-
+body.dark {
+  /* Matches darkColors in packages/mobile-app/src/theme.ts (Expo). */
+  color-scheme: dark;
+  --bg-color: #17271e;
+  --page-color: #0e1b14;
+  --text-color: #f4faf5;
+  --muted-color: #a8b9ad;
+  --primary-color: #7fa68b;
+  --primary-text: #14241b;
+  --primary-pale: rgba(127, 166, 139, 0.14);
+  --accent-color: #7fa68b;
+  --lime-color: #a6d85b;
+  --accent-light: rgba(140, 191, 63, 0.17);
+  --accent-medium: rgba(140, 191, 63, 0.24);
+  --success-color: #7fa68b;
+  --success-light: var(--primary-pale);
+  --error-color: #ff7979;
+  --error-light: rgba(238, 86, 86, 0.17);
+  --border-color: #2d4435;
+  --soft-color: #1e3125;
+  --shadow-color: rgba(0, 0, 0, 0.28);
+  --selection-bg-color: var(--primary-pale);
+  --selection-border-color: #7fa68b;
+  --exam-progress-color: var(--primary-color);
+  --exam-progress-track: var(--primary-pale);
+  --blue-color: #4db7f2;
+  --blue-light: rgba(21, 153, 229, 0.17);
+  --orange-color: #f8b84c;
+  --orange-light: rgba(246, 166, 35, 0.16);
+  --yellow-color: #ffd976;
+  --yellow-light: rgba(255, 202, 88, 0.17);
+  --disabled-bg: #263229;
+  --disabled-text: #718078;
+  --hero-color: #345d45;
+  --hero-background: linear-gradient(135deg, #345d45, #3b664d 55%, #2f533e);
+  --hero-muted: rgba(255, 255, 255, 0.82);
+  --ring-correct: #9dc5a7;
+  --ring-incorrect: var(--error-color);
+  background-image: linear-gradient(#10251a, #16271d 48%, #0d1812);
+  background-attachment: fixed;
+}
 body {
-  min-height: 100vh;
-  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  min-width: 320px;
+  background: var(--page-color);
 }
-
-/* Prevent page-level scrolling on mobile devices */
-@media (max-width: 600px) {
-  html,
-  body {
-    height: 100vh;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+button,
+select {
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+button,
+a,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+a {
+  touch-action: manipulation;
+}
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 4px;
+}
+a {
+  color: inherit;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+img {
+  max-width: 100%;
+}
+::selection {
+  background: var(--accent-medium);
+  color: var(--text-color);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
-
-button {
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
-}
-
-body.dark {
-  --bg-color: #121212;
-  --text-color: #ffffff;
-  --accent-color: #ffd700;
-  --accent-light: rgba(255, 215, 0, 0.1);
-  --accent-medium: rgba(255, 215, 0, 0.2);
-  --success-color: #2ecc71;
-  --success-light: rgba(46, 204, 113, 0.1);
-  --error-color: #e74c3c;
-  --error-light: rgba(231, 76, 60, 0.1);
-  --border-color: #333333;
-  --shadow-color: rgba(255, 255, 255, 0.05);
-  --selection-bg-color: #252a31;
-  --selection-border-color: #a4adb7;
-  --exam-progress-color: #60a5fa;
-  --exam-progress-track: #263a57;
+body:has(dialog[open]) {
+  overflow: hidden;
 }

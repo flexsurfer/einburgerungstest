@@ -3,6 +3,7 @@ import "../styles/AnswerButton.css";
 
 export const AnswerButton = ({
   answer,
+  translation,
   index,
   isCorrect,
   isSelected,
@@ -67,7 +68,22 @@ export const AnswerButton = ({
       disabled={disabled}
       aria-pressed={isSelected}
     >
-      <span>{answer}</span>
+      <span className="answer-copy">
+        <span lang="de" dir="ltr">
+          {answer}
+        </span>
+        {translation && <small>{translation}</small>}
+      </span>
+      {((isSelected && (isExamMode || !showAnswers)) ||
+        (!isExamMode &&
+          isCorrect &&
+          (showAnswers ||
+            revealCorrectAnswer ||
+            userAnswer !== undefined))) && (
+        <span className="answer-feedback" aria-hidden="true">
+          {isExamMode ? "●" : isCorrect ? "✓" : "×"}
+        </span>
+      )}
       {mistakeCount > 0 && (
         <span className="mistake-count">
           {mistakeCount} {mistakeCount === 1 ? "mistake" : "mistakes"}

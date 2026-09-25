@@ -5,7 +5,6 @@ import { createPracticeState } from "../../features/practice/state.js";
 import { createQuestionsState } from "../../features/questions/state.js";
 import { createTestSessionState } from "../../features/test-session/state.js";
 import { createUiState } from "../../features/ui/state.js";
-import { createVocabularyState } from "../../features/vocabulary/state.js";
 
 export interface CreateAppStateOptions {
   readonly initialQuestions?: readonly QuestionInput[];
@@ -19,7 +18,6 @@ export function createAppState(
   return {
     ...createUiState(),
     ...createPreferencesState(options.initialLanguage),
-    ...createVocabularyState(),
     ...createQuestionsState(options.initialQuestions),
     ...createPracticeState(),
     ...createTestSessionState(),

@@ -1,6 +1,7 @@
 import { memo, useCallback } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import "../styles/ExamResult.css";
+import { useI18n } from "@ebtest/shared/i18n";
 
 const ResultStat = ({ className, label, value }) => (
   <div className={`exam-result-stat ${className}`}>
@@ -12,6 +13,7 @@ const ResultStat = ({ className, label, value }) => (
 
 export const ExamResultScreen = memo(() => {
   const runtime = useRuntime();
+  const { t } = useI18n("ExamResultScreen");
   const result = useSubscription(
     [appIds.subscriptions.testSessionResult],
     "ExamResultScreen",
@@ -26,46 +28,46 @@ export const ExamResultScreen = memo(() => {
   }, [runtime]);
 
   const returnToQuestions = useCallback(() => {
-    runtime.dispatch([appIds.events.navigationCategorySelected, null]);
+    runtime.dispatch([appIds.events.navigationHomeOpened]);
   }, [runtime]);
 
   return (
-    <main className="exam-result-screen">
+    <section className="exam-result-screen">
       <section className="exam-result-card">
-        <p className="exam-result-eyebrow">EXAM RESULT</p>
+        <p className="exam-result-eyebrow">{t("examResult")}</p>
         <div
           className={`exam-result-score ${result.passed ? "passed" : "failed"}`}
         >
           <strong>{result.correct}</strong>
-          <span>of {result.total}</span>
+          <span>{t("scoreOf", { total: result.total })}</span>
         </div>
 
-        <h1>{result.passed ? "You passed" : "Not passed yet"}</h1>
+        <h1>{t(result.passed ? "passed" : "notPassed")}</h1>
         <p className="exam-result-message">
           {finishReason === "time-expired"
-            ? "Time is up. Your saved answers have been evaluated."
-            : "Your saved answers have been evaluated."}
+            ? t("timeUp")
+            : t("answersEvaluated")}
         </p>
 
         <div className="exam-result-requirement">
           <strong>{result.requiredCorrect}</strong>
-          <span>correct answers are required to pass the official test.</span>
+          <span>{t("requiredCorrect")}</span>
         </div>
 
         <div className="exam-result-stats">
           <ResultStat
             className="correct"
-            label="Correct"
+            label={t("correct")}
             value={result.correct}
           />
           <ResultStat
             className="incorrect"
-            label="Incorrect"
+            label={t("incorrect")}
             value={result.incorrect}
           />
           <ResultStat
             className="unanswered"
-            label="Unanswered"
+            label={t("unanswered")}
             value={result.unanswered}
           />
         </div>
@@ -75,16 +77,16 @@ export const ExamResultScreen = memo(() => {
           onClick={startAgain}
           type="button"
         >
-          Take another exam
+          {t("takeAnotherExam")}
         </button>
         <button
           className="exam-result-secondary"
           onClick={returnToQuestions}
           type="button"
         >
-          Return to all questions
+          {t("backToHome")}
         </button>
       </section>
-    </main>
+    </section>
   );
 });

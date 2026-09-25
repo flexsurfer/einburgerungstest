@@ -154,7 +154,7 @@
 .exam-result-primary {
   border: none;
   background: var(--accent-color);
-  color: #1f2937;
+  color: var(--primary-text);
 }
 
 .exam-result-secondary {

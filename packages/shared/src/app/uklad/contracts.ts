@@ -14,7 +14,7 @@ export type AppLanguage = keyof typeof LANGUAGES;
 export type ColorScheme = Theme | null;
 export type ScrollMode = "auto" | "smooth";
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-export type DataKind = "questions" | "vocabulary";
+export type DataKind = "questions";
 export type CategorySelection = string | null;
 export type NavigationScreen = "settings" | "home" | "questions";
 export type AppError = string | null;
@@ -79,7 +79,6 @@ export type Favorites = number[];
 export type TestUsedQuestions = Record<string, Record<string, boolean>>;
 export type TestSessionStatus = "idle" | "in-progress" | "completed";
 export type TestSessionFinishReason = "finished" | "time-expired";
-export type VocabularyData = Record<string, unknown>;
 
 export interface TestSessionResult {
   correct: number;
@@ -149,12 +148,6 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.preferencesTheme]: Theme;
     [stateKeys.preferencesUseSystemTheme]: boolean;
 
-    [stateKeys.vocabularyData]: VocabularyData | null;
-    [stateKeys.vocabularyLoading]: boolean;
-    [stateKeys.vocabularyError]: AppError;
-    [stateKeys.vocabularyVisible]: boolean;
-    [stateKeys.vocabularyRendered]: boolean;
-
     [stateKeys.questionsItems]: Question[];
     [stateKeys.questionsCategories]: CategoryGroup[];
     [stateKeys.questionsLoading]: boolean;
@@ -185,8 +178,6 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.appInitialize]: [];
 
     [appIds.events.uiShowAnswersToggled]: [];
-    [appIds.events.vocabularyToggled]: [];
-    [appIds.events.vocabularyUnmounted]: [];
     [appIds.events.navigationCategorySelected]: [category: CategorySelection];
     [appIds.events.navigationLearnOpened]: [];
     [appIds.events.navigationHomeOpened]: [];
@@ -202,9 +193,6 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.questionsFetchRequested]: [];
     [appIds.events.questionsFetchSucceeded]: [questions: QuestionInput[]];
     [appIds.events.questionsFetchFailed]: [error: AppError];
-    [appIds.events.vocabularyFetchRequested]: [];
-    [appIds.events.vocabularyFetchSucceeded]: [data: VocabularyData];
-    [appIds.events.vocabularyFetchFailed]: [error: AppError];
 
     [appIds.events.practiceQuestionAnswered]: [
       questionIndex: number,
@@ -278,15 +266,6 @@ export interface AppContracts extends UkladContracts {
       result: CategoryGroup[];
     };
     [appIds.subscriptions.questionsError]: { params: []; result: AppError };
-
-    [appIds.subscriptions.vocabularyData]: {
-      params: [];
-      result: VocabularyData | null;
-    };
-    [appIds.subscriptions.vocabularyLoading]: { params: []; result: boolean };
-    [appIds.subscriptions.vocabularyError]: { params: []; result: AppError };
-    [appIds.subscriptions.vocabularyVisible]: { params: []; result: boolean };
-    [appIds.subscriptions.vocabularyRendered]: { params: []; result: boolean };
 
     [appIds.subscriptions.preferencesSelectedLanguage]: {
       params: [];

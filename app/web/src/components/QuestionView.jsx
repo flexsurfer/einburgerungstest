@@ -1,29 +1,65 @@
-import { memo } from "react";
-import { QuestionListView } from "./QuestionListView.jsx";
-import { QuestionCardView } from "./QuestionCardView.jsx";
-import { useIsMobile } from "../hooks/useIsMobile.js";
+import { useState } from "react";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
-import { ExamResultScreen } from "./ExamResultScreen.jsx";
-
-export const QuestionView = memo(() => {
-  const isMobile = useIsMobile();
-  const isTestMode = useSubscription(
+import { categoryDisplayName, useI18n } from "@ebtest/shared/i18n";
+import { QuestionListView } from "./QuestionListView";
+import { QuestionCardView } from "./QuestionCardView";
+import { ExamResultScreen } from "./ExamResultScreen";
+import { UiIcon } from "./UiIcon";
+export function QuestionView() {
+  const { t, language } = useI18n("QuestionView");
+  const [list, setList] = useState(false);
+  const exam = useSubscription(
     [appIds.subscriptions.navigationIsTestMode],
     "QuestionView",
   );
-  const testSessionStatus = useSubscription(
+  const learn = useSubscription(
+    [appIds.subscriptions.navigationIsLearnMode],
+    "QuestionView",
+  );
+  const category = useSubscription(
+    [appIds.subscriptions.navigationSelectedCategory],
+    "QuestionView",
+  );
+  const status = useSubscription(
     [appIds.subscriptions.testSessionStatus],
     "QuestionView",
   );
-
-  if (isTestMode && testSessionStatus === "completed") {
-    return <ExamResultScreen />;
-  }
-
-  // Render appropriate view based on device type
-  if (isMobile) {
-    return <QuestionCardView />;
-  } else {
-    return <QuestionListView />;
-  }
-});
+  if (exam && status === "completed") return <ExamResultScreen />;
+  const title = learn
+    ? t("studyQuestions")
+    : exam
+      ? t("mockExam")
+      : category === "favorites"
+        ? t("savedQuestions")
+        : category === "wrong"
+          ? t("reviewMistakes")
+          : category
+            ? categoryDisplayName(category, language)
+            : t("allQuestions");
+  return (
+    <div className={`practice-page ${list && !exam ? "list-mode" : ""}`}>
+      <header className="page-heading">
+        <div>
+          <p className="eyebrow">
+            {t(learn ? "learnMode" : exam ? "examMode" : "practiceMode")}
+          </p>
+          <h1>{title}</h1>
+        </div>
+        <div className="practice-tools">
+          {!exam && (
+            <button
+              className={`icon-button ${list ? "selected" : ""}`}
+              aria-label={t("listView")}
+              aria-pressed={list}
+              title={t("listView")}
+              onClick={() => setList(!list)}
+            >
+              <UiIcon name="grid" />
+            </button>
+          )}
+        </div>
+      </header>
+      {list && !exam ? <QuestionListView /> : <QuestionCardView />}
+    </div>
+  );
+}

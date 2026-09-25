@@ -86,3 +86,61 @@
   color: var(--error-color);
   border-color: var(--error-color);
 }
+.answer-button {
+  padding: 13px 16px;
+  min-height: 58px;
+  gap: 13px;
+  text-align: start;
+  border-radius: 10px;
+  font-size: 14px;
+  background: transparent;
+}
+.answer-button:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: var(--primary-pale);
+}
+.answer-copy {
+  flex: 1;
+}
+.answer-copy > span {
+  display: block;
+  text-align: left;
+  font-size: 16px;
+}
+.answer-copy small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted-color);
+  line-height: 1.5;
+  font-size: 12px;
+}
+.answer-feedback {
+  font-size: 19px;
+}
+.answer-action-button {
+  font-size: 12px;
+  border: 0;
+  background: transparent;
+  margin-top: 4px;
+  padding: 8px;
+}
+.answer-button.exam-mode.selected {
+  border-width: 1px;
+}
+@media (max-width: 700px) {
+  .answer-button {
+    font-size: 13px;
+    padding: 12px;
+    gap: 10px;
+  }
+  .answer-copy > span {
+    font-size: 15px;
+  }
+  .answer-copy small {
+    font-size: 11px;
+  }
+  .mistake-count {
+    font-size: 10px;
+    padding: 3px 5px;
+  }
+}

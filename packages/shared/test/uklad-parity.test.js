@@ -83,23 +83,6 @@ describe("Uklad pure event/subscription parity", () => {
       { value: "hidden" },
     ]);
 
-    harness.dispatchSync([appIds.events.vocabularyToggled]);
-    expect(harness.getState()[stateKeys.vocabularyVisible]).toBe(true);
-    expect(harness.getState()[stateKeys.vocabularyRendered]).toBe(true);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.uiSetBodyOverflow,
-      { value: "hidden" },
-    ]);
-    harness.dispatchSync([appIds.events.vocabularyToggled]);
-    expect(harness.getState()[stateKeys.vocabularyVisible]).toBe(false);
-    expect(harness.getState()[stateKeys.vocabularyRendered]).toBe(true);
-    harness.dispatchSync([appIds.events.vocabularyUnmounted]);
-    expect(harness.getState()[stateKeys.vocabularyRendered]).toBe(false);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.uiSetBodyOverflow,
-      { value: "auto" },
-    ]);
-
     harness.dispatchSync([appIds.events.preferencesLanguageSelected, "de"]);
     expect(harness.getState()[stateKeys.preferencesSelectedLanguage]).toBe(
       "de",
@@ -132,7 +115,7 @@ describe("Uklad pure event/subscription parity", () => {
     ]);
   });
 
-  it("preserves question and vocabulary result state and category grouping", () => {
+  it("preserves question result state and category grouping", () => {
     const { effects, harness } = createFixture();
 
     harness.dispatchSync([appIds.events.questionsFetchRequested]);
@@ -167,26 +150,6 @@ describe("Uklad pure event/subscription parity", () => {
     harness.dispatchSync([appIds.events.questionsFetchFailed, "Network error"]);
     expect(harness.getState()[stateKeys.questionsLoading]).toBe(false);
     expect(harness.getState()[stateKeys.questionsError]).toBe("Network error");
-
-    harness.dispatchSync([appIds.events.vocabularyFetchRequested]);
-    expect(harness.getState()[stateKeys.vocabularyLoading]).toBe(true);
-    expect(harness.getState()[stateKeys.vocabularyError]).toBe(null);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.dataFetch,
-      { dataType: "vocabulary" },
-    ]);
-    const vocabulary = { terms: ["der Staat", "die Wahl"] };
-    harness.dispatchSync([appIds.events.vocabularyFetchSucceeded, vocabulary]);
-    expect(harness.getState()[stateKeys.vocabularyLoading]).toBe(false);
-    expect(harness.getState()[stateKeys.vocabularyError]).toBe(null);
-    expect(harness.getState()[stateKeys.vocabularyData]).toBe(vocabulary);
-    harness.dispatchSync([
-      appIds.events.vocabularyFetchFailed,
-      "Vocabulary error",
-    ]);
-    expect(harness.getState()[stateKeys.vocabularyError]).toBe(
-      "Vocabulary error",
-    );
   });
 
   it("preserves answer, favorite, clear, and navigation event behavior", () => {

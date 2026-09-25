@@ -79,10 +79,10 @@ export const QuestionListView = memo(() => {
         {visibleQuestions.map((question) => (
           <QuestionCard key={question.globalIndex} question={question} />
         ))}
-        {visibleCount < filteredQuestions.length && (
-          <div ref={loadMoreRef} style={{ height: "60px" }} />
-        )}
       </div>
+      {visibleCount < filteredQuestions.length && (
+        <div ref={loadMoreRef} style={{ height: "60px" }} />
+      )}
       {showScrollTop && (
         <button className="scroll-top-button" onClick={scrollToTop}>
           ↑

@@ -79,27 +79,6 @@ describe("Uklad shared domain graph", () => {
       harness.getSubscriptionValue([appIds.subscriptions.uiShowAnswers]),
     ).toBe(true);
 
-    harness.dispatchSync([appIds.events.vocabularyToggled]);
-    expect(
-      harness.getSubscriptionValue([appIds.subscriptions.vocabularyVisible]),
-    ).toBe(true);
-    expect(
-      harness.getSubscriptionValue([appIds.subscriptions.vocabularyRendered]),
-    ).toBe(true);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.uiSetBodyOverflow,
-      { value: "hidden" },
-    ]);
-
-    harness.dispatchSync([appIds.events.vocabularyUnmounted]);
-    expect(
-      harness.getSubscriptionValue([appIds.subscriptions.vocabularyRendered]),
-    ).toBe(false);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.uiSetBodyOverflow,
-      { value: "auto" },
-    ]);
-
     harness.dispatchSync([appIds.events.preferencesLanguageSelected, "de"]);
     harness.dispatchSync([appIds.events.preferencesThemeToggled]);
     expect(
@@ -163,23 +142,6 @@ describe("Uklad shared domain graph", () => {
       },
       { title: "Bundesländer", items: [["Bayern", 1]] },
     ]);
-
-    harness.dispatchSync([appIds.events.vocabularyFetchRequested]);
-    expect(
-      harness.getSubscriptionValue([appIds.subscriptions.vocabularyLoading]),
-    ).toBe(true);
-    expect(effects.at(-1)).toEqual([
-      appIds.effects.dataFetch,
-      { dataType: "vocabulary" },
-    ]);
-
-    harness.dispatchSync([
-      appIds.events.vocabularyFetchSucceeded,
-      { terms: ["der Staat", "die Wahl"] },
-    ]);
-    expect(
-      harness.getSubscriptionValue([appIds.subscriptions.vocabularyData]),
-    ).toEqual({ terms: ["der Staat", "die Wahl"] });
 
     harness.dispatchSync([appIds.events.questionsFetchFailed, "Network error"]);
     expect(

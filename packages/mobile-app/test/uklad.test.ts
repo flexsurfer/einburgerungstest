@@ -91,10 +91,6 @@ describe("Uklad mobile platform", () => {
     expect(harness.getState()[stateKeys.questionsItems].length).toBeGreaterThan(
       0,
     );
-
-    harness.dispatchSync([appIds.events.vocabularyFetchRequested]);
-    await harness.flush();
-    expect(harness.getState()[stateKeys.vocabularyData]).not.toBeNull();
   });
 
   it("uses 300 general questions for practice and resumes by global index", () => {

@@ -7,9 +7,11 @@ import {
   FinishExamButton,
 } from "./ExamControls.jsx";
 import "../styles/NavigationControls.css";
+import { useI18n } from "@ebtest/shared/i18n";
 
 export const NavigationControls = memo(({ isVisible = true }) => {
   const runtime = useRuntime();
+  const { t } = useI18n("NavigationControls");
   const currentQuestionIndex = useSubscription(
     [appIds.subscriptions.navigationCurrentQuestionIndex],
     "NavigationControls",
@@ -53,10 +55,11 @@ export const NavigationControls = memo(({ isVisible = true }) => {
         className={`nav-button ${isFirstQuestion ? "disabled" : ""}`}
         onClick={handlePrevious}
         disabled={isFirstQuestion}
-        title="Previous question (← or h key)"
+        title={t("previousQuestion")}
+        aria-label={t("previousQuestion")}
       >
         <LeftArrow />
-        Prev
+        {t("previous")}
       </button>
 
       {isTestMode ? (
@@ -67,7 +70,10 @@ export const NavigationControls = memo(({ isVisible = true }) => {
           onClick={handleQuestionNumberPress}
         >
           <span className="question-number-text">
-            {currentIndex + 1} of {filteredQuestionsCount}
+            {t("itemOfTotal", {
+              current: currentIndex + 1,
+              total: filteredQuestionsCount,
+            })}
           </span>
           <DownArrow />
         </button>
@@ -77,9 +83,10 @@ export const NavigationControls = memo(({ isVisible = true }) => {
         className={`nav-button ${isLastQuestion ? "disabled" : ""}`}
         onClick={handleNext}
         disabled={isLastQuestion}
-        title="Next question (→ or l key)"
+        title={t("nextQuestion")}
+        aria-label={t("nextQuestion")}
       >
-        Next
+        {t("next")}
         <RightArrow />
       </button>
     </div>
