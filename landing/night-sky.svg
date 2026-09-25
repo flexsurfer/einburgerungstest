@@ -1,0 +1,45 @@
+<!-- Night tint from the Expo theme, with a subtle sky for the web layouts. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#06152F" stop-opacity=".9" />
+      <stop offset="58%" stop-color="#0A2541" stop-opacity=".74" />
+      <stop offset="100%" stop-color="#0C2B38" stop-opacity=".48" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#night)" d="M0 0h100v50H0z" />
+  <g fill="#FFF7DF">
+    <circle cx="3.7" cy="16.2" r=".07" opacity=".38" />
+    <circle cx="6.1" cy="7.8" r=".09" opacity=".56" />
+    <circle cx="9.4" cy="25.3" r=".05" opacity=".3" />
+    <circle cx="14.8" cy="12.1" r=".06" opacity=".43" />
+    <circle cx="17.2" cy="5.4" r=".11" opacity=".66" />
+    <circle cx="18.6" cy="6.7" r=".05" opacity=".32" />
+    <circle cx="23.9" cy="22.8" r=".08" opacity=".52" />
+    <circle cx="27.3" cy="10.6" r=".05" opacity=".29" />
+    <circle cx="28.1" cy="28.4" r=".06" opacity=".35" />
+    <circle cx="32.6" cy="17.7" r=".12" opacity=".71" />
+    <circle cx="34.2" cy="15.9" r=".05" opacity=".37" />
+    <circle cx="35.8" cy="19.3" r=".07" opacity=".45" />
+    <circle cx="38.4" cy="4.6" r=".06" opacity=".4" />
+    <circle cx="41.7" cy="26.1" r=".05" opacity=".28" />
+    <circle cx="44.9" cy="11.3" r=".09" opacity=".61" />
+    <circle cx="49.3" cy="21.6" r=".06" opacity=".39" />
+    <circle cx="51.6" cy="8.2" r=".05" opacity=".33" />
+    <circle cx="53.1" cy="9.4" r=".08" opacity=".5" />
+    <circle cx="56.8" cy="29.7" r=".05" opacity=".27" />
+    <circle cx="58.4" cy="15.2" r=".1" opacity=".65" />
+    <circle cx="63.7" cy="6.3" r=".07" opacity=".46" />
+    <circle cx="65.2" cy="24.8" r=".06" opacity=".31" />
+    <circle cx="68.9" cy="19.1" r=".05" opacity=".35" />
+    <circle cx="70.6" cy="10.8" r=".12" opacity=".72" />
+    <circle cx="72.4" cy="12.5" r=".05" opacity=".39" />
+    <circle cx="76.1" cy="27.6" r=".07" opacity=".43" />
+    <circle cx="78.3" cy="5.1" r=".06" opacity=".38" />
+    <circle cx="86.8" cy="8.7" r=".08" opacity=".54" />
+    <circle cx="89.2" cy="25.9" r=".05" opacity=".3" />
+    <circle cx="92.6" cy="14.4" r=".1" opacity=".63" />
+    <circle cx="93.8" cy="16.1" r=".05" opacity=".34" />
+    <circle cx="97.1" cy="6.8" r=".06" opacity=".42" />
+  </g>
+</svg>

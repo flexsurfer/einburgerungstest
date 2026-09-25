@@ -1,0 +1,32 @@
+[
+  {
+    "question": "Wie heißt die deutsche Verfassung?",
+    "answers": [
+      "Volksgesetz",
+      "Bundesgesetz",
+      "Deutsches Gesetz",
+      "Grundgesetz"
+    ],
+    "correct": 3
+  },
+  {
+    "question": "Welche Farben hat die deutsche Flagge?",
+    "answers": [
+      "schwarz-rot-gold",
+      "rot-weiß-schwarz",
+      "schwarz-rot-grün",
+      "schwarz-gelb-rot"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "In Deutschland dürfen Menschen offen etwas gegen die Regierung sagen, weil …",
+    "answers": [
+      "hier Religionsfreiheit gilt.",
+      "die Menschen Steuern zahlen.",
+      "die Menschen das Wahlrecht haben.",
+      "hier Meinungsfreiheit gilt."
+    ],
+    "correct": 3
+  }
+]
