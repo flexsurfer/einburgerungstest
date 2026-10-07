@@ -31,6 +31,9 @@ export const stateKeys = {
   testSessionStatus: "testSessionStatus",
   testSessionEndsAt: "testSessionEndsAt",
   testSessionFinishReason: "testSessionFinishReason",
+  testSessionReviewVisible: "testSessionReviewVisible",
+  testSessionReviewFilter: "testSessionReviewFilter",
+  testSessionReviewQuestionIndex: "testSessionReviewQuestionIndex",
 
   navigationSelectedCategory: "navigationSelectedCategory",
   navigationCurrentQuestionIndex: "navigationCurrentQuestionIndex",
@@ -72,6 +75,11 @@ export const appIds = {
     testSessionStarted: "test-session/started",
     testSessionAnswerSelected: "test-session/answer-selected",
     testSessionFinished: "test-session/finished",
+    testSessionReviewOpened: "test-session/review-opened",
+    testSessionReviewClosed: "test-session/review-closed",
+    testSessionReviewFilterSelected: "test-session/review-filter-selected",
+    testSessionReviewQuestionSelected: "test-session/review-question-selected",
+    testSessionReviewStepped: "test-session/review-stepped",
 
     navigationQuestionSelected: "navigation/question-selected",
     navigationNext: "navigation/next",
@@ -109,6 +117,11 @@ export const appIds = {
     testSessionEndsAt: "test-session/ends-at",
     testSessionFinishReason: "test-session/finish-reason",
     testSessionResult: "test-session/result",
+    testSessionReviewVisible: "test-session/review-visible",
+    testSessionReviewFilter: "test-session/review-filter",
+    testSessionReviewQuestionIndex: "test-session/review-question-index",
+    testSessionReviewItems: "test-session/review-items",
+    testSessionReview: "test-session/review",
 
     practiceFavoriteCount: "practice/favorite-count",
     practiceWrongCount: "practice/wrong-count",

@@ -122,3 +122,11 @@ app/mobile-expo/tools/
 app/web/public/
 app/web/seo/
 app/web/test/
+app/web/predeploy.mjs
+app/mobile-expo/app.config.js
+app/mobile-expo/app.json
+app/mobile-expo/credentials.example.json
+app/mobile-expo/eas.json
+app/mobile-expo/package.json
+app/mobile-expo/README.md
+logo.png

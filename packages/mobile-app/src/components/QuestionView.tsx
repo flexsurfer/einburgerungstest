@@ -4,6 +4,7 @@ import { QuestionCardView } from "./QuestionCardView";
 import { useIsTablet } from "../hooks/useIsTablet";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { ExamResultScreen } from "./ExamResultScreen";
+import { ExamReviewScreen } from "./ExamReviewScreen";
 
 export const QuestionView = memo(() => {
   const isTabletDevice = useIsTablet();
@@ -16,8 +17,12 @@ export const QuestionView = memo(() => {
     "QuestionView",
   );
 
+  const reviewing = useSubscription(
+    [appIds.subscriptions.testSessionReviewVisible],
+    "QuestionView",
+  );
   if (isTestMode && testSessionStatus === "completed") {
-    return <ExamResultScreen />;
+    return reviewing ? <ExamReviewScreen /> : <ExamResultScreen />;
   }
 
   // Render appropriate view based on device type

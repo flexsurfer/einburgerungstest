@@ -95,9 +95,12 @@
   font-size: 14px;
   background: transparent;
 }
-.answer-button:hover:not(:disabled) {
-  border-color: var(--primary-color);
-  background: var(--primary-pale);
+/* Touch scrolling must not trigger sticky hover feedback. */
+@media (hover: hover) and (pointer: fine) {
+  .answer-button:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    background: var(--primary-pale);
+  }
 }
 .answer-copy {
   flex: 1;

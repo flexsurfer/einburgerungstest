@@ -4,6 +4,7 @@ import { categoryDisplayName, useI18n } from "@ebtest/shared/i18n";
 import { QuestionListView } from "./QuestionListView";
 import { QuestionCardView } from "./QuestionCardView";
 import { ExamResultScreen } from "./ExamResultScreen";
+import { ExamReviewScreen } from "./ExamReviewScreen";
 import { UiIcon } from "./UiIcon";
 export function QuestionView() {
   const { t, language } = useI18n("QuestionView");
@@ -24,7 +25,12 @@ export function QuestionView() {
     [appIds.subscriptions.testSessionStatus],
     "QuestionView",
   );
-  if (exam && status === "completed") return <ExamResultScreen />;
+  const reviewing = useSubscription(
+    [appIds.subscriptions.testSessionReviewVisible],
+    "QuestionView",
+  );
+  if (exam && status === "completed")
+    return reviewing ? <ExamReviewScreen /> : <ExamResultScreen />;
   const title = learn
     ? t("studyQuestions")
     : exam

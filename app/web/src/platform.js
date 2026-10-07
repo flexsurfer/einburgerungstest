@@ -111,6 +111,14 @@ export function registerWebPlatform(runtime) {
         document.body.classList.remove("light", "dark");
         document.body.classList.add(theme);
         document.documentElement.style.colorScheme = theme;
+        const headerColor = getComputedStyle(document.body)
+          .getPropertyValue("--bg-color")
+          .trim();
+        if (headerColor) {
+          document
+            .querySelectorAll('meta[name="theme-color"]')
+            .forEach((meta) => meta.setAttribute("content", headerColor));
+        }
       });
 
       registrar.regEffect(

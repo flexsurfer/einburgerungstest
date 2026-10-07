@@ -36,6 +36,35 @@ const screens: Array<[string, AppEvent[]]> = [
 ];
 
 describe("Android hardware Back", () => {
+  it("returns from exam review to the result without discarding the submission", async () => {
+    const runtime = createAppRuntime({ initialQuestions: mobileQuestionsData });
+    runtimes.push(runtime);
+    registerSharedModules(runtime);
+    registerMobilePlatform(runtime, { applySystemBarTheme: vi.fn() });
+    const harness = createUkladTestHarness(runtime);
+    runtime.dispatch([appIds.events.preferencesLandSelected, "Bayern"]);
+    runtime.dispatch([appIds.events.testSessionStarted]);
+    await harness.flush();
+    const question = harness.getState().testSessionQuestions[0];
+    runtime.dispatch([
+      appIds.events.testSessionAnswerSelected,
+      question.globalIndex,
+      question.correct,
+    ]);
+    runtime.dispatch([appIds.events.testSessionFinished, "finished"]);
+    runtime.dispatch([appIds.events.testSessionReviewOpened]);
+    await harness.flush();
+    const submitted = harness.getState().testSessionAnswers;
+    const listener = vi.spyOn(BackHandler, "addEventListener");
+    const stop = watchMobileBack(runtime, true, true);
+    listener.mock.calls[0][1]({ type: "hardwareBackPress", timeStamp: 0 });
+    await harness.flush();
+    expect(harness.getState().testSessionReviewVisible).toBe(false);
+    expect(harness.getState().navigationActiveScreen).toBe("questions");
+    expect(harness.getState().testSessionStatus).toBe("completed");
+    expect(harness.getState().testSessionAnswers).toEqual(submitted);
+    stop?.();
+  });
   it.each(screens)(
     "returns from %s to Home and consumes Back",
     async (_, events) => {

@@ -54,10 +54,9 @@ function createMockDraftDb(questionsData, usedTestQuestions = {}) {
 describe("shuffle", () => {
   it("shuffles an array", () => {
     const arr = [1, 2, 3, 4, 5];
-    const original = [...arr];
-    shuffle(arr);
-    expect(arr).not.toEqual(original);
-    expect(arr.sort()).toEqual(original.sort());
+    // Always swap with index 0 so the permutation is deterministic.
+    shuffle(arr, () => 0);
+    expect(arr).toEqual([2, 3, 4, 5, 1]);
   });
 });
 

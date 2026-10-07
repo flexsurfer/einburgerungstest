@@ -4,6 +4,8 @@
 }
 :root {
   color-scheme: light;
+  /* iOS uses the page canvas to fill the area around the status bar. */
+  background: var(--bg-color);
   font-family:
     "DM Sans",
     -apple-system,
@@ -43,7 +45,7 @@
   --ring-correct: #c1dd90;
   --ring-incorrect: #ee7770;
 }
-body.dark {
+:root:has(body.dark) {
   /* Matches darkColors in packages/mobile-app/src/theme.ts (Expo). */
   color-scheme: dark;
   --bg-color: #17271e;
@@ -81,14 +83,12 @@ body.dark {
   --hero-muted: rgba(255, 255, 255, 0.82);
   --ring-correct: #9dc5a7;
   --ring-incorrect: var(--error-color);
-  background-image: linear-gradient(#10251a, #16271d 48%, #0d1812);
-  background-attachment: fixed;
 }
 body {
   color: var(--text-color);
   margin: 0;
   min-width: 320px;
-  background: var(--page-color);
+  background: var(--bg-color);
 }
 button,
 select,

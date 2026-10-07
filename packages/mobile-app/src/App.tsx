@@ -58,6 +58,14 @@ export function AppContent({
     "App",
   );
   const themeColors = useColors();
+  const reviewVisible = useSubscription(
+    [appIds.subscriptions.testSessionReviewVisible],
+    "App",
+  );
+  const isTestMode = useSubscription(
+    [appIds.subscriptions.navigationIsTestMode],
+    "App",
+  );
   const { isRtl } = useI18n("App");
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
@@ -71,7 +79,12 @@ export function AppContent({
     selectedLand !== null &&
     activeScreen !== "home";
 
-  useEffect(() => watchMobileBack(runtime, canGoBack), [runtime, canGoBack]);
+  const reviewingExam =
+    activeScreen === "questions" && isTestMode && reviewVisible;
+  useEffect(
+    () => watchMobileBack(runtime, canGoBack, reviewingExam),
+    [runtime, canGoBack, reviewingExam],
+  );
 
   useEffect(() => {
     screenProgress.stopAnimation();

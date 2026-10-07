@@ -10,6 +10,7 @@ import {
   createLegacyCompatibleAsyncStorage,
   createLegacyCompatibleSyncStorage,
   createAppRuntime,
+  registerAppModules,
   registerSharedModules,
   stateKeys,
 } from "../src/app/uklad/index.ts";
@@ -263,6 +264,65 @@ describe("Uklad Persist application boundary", () => {
       5: [],
     });
   });
+
+  it.each(["web", "native"])(
+    "saves submitted exam mistakes across restarts on %s",
+    async (target) => {
+      const storage = (
+        target === "native" ? createAsyncStorage : createSyncStorage
+      )({
+        [canonicalKey(stateKeys.practiceMistakes)]: envelope({ 1: [0] }),
+        [canonicalKey(stateKeys.practiceUserAnswers)]: envelope({ 2: 0 }),
+      });
+      const { runtime, harness, handle } = createFixture({ target, storage });
+      registerAppModules(runtime, [
+        (registrar) => {
+          registrar.regCoeffect(appIds.coeffects.systemNow, () => 1000);
+          registrar.regEffect(appIds.effects.uiScrollToTop, () => {});
+        },
+      ]);
+      await hydrateAsync(handle);
+      const questions = [
+        {
+          question: "Question one",
+          category: "Politik",
+          correct: 1,
+          answers: ["A", "B"],
+        },
+        {
+          question: "Question two",
+          category: "Politik",
+          correct: 0,
+          answers: ["A", "B"],
+        },
+      ];
+      harness.dispatchSync([appIds.events.questionsFetchSucceeded, questions]);
+      harness.dispatchSync([appIds.events.testSessionStarted]);
+      harness.dispatchSync([appIds.events.testSessionAnswerSelected, 1, 0]);
+      harness.dispatchSync([appIds.events.testSessionAnswerSelected, 2, 0]);
+      harness.dispatchSync([appIds.events.testSessionFinished, "finished"]);
+      await handle.flush();
+
+      expect(storage.values.get(canonicalKey(stateKeys.practiceMistakes))).toBe(
+        envelope({ 1: [0, 0] }),
+      );
+      const restored = createFixture({ target, storage });
+      await hydrateAsync(restored.handle);
+      restored.harness.dispatchSync([
+        appIds.events.questionsFetchSucceeded,
+        questions,
+      ]);
+      expect(restored.harness.getState().practiceMistakes).toEqual({
+        1: [0, 0],
+      });
+      expect(restored.harness.getState().practiceUserAnswers).toEqual({ 2: 0 });
+      expect(
+        restored.harness.getSubscriptionValue([
+          appIds.subscriptions.practiceWrongCount,
+        ]),
+      ).toBe(1);
+    },
+  );
 
   it("hydrates and persists the selected application language", async () => {
     const storage = createAsyncStorage({

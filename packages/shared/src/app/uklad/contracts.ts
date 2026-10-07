@@ -71,7 +71,7 @@ export interface Question extends QuestionInput {
 
 export type UserAnswers = Record<number, number>;
 /**
- * Ordered incorrect answer indexes for every failed practice attempt.
+ * Ordered incorrect answer indexes for practice and submitted exam attempts.
  * An empty entry records an explicit removal and suppresses legacy inference.
  */
 export type PracticeMistakes = Record<number, number[]>;
@@ -79,6 +79,23 @@ export type Favorites = number[];
 export type TestUsedQuestions = Record<string, Record<string, boolean>>;
 export type TestSessionStatus = "idle" | "in-progress" | "completed";
 export type TestSessionFinishReason = "finished" | "time-expired";
+export type TestSessionAnswerStatus = "correct" | "incorrect" | "unanswered";
+export type TestSessionReviewFilter = "all" | TestSessionAnswerStatus;
+
+export interface TestSessionReviewItem {
+  question: Question;
+  /** Original zero-based position in the submitted exam, even when filtered. */
+  questionIndex: number;
+  answerIndex: number | null;
+  status: TestSessionAnswerStatus;
+}
+
+export interface TestSessionReview {
+  items: TestSessionReviewItem[];
+  current: TestSessionReviewItem | null;
+  /** Zero-based position within the active filter; -1 for an empty filter. */
+  position: number;
+}
 
 export interface TestSessionResult {
   correct: number;
@@ -166,6 +183,9 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.testSessionStatus]: TestSessionStatus;
     [stateKeys.testSessionEndsAt]: number | null;
     [stateKeys.testSessionFinishReason]: TestSessionFinishReason | null;
+    [stateKeys.testSessionReviewVisible]: boolean;
+    [stateKeys.testSessionReviewFilter]: TestSessionReviewFilter;
+    [stateKeys.testSessionReviewQuestionIndex]: number;
 
     [stateKeys.navigationSelectedCategory]: CategorySelection;
     [stateKeys.navigationCurrentQuestionIndex]: number;
@@ -212,6 +232,13 @@ export interface AppContracts extends UkladContracts {
       answerIndex: number,
     ];
     [appIds.events.testSessionFinished]: [reason: TestSessionFinishReason];
+    [appIds.events.testSessionReviewOpened]: [filter?: TestSessionReviewFilter];
+    [appIds.events.testSessionReviewClosed]: [];
+    [appIds.events.testSessionReviewFilterSelected]: [
+      filter: TestSessionReviewFilter,
+    ];
+    [appIds.events.testSessionReviewQuestionSelected]: [questionIndex: number];
+    [appIds.events.testSessionReviewStepped]: [direction: -1 | 1];
 
     [appIds.events.navigationQuestionSelected]: [questionIndex: number];
     [appIds.events.navigationNext]: [];
@@ -325,6 +352,26 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.testSessionResult]: {
       params: [];
       result: TestSessionResult;
+    };
+    [appIds.subscriptions.testSessionReviewVisible]: {
+      params: [];
+      result: boolean;
+    };
+    [appIds.subscriptions.testSessionReviewFilter]: {
+      params: [];
+      result: TestSessionReviewFilter;
+    };
+    [appIds.subscriptions.testSessionReviewQuestionIndex]: {
+      params: [];
+      result: number;
+    };
+    [appIds.subscriptions.testSessionReviewItems]: {
+      params: [];
+      result: TestSessionReviewItem[];
+    };
+    [appIds.subscriptions.testSessionReview]: {
+      params: [];
+      result: TestSessionReview;
     };
 
     [appIds.subscriptions.practiceFavoriteCount]: {

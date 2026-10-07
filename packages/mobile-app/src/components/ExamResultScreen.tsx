@@ -20,19 +20,28 @@ function ResultStat({
   label,
   value,
   colors,
+  onPress,
+  reviewLabel,
 }: {
   color: string;
   label: string;
   value: number;
   colors: Colors;
+  onPress: () => void;
+  reviewLabel: string;
 }) {
   const styleSheet = styles(colors);
   return (
-    <View style={styleSheet.stat}>
+    <TouchableOpacity
+      accessibilityRole="button"
+      accessibilityLabel={`${reviewLabel}: ${label} (${value})`}
+      onPress={onPress}
+      style={styleSheet.stat}
+    >
       <View style={[styleSheet.statDot, { backgroundColor: color }]} />
       <Text style={styleSheet.statValue}>{value}</Text>
       <Text style={styleSheet.statLabel}>{label}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -88,6 +97,9 @@ export const ExamResultScreen = memo(() => {
             ? t("timeUp")
             : t("answersEvaluated")}
         </Text>
+        {result.incorrect > 0 && (
+          <Text style={styleSheet.message}>{t("examMistakesSaved")}</Text>
+        )}
 
         <View style={styleSheet.requirement}>
           <Text style={styleSheet.requirementValue}>
@@ -102,38 +114,68 @@ export const ExamResultScreen = memo(() => {
             colors={colors}
             label={t("correct")}
             value={result.correct}
+            reviewLabel={t("reviewAnswers")}
+            onPress={() =>
+              runtime.dispatch([
+                appIds.events.testSessionReviewOpened,
+                "correct",
+              ])
+            }
           />
           <ResultStat
             color={colors.errorColor}
             colors={colors}
             label={t("incorrect")}
             value={result.incorrect}
+            reviewLabel={t("reviewAnswers")}
+            onPress={() =>
+              runtime.dispatch([
+                appIds.events.testSessionReviewOpened,
+                "incorrect",
+              ])
+            }
           />
           <ResultStat
             color={colors.textMutedColor}
             colors={colors}
             label={t("unanswered")}
             value={result.unanswered}
+            reviewLabel={t("reviewAnswers")}
+            onPress={() =>
+              runtime.dispatch([
+                appIds.events.testSessionReviewOpened,
+                "unanswered",
+              ])
+            }
           />
         </View>
 
         <TouchableOpacity
           accessibilityRole="button"
           activeOpacity={0.82}
-          onPress={startAgain}
+          onPress={() =>
+            runtime.dispatch([appIds.events.testSessionReviewOpened])
+          }
           style={styleSheet.primaryButton}
         >
-          <Text style={styleSheet.primaryButtonText}>
+          <Text style={styleSheet.primaryButtonText}>{t("reviewAnswers")}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          accessibilityRole="button"
+          activeOpacity={0.76}
+          onPress={startAgain}
+          style={styleSheet.secondaryButton}
+        >
+          <Text style={styleSheet.secondaryButtonText}>
             {t("takeAnotherExam")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           accessibilityRole="button"
-          activeOpacity={0.76}
           onPress={goHome}
-          style={styleSheet.secondaryButton}
+          style={styleSheet.homeButton}
         >
-          <Text style={styleSheet.secondaryButtonText}>{t("backToHome")}</Text>
+          <Text style={styleSheet.homeButtonText}>{t("backToHome")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -142,6 +184,13 @@ export const ExamResultScreen = memo(() => {
 
 const styles = (colors: Colors) =>
   StyleSheet.create({
+    homeButton: {
+      minHeight: 44,
+      marginTop: 8,
+      padding: 12,
+      justifyContent: "center",
+    },
+    homeButtonText: { color: colors.textMutedColor, fontSize: 13 },
     screen: {
       flex: 1,
       backgroundColor: "transparent",

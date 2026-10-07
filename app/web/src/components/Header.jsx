@@ -77,6 +77,9 @@ export function Header() {
           [appIds.events.navigationPracticeResumed],
           screen === "questions" && !learn && category === null,
         )}
+        <ExamLauncher
+          className={`side-link ${screen === "questions" && category === "test" ? "active" : ""}`}
+        />
         <span className="nav-section-label">{t("review")}</span>
         {item(
           "bookmark",
@@ -92,9 +95,6 @@ export function Header() {
           screen === "questions" && category === "wrong",
           mistakes,
         )}
-        <ExamLauncher
-          className={`side-link ${screen === "questions" && category === "test" ? "active" : ""}`}
-        />
       </nav>
       {screen === "questions" && category !== "test" && <Statistics />}
       <div className="sidebar-bottom">

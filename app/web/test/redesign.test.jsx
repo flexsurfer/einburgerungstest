@@ -29,6 +29,8 @@ const regional = Array.from({ length: 10 }, (_, i) => ({
   category: "Berlin",
   correct: 1,
   answers: ["Falsch", "Richtig", "Auch falsch", "Noch falsch"],
+  img: { url: "berlin_1", text: "Abbildung zur Landesfrage" },
+  explanation: "Regionale Erklärung",
 }));
 
 beforeEach(async () => {
@@ -72,6 +74,10 @@ const button = (text) =>
   [...container.querySelectorAll("button")].find(
     (el) => el.textContent.trim() === text && !el.closest("dialog:not([open])"),
   );
+const navigationButton = (text) =>
+  [...container.querySelectorAll(".main-nav .side-link")].find(
+    (el) => el.querySelector("span:not(.nav-count)")?.textContent.trim() === text,
+  );
 async function click(element) {
   expect(element).toBeTruthy();
   await act(async () => {
@@ -109,9 +115,9 @@ describe("web learning flows", () => {
     );
     await click(button("Continue Practice"));
     expect(container.textContent).toContain("Allgemeine Frage 2");
-    await click(container.querySelectorAll(".main-nav .side-link")[3]);
+    await click(navigationButton("Saved Questions"));
     expect(container.textContent).toContain("Allgemeine Frage 1");
-    await click(container.querySelectorAll(".main-nav .side-link")[4]);
+    await click(navigationButton("Mistakes"));
     expect(container.textContent).toContain("Wrong attempts: 1");
     expect(container.querySelector(".answer-button.correct")).not.toBeNull();
   });
@@ -153,5 +159,104 @@ describe("web learning flows", () => {
     await select(container.querySelector("#app-language"), "ar");
     expect(document.documentElement.dir).toBe("rtl");
     expect(container.querySelector("h1").textContent).toBe("الإعدادات");
+  });
+
+  it("reviews submitted choices, filters, explanations and bookmarks without changing the score", async () => {
+    await click(button("Start Exam"));
+    const dialog = container.querySelector("dialog[open]");
+    await select(dialog.querySelector("select"), "Berlin");
+    await click(dialog.querySelector(".primary-button"));
+    await click(container.querySelectorAll(".answer-button")[0]);
+    await click(button("Next"));
+    await click(container.querySelectorAll(".answer-button")[1]);
+    await click(container.querySelector(".finish-exam-button"));
+    const submitted = harness.getSubscriptionValue([appIds.subscriptions.testSessionAnswers]);
+    await click(button("Review answers"));
+    expect(container.querySelector("h1").textContent).toBe("Answer review");
+    expect(container.querySelector(".exam-review-question-meta").textContent).toContain("Question 1 of 33");
+    expect(container.querySelector(".exam-review-answer.incorrect").textContent).toContain("Your answer");
+    expect(container.querySelector(".exam-review-answer.correct").textContent).toContain("Correct answer");
+    expect(container.querySelector(".exam-review-explanation").textContent).toContain("English explanation");
+    expect(container.querySelectorAll(".exam-review-answer button")).toHaveLength(0);
+    await click(container.querySelector('.exam-review-filters button:nth-child(2)'));
+    expect(container.querySelectorAll(".exam-review-number")).toHaveLength(1);
+    await click(container.querySelector('.exam-review-filters button:nth-child(1)'));
+    await click(container.querySelector('[aria-label="Next question"]'));
+    expect(container.querySelector(".exam-review-question-meta").textContent).toContain("Question 2 of 33");
+    expect(container.querySelector(".exam-review-answer.correct").textContent).toContain("Your answer · Correct");
+    expect(document.activeElement).toBe(container.querySelector(".exam-review-card h2"));
+    await click(container.querySelector('[aria-label="Next question"]'));
+    expect(container.textContent).toContain("You didn’t answer this question.");
+    expect(container.querySelectorAll(".exam-review-answer.correct")).toHaveLength(1);
+    expect(container.querySelectorAll(".exam-review-answer.incorrect")).toHaveLength(0);
+    await click(container.querySelector('[aria-label="Bookmark question"]'));
+    expect(harness.getSubscriptionValue([appIds.subscriptions.practiceFavoriteCount])).toBe(1);
+    await click(container.querySelector('.exam-review-filters button:nth-child(3)'));
+    expect(container.querySelectorAll(".exam-review-number")).toHaveLength(31);
+    await click(container.querySelector('.exam-review-number:last-child'));
+    expect(container.querySelector(".exam-review-question-meta").textContent).toContain("Question 33 of 33");
+    expect(container.querySelector(".exam-review-image img").getAttribute("src")).toBe("/assets/img/berlin_1.png");
+    expect(container.querySelector(".exam-review-explanation p").textContent).toBe("Regionale Erklärung");
+    expect(container.querySelector(".exam-review-explanation p").lang).toBe("de");
+    expect(container.querySelector(".exam-review-card").textContent).not.toContain("undefined");
+    await click(container.querySelector(".exam-review-back"));
+    expect(container.querySelector("h1").textContent).toBe("Not passed yet");
+    expect(harness.getSubscriptionValue([appIds.subscriptions.testSessionAnswers])).toEqual(submitted);
+    expect(harness.getSubscriptionValue([appIds.subscriptions.practiceUserAnswers])).toEqual({});
+    expect(harness.getSubscriptionValue([appIds.subscriptions.practiceMistakes])).toEqual({ 1: [0] });
+    await click(button("Review answers"));
+    expect(container.querySelector(".exam-review-question-meta").textContent).toContain("Question 33 of 33");
+    await click(container.querySelector(".exam-review-back"));
+    expect(container.textContent).toContain("Incorrect answers have been added to Mistakes.");
+    await click(button("Back to home"));
+    await click(navigationButton("Mistakes"));
+    expect(container.textContent).toContain("Allgemeine Frage 1");
+    expect(container.textContent).toContain("Wrong attempts: 1");
+    expect(container.querySelector(".answer-button.mistake").textContent).toContain("Falsch");
+  });
+
+  it("opens result filters directly and recovers from an empty review on a narrow screen", async () => {
+    await act(async () => {
+      window.innerWidth = 390;
+      window.dispatchEvent(new Event("resize"));
+      runtime.dispatch([appIds.events.preferencesLandSelected, "Berlin"]);
+      runtime.dispatch([appIds.events.testSessionStarted]);
+      runtime.dispatch([appIds.events.testSessionFinished, "time-expired"]);
+      await harness.flush();
+    });
+    expect(container.textContent).toContain("Time is up.");
+    await click(container.querySelector('.exam-result-stat.incorrect'));
+    expect(container.textContent).toContain("No incorrect answers");
+    expect(container.querySelector(".exam-review-navigation")).toBeNull();
+    await click(button("All questions"));
+    expect(container.querySelector(".exam-review-overview").open).toBe(false);
+    await click(container.querySelector(".exam-review-overview summary"));
+    expect(container.querySelector(".exam-review-overview").open).toBe(true);
+    await click(container.querySelectorAll(".exam-review-number")[4]);
+    expect(container.querySelector(".exam-review-overview").open).toBe(false);
+    expect(container.querySelector(".exam-review-question-meta").textContent).toContain("Question 5 of 33");
+    await click(container.querySelector(".exam-review-back"));
+    await click(button("Take another exam"));
+    expect(container.querySelector('[role="timer"]')).not.toBeNull();
+    expect(container.querySelector(".exam-review-card")).toBeNull();
+    expect(harness.getSubscriptionValue([appIds.subscriptions.testSessionAnswers])).toEqual({});
+    window.innerWidth = 1024;
+  });
+
+  it("localizes the review while keeping German exam content left-to-right", async () => {
+    await act(async () => {
+      runtime.dispatch([appIds.events.preferencesLandSelected, "Berlin"]);
+      runtime.dispatch([appIds.events.testSessionStarted]);
+      runtime.dispatch([appIds.events.testSessionFinished, "finished"]);
+      runtime.dispatch([appIds.events.testSessionReviewOpened]);
+      runtime.dispatch([appIds.events.preferencesLanguageSelected, "ar"]);
+      await harness.flush();
+    });
+    expect(document.documentElement.dir).toBe("rtl");
+    expect(container.querySelector("h1").textContent).toBe("مراجعة الإجابات");
+    expect(container.querySelector(".exam-review-card h2").dir).toBe("ltr");
+    expect(container.querySelector(".exam-review-answer p").lang).toBe("de");
+    expect(container.querySelector(".exam-review-explanation p").dir).toBe("ltr");
+    expect(container.querySelector(".exam-review-explanation p").textContent).toBe("Deutsche Erklärung");
   });
 });

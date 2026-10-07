@@ -65,6 +65,23 @@
   font-size: 1.8rem;
 }
 
+.exam-result-card h1:focus {
+  outline: none;
+}
+.exam-result-stat:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-pale);
+}
+.exam-result-home {
+  border: none;
+  background: transparent;
+  padding: 12px;
+  margin-top: 6px;
+  min-height: 44px;
+  color: var(--muted-color);
+  font-size: 13px;
+}
+
 .exam-result-message {
   margin-top: 0.35rem;
   opacity: 0.72;

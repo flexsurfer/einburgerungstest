@@ -5,6 +5,7 @@ import { Header } from "./components/Header.jsx";
 import { HomeScreen } from "./components/HomeScreen.jsx";
 import { SettingsScreen } from "./components/SettingsScreen.jsx";
 import { QuestionView } from "./components/QuestionView.jsx";
+import { IosInstallGuide } from "./components/IosInstallGuide.jsx";
 import "./styles/App.css";
 function App() {
   const runtime = useRuntime();
@@ -57,6 +58,7 @@ function App() {
           <QuestionView />
         )}
       </main>
+      <IosInstallGuide />
     </div>
   );
 }
