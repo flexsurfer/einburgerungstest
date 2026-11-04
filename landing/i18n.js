@@ -1,7 +1,7 @@
 class I18n {
   constructor() {
-    // Localized URLs keep their language. The English entry page can redirect
-    // to a saved preference or the browser's primary language.
+    // Every URL keeps its language, including English search results at /.
+    // A language change requires an explicit selector/link or legacy parameter.
     this.currentLanguage = document.documentElement.lang;
     this.translations = JSON.parse(
       document.getElementById("landing-translations").textContent,
@@ -14,22 +14,6 @@ class I18n {
         this.switchLanguage(legacyLanguage, true, true);
       }
       return;
-    }
-    if (this.currentLanguage !== "en") return;
-
-    let preferredLanguage;
-    try {
-      preferredLanguage = localStorage.getItem("ebtest-language");
-    } catch {
-      /* Browser language detection also works without storage. */
-    }
-    if (!this.languageLink(preferredLanguage)) {
-      preferredLanguage = (navigator.languages?.[0] || navigator.language || "en")
-        .toLowerCase()
-        .split("-")[0];
-    }
-    if (preferredLanguage !== "en" && this.languageLink(preferredLanguage)) {
-      this.switchLanguage(preferredLanguage, false, true);
     }
   }
 
