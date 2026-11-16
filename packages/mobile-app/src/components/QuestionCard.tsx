@@ -12,7 +12,7 @@ import { useColors, type Colors } from "../theme";
 import { BookmarkButton } from "./BookmarkButton";
 import { AnswerList } from "./AnswerList";
 import { Question } from "../types";
-import images from "../assets/images";
+import { useMobileImages } from "../assets";
 import { categoryDisplayName, useI18n } from "../i18n";
 
 interface QuestionCardProps {
@@ -33,6 +33,7 @@ export const QuestionCard = memo<QuestionCardProps>(
     gap = 0,
     scrollable = false,
   }) => {
+    const images = useMobileImages();
     const [height, setHeight] = useState<number | null>(null);
     const uri = question.img?.url ?? undefined;
 
@@ -52,7 +53,7 @@ export const QuestionCard = memo<QuestionCardProps>(
       }
       const { width, height } = Image.resolveAssetSource(images[uri]);
       setHeight(imageWidth / (width / height));
-    }, [uri, imageWidth, numColumns, screenWidth, gap]);
+    }, [uri, images, imageWidth, numColumns, screenWidth, gap]);
 
     const colors = useColors();
     const { language, t } = useI18n("QuestionCard");

@@ -1,0 +1,31 @@
+{
+  "name": "@ebtest/web-app",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./components/*": "./src/components/*.jsx",
+    "./bootstrap": "./src/bootstrap.js",
+    "./platform": "./src/platform.js",
+    "./persistence": "./src/persistence.js"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@ebtest/shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@ukladjs/core": "catalog:",
+    "@vitejs/plugin-react": "6.1.0",
+    "jsdom": "~30.0.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "vite": "8.2.2",
+    "vitest": "^4.1.11"
+  }
+}

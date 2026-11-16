@@ -1,105 +1,37 @@
 # Einbürgerungstest
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+A free app for preparing for the German citizenship test and **Leben in Deutschland**.
 
-Einbürgerungstest is a free, open-source, and user-friendly application for practicing the **"Leben in Deutschland"** test and the **Einbürgerungstest** (German naturalization test) created by a foreigner on a voluntary basis.
+**[Use the app at ebtest.org](https://www.ebtest.org/)**
 
-Website: [https://www.ebtest.org/](https://www.ebtest.org/)
+Study questions, practice answers, take timed mock exams, save bookmarks, and
+track your progress. Available in German, English, Russian, Ukrainian, Turkish,
+and Arabic. Built with React, React Native, and [Uklad](https://github.com/ukladjs/uklad).
 
-If you like it, please give it a ⭐ on [GitHub](https://github.com/flexsurfer/einburgerungstest)!
+## What's in this repository
 
-**Disclaimer:** The author takes no responsibility for any mistakes or inaccuracies. Pull requests and issues are welcome.
+The public code is available for review and contributions:
 
-Questions are based on the official dataset from: [www.bamf.de – Gesamtfragenkatalog zum Test „Leben in Deutschland“ und zum „Einbürgerungstest“, Stand: 07.05.2025](https://www.bamf.de)
+- [`packages/shared`](packages/shared): shared state, learning logic, translations, and persistence.
+- [`packages/web-app`](packages/web-app): web learning, exam, and settings components, plus browser integration.
+- [`packages/mobile-app`](packages/mobile-app): React Native components and platform integration.
 
-The app is available as a web application and a mobile app (Android/iOS) built with React and React Native, sharing common logic via [Uklad](https://github.com/ukladjs/uklad) and a monorepo setup.
+## Development
 
-## Features
+Requires Node.js 22.18+ and pnpm 11.24.0.
 
-- **Practice Questions:** Over 300 questions categorized by topics like Recht, Gesellschaft und Familie, Staat, Politik, etc.
-- **Multiple Modes:**
-  - Testing mode for practicing with statistics.
-  - Review mode for checking answers.
-- **Favorites:** Mark questions as favorites for quick access.
-- **Vocabulary:** Multilingual vocabulary support (English, Russian, Arabic, Turkish) for key terms.
-- **Offline Support:** Works offline after initial load.
-- **Statistics:** Track correct/incorrect answers and accuracy.
-- **Images:** Some questions include illustrative images.
-- **Categories and Filtering:** Browse questions by category or favorites.
-
-## Tech Stack
-
-- **Frontend:** React (Web), React Native (Mobile)
-- **State Management:** [Uklad](https://github.com/ukladjs/uklad) (re-frame-style events, effects, subscriptions, and platform modules)
-- **Persistence:** [`@ukladjs/persist`](https://www.npmjs.com/package/@ukladjs/persist) (versioned web `localStorage` and native `AsyncStorage` hydration)
-- **Build Tools:** Vite (Web), Metro (Mobile)
-- **Package Manager:** pnpm
-- **Testing:** Vitest
-
-## Installation
-
-### Prerequisites
-
-- Node.js >= 22.18
-- pnpm (install globally: `npm install -g pnpm`)
-- For mobile: Android Studio (for Android), Xcode (for iOS), CocoaPods (for iOS)
-
-### Setup
-
-1. Clone the repository:
-
-   ```
-   git clone https://github.com/flexsurfer/einburgerungstest.git
-   cd einburgerungstest
-   ```
-
-2. Install dependencies:
-   ```
-   pnpm install
-   ```
-
-## Usage
-
-- Test: `pnpm test` (runs all tests)
-
-### Web App
-
-- Development: `pnpm dev:web` (runs on http://localhost:4200)
-- Build: `pnpm build:web`
-
-### Mobile App
-
-- Start Metro: `pnpm dev:mobile`
-- Run on Android: `pnpm dev:run-android`
-- Run on iOS: `pnpm dev:run-ios`
-- For iOS, ensure Pods are installed: `cd app/mobile/ios && bundle exec pod install`
-
-The Android app compiles against and targets Android 16 (API 36), meeting the
-[Google Play target API requirement for updates from August 31, 2026](https://support.google.com/googleplay/android-developer/answer/11926878).
-Install Android SDK Platform 36 and Build Tools 36.0.0 through Android Studio's SDK Manager.
-
-To release this change, increment `versionCode` in `app/mobile/android/app/build.gradle`
-to a value higher than any previously uploaded build, configure the existing release
-signing properties, and run `pnpm --filter mobile build:android:bundle`. Upload the
-generated `app/mobile/android/app/build/outputs/bundle/release/app-release.aab` to
-Google Play Console; changing the source configuration alone does not update the published app.
-
-### Shared Package
-
-The shared package contains common Uklad state, data, events, subscriptions, and platform-neutral feature modules used by both web and mobile apps.
-
-- Test shared: `pnpm test:shared`
+```sh
+pnpm install --frozen-lockfile
+pnpm test:shared
+pnpm test:web-app
+```
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-Please ensure your code passes tests and linting.
+Issues and pull requests are welcome, including corrections to translations and
+explanations. Questions are based on the [BAMF catalogue](https://www.bamf.de)
+dated 7 May 2025; mistakes are possible.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+[MIT](LICENSE).

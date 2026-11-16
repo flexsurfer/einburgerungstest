@@ -1,7 +1,9 @@
 export const Appearance = {
   getColorScheme: () => "light",
   addChangeListener: (
-    _listener: (event: { colorScheme: "light" | "dark" | null }) => void,
+    _listener: (event: {
+      colorScheme: "light" | "dark" | "unspecified" | null;
+    }) => void,
   ) => ({
     remove: () => undefined,
   }),

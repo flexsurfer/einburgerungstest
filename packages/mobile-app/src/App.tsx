@@ -21,6 +21,7 @@ import {
   type NavigationScreen,
 } from "@ebtest/shared/uklad";
 import type { MobileApp, MobileHydrationResult } from "./bootstrap";
+import { MobileImagesProvider, type MobileImages } from "./assets";
 import { useColors, type Colors } from "./theme";
 import { QuestionView } from "./components/QuestionView";
 import { Header } from "./components/Header";
@@ -33,6 +34,7 @@ import { watchMobileBack } from "./hardware-back";
 
 export interface AppProps {
   app: MobileApp;
+  images: MobileImages;
 }
 
 const SCREEN_POSITION: Record<NavigationScreen, number> = {
@@ -211,12 +213,14 @@ function MobileHydrationGate({ app }: { app: MobileApp }) {
   return <AppContent interactive={state.status === "ready"} />;
 }
 
-function App({ app }: AppProps) {
+function App({ app, images }: AppProps) {
   return (
     <UkladProvider runtime={app.runtime}>
-      <SafeAreaProvider>
-        <MobileHydrationGate app={app} />
-      </SafeAreaProvider>
+      <MobileImagesProvider images={images}>
+        <SafeAreaProvider>
+          <MobileHydrationGate app={app} />
+        </SafeAreaProvider>
+      </MobileImagesProvider>
     </UkladProvider>
   );
 }

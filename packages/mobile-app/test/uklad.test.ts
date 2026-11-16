@@ -11,21 +11,13 @@ import {
   stateKeys,
 } from "@ebtest/shared/uklad";
 import {
-  mobileQuestionsData,
   registerMobilePlatform,
   watchMobileSystemTheme,
   type MobilePlatform,
 } from "../src/platform";
 import { bootstrapMobileApp, createMobileAppRuntime } from "../src/bootstrap";
 import { examSecondsRemaining, formatExamTime } from "../src/exam-time";
-
-vi.mock("@react-native-async-storage/async-storage", () => ({
-  default: {
-    getItem: vi.fn(async () => null),
-    setItem: vi.fn(async () => undefined),
-    removeItem: vi.fn(async () => undefined),
-  },
-}));
+import { fixtureQuestions } from "./fixtures/questions";
 
 const runtimes: Array<ReturnType<typeof createAppRuntime>> = [];
 const apps: Array<ReturnType<typeof bootstrapMobileApp>> = [];
@@ -46,11 +38,17 @@ afterEach(async () => {
 });
 
 function createRuntime(
-  platform: MobilePlatform = { applySystemBarTheme: vi.fn() },
+  platformOverrides: Partial<MobilePlatform> = {},
   withBundledQuestions = false,
 ) {
+  const platform: MobilePlatform = {
+    questions: fixtureQuestions,
+    applySystemBarTheme: vi.fn(),
+    ...platformOverrides,
+  };
   const runtime = withBundledQuestions
     ? createMobileAppRuntime({
+        initialQuestions: platform.questions,
         runtimeId: `mobile-platform-${runtimes.length + 1}`,
       })
     : createAppRuntime({
@@ -63,6 +61,47 @@ function createRuntime(
 }
 
 describe("Uklad mobile platform", () => {
+  it("keeps host-provided content separate across runtimes and reloads", async () => {
+    const firstQuestions = [{ ...fixtureQuestions[0], question: "First host" }];
+    const secondQuestions = [
+      { ...fixtureQuestions[1], question: "Second host" },
+    ];
+    const first = createRuntime({ questions: firstQuestions }, true);
+    const second = createRuntime({ questions: secondQuestions }, true);
+
+    expect(first.harness.getState()[stateKeys.questionsItems][0].question).toBe(
+      "First host",
+    );
+    expect(
+      second.harness.getState()[stateKeys.questionsItems][0].question,
+    ).toBe("Second host");
+
+    first.harness.dispatchSync([appIds.events.questionsFetchRequested]);
+    second.harness.dispatchSync([appIds.events.questionsFetchRequested]);
+    await Promise.all([first.harness.flush(), second.harness.flush()]);
+
+    expect(first.harness.getState()[stateKeys.questionsItems]).toEqual([
+      { ...firstQuestions[0], globalIndex: 1 },
+    ]);
+    expect(second.harness.getState()[stateKeys.questionsItems]).toEqual([
+      { ...secondQuestions[0], globalIndex: 1 },
+    ]);
+  });
+
+  it("reports invalid host content through the question error state", async () => {
+    const { harness } = createRuntime({
+      questions: {} as MobilePlatform["questions"],
+    });
+
+    harness.dispatchSync([appIds.events.questionsFetchRequested]);
+    await harness.flush();
+
+    expect(harness.getState()[stateKeys.questionsLoaded]).toBe(false);
+    expect(harness.getState()[stateKeys.questionsError]).toBe(
+      "Questions data must be an array",
+    );
+  });
+
   it.each([
     ["de-DE", "de"],
     ["uk-UA", "uk"],
@@ -71,6 +110,7 @@ describe("Uklad mobile platform", () => {
     async (locale, language) => {
       const app = bootstrapMobileApp({
         platform: {
+          questions: fixtureQuestions,
           applySystemBarTheme: vi.fn(),
           getDeviceLanguage: () => locale,
         },
@@ -384,10 +424,23 @@ describe("Uklad mobile platform", () => {
     expect(harness.getState()[stateKeys.navigationActiveScreen]).toBe("home");
   });
 
+  it.each([null, "unspecified"] as const)(
+    "uses the default theme when native appearance is %s",
+    (scheme) => {
+      vi.spyOn(Appearance, "getColorScheme").mockReturnValue(scheme);
+      const applySystemBarTheme = vi.fn();
+      const { harness } = createRuntime({ applySystemBarTheme });
+
+      harness.dispatchSync([appIds.events.appInitialize]);
+
+      expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
+      expect(applySystemBarTheme).toHaveBeenLastCalledWith("light");
+    },
+  );
+
   it("forwards native system-theme changes only while system mode is enabled", async () => {
-    const listeners: Array<
-      (event: { colorScheme: "light" | "dark" | null }) => void
-    > = [];
+    const listeners: Array<Parameters<typeof Appearance.addChangeListener>[0]> =
+      [];
     vi.spyOn(Appearance, "addChangeListener").mockImplementation((listener) => {
       listeners.push(listener);
       return { remove: vi.fn() };
@@ -400,6 +453,12 @@ describe("Uklad mobile platform", () => {
     await harness.flush();
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("dark");
 
+    listeners[0]?.({ colorScheme: "unspecified" });
+    await harness.flush();
+    expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
+
+    listeners[0]?.({ colorScheme: "dark" });
+    await harness.flush();
     harness.dispatchSync([appIds.events.preferencesThemeToggled]);
     listeners[0]?.({ colorScheme: "light" });
     await harness.flush();
@@ -443,13 +502,14 @@ describe("Uklad mobile platform", () => {
     >;
     const applySystemBarTheme = vi.fn();
     const runtime = createMobileAppRuntime({
+      initialQuestions: fixtureQuestions,
       runtimeId: "mobile-bootstrap",
     });
     runtimes.push(runtime);
 
     const app = bootstrapMobileApp({
       runtime,
-      platform: { applySystemBarTheme },
+      platform: { questions: fixtureQuestions, applySystemBarTheme },
       persistence,
     });
     apps.push(app);
@@ -474,7 +534,7 @@ describe("Uklad mobile platform", () => {
   });
 
   it("migrates hydrated legacy answers after native questions are available", async () => {
-    const question = mobileQuestionsData[0];
+    const question = fixtureQuestions[0];
     const wrongAnswer = question.correct === 0 ? 1 : 0;
     const userAnswersKey = `${APP_PERSISTENCE_PREFIX}/${encodeURIComponent(
       stateKeys.practiceUserAnswers,
@@ -490,7 +550,7 @@ describe("Uklad mobile platform", () => {
     );
 
     const app = bootstrapMobileApp({
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
     });
     apps.push(app);
     const harness = createUkladTestHarness(app.runtime);
@@ -523,6 +583,7 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const runtime = createMobileAppRuntime({
+      initialQuestions: fixtureQuestions,
       runtimeId: "mobile-hydration-failure",
     });
     runtimes.push(runtime);
@@ -530,7 +591,7 @@ describe("Uklad mobile platform", () => {
 
     const app = bootstrapMobileApp({
       runtime,
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
       persistence,
       onHydrationError,
     });
@@ -562,12 +623,13 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const runtime = createMobileAppRuntime({
+      initialQuestions: fixtureQuestions,
       runtimeId: "mobile-hydration-retry",
     });
     runtimes.push(runtime);
     const app = bootstrapMobileApp({
       runtime,
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
       persistence,
     });
     apps.push(app);
@@ -596,7 +658,7 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const app = bootstrapMobileApp({
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
       persistence,
     });
     apps.push(app);
@@ -625,7 +687,7 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const app = bootstrapMobileApp({
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
       persistence,
       onPersistenceFlushError,
     });
@@ -656,7 +718,7 @@ describe("Uklad mobile platform", () => {
       typeof import("../src/persistence").attachMobilePersistence
     >;
     const app = bootstrapMobileApp({
-      platform: { applySystemBarTheme: vi.fn() },
+      platform: { questions: fixtureQuestions, applySystemBarTheme: vi.fn() },
       persistence,
     });
     apps.push(app);

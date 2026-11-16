@@ -1,11 +1,10 @@
 packages:
-  - app/*
   - packages/*
+# Native peers belong to the optional Expo host, not the public installation.
+autoInstallPeers: false
 catalog:
   "@ukladjs/core": ^0.2.4
   "@ukladjs/persist": ^0.2.0
-publicHoistPattern:
-  - "@react-native/gradle-plugin"
 allowBuilds:
   bson: false
   esbuild: true

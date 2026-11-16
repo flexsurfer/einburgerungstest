@@ -5,6 +5,7 @@
   "main": "./src/App.tsx",
   "exports": {
     ".": "./src/App.tsx",
+    "./assets": "./src/assets.tsx",
     "./bootstrap": "./src/bootstrap.ts",
     "./platform": "./src/platform.ts",
     "./persistence": "./src/persistence.ts"
@@ -21,6 +22,20 @@
     "react-native": "*",
     "react-native-safe-area-context": "*",
     "react-native-svg": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-safe-area-context": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@ukladjs/core": "catalog:",

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { categoryDisplayName, resolveLanguage, translate } from "../src/i18n";
-import questions from "../assets/data.json";
 
 describe("mobile localization", () => {
   it("normalizes supported device locales and falls back to English", () => {
@@ -37,20 +36,5 @@ describe("mobile localization", () => {
     [112, "помилок"],
   ])("uses the Ukrainian mistake ending for %i attempts", (count, label) => {
     expect(translate("uk", "mistakesPlural", { count })).toBe(label);
-  });
-
-  it("ships Ukrainian questions, aligned answer choices and explanations for every state", () => {
-    expect(questions).toHaveLength(460);
-    for (const question of questions) {
-      expect(question.uk.question.trim()).not.toBe("");
-      expect(question.uk.explanation.trim()).not.toBe("");
-      expect(question.uk.answers).toHaveLength(question.answers.length);
-      expect(question.uk.answers.every((answer) => answer.trim())).toBe(true);
-      expect(question.uk.answers[question.correct]).toBeTruthy();
-      expect(categoryDisplayName(question.category, "uk")).toBeTruthy();
-    }
-    expect(questions[0].uk.answers[questions[0].correct]).toBe(
-      "тут діє свобода слова.",
-    );
   });
 });

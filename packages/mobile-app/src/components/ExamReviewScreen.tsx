@@ -17,7 +17,7 @@ import {
 } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { categoryDisplayName, useI18n, type TranslationKey } from "../i18n";
-import images from "../assets/images";
+import { useMobileImages } from "../assets";
 import { BookmarkButton } from "./BookmarkButton";
 import { DownArrow, LeftArrow, RightArrow } from "./Icons";
 
@@ -40,6 +40,7 @@ const emptyTitles: Record<TestSessionReviewFilter, TranslationKey> = {
 };
 
 export function ExamReviewScreen({ onClose }: { onClose: () => void }) {
+  const images = useMobileImages();
   const runtime = useRuntime();
   const colors = useColors();
   const { t, language, isRtl } = useI18n("ExamReviewScreen");

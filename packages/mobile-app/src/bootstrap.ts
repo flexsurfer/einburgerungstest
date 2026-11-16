@@ -4,9 +4,9 @@ import {
   registerSharedModules,
   type AppRuntime,
   type AppRuntimeOptions,
+  type QuestionInput,
 } from "@ebtest/shared/uklad";
 import {
-  mobileQuestionsData,
   registerMobilePlatform,
   watchMobileSystemTheme,
   type MobilePlatform,
@@ -46,11 +46,11 @@ export interface MobileApp {
 export type MobileAppRuntimeOptions = Omit<
   AppRuntimeOptions,
   "initialQuestions"
->;
+> & { readonly initialQuestions: readonly QuestionInput[] };
 
 /** Create a native runtime whose first snapshot already contains questions. */
 export function createMobileAppRuntime(
-  options: MobileAppRuntimeOptions = {},
+  options: MobileAppRuntimeOptions,
 ): AppRuntime {
   const {
     runtimeId = "einburgerungstest-native",
@@ -62,7 +62,6 @@ export function createMobileAppRuntime(
     ...runtimeOptions,
     runtimeId,
     name,
-    initialQuestions: mobileQuestionsData,
   });
 }
 
@@ -76,6 +75,7 @@ export function bootstrapMobileApp(options: MobileBootstrapOptions): MobileApp {
     options.runtime ??
     createMobileAppRuntime({
       runtimeId: options.runtimeId ?? "einburgerungstest-native",
+      initialQuestions: options.platform.questions,
       initialLanguage: resolveLanguage(options.platform.getDeviceLanguage?.()),
     });
 

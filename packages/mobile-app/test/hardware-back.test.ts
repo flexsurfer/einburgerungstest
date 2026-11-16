@@ -8,7 +8,8 @@ import {
   type AppRuntime,
 } from "@ebtest/shared/uklad";
 import { watchMobileBack } from "../src/hardware-back";
-import { mobileQuestionsData, registerMobilePlatform } from "../src/platform";
+import { registerMobilePlatform } from "../src/platform";
+import { fixtureQuestions } from "./fixtures/questions";
 
 const runtimes: AppRuntime[] = [];
 
@@ -40,11 +41,14 @@ describe("Android hardware Back", () => {
     "returns from %s to Home and consumes Back",
     async (_, events) => {
       const runtime = createAppRuntime({
-        initialQuestions: mobileQuestionsData,
+        initialQuestions: fixtureQuestions,
       });
       runtimes.push(runtime);
       registerSharedModules(runtime);
-      registerMobilePlatform(runtime, { applySystemBarTheme: vi.fn() });
+      registerMobilePlatform(runtime, {
+        questions: fixtureQuestions,
+        applySystemBarTheme: vi.fn(),
+      });
       const harness = createUkladTestHarness(runtime);
       runtime.dispatch([appIds.events.preferencesLandSelected, "Bayern"]);
       runtime.dispatch([appIds.events.navigationCategorySelected, null]);

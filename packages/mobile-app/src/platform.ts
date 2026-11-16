@@ -10,20 +10,15 @@ import {
   type ScrollMode,
   type Theme,
 } from "@ebtest/shared/uklad";
-import questionsData from "../assets/data.json";
 import { questionListRef } from "./refs";
 import { translate } from "./i18n";
 
 export interface MobilePlatform {
+  /** Bundled content supplied by the host; treat it as read-only. */
+  readonly questions: readonly QuestionInput[];
   applySystemBarTheme(theme: Theme): void | Promise<void>;
   getDeviceLanguage?(): string | null;
 }
-
-export const mobileQuestionsData = questionsData as QuestionInput[];
-
-const localData: Record<DataKind, unknown> = {
-  questions: mobileQuestionsData,
-};
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
@@ -35,18 +30,25 @@ function validateData(dataType: DataKind, data: unknown): void {
   }
 }
 
-function localDataFor(dataType: DataKind): unknown {
+function localDataFor(
+  dataType: DataKind,
+  platform: MobilePlatform,
+): QuestionInput[] {
   if (dataType !== "questions") {
     throw new Error(`Unknown data type: ${String(dataType)}`);
   }
-  const data = localData[dataType];
+  const data = platform.questions;
   validateData(dataType, data);
-  return data;
+  return [...data];
 }
 
 type MobileEffectRuntime = Pick<AppRuntime, "dispatch">;
 
-/** Register the effects and coeffects supplied by bare RN and Expo hosts. */
+function normalizeColorScheme(scheme: string | null | undefined): ColorScheme {
+  return scheme === "light" || scheme === "dark" ? scheme : null;
+}
+
+/** Register the effects and coeffects supplied by the native host. */
 export function registerMobilePlatform(
   runtime: AppRuntime,
   platform: MobilePlatform,
@@ -55,7 +57,7 @@ export function registerMobilePlatform(
     (registrar) => {
       registrar.regCoeffect(
         appIds.coeffects.systemColorScheme,
-        (): ColorScheme => Appearance.getColorScheme(),
+        (): ColorScheme => normalizeColorScheme(Appearance.getColorScheme()),
       );
       registrar.regCoeffect(appIds.coeffects.systemNow, () => Date.now());
 
@@ -83,7 +85,7 @@ export function registerMobilePlatform(
         effectRuntime: MobileEffectRuntime,
       ) => {
         try {
-          const data = localDataFor(payload.dataType) as QuestionInput[];
+          const data = localDataFor(payload.dataType, platform);
           effectRuntime.dispatch([appIds.events.questionsFetchSucceeded, data]);
         } catch (error) {
           effectRuntime.dispatch([
@@ -155,7 +157,7 @@ export function watchMobileSystemTheme(runtime: AppRuntime): () => void {
   const subscription = Appearance.addChangeListener(({ colorScheme }) => {
     runtime.dispatch([
       appIds.events.preferencesSystemThemeChanged,
-      colorScheme,
+      normalizeColorScheme(colorScheme),
     ]);
   });
 

@@ -6,6 +6,9 @@ export default defineConfig({
     alias: {
       '@ebtest/shared': path.resolve(__dirname, '../shared/src'),
       'react-native': path.resolve(__dirname, './test/mocks/react-native.ts'),
+      '@react-native-async-storage/async-storage': path.resolve(
+        __dirname, './test/mocks/async-storage.ts',
+      ),
     },
   },
   test: {
