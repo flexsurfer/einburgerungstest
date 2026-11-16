@@ -23,6 +23,11 @@ const general = Array.from({ length: 30 }, (_, i) => ({
     answers: ["Wrong", "Right", "Also wrong", "Wrong again"],
     explanation: "English explanation",
   },
+  uk: {
+    question: `Перекладене запитання ${i + 1}`,
+    answers: ["Неправильно", "Правильно", "Теж неправильно", "Знову неправильно"],
+    explanation: "Українське пояснення",
+  },
 }));
 const regional = Array.from({ length: 10 }, (_, i) => ({
   question: `Berlin Frage ${i + 1}`,
@@ -94,6 +99,19 @@ async function select(element, value) {
 }
 
 describe("web learning flows", () => {
+  it("hides Clear answer in Study for a question answered in Practice", async () => {
+    await click(button("PRACTICE"));
+    await click(container.querySelector(".answer-button"));
+    expect(button("Clear answer")).toBeDefined();
+
+    await click(button("Study"));
+    expect(container.textContent).toContain("Translated question 1");
+    expect(button("Clear answer")).toBeUndefined();
+
+    await click(button("PRACTICE"));
+    expect(button("Clear answer")).toBeDefined();
+  });
+
   it("uses the shared study, practice, bookmark, mistake and resume state", async () => {
     expect(container.textContent).toContain("A little closer, every day.");
     await click(button("Study"));
@@ -159,6 +177,24 @@ describe("web learning flows", () => {
     await select(container.querySelector("#app-language"), "ar");
     expect(document.documentElement.dir).toBe("rtl");
     expect(container.querySelector("h1").textContent).toBe("الإعدادات");
+  });
+
+  it("switches from Arabic to Ukrainian across settings, home and study", async () => {
+    await click(button("Settings"));
+    await select(container.querySelector("#app-language"), "ar");
+    await select(container.querySelector("#app-language"), "uk");
+    expect(document.documentElement.lang).toBe("uk");
+    expect(document.documentElement.dir).toBe("ltr");
+    expect(container.querySelector("h1").textContent).toBe("Налаштування");
+    expect(container.querySelector('option[value="uk"]').textContent).toBe("Українська");
+    await click(button("Головна"));
+    expect(container.textContent).toContain("Щодня на крок ближче.");
+    expect(container.textContent).toContain("Демократія і право");
+    await click(button("Навчання"));
+    expect(container.textContent).toContain("Allgemeine Frage 1");
+    expect(container.textContent).toContain("Перекладене запитання 1");
+    expect(container.textContent).toContain("Українське пояснення");
+    expect(container.querySelector(".answer-button").textContent).toContain("Неправильно");
   });
 
   it("reviews submitted choices, filters, explanations and bookmarks without changing the score", async () => {

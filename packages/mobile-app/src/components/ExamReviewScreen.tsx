@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 import {
   appIds,
@@ -40,7 +39,7 @@ const emptyTitles: Record<TestSessionReviewFilter, TranslationKey> = {
   correct: "noCorrectAnswers",
 };
 
-export function ExamReviewScreen() {
+export function ExamReviewScreen({ onClose }: { onClose: () => void }) {
   const runtime = useRuntime();
   const colors = useColors();
   const { t, language, isRtl } = useI18n("ExamReviewScreen");
@@ -56,8 +55,7 @@ export function ExamReviewScreen() {
     [appIds.subscriptions.testSessionResult],
     "ExamReviewScreen",
   );
-  const { width } = useWindowDimensions();
-  const wide = width >= 900;
+  const [wide, setWide] = useState(false);
   const [overviewOpen, setOverviewOpen] = useState(false);
   const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const pendingNavigation = useRef(false);
@@ -81,7 +79,6 @@ export function ExamReviewScreen() {
     }
   }, [current, result.total, t]);
 
-  const close = () => runtime.dispatch([appIds.events.testSessionReviewClosed]);
   const step = (direction: -1 | 1) => {
     pendingNavigation.current = true;
     runtime.dispatch([appIds.events.testSessionReviewStepped, direction]);
@@ -99,25 +96,29 @@ export function ExamReviewScreen() {
         : s.unanswered;
 
   return (
-    <View style={s.screen}>
+    <View
+      onLayout={({ nativeEvent }) => setWide(nativeEvent.layout.width >= 900)}
+      style={s.screen}
+    >
       <View style={s.topBar}>
-        <TouchableOpacity
-          accessibilityRole="button"
-          onPress={close}
-          style={s.backButton}
-        >
-          <LeftArrow color={colors.textMutedColor} isRtl={isRtl} />
-          <Text style={s.backText}>{t("backToResult")}</Text>
-        </TouchableOpacity>
-        <Text style={s.score}>
-          {result.correct} / {result.total} · {t("correct")}
-        </Text>
-      </View>
-      <ScrollView ref={scrollRef} contentContainerStyle={s.scrollContent}>
-        <View style={s.content}>
+        <View style={s.heading}>
           <Text accessibilityRole="header" style={s.title}>
             {t("answerReview")}
           </Text>
+          <Text style={s.score}>
+            {result.correct} / {result.total} · {t("correct")}
+          </Text>
+        </View>
+        <TouchableOpacity
+          accessibilityRole="button"
+          onPress={onClose}
+          style={s.doneButton}
+        >
+          <Text style={s.doneText}>{t("done")}</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView ref={scrollRef} contentContainerStyle={s.scrollContent}>
+        <View style={s.content}>
           <Text style={s.subtitle}>{t("reviewDescription")}</Text>
           <View accessibilityLabel={t("reviewFilterLabel")} style={s.filters}>
             {filters.map((value) => (
@@ -392,9 +393,9 @@ export function ExamReviewScreen() {
           <TouchableOpacity
             accessibilityRole="button"
             accessibilityLabel={t(
-              position < items.length - 1 ? "nextQuestion" : "backToResult",
+              position < items.length - 1 ? "nextQuestion" : "done",
             )}
-            onPress={position < items.length - 1 ? () => step(1) : close}
+            onPress={position < items.length - 1 ? () => step(1) : onClose}
             style={[s.navButton, s.nextButton]}
           >
             <Text style={s.nextText}>
@@ -419,27 +420,30 @@ const styles = (colors: Colors) =>
       justifyContent: "space-between",
       gap: 12,
       paddingHorizontal: 16,
+      paddingVertical: 12,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.borderColor,
     },
-    backButton: {
+    heading: { flex: 1, gap: 4 },
+    doneButton: {
       minHeight: 44,
-      flexDirection: "row",
+      minWidth: 60,
+      paddingHorizontal: 12,
       alignItems: "center",
-      flexShrink: 1,
+      justifyContent: "center",
     },
-    backText: { color: colors.textMutedColor, fontSize: 13, flexShrink: 1 },
+    doneText: { color: colors.primaryColor, fontSize: 15, fontWeight: "700" },
     score: {
       color: colors.primaryColor,
       fontSize: 12,
       fontWeight: "700",
-      flexShrink: 1,
-      textAlign: "right",
     },
     scrollContent: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 24 },
     content: { width: "100%", maxWidth: 1100, alignSelf: "center" },
     title: {
       color: colors.textColor,
-      fontSize: 27,
-      lineHeight: 34,
+      fontSize: 20,
+      lineHeight: 28,
       fontWeight: "800",
     },
     subtitle: {

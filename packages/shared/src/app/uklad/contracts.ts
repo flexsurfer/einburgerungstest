@@ -7,6 +7,7 @@ export const LANGUAGES = {
   en: "English",
   de: "Deutsch",
   ru: "Русский",
+  uk: "Українська",
   tr: "Türkçe",
   ar: "العربية",
 } as const;
@@ -60,6 +61,7 @@ export interface QuestionInput {
   img?: QuestionImage;
   explanation?: string;
   ru?: QuestionTranslation;
+  uk?: QuestionTranslation;
   en?: QuestionTranslation;
   ar?: QuestionTranslation;
   tr?: QuestionTranslation;

@@ -61,6 +61,7 @@ function prepareQuestions(data: readonly QuestionInput[]): Question[] {
     answers: [...question.answers],
     ...(question.img === undefined ? {} : { img: { ...question.img } }),
     ...(question.ru === undefined ? {} : { ru: copyTranslation(question.ru) }),
+    ...(question.uk === undefined ? {} : { uk: copyTranslation(question.uk) }),
     ...(question.en === undefined ? {} : { en: copyTranslation(question.en) }),
     ...(question.ar === undefined ? {} : { ar: copyTranslation(question.ar) }),
     ...(question.tr === undefined ? {} : { tr: copyTranslation(question.tr) }),

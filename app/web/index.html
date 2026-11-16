@@ -40,6 +40,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/landing/landing.css" />
+    <link rel="stylesheet" href="/landing/learning.css" />
   </head>
   <body>
     <a class="skip-link" href="#main" data-i18n="seo.skip">Skip to content</a>
@@ -78,7 +79,11 @@
       </defs>
     </svg>
     <header class="site-header wrap">
-      <a class="brand" href="/" aria-label="EBTest home"
+      <a
+        class="brand"
+        href="/"
+        aria-label="EBTest home"
+        data-i18n-attr="aria-label:seo.home"
         ><img
           class="brand-mark"
           src="/landing/logo.png"
@@ -91,8 +96,16 @@
           ></span
         ></a
       >
-      <nav aria-label="Main navigation">
-        <a href="#approach" data-i18n="navigation.features">The approach</a
+      <nav
+        aria-label="Main navigation"
+        data-i18n-attr="aria-label:seo.navigation"
+      >
+        <a
+          href="/questions/"
+          data-catalogue-link
+          data-i18n="navigation.catalogue"
+          >Question catalogue</a
+        ><a href="#approach" data-i18n="navigation.features">The approach</a
         ><a href="#on-the-go" data-i18n="navigation.android">On the go</a>
       </nav>
       <div class="header-actions">
@@ -106,6 +119,7 @@
             <option value="en">EN</option>
             <option value="de">DE</option>
             <option value="ru">RU</option>
+            <option value="uk">UK</option>
             <option value="tr">TR</option>
             <option value="ar">AR</option>
           </select>
@@ -115,6 +129,7 @@
           class="theme-toggle"
           aria-label="Toggle color theme"
           title="Toggle color theme"
+          data-i18n-attr="aria-label:navigation.themeToggleDark;title:navigation.themeToggleDark"
         >
           ◐</button
         ><a class="button small" href="/app/"
@@ -171,6 +186,7 @@
             <img
               src="/assets/img/home.jpg"
               alt="Illustration of the Reichstag and Berlin skyline"
+              data-i18n-attr="alt:seo.skyline"
               fetchpriority="high"
               width="1774"
               height="887"
@@ -203,7 +219,11 @@
           </div>
         </div>
       </section>
-      <section class="exam-strip wrap" aria-label="The test in numbers">
+      <section
+        class="exam-strip wrap"
+        aria-label="The test in numbers"
+        data-i18n-attr="aria-label:seo.testNumbers"
+      >
         <div class="strip-intro">
           <span class="eyebrow" data-i18n="stats.eyebrow">A CLEAR GOAL</span
           ><span data-i18n="stats.heading">A little about the test.</span>
@@ -217,7 +237,11 @@
           ><span data-i18n="stats.pass">correct answers to pass</span>
         </div>
         <div>
-          <strong>60<span class="number-unit"> min</span></strong
+          <strong
+            >60
+            <span class="number-unit" data-i18n="stats.minutes"
+              >min</span
+            ></strong
           ><span data-i18n="stats.time">time to find your answers</span>
         </div>
       </section>
@@ -247,7 +271,7 @@
                 >
               </div>
               <svg><use href="#globe" /></svg
-              ><span class="visual-caption">DE · EN · RU · TR · AR</span>
+              ><span class="visual-caption">DE · EN · RU · UK · TR · AR</span>
             </div>
             <h3 data-i18n="features.study.title">Understand, then remember.</h3>
             <p data-i18n="features.study.description">
@@ -316,7 +340,11 @@
             <span class="orbit-label" data-i18n="mobile.aside"
               >A little everyday companion.</span
             >
-            <div class="phone" aria-label="Mobile app preview">
+            <div
+              class="phone"
+              aria-label="Mobile app preview"
+              data-i18n-attr="aria-label:seo.mobilePreview"
+            >
               <div class="phone-top"><span>9:41</span><span>••• ▰</span></div>
               <div class="phone-heading">
                 ☰ <strong>Einbürgerungstest</strong><span></span>
@@ -356,7 +384,8 @@
                 </div>
                 <strong data-i18n="mobile.mockExam">Mock Exam</strong>
                 <div>
-                  <svg><use href="#clock" /></svg><span>33 · 60 min</span
+                  <svg><use href="#clock" /></svg
+                  ><span data-i18n="mobile.examSummary">33 · 60 min</span
                   ><span class="phone-start">→</span>
                 </div>
               </div>
@@ -396,8 +425,9 @@
             <div class="language-note">
               <svg><use href="#globe" /></svg>
               <p data-i18n="mobile.languages">
-                One app. Five languages.<br /><span
-                  >Deutsch · English · Русский · Türkçe · العربية</span
+                One app. Six languages.<br /><span
+                  >Deutsch · English · Русский · Українська · Türkçe ·
+                  العربية</span
                 >
               </p>
             </div>

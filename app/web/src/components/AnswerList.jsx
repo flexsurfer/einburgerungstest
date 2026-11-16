@@ -28,6 +28,10 @@ export const AnswerList = ({ question, translatedAnswers }) => {
     [appIds.subscriptions.navigationIsTestMode],
     "AnswerList",
   );
+  const isLearnMode = useSubscription(
+    [appIds.subscriptions.navigationIsLearnMode],
+    "AnswerList",
+  );
   const selectedCategory = useSubscription(
     [appIds.subscriptions.navigationSelectedCategory],
     "AnswerList",
@@ -69,6 +73,7 @@ export const AnswerList = ({ question, translatedAnswers }) => {
   const wrongAnswersMode = selectedCategory === "wrong";
   const showAnswerAction =
     !isTestMode &&
+    !isLearnMode &&
     (wrongAnswersMode
       ? mistakeSummary.totalAttempts > 0
       : userAnswer !== undefined);

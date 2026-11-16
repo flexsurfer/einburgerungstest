@@ -56,6 +56,11 @@ describe("Uklad application foundation", () => {
         category: "Politik",
         correct: 0,
         answers: ["The people", "The courts"],
+        uk: {
+          question: "Хто обирає Бундестаг?",
+          answers: ["Народ", "Суди"],
+          explanation: "Бундестаг обирають громадяни, які мають право голосу.",
+        },
       },
       {
         question: "Which state is a Bundesland?",
@@ -83,6 +88,15 @@ describe("Uklad application foundation", () => {
     expect(state[stateKeys.questionsItems]).not.toBe(initialQuestions);
     expect(state[stateKeys.questionsItems][0].answers).not.toBe(
       initialQuestions[0].answers,
+    );
+    expect(state[stateKeys.questionsItems][0].uk).toEqual(
+      initialQuestions[0].uk,
+    );
+    expect(state[stateKeys.questionsItems][0].uk).not.toBe(
+      initialQuestions[0].uk,
+    );
+    expect(state[stateKeys.questionsItems][0].uk.answers).not.toBe(
+      initialQuestions[0].uk.answers,
     );
   });
 

@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
+import { useI18n } from "@ebtest/shared/i18n";
 import { QuestionCard } from "./QuestionCard.jsx";
 import { DesktopExamControls } from "./ExamControls.jsx";
 import "../styles/QuestionList.css";
 
 export const QuestionListView = memo(() => {
   const runtime = useRuntime();
+  const { t } = useI18n("QuestionListView");
   const filteredQuestions = useSubscription(
     [appIds.subscriptions.practiceFilteredQuestions],
     "QuestionList",
@@ -65,7 +67,7 @@ export const QuestionListView = memo(() => {
   if (!filteredQuestions || filteredQuestions.length === 0) {
     return (
       <div className="empty-questions">
-        <p>No questions available</p>
+        <p>{t("noQuestions")}</p>
       </div>
     );
   }

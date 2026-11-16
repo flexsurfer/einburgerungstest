@@ -324,24 +324,34 @@ describe("Uklad Persist application boundary", () => {
     },
   );
 
-  it("hydrates and persists the selected application language", async () => {
-    const storage = createAsyncStorage({
-      [canonicalKey(stateKeys.preferencesSelectedLanguage)]: envelope("tr"),
-    });
-    const { handle, harness } = createFixture({ target: "native", storage });
+  it.each([
+    ["tr", "ar"],
+    ["uk", "en"],
+    ["en", "uk"],
+  ])(
+    "hydrates %s and persists %s as the application language",
+    async (saved, selected) => {
+      const storage = createAsyncStorage({
+        [canonicalKey(stateKeys.preferencesSelectedLanguage)]: envelope(saved),
+      });
+      const { handle, harness } = createFixture({ target: "native", storage });
 
-    await hydrateAsync(handle);
-    expect(harness.getState()[stateKeys.preferencesSelectedLanguage]).toBe(
-      "tr",
-    );
+      await hydrateAsync(handle);
+      expect(harness.getState()[stateKeys.preferencesSelectedLanguage]).toBe(
+        saved,
+      );
 
-    harness.dispatchSync([appIds.events.preferencesLanguageSelected, "ar"]);
-    await handle.flush();
+      harness.dispatchSync([
+        appIds.events.preferencesLanguageSelected,
+        selected,
+      ]);
+      await handle.flush();
 
-    expect(
-      storage.values.get(canonicalKey(stateKeys.preferencesSelectedLanguage)),
-    ).toBe(envelope("ar"));
-  });
+      expect(
+        storage.values.get(canonicalKey(stateKeys.preferencesSelectedLanguage)),
+      ).toBe(envelope(selected));
+    },
+  );
 
   it("migrates and persists a pre-history wrong answer when questions load", async () => {
     const storage = createSyncStorage({

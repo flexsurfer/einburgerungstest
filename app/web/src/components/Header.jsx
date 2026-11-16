@@ -43,7 +43,7 @@ export function Header() {
   );
   return (
     <aside className="sidebar">
-      <a className="brand" href="/" aria-label="EBTest home">
+      <a className="brand" href="/" aria-label={`EBTest · ${t("home")}`}>
         <img
           className="brand-mark"
           src="/landing/logo.png"
@@ -58,7 +58,7 @@ export function Header() {
           </span>
         </span>
       </a>
-      <nav aria-label="Main navigation" className="main-nav">
+      <nav aria-label={t("mainNavigation")} className="main-nav">
         {item(
           "home",
           t("home"),

@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { categoryDisplayName, resolveLanguage, translate } from "../src/i18n";
+import questions from "../assets/data.json";
 
 describe("mobile localization", () => {
   it("normalizes supported device locales and falls back to English", () => {
     expect(resolveLanguage("de-DE")).toBe("de");
     expect(resolveLanguage("AR_sa")).toBe("ar");
+    expect(resolveLanguage("uk-UA")).toBe("uk");
+    expect(resolveLanguage(" UK_ua ")).toBe("uk");
+    expect(resolveLanguage("ua")).toBe("en");
     expect(resolveLanguage("fr-FR")).toBe("en");
     expect(resolveLanguage(null)).toBe("en");
   });
@@ -15,5 +19,38 @@ describe("mobile localization", () => {
       "10 sorudan 3",
     );
     expect(categoryDisplayName("Politik", "ar")).toBe("السياسة");
+    expect(translate("uk", "settings")).toBe("Налаштування");
+    expect(translate("uk", "itemOfTotal", { current: 3, total: 10 })).toBe(
+      "3 із 10",
+    );
+    expect(categoryDisplayName("Politik", "uk")).toBe("Політика");
+  });
+
+  it.each([
+    [2, "помилки"],
+    [5, "помилок"],
+    [11, "помилок"],
+    [14, "помилок"],
+    [21, "помилка"],
+    [22, "помилки"],
+    [25, "помилок"],
+    [112, "помилок"],
+  ])("uses the Ukrainian mistake ending for %i attempts", (count, label) => {
+    expect(translate("uk", "mistakesPlural", { count })).toBe(label);
+  });
+
+  it("ships Ukrainian questions, aligned answer choices and explanations for every state", () => {
+    expect(questions).toHaveLength(460);
+    for (const question of questions) {
+      expect(question.uk.question.trim()).not.toBe("");
+      expect(question.uk.explanation.trim()).not.toBe("");
+      expect(question.uk.answers).toHaveLength(question.answers.length);
+      expect(question.uk.answers.every((answer) => answer.trim())).toBe(true);
+      expect(question.uk.answers[question.correct]).toBeTruthy();
+      expect(categoryDisplayName(question.category, "uk")).toBeTruthy();
+    }
+    expect(questions[0].uk.answers[questions[0].correct]).toBe(
+      "тут діє свобода слова.",
+    );
   });
 });

@@ -43,7 +43,7 @@ export const QuestionCard = memo(({ question }) => {
             src={`/assets/img/${question.img.url}.png`}
             alt={
               question.img.text ||
-              `Question ${question.globalIndex} illustration`
+              t("questionImage", { number: question.globalIndex })
             }
             className="question-image"
           />

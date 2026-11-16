@@ -110,7 +110,9 @@ export const AnswerButton = memo<AnswerButtonProps>(
           <View style={styles(themeColors).mistakeCount}>
             <Text style={styles(themeColors).mistakeCountText}>
               {mistakeCount}{" "}
-              {mistakeCount === 1 ? t("mistake") : t("mistakesPlural")}
+              {t(mistakeCount === 1 ? "mistake" : "mistakesPlural", {
+                count: mistakeCount,
+              })}
             </Text>
           </View>
         ) : null}

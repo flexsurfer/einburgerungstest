@@ -46,7 +46,7 @@ function App() {
   return (
     <div className="app-container">
       <a className="skip-link" href="#main-content">
-        Skip to content
+        {t("skipToContent")}
       </a>
       <Header />
       <main id="main-content" className="app-main">
