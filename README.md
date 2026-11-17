@@ -18,7 +18,8 @@ The public code is available for review and contributions:
 
 ## Development
 
-Requires Node.js 26.13.1 LTS and pnpm 12.21.0.
+Use Node.js 26.13.1 LTS (pinned in `.nvmrc`) and pnpm 12.21.0.
+Patched Node 24 LTS is also supported from 24.22.3 for tools such as Dependabot.
 
 ```sh
 nvm use
@@ -39,8 +40,9 @@ build-script permissions, and provenance downgrade protection. Use frozen
 installs in CI. See [the dependency maintenance policy](tooling/DEPENDENCIES.md)
 before changing SDK-constrained versions or temporary overrides.
 
-GitHub Actions runs public checks and dependency audits on pushes, pull requests,
-and weekly. Dependabot proposes tool and action updates for review.
+GitHub Actions runs public checks and dependency audits on Node 24.22.3 and
+26.13.1 on pushes, pull requests, and weekly. Dependabot proposes tool and
+action updates for review.
 
 ## Contributing
 

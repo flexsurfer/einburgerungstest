@@ -2,6 +2,11 @@
 
 Reviewed on 17 November 2026. Install with Node 26.13.1 LTS and pnpm 12.21.0
 using the committed `.nvmrc`, `packageManager`, workspace policy, and lockfile.
+Node 24 LTS from 24.22.3 is also supported across the public packages and hosts.
+Dependabot's updater currently runs 24.22.3 independently of our CI setup and
+`.nvmrc`; the engine range accepts both patched LTS lines with `engineStrict`
+still enabled. Public CI checks both versions. Keep the engine floors and CI
+matrix aligned with security releases; local and EAS defaults remain Node 26.
 
 ## Compatibility constraints
 
