@@ -11,6 +11,7 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
+  useAnimatedValue,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,8 +34,8 @@ export const QuestionPicker = memo(() => {
   const colors = useColors();
   const { t } = useI18n("QuestionPicker");
   const { width, height } = useWindowDimensions();
-  const sheetTranslateY = useRef(new Animated.Value(0)).current;
-  const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const sheetTranslateY = useAnimatedValue(0);
+  const backdropOpacity = useAnimatedValue(0);
   const dragStartY = useRef(0);
   const scrollOffsetY = useRef(0);
   const pickerItems = useSubscription(
@@ -197,11 +198,14 @@ export const QuestionPicker = memo(() => {
       Math.abs(gesture.dy) > Math.abs(gesture.dx);
 
     return {
+      // PanResponder registers these callbacks; refs are read only during gestures.
+      // eslint-disable-next-line react-hooks/refs
       handle: PanResponder.create({
         onStartShouldSetPanResponder: () => !usesNativeIosSheet,
         onStartShouldSetPanResponderCapture: () => !usesNativeIosSheet,
         ...responderHandlers,
       }),
+      // eslint-disable-next-line react-hooks/refs -- callbacks run during gestures, not registration.
       list: PanResponder.create({
         onMoveShouldSetPanResponder: (_event, gesture) =>
           shouldPullFromList(gesture),

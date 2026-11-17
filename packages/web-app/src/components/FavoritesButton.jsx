@@ -1,8 +1,5 @@
 import { Star } from "./Star.jsx";
-import {
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useSubscription } from "@ebtest/shared/uklad";
 
 export const FavoritesButton = ({ onCategoryClick }) => {
   const selectedCategory = useSubscription(

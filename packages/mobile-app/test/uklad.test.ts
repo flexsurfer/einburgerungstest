@@ -185,7 +185,7 @@ describe("Uklad mobile platform", () => {
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationCurrentQuestion,
-      ]).globalIndex,
+      ])?.globalIndex,
     ).toBe(124);
   });
 
@@ -229,7 +229,7 @@ describe("Uklad mobile platform", () => {
     expect(
       harness.getSubscriptionValue([
         appIds.subscriptions.navigationCurrentQuestion,
-      ]).globalIndex,
+      ])?.globalIndex,
     ).toBe(209);
     expect(harness.getState()[stateKeys.practiceGlobalIndex]).toBe(124);
   });
@@ -427,7 +427,10 @@ describe("Uklad mobile platform", () => {
   it.each([null, "unspecified"] as const)(
     "uses the default theme when native appearance is %s",
     (scheme) => {
-      vi.spyOn(Appearance, "getColorScheme").mockReturnValue(scheme);
+      // Exercise a legacy native value that RN 0.88 no longer declares.
+      vi.spyOn(Appearance, "getColorScheme").mockReturnValue(
+        scheme as ReturnType<typeof Appearance.getColorScheme>,
+      );
       const applySystemBarTheme = vi.fn();
       const { harness } = createRuntime({ applySystemBarTheme });
 
@@ -453,7 +456,12 @@ describe("Uklad mobile platform", () => {
     await harness.flush();
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("dark");
 
-    listeners[0]?.({ colorScheme: "unspecified" });
+    // Older native bridges could still report this value during an upgrade.
+    listeners[0]?.({
+      colorScheme: "unspecified" as ReturnType<
+        typeof Appearance.getColorScheme
+      >,
+    });
     await harness.flush();
     expect(harness.getState()[stateKeys.preferencesTheme]).toBe("light");
 

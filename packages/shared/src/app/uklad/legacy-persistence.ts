@@ -47,7 +47,7 @@ function decodeStateKey(
 function legacyKeyForStorageKey(
   storageKey: string,
   prefix: string,
-  legacyKeys: Record<string, string>,
+  legacyKeys: LegacyStorageMap,
 ): string | undefined {
   const stateKey = decodeStateKey(storageKey, prefix);
   return stateKey === undefined ? undefined : legacyKeys[stateKey];
@@ -84,7 +84,7 @@ function resolveLegacyOptions(options: LegacyPersistenceOptions = {}) {
 function isLegacyThemeModeKey(
   stateKey: string | undefined,
   legacyKey: string | undefined,
-  legacyKeys: Record<string, string>,
+  legacyKeys: LegacyStorageMap,
 ): boolean {
   return (
     stateKey === stateKeys.preferencesUseSystemTheme &&

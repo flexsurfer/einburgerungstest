@@ -18,7 +18,7 @@ export const QuestionListView = memo(() => {
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
-  const loadMoreRef = useRef(null);
+  const loadMoreRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -44,11 +44,7 @@ export const QuestionListView = memo(() => {
       observer.observe(loadMoreRef.current);
     }
 
-    return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
-    };
+    return () => observer.disconnect();
   }, [visibleCount, filteredQuestions.length]);
 
   useEffect(() => {

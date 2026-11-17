@@ -1,10 +1,10 @@
 .statistics-container {
-    background-color: var(--bg-color);
-    box-shadow: 0 -4px 12px var(--shadow-color);
-    z-index: 10;
-    padding: 0.2rem;
-    /* iOS safe area support */
-    padding-bottom: calc(0.2rem + env(safe-area-inset-bottom, 0));
+  background-color: var(--bg-color);
+  box-shadow: 0 -4px 12px var(--shadow-color);
+  z-index: 10;
+  padding: 0.2rem;
+  /* iOS safe area support */
+  padding-bottom: calc(0.2rem + env(safe-area-inset-bottom, 0));
 }
 
 /* Mobile: flex item in column layout */
@@ -26,156 +26,155 @@
 }
 
 .statistics-card {
-    background-color: var(--bg-color);
-    max-width: 500px;
-    margin: 0 auto;
+  background-color: var(--bg-color);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .statistics-content {
-    display: flex;
-    justify-content: flex-start;
-    gap: 0.2rem;
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.2rem;
 }
 
 .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.1rem;
-    padding: 0.1rem;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    min-width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  min-width: fit-content;
 }
 
 .stat-icon {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 0.7rem;
-    flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.7rem;
+  flex-shrink: 0;
 }
 
 .correct .stat-icon {
-    background-color: var(--success-color);
-    color: white;
+  background-color: var(--success-color);
+  color: white;
 }
 
 .incorrect .stat-icon {
-    background-color: var(--error-color);
-    color: white;
+  background-color: var(--error-color);
+  color: white;
 }
 
 .accuracy .stat-icon {
-    background-color: transparent;
-    color: var(--text-color);
-    font-size: 1rem;
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: 1rem;
 }
 
 .stat-number {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-color);
-    line-height: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1;
 }
 
 .stat-number-green {
-    color: var(--success-color);
+  color: var(--success-color);
 }
 
 .stat-number-red {
-    color: var(--error-color);
+  color: var(--error-color);
 }
 
 .statistics-footer {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .progress-bar {
-    height: 4px;
-    background-color: var(--border-color);
-    border-radius: 2px;
-    overflow: hidden;
-    flex: 1;
+  height: 4px;
+  background-color: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+  flex: 1;
 }
 
 .progress-fill {
-    height: 100%;
-    background-color: var(--accent-color);
-    border-radius: 2px;
-    transition: width 0.3s ease;
+  height: 100%;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
 .progress-text {
-    font-size: 0.7rem;
-    color: var(--text-color);
-    opacity: 0.8;
-    white-space: nowrap;
+  font-size: 0.7rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  white-space: nowrap;
 }
 
 .clear-button {
-    padding: 8px 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    color: var(--text-color);
+  padding: 8px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
 .clear-button:hover {
-    background: var(--accent-light);
-    color: var(--accent-color);
+  background: var(--accent-light);
+  color: var(--accent-color);
 }
 
 .toggle-button {
-    padding: 8px 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    background: var(--bg-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    color: var(--text-color);
+  padding: 8px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: var(--text-color);
 }
 
 .toggle-button:hover {
-    background: var(--success-light);
-    color: var(--success-color);
+  background: var(--success-light);
+  color: var(--success-color);
 }
 
 .toggle-button.active {
-    background: var(--success-color);
-    color: var(--bg-color);
-    border-color: var(--success-color);
+  background: var(--success-color);
+  color: var(--bg-color);
+  border-color: var(--success-color);
 }
 
 .toggle-button.active:hover {
-    background: var(--success-color);
-    opacity: 0.9;
+  background: var(--success-color);
+  opacity: 0.9;
 }
 
 .buttons-group {
-    display: flex;
-    gap: 0.2rem;
-    margin-left: auto;
+  display: flex;
+  gap: 0.2rem;
+  margin-left: auto;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-    .stat-item {
-        padding: 0.3rem;
-        gap: 0.25rem;
-    }
+  .stat-item {
+    padding: 0.3rem;
+    gap: 0.25rem;
+  }
 
-    .stat-number {
-        font-size: 0.9rem;
-    }
+  .stat-number {
+    font-size: 0.9rem;
+  }
 }
-

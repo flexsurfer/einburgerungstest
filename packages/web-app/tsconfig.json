@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "checkJs": true,
+    "noImplicitAny": false,
+    "noEmit": true,
+    "types": ["react", "react-dom", "node"],
+    "allowArbitraryExtensions": true
+  },
+  "include": ["src/**/*"]
+}

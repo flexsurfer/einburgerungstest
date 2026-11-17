@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+artifacts/
+website/
+mobile-expo/
+*.tsbuildinfo
+AGENTS.md
+pnpm-lock.yaml

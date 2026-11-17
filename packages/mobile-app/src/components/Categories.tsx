@@ -8,7 +8,12 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
 } from "react-native";
-import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
+import {
+  appIds,
+  useRuntime,
+  useSubscription,
+  type CategorySelection,
+} from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { FavoritesButton } from "./FavoritesButton";
 import { categoryDisplayName, useI18n } from "../i18n";
@@ -50,10 +55,10 @@ export const Categories = () => {
     width: 0,
     height: 0,
   });
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<React.ComponentRef<typeof TouchableOpacity>>(null);
 
   const handleCategoryClick = useCallback(
-    (category) => {
+    (category: CategorySelection) => {
       runtime.dispatch(
         category === "test"
           ? [appIds.events.testSessionStarted]
@@ -205,7 +210,8 @@ export const Categories = () => {
                                   styles(colors).activeText,
                               ]}
                             >
-                              {categoryDisplayName(category, language)} ({count})
+                              {categoryDisplayName(category, language)} ({count}
+                              )
                             </Text>
                           </TouchableOpacity>
                         ))}

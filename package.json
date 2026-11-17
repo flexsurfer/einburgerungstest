@@ -1,9 +1,9 @@
 {
   "name": "einburgerungstest",
   "private": true,
-  "packageManager": "pnpm@11.24.0",
+  "packageManager": "pnpm@12.21.0",
   "engines": {
-    "node": ">=22.18.0"
+    "node": "^26.13.1"
   },
   "scripts": {
     "test": "pnpm test:shared && pnpm test:mobile-app && pnpm test:web-app",
@@ -29,17 +29,34 @@
     "build:web": "pnpm --dir website run build",
     "build": "pnpm build:web",
     "predeploy": "pnpm --dir website run prepare:deploy",
-    "deploy:web": "pnpm --dir website run deploy"
+    "deploy:web": "pnpm --dir website run deploy",
+    "lint": "eslint . --max-warnings 0",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "audit:deps": "pnpm audit --audit-level low",
+    "typecheck:shared": "tsc --noEmit -p packages/shared/tsconfig.json",
+    "typecheck:web-app": "tsc --noEmit -p packages/web-app/tsconfig.json",
+    "typecheck": "pnpm typecheck:shared && pnpm typecheck:web-app",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
     "jiti": "2.7.0",
-    "jsdom": "~30.0.1",
-    "prettier": "^3.9.6",
-    "react": "19.2.8",
-    "typescript": "~5.9.3",
-    "vitest": "^4.1.11"
+    "jsdom": "31.0.1",
+    "prettier": "3.10.1",
+    "react": "19.3.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0",
+    "eslint": "10.15.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.72.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.14.0",
+    "@types/node": "26.6.6",
+    "@types/react-dom": "19.3.0",
+    "@types/react": "19.3.0"
   }
 }

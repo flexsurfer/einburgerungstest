@@ -765,8 +765,7 @@ const ar: TranslationDictionary = {
   language: "اللغة",
   languageDescription: "اختر لغة التطبيق.",
   federalState: "الولاية الاتحادية",
-  federalStateDescription:
-    "تُستخدم للتدريب ولأسئلة الامتحان الإقليمية الثلاثة.",
+  federalStateDescription: "تُستخدم للتدريب ولأسئلة الامتحان الإقليمية الثلاثة.",
   federalStateValue: "الولاية المحددة",
   federalStateNotSelected: "غير محددة",
   chooseFederalState: "اختر ولاية اتحادية",

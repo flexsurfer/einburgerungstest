@@ -3,17 +3,21 @@ import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
 import { LandSelect } from "./LandSelect";
 import { UiIcon } from "./UiIcon";
-export function ExamLauncher({ className = "primary-button", children }) {
+/** @param {{ className?: string, children?: import("react").ReactNode }} props */
+export function ExamLauncher({
+  className = "primary-button",
+  children = null,
+}) {
   const runtime = useRuntime();
   const land = useSubscription(
     [appIds.subscriptions.preferencesSelectedLand],
     "ExamLauncher",
   );
   const { t } = useI18n("ExamLauncher");
-  const dialog = useRef(null);
+  const dialog = useRef(/** @type {HTMLDialogElement | null} */ (null));
   return (
     <>
-      <button className={className} onClick={() => dialog.current.showModal()}>
+      <button className={className} onClick={() => dialog.current?.showModal()}>
         {children || (
           <>
             <UiIcon name="exam" />
@@ -26,7 +30,7 @@ export function ExamLauncher({ className = "primary-button", children }) {
         aria-label={t("startMockExam")}
         className="exam-dialog"
         onClick={(e) => {
-          if (e.target === e.currentTarget) dialog.current.close();
+          if (e.target === e.currentTarget) dialog.current?.close();
         }}
       >
         <div className="dialog-heading">
@@ -36,7 +40,7 @@ export function ExamLauncher({ className = "primary-button", children }) {
           <button
             className="icon-button"
             aria-label={t("cancel")}
-            onClick={() => dialog.current.close()}
+            onClick={() => dialog.current?.close()}
           >
             <UiIcon name="close" />
           </button>
@@ -59,7 +63,7 @@ export function ExamLauncher({ className = "primary-button", children }) {
           className="primary-button"
           disabled={!land}
           onClick={() => {
-            dialog.current.close();
+            dialog.current?.close();
             runtime.dispatch([appIds.events.testSessionStarted]);
           }}
         >

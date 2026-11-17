@@ -20,7 +20,14 @@ function themeFromMediaQuery() {
   }
 }
 
-async function fetchJson({ dataType, url, method }, runtime) {
+/**
+ * @param {{ dataType: "questions", url?: string, method?: import("@ebtest/shared/uklad").HttpMethod }} request
+ * @param {Pick<import("@ebtest/shared/uklad").AppRuntime, "dispatch">} runtime
+ */
+async function fetchJson(
+  { dataType, url = undefined, method = undefined },
+  runtime,
+) {
   try {
     if (typeof globalThis.fetch !== "function") {
       throw new Error("Fetch is not available in this browser");
@@ -74,18 +81,18 @@ export function registerWebPlatform(runtime) {
       registrar.regEffect(
         appIds.effects.dataFetch,
         (payload, effectRuntime) => {
-          void fetchJson(payload || {}, effectRuntime);
+          void fetchJson(payload, effectRuntime);
         },
       );
 
       registrar.regEffect(
         appIds.effects.dataLoadLocal,
         (payload, effectRuntime) => {
-          void fetchJson(payload || {}, effectRuntime);
+          void fetchJson(payload, effectRuntime);
         },
       );
 
-      registrar.regEffect(appIds.effects.uiScrollToTop, ({ behavior } = {}) => {
+      registrar.regEffect(appIds.effects.uiScrollToTop, ({ behavior }) => {
         if (typeof globalThis.scrollTo === "function") {
           globalThis.scrollTo({ top: 0, behavior: behavior || "auto" });
         }
@@ -105,7 +112,7 @@ export function registerWebPlatform(runtime) {
         },
       );
 
-      registrar.regEffect(appIds.effects.uiSetBodyTheme, ({ theme } = {}) => {
+      registrar.regEffect(appIds.effects.uiSetBodyTheme, ({ theme }) => {
         if (typeof document === "undefined" || !document.body) return;
 
         document.body.classList.remove("light", "dark");
@@ -121,14 +128,11 @@ export function registerWebPlatform(runtime) {
         }
       });
 
-      registrar.regEffect(
-        appIds.effects.uiSetBodyOverflow,
-        ({ value } = {}) => {
-          if (typeof document !== "undefined" && document.body) {
-            document.body.style.overflow = value;
-          }
-        },
-      );
+      registrar.regEffect(appIds.effects.uiSetBodyOverflow, ({ value }) => {
+        if (typeof document !== "undefined" && document.body) {
+          document.body.style.overflow = value;
+        }
+      });
     },
   ]);
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Animated,
   Button,
@@ -8,6 +8,7 @@ import {
   Text,
   View,
   useWindowDimensions,
+  useAnimatedValue,
 } from "react-native";
 import {
   SafeAreaProvider,
@@ -63,9 +64,7 @@ export function AppContent({
   const { isRtl } = useI18n("App");
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
-  const screenProgress = useRef(
-    new Animated.Value(SCREEN_POSITION[activeScreen]),
-  ).current;
+  const screenProgress = useAnimatedValue(SCREEN_POSITION[activeScreen]);
 
   const canGoBack =
     interactive &&

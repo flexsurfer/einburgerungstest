@@ -250,7 +250,7 @@ export function ExamReviewScreen({ onClose }: { onClose: () => void }) {
                   {translation?.question && (
                     <Text style={s.translation}>{translation.question}</Text>
                   )}
-                  {question.img && imageSize && (
+                  {question.img && imageSize?.width && imageSize?.height && (
                     <View style={s.imageContainer}>
                       <Image
                         source={imageSource}

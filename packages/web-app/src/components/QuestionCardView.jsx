@@ -7,13 +7,15 @@ import "../styles/QuestionList.css";
 import { useI18n } from "@ebtest/shared/i18n";
 
 function BottomNavigation() {
-  const panelRef = useRef(null);
-  const spacerRef = useRef(null);
+  const panelRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const spacerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
+    const spacer = spacerRef.current;
+    if (!panel || !spacer) return;
     const updateHeight = () => {
-      spacerRef.current.style.height = `${panel.getBoundingClientRect().height}px`;
+      spacer.style.height = `${panel.getBoundingClientRect().height}px`;
     };
     updateHeight();
     if (typeof ResizeObserver === "undefined") {

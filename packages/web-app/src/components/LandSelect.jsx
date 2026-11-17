@@ -5,7 +5,8 @@ import {
   useSubscription,
 } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
-export function LandSelect({ id }) {
+/** @param {{ id?: string }} props */
+export function LandSelect({ id = undefined }) {
   const runtime = useRuntime();
   const land = useSubscription(
     [appIds.subscriptions.preferencesSelectedLand],
@@ -17,12 +18,13 @@ export function LandSelect({ id }) {
       id={id}
       aria-label={t("chooseFederalState")}
       value={land || ""}
-      onChange={(e) =>
-        runtime.dispatch([
-          appIds.events.preferencesLandSelected,
-          e.target.value,
-        ])
-      }
+      onChange={(e) => {
+        const selected = FEDERAL_LANDS.find(
+          (value) => value === e.target.value,
+        );
+        if (selected)
+          runtime.dispatch([appIds.events.preferencesLandSelected, selected]);
+      }}
     >
       <option value="" disabled>
         {t("chooseFederalState")}

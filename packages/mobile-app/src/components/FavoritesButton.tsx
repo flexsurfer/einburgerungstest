@@ -1,13 +1,10 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import {
-  appIds,
-  useSubscription,
-} from "@ebtest/shared/uklad";
+import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { Star } from "./Star";
 import { useI18n } from "../i18n";
 
-export const FavoritesButton = ({ onPress }) => {
+export const FavoritesButton = ({ onPress }: { onPress: () => void }) => {
   const { t } = useI18n("FavoritesButtonI18n");
   const selectedCategory = useSubscription(
     [appIds.subscriptions.navigationSelectedCategory],

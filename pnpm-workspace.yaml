@@ -8,5 +8,12 @@ catalog:
 allowBuilds:
   bson: false
   esbuild: true
-minimumReleaseAgeExclude:
-  - "@ukladjs/core@0.2.4"
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+engineStrict: true
+trustPolicy: no-downgrade
+# GHSA-g3hv-75wg-m249: remove when typescript-eslint adopts the patched major.
+overrides:
+  "@typescript-eslint/typescript-estree>minimatch": 11.0.8
+# Share identical runtime packages across the independent linked installations.
+virtualStoreType: global

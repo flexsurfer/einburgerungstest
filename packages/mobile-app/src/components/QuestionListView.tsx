@@ -1,5 +1,11 @@
-import React, { memo, useCallback, useMemo, useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
+import React, { memo, useCallback, useMemo } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import { appIds, useSubscription } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { QuestionCard } from "./QuestionCard";
@@ -38,7 +44,7 @@ export const QuestionListView = memo(() => {
     "QuestionListView",
   );
 
-  const [dimensions, setDimensions] = useState(Dimensions.get("window"));
+  const dimensions = useWindowDimensions();
   const minCardWidth = 280; // Minimum card width in pixels
   const padding = 40; // Total horizontal padding
   const gap = 20; // Gap between columns
@@ -47,15 +53,6 @@ export const QuestionListView = memo(() => {
     () => calculateLayout(dimensions.width, minCardWidth, padding, gap),
     [dimensions.width],
   );
-
-  // Listen for dimension changes (rotation)
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener("change", ({ window }) => {
-      setDimensions(window);
-    });
-
-    return () => subscription?.remove();
-  }, []);
 
   const renderQuestion = useCallback(
     ({ item }: { item: Question }) => (

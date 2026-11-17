@@ -42,7 +42,7 @@ export const Categories = memo(() => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLandPickerOpen, setIsLandPickerOpen] = useState(false);
 
-  const popupRef = useRef(null);
+  const popupRef = useRef(/** @type {HTMLDivElement | null} */ (null));
 
   const handleCategoryClick = useCallback(
     (category) => {

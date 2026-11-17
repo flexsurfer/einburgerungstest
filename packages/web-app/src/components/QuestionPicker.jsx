@@ -14,22 +14,24 @@ export function QuestionPicker() {
     [appIds.subscriptions.navigationQuestionPickerItems],
     "QuestionPicker",
   );
-  const ref = useRef(null);
-  const gridRef = useRef(null);
+  const ref = useRef(/** @type {HTMLDialogElement | null} */ (null));
+  const gridRef = useRef(/** @type {HTMLDivElement | null} */ (null));
   const close = () =>
     runtime.dispatch([appIds.events.navigationQuestionPickerShown, false]);
   useEffect(() => {
-    if (visible && !ref.current.open) {
-      ref.current.showModal();
-      const selected = gridRef.current.querySelector('[aria-current="true"]');
-      if (selected) {
-        const grid = gridRef.current;
+    const dialog = ref.current;
+    const grid = gridRef.current;
+    if (!dialog || !grid) return;
+    if (visible && !dialog.open) {
+      dialog.showModal();
+      const selected = grid.querySelector('[aria-current="true"]');
+      if (selected instanceof HTMLElement) {
         grid.scrollTop +=
           selected.getBoundingClientRect().top -
           grid.getBoundingClientRect().top -
           (grid.clientHeight - selected.offsetHeight) / 2;
       }
-    } else if (!visible && ref.current.open) ref.current.close();
+    } else if (!visible && dialog.open) dialog.close();
   }, [visible]);
   return (
     <dialog
@@ -64,21 +66,28 @@ export function QuestionPicker() {
           </button>
         </header>
         <div className="question-picker-legend">
-          {["correct", "incorrect", "unanswered", "current"].map((status) => (
-            <div className={`legend-item ${status}`} key={status}>
-              <span className="legend-icon" aria-hidden="true">
-                {
+          {
+            /** @type {const} */ ([
+              "correct",
+              "incorrect",
+              "unanswered",
+              "current",
+            ]).map((status) => (
+              <div className={`legend-item ${status}`} key={status}>
+                <span className="legend-icon" aria-hidden="true">
                   {
-                    correct: "✓",
-                    incorrect: "×",
-                    unanswered: "",
-                    current: "•",
-                  }[status]
-                }
-              </span>
-              <span>{t(status)}</span>
-            </div>
-          ))}
+                    {
+                      correct: "✓",
+                      incorrect: "×",
+                      unanswered: "",
+                      current: "•",
+                    }[status]
+                  }
+                </span>
+                <span>{t(status)}</span>
+              </div>
+            ))
+          }
         </div>
         <div ref={gridRef} className="question-picker-grid">
           {items.map((item) => (

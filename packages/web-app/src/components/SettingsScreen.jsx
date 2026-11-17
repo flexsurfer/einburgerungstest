@@ -4,7 +4,7 @@ import {
   useRuntime,
   useSubscription,
 } from "@ebtest/shared/uklad";
-import { useI18n } from "@ebtest/shared/i18n";
+import { resolveLanguage, useI18n } from "@ebtest/shared/i18n";
 import { LandSelect } from "./LandSelect";
 import { UiIcon } from "./UiIcon";
 export function SettingsScreen() {
@@ -37,7 +37,7 @@ export function SettingsScreen() {
             onChange={(e) =>
               runtime.dispatch([
                 appIds.events.preferencesLanguageSelected,
-                e.target.value,
+                resolveLanguage(e.target.value),
               ])
             }
           >
@@ -62,29 +62,33 @@ export function SettingsScreen() {
           <h2>{t("appearance")}</h2>
           <p>{t("appearanceDescription")}</p>
           <div className="theme-options">
-            {["light", "dark", "system"].map((value) => (
-              <button
-                key={value}
-                className={`theme-option ${theme === value ? "selected" : ""}`}
-                aria-pressed={theme === value}
-                onClick={() =>
-                  runtime.dispatch([
-                    appIds.events.preferencesThemeSelected,
-                    value,
-                  ])
-                }
-              >
-                <span className={`theme-preview ${value}`}>
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span>
-                  {t(value)}
-                  {theme === value && <UiIcon name="check" size={17} />}
-                </span>
-              </button>
-            ))}
+            {
+              /** @type {const} */ (["light", "dark", "system"]).map(
+                (value) => (
+                  <button
+                    key={value}
+                    className={`theme-option ${theme === value ? "selected" : ""}`}
+                    aria-pressed={theme === value}
+                    onClick={() =>
+                      runtime.dispatch([
+                        appIds.events.preferencesThemeSelected,
+                        value,
+                      ])
+                    }
+                  >
+                    <span className={`theme-preview ${value}`}>
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span>
+                      {t(value)}
+                      {theme === value && <UiIcon name="check" size={17} />}
+                    </span>
+                  </button>
+                ),
+              )
+            }
           </div>
         </section>
         <section className="setting-row">

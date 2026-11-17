@@ -19,7 +19,7 @@ const ResultStat = ({ className, label, value, onClick, reviewLabel }) => (
 export const ExamResultScreen = memo(() => {
   const runtime = useRuntime();
   const { t } = useI18n("ExamResultScreen");
-  const titleRef = useRef(null);
+  const titleRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
   useEffect(() => {
     titleRef.current?.focus({ preventScroll: true });
   }, []);

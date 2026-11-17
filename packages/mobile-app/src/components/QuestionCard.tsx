@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import {
   View,
   Text,
@@ -34,7 +34,6 @@ export const QuestionCard = memo<QuestionCardProps>(
     scrollable = false,
   }) => {
     const images = useMobileImages();
-    const [height, setHeight] = useState<number | null>(null);
     const uri = question.img?.url ?? undefined;
 
     // Calculate card width based on screen size and number of columns
@@ -47,13 +46,11 @@ export const QuestionCard = memo<QuestionCardProps>(
 
     const imageWidth = cardWidth - (isTablet ? 32 : 40); // Account for card padding
 
-    useEffect(() => {
-      if (!uri) {
-        return;
-      }
-      const { width, height } = Image.resolveAssetSource(images[uri]);
-      setHeight(imageWidth / (width / height));
-    }, [uri, images, imageWidth, numColumns, screenWidth, gap]);
+    const imageSize = uri ? Image.resolveAssetSource(images[uri]) : undefined;
+    const height =
+      imageSize?.width && imageSize?.height
+        ? imageWidth / (imageSize.width / imageSize.height)
+        : null;
 
     const colors = useColors();
     const { language, t } = useI18n("QuestionCard");
@@ -97,7 +94,7 @@ export const QuestionCard = memo<QuestionCardProps>(
     );
     const body = (
       <View style={scrollable && styleSheet.cardBottom}>
-        {height && (
+        {height && uri && question.img && (
           <View style={styleSheet.questionImageContainer}>
             <Image
               source={images[uri]}

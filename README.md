@@ -18,13 +18,29 @@ The public code is available for review and contributions:
 
 ## Development
 
-Requires Node.js 22.18+ and pnpm 11.24.0.
+Requires Node.js 26.13.1 LTS and pnpm 12.21.0.
 
 ```sh
+nvm use
 pnpm install --frozen-lockfile
-pnpm test:shared
-pnpm test:web-app
+pnpm check
+pnpm audit:deps
 ```
+
+`pnpm check` runs ESLint, Prettier, strict shared TypeScript checking, checked
+web JavaScript, and all public package tests. JavaScript checking keeps inferred
+parameter types; TypeScript source uses full strict mode. The optional Expo host
+type-checks the native package against its SDK's declarations.
+
+The independent host installations share pnpm's content-addressed virtual store
+so identical React packages resolve to one physical instance. Lockfiles remain
+independent. Installs enforce the Node engine, a 24-hour release delay, explicit
+build-script permissions, and provenance downgrade protection. Use frozen
+installs in CI. See [the dependency maintenance policy](tooling/DEPENDENCIES.md)
+before changing SDK-constrained versions or temporary overrides.
+
+GitHub Actions runs public checks and dependency audits on pushes, pull requests,
+and weekly. Dependabot proposes tool and action updates for review.
 
 ## Contributing
 
