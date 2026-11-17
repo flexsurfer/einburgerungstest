@@ -14,8 +14,8 @@ export function QuestionPicker() {
     [appIds.subscriptions.navigationQuestionPickerItems],
     "QuestionPicker",
   );
-  const ref = useRef(/** @type {HTMLDialogElement | null} */ (null));
-  const gridRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const ref = useRef<HTMLDialogElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const close = () =>
     runtime.dispatch([appIds.events.navigationQuestionPickerShown, false]);
   useEffect(() => {
@@ -66,13 +66,8 @@ export function QuestionPicker() {
           </button>
         </header>
         <div className="question-picker-legend">
-          {
-            /** @type {const} */ ([
-              "correct",
-              "incorrect",
-              "unanswered",
-              "current",
-            ]).map((status) => (
+          {(["correct", "incorrect", "unanswered", "current"] as const).map(
+            (status) => (
               <div className={`legend-item ${status}`} key={status}>
                 <span className="legend-icon" aria-hidden="true">
                   {
@@ -86,8 +81,8 @@ export function QuestionPicker() {
                 </span>
                 <span>{t(status)}</span>
               </div>
-            ))
-          }
+            ),
+          )}
         </div>
         <div ref={gridRef} className="question-picker-grid">
           {items.map((item) => (

@@ -1,7 +1,12 @@
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
 import { UiIcon } from "./UiIcon";
-export function StarButton({ globalIndex }) {
+
+interface StarButtonProps {
+  globalIndex: number;
+}
+
+export function StarButton({ globalIndex }: StarButtonProps) {
   const runtime = useRuntime();
   const favorite = useSubscription(
     [appIds.subscriptions.practiceIsFavoriteByGlobalIndex, globalIndex],

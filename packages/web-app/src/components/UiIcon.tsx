@@ -1,3 +1,5 @@
+import type { SVGProps } from "react";
+
 const paths = {
   home: "m3 10 9-7 9 7v10H3V10Zm6 10v-7h6v7",
   book: "M12 5v16M3 3c4-1 7 0 9 2 2-2 5-3 9-2v15c-4-1-7 0-9 3-2-3-5-4-9-3V3Z",
@@ -20,7 +22,14 @@ const paths = {
   close: "m6 6 12 12M6 18 18 6",
   menu: "M4 6h16M4 12h16M4 18h16",
 };
-export function UiIcon({ name, size = 21, ...props }) {
+export type UiIconName = keyof typeof paths;
+
+interface UiIconProps extends SVGProps<SVGSVGElement> {
+  name: UiIconName;
+  size?: number;
+}
+
+export function UiIcon({ name, size = 21, ...props }: UiIconProps) {
   return (
     <svg
       width={size}

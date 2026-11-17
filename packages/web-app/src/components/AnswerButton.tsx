@@ -1,6 +1,21 @@
 import { useCallback } from "react";
 import "../styles/AnswerButton.css";
 
+interface AnswerButtonProps {
+  answer: string;
+  translation?: string;
+  index: number;
+  isCorrect: boolean;
+  isSelected: boolean;
+  showAnswers: boolean;
+  disabled: boolean;
+  isExamMode: boolean;
+  onClick: (index: number) => void;
+  userAnswer: number | undefined;
+  mistakeCount?: number;
+  revealCorrectAnswer?: boolean;
+}
+
 export const AnswerButton = ({
   answer,
   translation,
@@ -14,7 +29,7 @@ export const AnswerButton = ({
   userAnswer,
   mistakeCount = 0,
   revealCorrectAnswer = false,
-}) => {
+}: AnswerButtonProps) => {
   const getClassName = useCallback(() => {
     const classes = ["answer-button"];
 

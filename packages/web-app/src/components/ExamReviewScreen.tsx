@@ -7,12 +7,12 @@ import { UiIcon } from "./UiIcon";
 import "../styles/ExamReview.css";
 
 const statusSymbols = { correct: "✓", incorrect: "×", unanswered: "–" };
-const emptyTitles = /** @type {const} */ ({
+const emptyTitles = {
   all: "noQuestions",
   incorrect: "noIncorrectAnswers",
   unanswered: "noUnansweredAnswers",
   correct: "noCorrectAnswers",
-});
+} as const;
 
 export function ExamReviewScreen() {
   const runtime = useRuntime();
@@ -31,8 +31,8 @@ export function ExamReviewScreen() {
   );
   const compact = useIsMobile(1100);
   const [overviewOpen, setOverviewOpen] = useState(false);
-  const titleRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
-  const questionRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const questionRef = useRef<HTMLHeadingElement>(null);
   const focusQuestion = useRef(false);
   const { current, items, position } = review;
   const question = current?.question;
@@ -53,7 +53,7 @@ export function ExamReviewScreen() {
     }
   }, [current?.questionIndex]);
 
-  const navigate = (event) => {
+  const navigate = (event: Parameters<typeof runtime.dispatch>[0]) => {
     focusQuestion.current = true;
     setOverviewOpen(false);
     runtime.dispatch(event);
@@ -89,13 +89,8 @@ export function ExamReviewScreen() {
         role="group"
         aria-label={t("reviewFilterLabel")}
       >
-        {
-          /** @type {const} */ ([
-            "all",
-            "incorrect",
-            "unanswered",
-            "correct",
-          ]).map((value) => (
+        {(["all", "incorrect", "unanswered", "correct"] as const).map(
+          (value) => (
             <button
               key={value}
               type="button"
@@ -110,8 +105,8 @@ export function ExamReviewScreen() {
               {t(value === "all" ? "allQuestions" : value)}
               <span>{value === "all" ? result.total : result[value]}</span>
             </button>
-          ))
-        }
+          ),
+        )}
       </div>
 
       <div className="exam-review-layout">
@@ -159,18 +154,14 @@ export function ExamReviewScreen() {
             ))}
           </div>
           <div className="exam-review-legend">
-            {
-              /** @type {const} */ (["correct", "incorrect", "unanswered"]).map(
-                (status) => (
-                  <span key={status}>
-                    <b className={status} aria-hidden="true">
-                      {statusSymbols[status]}
-                    </b>
-                    {t(status)}
-                  </span>
-                ),
-              )
-            }
+            {(["correct", "incorrect", "unanswered"] as const).map((status) => (
+              <span key={status}>
+                <b className={status} aria-hidden="true">
+                  {statusSymbols[status]}
+                </b>
+                {t(status)}
+              </span>
+            ))}
           </div>
         </details>
 

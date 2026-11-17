@@ -1,14 +1,14 @@
 import { memo, useEffect, useLayoutEffect, useRef } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
-import { QuestionCard } from "./QuestionCard.jsx";
-import { NavigationControls } from "./NavigationControls.jsx";
-import { QuestionPicker } from "./QuestionPicker.jsx";
+import { QuestionCard } from "./QuestionCard";
+import { NavigationControls } from "./NavigationControls";
+import { QuestionPicker } from "./QuestionPicker";
 import "../styles/QuestionList.css";
 import { useI18n } from "@ebtest/shared/i18n";
 
 function BottomNavigation() {
-  const panelRef = useRef(/** @type {HTMLDivElement | null} */ (null));
-  const spacerRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const panelRef = useRef<HTMLDivElement>(null);
+  const spacerRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const panel = panelRef.current;

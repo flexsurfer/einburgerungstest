@@ -1,4 +1,11 @@
-import { appIds, registerAppModules, stateKeys } from "@ebtest/shared/uklad";
+import {
+  appIds,
+  registerAppModules,
+  stateKeys,
+  type AppContracts,
+  type AppRuntime,
+  type ColorScheme,
+} from "@ebtest/shared/uklad";
 
 const DATA_URLS = Object.freeze({
   questions: "/assets/data.json",
@@ -6,11 +13,11 @@ const DATA_URLS = Object.freeze({
 
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 
-function errorMessage(error) {
+function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-function themeFromMediaQuery() {
+function themeFromMediaQuery(): ColorScheme {
   if (typeof globalThis.matchMedia !== "function") return null;
 
   try {
@@ -20,13 +27,13 @@ function themeFromMediaQuery() {
   }
 }
 
-/**
- * @param {{ dataType: "questions", url?: string, method?: import("@ebtest/shared/uklad").HttpMethod }} request
- * @param {Pick<import("@ebtest/shared/uklad").AppRuntime, "dispatch">} runtime
- */
 async function fetchJson(
-  { dataType, url = undefined, method = undefined },
-  runtime,
+  {
+    dataType,
+    url,
+    method,
+  }: AppContracts["effects"][typeof appIds.effects.dataFetch],
+  runtime: Pick<AppRuntime, "dispatch">,
 ) {
   try {
     if (typeof globalThis.fetch !== "function") {
@@ -41,8 +48,8 @@ async function fetchJson(
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    if (dataType === "questions" && !Array.isArray(data)) {
+    const data: unknown = await response.json();
+    if (!Array.isArray(data)) {
       throw new Error("Questions response must be an array");
     }
     runtime.dispatch([appIds.events.questionsFetchSucceeded, data]);
@@ -52,7 +59,7 @@ async function fetchJson(
 }
 
 /** Register browser-only effects and coeffects on one Uklad runtime. */
-export function registerWebPlatform(runtime) {
+export function registerWebPlatform(runtime: AppRuntime) {
   return registerAppModules(runtime, [
     (registrar) => {
       registrar.regCoeffect(
@@ -138,7 +145,7 @@ export function registerWebPlatform(runtime) {
 }
 
 /** Keep system-following theme in sync after persistence hydration. */
-export function watchWebSystemTheme(runtime) {
+export function watchWebSystemTheme(runtime: AppRuntime): () => void {
   if (typeof globalThis.matchMedia !== "function") return () => {};
 
   let mediaQuery;
@@ -148,7 +155,7 @@ export function watchWebSystemTheme(runtime) {
     return () => {};
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event: MediaQueryListEvent) => {
     runtime.dispatch([
       appIds.events.preferencesSystemThemeChanged,
       event.matches ? "dark" : "light",

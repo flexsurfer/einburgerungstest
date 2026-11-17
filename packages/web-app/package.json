@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./components/*": "./src/components/*.jsx",
-    "./bootstrap": "./src/bootstrap.js",
-    "./platform": "./src/platform.js",
-    "./persistence": "./src/persistence.js"
+    "./components/*": "./src/components/*.tsx",
+    "./bootstrap": "./src/bootstrap.ts",
+    "./platform": "./src/platform.ts",
+    "./persistence": "./src/persistence.ts"
   },
   "scripts": {
     "test": "vitest run"

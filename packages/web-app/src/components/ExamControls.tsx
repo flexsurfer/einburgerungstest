@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
-import { examSecondsRemaining, formatExamTime } from "../exam-time.js";
+import { examSecondsRemaining, formatExamTime } from "../exam-time";
 import "../styles/ExamControls.css";
 import { useI18n } from "@ebtest/shared/i18n";
 

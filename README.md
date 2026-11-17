@@ -28,9 +28,9 @@ pnpm check
 pnpm audit:deps
 ```
 
-`pnpm check` runs ESLint, Prettier, strict shared TypeScript checking, checked
-web JavaScript, and all public package tests. JavaScript checking keeps inferred
-parameter types; TypeScript source uses full strict mode. The optional Expo host
+`pnpm check` runs ESLint, Prettier, strict TypeScript checking for the shared
+and web packages, and all public package tests. Web checking includes source,
+tests, and the Vitest configuration. The optional Expo host
 type-checks the native package against its SDK's declarations.
 
 The independent host installations share pnpm's content-addressed virtual store

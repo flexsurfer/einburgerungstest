@@ -2,9 +2,32 @@ import {
   appIds,
   createAppRuntime,
   registerSharedModules,
+  type AppRuntime,
 } from "@ebtest/shared/uklad";
-import { attachWebPersistence } from "./persistence.js";
-import { registerWebPlatform, watchWebSystemTheme } from "./platform.js";
+import {
+  attachWebPersistence,
+  type WebPersistenceOptions,
+} from "./persistence";
+import { registerWebPlatform, watchWebSystemTheme } from "./platform";
+
+export interface WebBootstrapOptions {
+  readonly runtime?: AppRuntime;
+  readonly runtimeId?: string;
+  readonly persistence?: ReturnType<typeof attachWebPersistence>;
+  readonly persistenceOptions?: WebPersistenceOptions;
+  readonly onHydrationError?: (error: unknown) => void;
+}
+
+export type WebHydrationResult =
+  { readonly ok: true } | { readonly ok: false; readonly error: unknown };
+
+export interface WebApp {
+  readonly runtime: AppRuntime;
+  readonly persistence: ReturnType<typeof attachWebPersistence>;
+  readonly hydration: Promise<WebHydrationResult>;
+  readonly retryHydration: () => Promise<WebHydrationResult>;
+  dispose(): Promise<void>;
+}
 
 /**
  * Create the browser runtime and start persistence hydration. Domain actions
@@ -12,7 +35,7 @@ import { registerWebPlatform, watchWebSystemTheme } from "./platform.js";
  * answers cannot be overwritten by boot events and failed persistence cannot
  * silently turn the app into a non-durable session.
  */
-export function createWebApp(options = {}) {
+export function createWebApp(options: WebBootstrapOptions = {}): WebApp {
   const runtime =
     options.runtime ||
     createAppRuntime({
@@ -38,9 +61,9 @@ export function createWebApp(options = {}) {
     runtime.dispatch([appIds.events.questionsFetchRequested]);
   };
 
-  let activeHydration;
+  let activeHydration: Promise<WebHydrationResult> | undefined;
 
-  const reportHydrationFailure = (error) => {
+  const reportHydrationFailure = (error: unknown): WebHydrationResult => {
     try {
       options.onHydrationError?.(error);
     } catch (callbackError) {
@@ -51,10 +74,10 @@ export function createWebApp(options = {}) {
     return { ok: false, error };
   };
 
-  const runHydration = () => {
+  const runHydration = (): Promise<WebHydrationResult> => {
     if (activeHydration) return activeHydration;
 
-    let hydration;
+    let hydration: Promise<unknown>;
     try {
       persistence.hydrate();
       hydration = Promise.resolve(persistence.whenHydrated());
@@ -65,7 +88,7 @@ export function createWebApp(options = {}) {
     const settledHydration = hydration
       .then(() => {
         initialize();
-        return { ok: true };
+        return { ok: true } as const;
       })
       .catch(reportHydrationFailure)
       .finally(() => {

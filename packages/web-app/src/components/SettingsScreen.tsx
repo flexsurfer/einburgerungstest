@@ -62,33 +62,29 @@ export function SettingsScreen() {
           <h2>{t("appearance")}</h2>
           <p>{t("appearanceDescription")}</p>
           <div className="theme-options">
-            {
-              /** @type {const} */ (["light", "dark", "system"]).map(
-                (value) => (
-                  <button
-                    key={value}
-                    className={`theme-option ${theme === value ? "selected" : ""}`}
-                    aria-pressed={theme === value}
-                    onClick={() =>
-                      runtime.dispatch([
-                        appIds.events.preferencesThemeSelected,
-                        value,
-                      ])
-                    }
-                  >
-                    <span className={`theme-preview ${value}`}>
-                      <i />
-                      <i />
-                      <i />
-                    </span>
-                    <span>
-                      {t(value)}
-                      {theme === value && <UiIcon name="check" size={17} />}
-                    </span>
-                  </button>
-                ),
-              )
-            }
+            {(["light", "dark", "system"] as const).map((value) => (
+              <button
+                key={value}
+                className={`theme-option ${theme === value ? "selected" : ""}`}
+                aria-pressed={theme === value}
+                onClick={() =>
+                  runtime.dispatch([
+                    appIds.events.preferencesThemeSelected,
+                    value,
+                  ])
+                }
+              >
+                <span className={`theme-preview ${value}`}>
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span>
+                  {t(value)}
+                  {theme === value && <UiIcon name="check" size={17} />}
+                </span>
+              </button>
+            ))}
           </div>
         </section>
         <section className="setting-row">

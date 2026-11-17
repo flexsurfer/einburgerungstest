@@ -5,12 +5,16 @@ import {
   ExamAnsweredProgress,
   ExamTimer,
   FinishExamButton,
-} from "./ExamControls.jsx";
+} from "./ExamControls";
 import "../styles/NavigationControls.css";
 import { useI18n } from "@ebtest/shared/i18n";
 
-export const NavigationControls = memo(
-  /** @param {{ isVisible?: boolean }} props */ ({ isVisible = true }) => {
+interface NavigationControlsProps {
+  isVisible?: boolean;
+}
+
+export const NavigationControls = memo<NavigationControlsProps>(
+  ({ isVisible = true }) => {
     const runtime = useRuntime();
     const { t } = useI18n("NavigationControls");
     const currentQuestionIndex = useSubscription(

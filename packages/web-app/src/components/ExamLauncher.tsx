@@ -1,20 +1,24 @@
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
 import { LandSelect } from "./LandSelect";
 import { UiIcon } from "./UiIcon";
-/** @param {{ className?: string, children?: import("react").ReactNode }} props */
+interface ExamLauncherProps {
+  className?: string;
+  children?: ReactNode;
+}
+
 export function ExamLauncher({
   className = "primary-button",
   children = null,
-}) {
+}: ExamLauncherProps) {
   const runtime = useRuntime();
   const land = useSubscription(
     [appIds.subscriptions.preferencesSelectedLand],
     "ExamLauncher",
   );
   const { t } = useI18n("ExamLauncher");
-  const dialog = useRef(/** @type {HTMLDialogElement | null} */ (null));
+  const dialog = useRef<HTMLDialogElement>(null);
   return (
     <>
       <button className={className} onClick={() => dialog.current?.showModal()}>

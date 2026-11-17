@@ -1,11 +1,16 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "checkJs": true,
-    "noImplicitAny": false,
+    "allowJs": false,
     "noEmit": true,
     "types": ["react", "react-dom", "node"],
     "allowArbitraryExtensions": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "test/**/*.ts",
+    "test/**/*.tsx",
+    "vitest.config.ts"
+  ]
 }

@@ -3,7 +3,21 @@ import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import "../styles/ExamResult.css";
 import { useI18n } from "@ebtest/shared/i18n";
 
-const ResultStat = ({ className, label, value, onClick, reviewLabel }) => (
+interface ResultStatProps {
+  className: string;
+  label: string;
+  value: number;
+  onClick: () => void;
+  reviewLabel: string;
+}
+
+const ResultStat = ({
+  className,
+  label,
+  value,
+  onClick,
+  reviewLabel,
+}: ResultStatProps) => (
   <button
     type="button"
     onClick={onClick}
@@ -19,7 +33,7 @@ const ResultStat = ({ className, label, value, onClick, reviewLabel }) => (
 export const ExamResultScreen = memo(() => {
   const runtime = useRuntime();
   const { t } = useI18n("ExamResultScreen");
-  const titleRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
+  const titleRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     titleRef.current?.focus({ preventScroll: true });
   }, []);

@@ -1,9 +1,22 @@
 import { useCallback } from "react";
-import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
+import {
+  appIds,
+  useRuntime,
+  useSubscription,
+  type Question,
+} from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
-import { AnswerButton } from "./AnswerButton.jsx";
+import { AnswerButton } from "./AnswerButton";
 
-export const AnswerList = ({ question, translatedAnswers }) => {
+interface AnswerListProps {
+  question: Question;
+  translatedAnswers?: string[];
+}
+
+export const AnswerList = ({
+  question,
+  translatedAnswers,
+}: AnswerListProps) => {
   const runtime = useRuntime();
   const { t } = useI18n("AnswerList");
   const showAnswers = useSubscription(
@@ -42,7 +55,7 @@ export const AnswerList = ({ question, translatedAnswers }) => {
   );
 
   const handleAnswerClick = useCallback(
-    (index) => {
+    (index: number) => {
       if (isTestMode && testSessionStatus === "in-progress") {
         runtime.dispatch([
           appIds.events.testSessionAnswerSelected,

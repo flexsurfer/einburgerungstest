@@ -5,8 +5,11 @@ import {
   useSubscription,
 } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
-/** @param {{ id?: string }} props */
-export function LandSelect({ id = undefined }) {
+interface LandSelectProps {
+  id?: string;
+}
+
+export function LandSelect({ id }: LandSelectProps) {
   const runtime = useRuntime();
   const land = useSubscription(
     [appIds.subscriptions.preferencesSelectedLand],

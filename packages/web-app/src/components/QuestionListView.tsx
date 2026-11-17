@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { useI18n } from "@ebtest/shared/i18n";
-import { QuestionCard } from "./QuestionCard.jsx";
-import { DesktopExamControls } from "./ExamControls.jsx";
+import { QuestionCard } from "./QuestionCard";
+import { DesktopExamControls } from "./ExamControls";
 import "../styles/QuestionList.css";
 
 export const QuestionListView = memo(() => {
@@ -18,7 +18,7 @@ export const QuestionListView = memo(() => {
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
-  const loadMoreRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {

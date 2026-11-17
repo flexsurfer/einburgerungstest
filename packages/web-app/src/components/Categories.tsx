@@ -4,8 +4,10 @@ import {
   FEDERAL_LANDS,
   useRuntime,
   useSubscription,
+  type CategorySelection,
+  type FederalLand,
 } from "@ebtest/shared/uklad";
-import { FavoritesButton } from "./FavoritesButton.jsx";
+import { FavoritesButton } from "./FavoritesButton";
 import "../styles/Header.css";
 
 export const Categories = memo(() => {
@@ -42,10 +44,10 @@ export const Categories = memo(() => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isLandPickerOpen, setIsLandPickerOpen] = useState(false);
 
-  const popupRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const handleCategoryClick = useCallback(
-    (category) => {
+    (category: CategorySelection) => {
       if (category === "test") {
         setIsLandPickerOpen(true);
         return;
@@ -55,7 +57,7 @@ export const Categories = memo(() => {
     [runtime],
   );
   const startExam = useCallback(
-    (land) => {
+    (land: FederalLand) => {
       runtime.dispatch([appIds.events.preferencesLandSelected, land]);
       runtime.dispatch([appIds.events.testSessionStarted]);
       setIsLandPickerOpen(false);
@@ -63,7 +65,7 @@ export const Categories = memo(() => {
     [runtime],
   );
   const setOverFlow = useCallback(
-    (value) => {
+    (value: string) => {
       runtime.dispatch([appIds.events.uiBodyOverflowSet, value]);
     },
     [runtime],
@@ -80,8 +82,12 @@ export const Categories = memo(() => {
   useEffect(() => {
     if (!isPopupOpen) return;
 
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        event.target instanceof Node &&
+        !popupRef.current.contains(event.target)
+      ) {
         setIsPopupOpen(false);
       }
     };
@@ -96,7 +102,7 @@ export const Categories = memo(() => {
   useEffect(() => {
     if (!isLandPickerOpen) return;
 
-    const handleEscape = (event) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsLandPickerOpen(false);
     };
     document.addEventListener("keydown", handleEscape);

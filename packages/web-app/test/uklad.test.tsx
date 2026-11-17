@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, assert, describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createUkladTestHarness } from "@ukladjs/core/testing";
 import {
@@ -6,20 +6,25 @@ import {
   createAppRuntime,
   registerSharedModules,
   stateKeys,
+  type AppRuntime,
 } from "@ebtest/shared/uklad";
-import { createWebApp } from "../src/bootstrap.js";
-import { registerWebPlatform, watchWebSystemTheme } from "../src/platform.js";
-import { AnswerButton } from "../src/components/AnswerButton.jsx";
+import { createWebApp, type WebApp } from "../src/bootstrap";
+import { registerWebPlatform, watchWebSystemTheme } from "../src/platform";
+import { AnswerButton } from "../src/components/AnswerButton";
 
-const runtimes = [];
-const apps = [];
+const runtimes: AppRuntime[] = [];
+const apps: WebApp[] = [];
+
+type ColorSchemeListener = (
+  event: Pick<MediaQueryListEvent, "matches">,
+) => void;
 
 afterEach(async () => {
   while (apps.length > 0) {
-    await apps.pop().dispose();
+    await apps.pop()?.dispose();
   }
   while (runtimes.length > 0) {
-    runtimes.pop().dispose();
+    runtimes.pop()?.dispose();
   }
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
@@ -121,17 +126,16 @@ describe("Uklad web platform", () => {
 
   it("updates the DOM when the system color scheme changes", async () => {
     const { harness, runtime } = createFixture();
-    let onChange;
     const mediaQuery = {
       matches: false,
-      addEventListener: (_event, listener) => {
-        onChange = listener;
-      },
+      addEventListener:
+        vi.fn<(_event: string, listener: ColorSchemeListener) => void>(),
       removeEventListener: vi.fn(),
     };
     vi.stubGlobal("matchMedia", () => mediaQuery);
 
     const stopWatching = watchWebSystemTheme(runtime);
+    const onChange = mediaQuery.addEventListener.mock.calls[0][1];
     onChange({ matches: true });
     await harness.flush();
     stopWatching();
@@ -145,17 +149,15 @@ describe("Uklad web platform", () => {
 
   it("uses the legacy browser color-scheme listener signature", async () => {
     const { harness, runtime } = createFixture();
-    let onChange;
     const mediaQuery = {
       matches: false,
-      addListener: vi.fn((listener) => {
-        onChange = listener;
-      }),
+      addListener: vi.fn<(listener: ColorSchemeListener) => void>(),
       removeListener: vi.fn(),
     };
     vi.stubGlobal("matchMedia", () => mediaQuery);
 
     const stopWatching = watchWebSystemTheme(runtime);
+    const onChange = mediaQuery.addListener.mock.calls[0][0];
     onChange({ matches: true });
     await harness.flush();
     stopWatching();
@@ -247,16 +249,17 @@ describe("Uklad web platform", () => {
   });
 
   it("does not dispatch boot actions until persistence hydration resolves", async () => {
-    let resolveHydration;
-    const ready = new Promise((resolve) => {
+    let resolveHydration: (() => void) | undefined;
+    const ready = new Promise<void>((resolve) => {
       resolveHydration = resolve;
     });
     const persistence = {
       hydrate: vi.fn(),
       whenHydrated: () => ready,
-      purge: vi.fn(),
+      flush: vi.fn().mockResolvedValue(undefined),
+      purge: vi.fn().mockResolvedValue(undefined),
       dispose: vi.fn().mockResolvedValue(undefined),
-    };
+    } satisfies WebApp["persistence"];
     const runtime = createAppRuntime({
       runtimeId: "web-bootstrap",
     });
@@ -272,6 +275,7 @@ describe("Uklad web platform", () => {
     expect(persistence.hydrate).toHaveBeenCalledOnce();
     expect(fetchMock).not.toHaveBeenCalled();
 
+    assert.isDefined(resolveHydration);
     resolveHydration();
     await app.hydration;
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
@@ -281,14 +285,15 @@ describe("Uklad web platform", () => {
   });
 
   it("does not purge stored data when hydration fails", async () => {
-    const purge = vi.fn();
+    const purge = vi.fn().mockResolvedValue(undefined);
     const onHydrationError = vi.fn();
     const persistence = {
       hydrate: vi.fn(),
       whenHydrated: () => Promise.reject(new Error("temporary read failure")),
+      flush: vi.fn().mockResolvedValue(undefined),
       purge,
       dispose: vi.fn().mockResolvedValue(undefined),
-    };
+    } satisfies WebApp["persistence"];
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve([]),
@@ -318,9 +323,10 @@ describe("Uklad web platform", () => {
           ? Promise.reject(new Error("temporary read failure"))
           : Promise.resolve();
       }),
-      purge: vi.fn(),
+      flush: vi.fn().mockResolvedValue(undefined),
+      purge: vi.fn().mockResolvedValue(undefined),
       dispose: vi.fn().mockResolvedValue(undefined),
-    };
+    } satisfies WebApp["persistence"];
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve([]),
@@ -359,9 +365,9 @@ describe("Uklad web platform", () => {
     expect(harness.getState()[stateKeys.practiceUserAnswers]).toEqual({
       1: 1,
     });
-    expect(
-      JSON.parse(localStorage.getItem("ebtest/practiceUserAnswers")),
-    ).toEqual({
+    const persistedAnswers = localStorage.getItem("ebtest/practiceUserAnswers");
+    assert.isNotNull(persistedAnswers);
+    expect(JSON.parse(persistedAnswers)).toEqual({
       v: 2,
       data: { 1: 1 },
     });
