@@ -11,6 +11,11 @@ const DATA_URLS = Object.freeze({
   questions: "/assets/data.json",
 });
 
+export interface WebPlatformOptions {
+  /** Content-hashed JSON URL; its contents must never change at the same URL. */
+  readonly questionsAssetUrl?: string;
+}
+
 const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
 
 function errorMessage(error: unknown): string {
@@ -34,14 +39,22 @@ async function fetchJson(
     method,
   }: AppContracts["effects"][typeof appIds.effects.dataFetch],
   runtime: Pick<AppRuntime, "dispatch">,
+  { questionsAssetUrl }: WebPlatformOptions,
 ) {
   try {
     if (typeof globalThis.fetch !== "function") {
       throw new Error("Fetch is not available in this browser");
     }
 
-    const response = await globalThis.fetch(url || DATA_URLS[dataType], {
-      method: method || "GET",
+    const requestUrl = url || questionsAssetUrl || DATA_URLS[dataType];
+    const requestMethod = method || "GET";
+    const response = await globalThis.fetch(requestUrl, {
+      method: requestMethod,
+      ...(questionsAssetUrl &&
+      requestUrl === questionsAssetUrl &&
+      requestMethod === "GET"
+        ? { cache: "force-cache" as const }
+        : {}),
     });
 
     if (response.ok === false) {
@@ -59,7 +72,10 @@ async function fetchJson(
 }
 
 /** Register browser-only effects and coeffects on one Uklad runtime. */
-export function registerWebPlatform(runtime: AppRuntime) {
+export function registerWebPlatform(
+  runtime: AppRuntime,
+  options: WebPlatformOptions = {},
+) {
   return registerAppModules(runtime, [
     (registrar) => {
       registrar.regCoeffect(
@@ -88,14 +104,14 @@ export function registerWebPlatform(runtime: AppRuntime) {
       registrar.regEffect(
         appIds.effects.dataFetch,
         (payload, effectRuntime) => {
-          void fetchJson(payload, effectRuntime);
+          void fetchJson(payload, effectRuntime, options);
         },
       );
 
       registrar.regEffect(
         appIds.effects.dataLoadLocal,
         (payload, effectRuntime) => {
-          void fetchJson(payload, effectRuntime);
+          void fetchJson(payload, effectRuntime, options);
         },
       );
 

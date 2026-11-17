@@ -248,41 +248,48 @@ describe("Uklad web platform", () => {
     expect(harness.getState()[stateKeys.practiceMistakes]).toEqual({});
   });
 
-  it("does not dispatch boot actions until persistence hydration resolves", async () => {
-    let resolveHydration: (() => void) | undefined;
-    const ready = new Promise<void>((resolve) => {
-      resolveHydration = resolve;
-    });
-    const persistence = {
-      hydrate: vi.fn(),
-      whenHydrated: () => ready,
-      flush: vi.fn().mockResolvedValue(undefined),
-      purge: vi.fn().mockResolvedValue(undefined),
-      dispose: vi.fn().mockResolvedValue(undefined),
-    } satisfies WebApp["persistence"];
-    const runtime = createAppRuntime({
-      runtimeId: "web-bootstrap",
-    });
-    const app = createWebApp({ runtime, persistence });
-    apps.push(app);
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve([]),
-    });
-    vi.stubGlobal("fetch", fetchMock);
+  it.each([undefined, "/assets/data.0123456789abcdef.json"])(
+    "waits for hydration before loading the configured questions asset (%s)",
+    async (questionsAssetUrl) => {
+      let resolveHydration: (() => void) | undefined;
+      const ready = new Promise<void>((resolve) => {
+        resolveHydration = resolve;
+      });
+      const persistence = {
+        hydrate: vi.fn(),
+        whenHydrated: () => ready,
+        flush: vi.fn().mockResolvedValue(undefined),
+        purge: vi.fn().mockResolvedValue(undefined),
+        dispose: vi.fn().mockResolvedValue(undefined),
+      } satisfies WebApp["persistence"];
+      const runtime = createAppRuntime({
+        runtimeId: "web-bootstrap",
+      });
+      const app = createWebApp({ runtime, persistence, questionsAssetUrl });
+      apps.push(app);
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve([]),
+      });
+      vi.stubGlobal("fetch", fetchMock);
 
-    await Promise.resolve();
-    expect(persistence.hydrate).toHaveBeenCalledOnce();
-    expect(fetchMock).not.toHaveBeenCalled();
+      await Promise.resolve();
+      expect(persistence.hydrate).toHaveBeenCalledOnce();
+      expect(fetchMock).not.toHaveBeenCalled();
 
-    assert.isDefined(resolveHydration);
-    resolveHydration();
-    await app.hydration;
-    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
-    expect(fetchMock).toHaveBeenCalledWith("/assets/data.json", {
-      method: "GET",
-    });
-  });
+      assert.isDefined(resolveHydration);
+      resolveHydration();
+      await app.hydration;
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+      expect(fetchMock).toHaveBeenCalledWith(
+        questionsAssetUrl || "/assets/data.json",
+        {
+          method: "GET",
+          ...(questionsAssetUrl ? { cache: "force-cache" } : {}),
+        },
+      );
+    },
+  );
 
   it("does not purge stored data when hydration fails", async () => {
     const purge = vi.fn().mockResolvedValue(undefined);

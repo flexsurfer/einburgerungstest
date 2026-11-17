@@ -8,9 +8,13 @@ import {
   attachWebPersistence,
   type WebPersistenceOptions,
 } from "./persistence";
-import { registerWebPlatform, watchWebSystemTheme } from "./platform";
+import {
+  registerWebPlatform,
+  watchWebSystemTheme,
+  type WebPlatformOptions,
+} from "./platform";
 
-export interface WebBootstrapOptions {
+export interface WebBootstrapOptions extends WebPlatformOptions {
   readonly runtime?: AppRuntime;
   readonly runtimeId?: string;
   readonly persistence?: ReturnType<typeof attachWebPersistence>;
@@ -44,7 +48,7 @@ export function createWebApp(options: WebBootstrapOptions = {}): WebApp {
     });
 
   registerSharedModules(runtime);
-  registerWebPlatform(runtime);
+  registerWebPlatform(runtime, options);
 
   const persistence =
     options.persistence ||
