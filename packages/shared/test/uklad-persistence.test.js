@@ -14,6 +14,7 @@ import {
   registerSharedModules,
   stateKeys,
 } from "../src/app/uklad/index.ts";
+import { recordPlatformEffects } from "./fixtures/platform-effects.js";
 
 const runtimes = [];
 const handles = [];
@@ -107,6 +108,7 @@ function createFixture({ target, storage, onError } = {}) {
   });
   runtimes.push(runtime);
   registerSharedModules(runtime);
+  recordPlatformEffects(runtime);
 
   const handle =
     target === "native"
@@ -278,7 +280,6 @@ describe("Uklad Persist application boundary", () => {
       registerAppModules(runtime, [
         (registrar) => {
           registrar.regCoeffect(appIds.coeffects.systemNow, () => 1000);
-          registrar.regEffect(appIds.effects.uiScrollToTop, () => {});
         },
       ]);
       await hydrateAsync(handle);

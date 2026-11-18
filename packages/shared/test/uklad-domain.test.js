@@ -3,10 +3,10 @@ import { createUkladTestHarness } from "@ukladjs/core/testing";
 import {
   appIds,
   createAppRuntime,
-  registerAppModules,
   registerSharedModules,
   stateKeys,
 } from "../src/app/uklad/index.ts";
+import { recordPlatformEffects } from "./fixtures/platform-effects.js";
 
 const runtimes = [];
 
@@ -41,24 +41,7 @@ function createDomainHarness() {
   });
   runtimes.push(runtime);
   registerSharedModules(runtime);
-
-  const effects = [];
-  registerAppModules(runtime, [
-    (registrar) => {
-      for (const effectId of [
-        appIds.effects.dataFetch,
-        appIds.effects.dataLoadLocal,
-        appIds.effects.uiConfirmClear,
-        appIds.effects.uiScrollToTop,
-        appIds.effects.uiSetBodyOverflow,
-        appIds.effects.uiSetBodyTheme,
-      ]) {
-        registrar.regEffect(effectId, (payload) => {
-          effects.push([effectId, payload]);
-        });
-      }
-    },
-  ]);
+  const effects = recordPlatformEffects(runtime);
 
   return {
     effects,

@@ -6,6 +6,7 @@ import {
   registerAppModules,
   registerSharedModules,
 } from "../src/app/uklad/index.ts";
+import { recordPlatformEffects } from "./fixtures/platform-effects.js";
 
 const runtimes = [];
 afterEach(() => {
@@ -23,10 +24,10 @@ function fixture() {
   });
   runtimes.push(runtime);
   registerSharedModules(runtime);
+  recordPlatformEffects(runtime);
   registerAppModules(runtime, [
     (registrar) => {
       registrar.regCoeffect(appIds.coeffects.systemNow, () => 1000);
-      registrar.regEffect(appIds.effects.uiScrollToTop, () => {});
     },
   ]);
   const harness = createUkladTestHarness(runtime);
