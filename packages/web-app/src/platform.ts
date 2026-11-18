@@ -1,3 +1,4 @@
+import { translate } from "@ebtest/shared/i18n";
 import {
   appIds,
   createExamDeadlineTimer,
@@ -147,12 +148,10 @@ export function registerWebPlatform(
 
       registrar.regEffect(
         appIds.effects.uiConfirmClear,
-        (_payload, effectRuntime) => {
+        ({ language }, effectRuntime) => {
           if (
             typeof globalThis.confirm === "function" &&
-            globalThis.confirm(
-              "Are you sure you want to clear ALL your progress?",
-            )
+            globalThis.confirm(translate(language, "clearProgressMessage"))
           ) {
             effectRuntime.dispatch([appIds.events.practiceAnswersCleared]);
           }
