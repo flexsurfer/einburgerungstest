@@ -1,6 +1,7 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
 import { migrateLegacyPracticeMistakes } from "./migration.js";
+import { navigationEffect } from "../navigation/route.js";
 
 export const registerPracticeEvents: AppModule = (registrar) => {
   registrar.regEvent(
@@ -46,6 +47,7 @@ export const registerPracticeEvents: AppModule = (registrar) => {
           0,
           draftState[stateKeys.navigationCurrentQuestionIndex] - 1,
         );
+        return [navigationEffect(draftState, "replace")];
       }
     },
   );
@@ -68,12 +70,16 @@ export const registerPracticeEvents: AppModule = (registrar) => {
         );
       }
       favorites.splice(favoriteIndex, 1);
+      if (draftState.navigationSelectedCategory === "favorites") {
+        return [navigationEffect(draftState, "replace")];
+      }
     },
   );
 
   registrar.regEvent(appIds.events.practiceAnswersCleared, ({ draftState }) => {
     draftState[stateKeys.practiceUserAnswers] = {};
     draftState[stateKeys.practiceMistakes] = {};
+    return [navigationEffect(draftState, "replace")];
   });
 
   registrar.regEvent(

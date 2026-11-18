@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
   appIds,
@@ -12,7 +12,6 @@ import { ClockIcon } from "./Icons";
 import { useI18n } from "../i18n";
 
 function useExamCountdown(): number {
-  const runtime = useRuntime();
   const status = useSubscription(
     [appIds.subscriptions.testSessionStatus],
     "ExamTimer",
@@ -24,25 +23,17 @@ function useExamCountdown(): number {
   const [remainingSeconds, setRemainingSeconds] = useState(() =>
     endsAt === null ? 0 : examSecondsRemaining(endsAt, Date.now()),
   );
-  const expiryDispatched = useRef(false);
-
   useEffect(() => {
-    expiryDispatched.current = false;
     if (status !== "in-progress" || endsAt === null) return;
 
     const update = () => {
-      const nextRemaining = examSecondsRemaining(endsAt, Date.now());
-      setRemainingSeconds(nextRemaining);
-      if (nextRemaining === 0 && !expiryDispatched.current) {
-        expiryDispatched.current = true;
-        runtime.dispatch([appIds.events.testSessionFinished, "time-expired"]);
-      }
+      setRemainingSeconds(examSecondsRemaining(endsAt, Date.now()));
     };
 
     update();
     const interval = setInterval(update, 250);
     return () => clearInterval(interval);
-  }, [endsAt, runtime, status]);
+  }, [endsAt, status]);
 
   return remainingSeconds;
 }

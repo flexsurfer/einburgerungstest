@@ -360,6 +360,66 @@ describe("Uklad mobile platform", () => {
     );
   });
 
+  it("finishes a suspended attempt once on foreground and ignores a previous attempt's timeout", async () => {
+    const now = vi.spyOn(Date, "now").mockReturnValue(1_000);
+    const { harness } = createRuntime(undefined, true);
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Berlin"]);
+    harness.dispatchSync([appIds.events.testSessionStarted]);
+    const firstDeadline = harness.getState().testSessionEndsAt!;
+    harness.dispatchSync([appIds.events.navigationHomeOpened]);
+    now.mockReturnValue(2_000);
+    harness.dispatchSync([appIds.events.testSessionStarted]);
+    const {
+      testSessionQuestions: [question],
+      testSessionEndsAt,
+    } = harness.getState();
+    const choice = (question.correct + 1) % question.answers.length;
+    harness.dispatchSync([
+      appIds.events.testSessionAnswerSelected,
+      question.globalIndex,
+      choice,
+    ]);
+    harness.dispatchSync([
+      appIds.events.testSessionFinished,
+      "time-expired",
+      firstDeadline,
+    ]);
+    expect(harness.getState().testSessionStatus).toBe("in-progress");
+    emitAppStateChange("background");
+    now.mockReturnValue(testSessionEndsAt!);
+    emitAppStateChange("active");
+    emitAppStateChange("active");
+    await harness.flush();
+    expect(harness.getState()).toMatchObject({
+      testSessionStatus: "completed",
+      testSessionFinishReason: "time-expired",
+      practiceMistakes: { [question.globalIndex]: [choice] },
+    });
+  });
+
+  it("rejects an answer submitted at the deadline before the timer fires", async () => {
+    const now = vi.spyOn(Date, "now").mockReturnValue(1_000);
+    const { harness } = createRuntime(undefined, true);
+    harness.dispatchSync([appIds.events.preferencesLandSelected, "Berlin"]);
+    harness.dispatchSync([appIds.events.testSessionStarted]);
+    const {
+      testSessionQuestions: [question],
+      testSessionEndsAt,
+    } = harness.getState();
+    now.mockReturnValue(testSessionEndsAt!);
+    harness.dispatchSync([
+      appIds.events.testSessionAnswerSelected,
+      question.globalIndex,
+      question.correct,
+    ]);
+    await harness.flush();
+    expect(harness.getState()).toMatchObject({
+      testSessionStatus: "completed",
+      testSessionFinishReason: "time-expired",
+      testSessionAnswers: {},
+    });
+  });
+
   it("formats the exam countdown without going below zero", () => {
     expect(examSecondsRemaining(61_001, 1_000)).toBe(61);
     expect(examSecondsRemaining(999, 1_000)).toBe(0);

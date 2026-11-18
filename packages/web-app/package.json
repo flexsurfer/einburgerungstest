@@ -6,6 +6,7 @@
   "exports": {
     "./components/*": "./src/components/*.tsx",
     "./bootstrap": "./src/bootstrap.ts",
+    "./routes": "./src/routes.ts",
     "./platform": "./src/platform.ts",
     "./persistence": "./src/persistence.ts"
   },

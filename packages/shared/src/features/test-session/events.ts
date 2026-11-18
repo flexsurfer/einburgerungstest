@@ -1,6 +1,7 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
 import { generateTest } from "./generate.js";
+import { navigationEffect } from "../navigation/route.js";
 import {
   isReviewFilter,
   selectReviewFilter,
@@ -25,6 +26,7 @@ export const registerTestSessionEvents: AppModule = (registrar) => {
       draftState[stateKeys.testSessionEndsAt] =
         now + EINBUERGERUNGSTEST_DURATION_MS;
       draftState[stateKeys.testSessionFinishReason] = null;
+      draftState.navigationExamSetupVisible = false;
       draftState.testSessionReviewVisible = false;
       draftState.testSessionReviewFilter = "all";
       draftState.testSessionReviewQuestionIndex = 0;
@@ -35,7 +37,11 @@ export const registerTestSessionEvents: AppModule = (registrar) => {
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
       draftState[stateKeys.navigationActiveScreen] = "questions";
 
-      return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
+      return [
+        [appIds.effects.testSessionSetDeadline, draftState.testSessionEndsAt],
+        navigationEffect(draftState),
+        [appIds.effects.uiScrollToTop, { behavior: "auto" }],
+      ];
     },
     {
       coeffects: {
@@ -47,8 +53,16 @@ export const registerTestSessionEvents: AppModule = (registrar) => {
 
   registrar.regEvent(
     appIds.events.testSessionAnswerSelected,
-    ({ draftState }, questionIndex, answerIndex) => {
+    ({ draftState, coeffects: { now } }, questionIndex, answerIndex) => {
       if (draftState[stateKeys.testSessionStatus] !== "in-progress") return;
+      const deadline = draftState.testSessionEndsAt;
+      if (deadline !== null && now >= deadline)
+        return [
+          [
+            "dispatch",
+            [appIds.events.testSessionFinished, "time-expired", deadline],
+          ],
+        ];
 
       const question = draftState[stateKeys.testSessionQuestions].find(
         (item) => item.globalIndex === questionIndex,
@@ -66,12 +80,16 @@ export const registerTestSessionEvents: AppModule = (registrar) => {
       // correction instructions for the paper exam.
       draftState[stateKeys.testSessionAnswers][questionIndex] = answerIndex;
     },
+    { coeffects: { now: appIds.coeffects.systemNow } },
   );
 
   registrar.regEvent(
     appIds.events.testSessionFinished,
-    ({ draftState }, reason) => {
+    ({ draftState, coeffects: { now } }, reason, expectedDeadline) => {
       if (draftState[stateKeys.testSessionStatus] !== "in-progress") return;
+      const deadline = draftState.testSessionEndsAt;
+      if (expectedDeadline !== undefined && expectedDeadline !== deadline)
+        return;
 
       // Record only the submitted choice. The completion guard ensures that
       // repeated Finish/timeout events cannot count the same exam twice.
@@ -86,11 +104,16 @@ export const registerTestSessionEvents: AppModule = (registrar) => {
       }
 
       draftState[stateKeys.testSessionStatus] = "completed";
-      draftState[stateKeys.testSessionFinishReason] = reason;
-      draftState[stateKeys.navigationQuestionPickerVisible] = false;
+      draftState[stateKeys.testSessionFinishReason] =
+        deadline !== null && now >= deadline ? "time-expired" : reason;
       draftState.testSessionReviewVisible = false;
-      return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
+      draftState.navigationQuestionPickerVisible = false;
+      return [
+        [appIds.effects.testSessionSetDeadline, null],
+        [appIds.effects.uiScrollToTop, { behavior: "auto" }],
+      ];
     },
+    { coeffects: { now: appIds.coeffects.systemNow } },
   );
 
   registrar.regEvent(

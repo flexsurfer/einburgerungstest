@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { appIds, useSubscription } from "@ebtest/shared/uklad";
+import { useEffect, useRef, useState } from "react";
+import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { categoryDisplayName, useI18n } from "@ebtest/shared/i18n";
 import { QuestionListView } from "./QuestionListView";
 import { QuestionCardView } from "./QuestionCardView";
@@ -7,6 +7,8 @@ import { ExamResultScreen } from "./ExamResultScreen";
 import { ExamReviewScreen } from "./ExamReviewScreen";
 import { UiIcon } from "./UiIcon";
 export function QuestionView() {
+  const runtime = useRuntime();
+  const heading = useRef<HTMLHeadingElement>(null);
   const { t, language } = useI18n("QuestionView");
   const [list, setList] = useState(false);
   const exam = useSubscription(
@@ -29,6 +31,10 @@ export function QuestionView() {
     [appIds.subscriptions.testSessionReviewVisible],
     "QuestionView",
   );
+  useEffect(() => {
+    if (exam && status === "in-progress")
+      heading.current?.focus({ preventScroll: true });
+  }, [exam, status]);
   if (exam && status === "completed")
     return reviewing ? <ExamReviewScreen /> : <ExamResultScreen />;
   const title = learn
@@ -49,10 +55,21 @@ export function QuestionView() {
           <p className="eyebrow">
             {t(learn ? "learnMode" : exam ? "examMode" : "practiceMode")}
           </p>
-          <h1>{title}</h1>
+          <h1 ref={heading} tabIndex={exam ? -1 : undefined}>
+            {title}
+          </h1>
         </div>
         <div className="practice-tools">
-          {!exam && (
+          {exam ? (
+            <button
+              className="text-button"
+              onClick={() =>
+                runtime.dispatch([appIds.events.navigationExamClosed])
+              }
+            >
+              {t("leaveExam")}
+            </button>
+          ) : (
             <button
               className={`icon-button ${list ? "selected" : ""}`}
               aria-label={t("listView")}

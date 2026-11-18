@@ -38,6 +38,7 @@ export const stateKeys = {
   navigationSelectedCategory: "navigationSelectedCategory",
   navigationCurrentQuestionIndex: "navigationCurrentQuestionIndex",
   navigationQuestionPickerVisible: "navigationQuestionPickerVisible",
+  navigationExamSetupVisible: "navigationExamSetupVisible",
   navigationActiveScreen: "navigationActiveScreen",
   navigationIsLearnMode: "navigationIsLearnMode",
 } as const;
@@ -52,6 +53,8 @@ export const appIds = {
     navigationHomeOpened: "navigation/home-opened",
     navigationSettingsOpened: "navigation/settings-opened",
     navigationPracticeResumed: "navigation/practice-resumed",
+    navigationRouteOpened: "navigation/route-opened",
+    navigationExamClosed: "navigation/exam-closed",
     preferencesLanguageSelected: "preferences/language-selected",
     preferencesLandSelected: "preferences/land-selected",
     preferencesThemeSelected: "preferences/theme-selected",
@@ -92,6 +95,7 @@ export const appIds = {
     navigationSelectedCategory: "navigation/selected-category",
     navigationCurrentQuestionIndex: "navigation/current-question-index",
     navigationQuestionPickerVisible: "navigation/question-picker-visible",
+    navigationExamSetupVisible: "navigation/exam-setup-visible",
     navigationActiveScreen: "navigation/active-screen",
 
     questionsItems: "questions/items",
@@ -147,6 +151,8 @@ export const appIds = {
     uiConfirmClear: "ui/confirm-clear",
     uiSetBodyTheme: "ui/set-body-theme",
     uiSetBodyOverflow: "ui/set-body-overflow",
+    navigationRouteChanged: "navigation/route-changed",
+    testSessionSetDeadline: "test-session/set-deadline",
   },
   coeffects: {
     systemColorScheme: "system/color-scheme",

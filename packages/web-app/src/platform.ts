@@ -1,11 +1,13 @@
 import {
   appIds,
+  createExamDeadlineTimer,
   registerAppModules,
   stateKeys,
   type AppContracts,
   type AppRuntime,
   type ColorScheme,
 } from "@ebtest/shared/uklad";
+import type { createBrowserNavigation } from "./navigation";
 
 const DATA_URLS = Object.freeze({
   questions: "/assets/data.json",
@@ -40,6 +42,7 @@ async function fetchJson(
   }: AppContracts["effects"][typeof appIds.effects.dataFetch],
   runtime: Pick<AppRuntime, "dispatch">,
   { questionsAssetUrl }: WebPlatformOptions,
+  navigation?: ReturnType<typeof createBrowserNavigation>,
 ) {
   try {
     if (typeof globalThis.fetch !== "function") {
@@ -66,6 +69,7 @@ async function fetchJson(
       throw new Error("Questions response must be an array");
     }
     runtime.dispatch([appIds.events.questionsFetchSucceeded, data]);
+    navigation?.start();
   } catch (error) {
     runtime.dispatch([appIds.events.questionsFetchFailed, errorMessage(error)]);
   }
@@ -75,9 +79,14 @@ async function fetchJson(
 export function registerWebPlatform(
   runtime: AppRuntime,
   options: WebPlatformOptions = {},
+  navigation?: ReturnType<typeof createBrowserNavigation>,
 ) {
   return registerAppModules(runtime, [
     (registrar) => {
+      // Standalone platform fixtures have no attached browser history owner.
+      registrar.regEffect(appIds.effects.navigationRouteChanged, (payload) =>
+        navigation?.sync(payload),
+      );
       registrar.regCoeffect(
         appIds.coeffects.systemColorScheme,
         themeFromMediaQuery,
@@ -104,18 +113,33 @@ export function registerWebPlatform(
       registrar.regEffect(
         appIds.effects.dataFetch,
         (payload, effectRuntime) => {
-          void fetchJson(payload, effectRuntime, options);
+          void fetchJson(payload, effectRuntime, options, navigation);
         },
       );
 
       registrar.regEffect(
         appIds.effects.dataLoadLocal,
         (payload, effectRuntime) => {
-          void fetchJson(payload, effectRuntime, options);
+          void fetchJson(payload, effectRuntime, options, navigation);
         },
       );
 
       registrar.regEffect(appIds.effects.uiScrollToTop, ({ behavior }) => {
+        const fragment = globalThis.window?.location.hash.slice(1);
+        if (fragment && behavior === "auto") {
+          let id = fragment;
+          try {
+            id = decodeURIComponent(fragment);
+          } catch {
+            // A literal percent sign can also be part of an element's ID.
+          }
+          const target = document.getElementById(id);
+          if (target) {
+            target.focus({ preventScroll: true });
+            target.scrollIntoView?.();
+            return;
+          }
+        }
         if (typeof globalThis.scrollTo === "function") {
           globalThis.scrollTo({ top: 0, behavior: behavior || "auto" });
         }
@@ -156,6 +180,27 @@ export function registerWebPlatform(
           document.body.style.overflow = value;
         }
       });
+
+      const deadline = createExamDeadlineTimer(runtime);
+      registrar.regEffect(
+        appIds.effects.testSessionSetDeadline,
+        deadline.setDeadline,
+      );
+      globalThis.window?.addEventListener("focus", deadline.reconcile);
+      globalThis.window?.addEventListener("pageshow", deadline.reconcile);
+      globalThis.document?.addEventListener(
+        "visibilitychange",
+        deadline.reconcile,
+      );
+      return () => {
+        deadline.setDeadline(null);
+        globalThis.window?.removeEventListener("focus", deadline.reconcile);
+        globalThis.window?.removeEventListener("pageshow", deadline.reconcile);
+        globalThis.document?.removeEventListener(
+          "visibilitychange",
+          deadline.reconcile,
+        );
+      };
     },
   ]);
 }

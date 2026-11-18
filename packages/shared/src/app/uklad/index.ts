@@ -2,6 +2,7 @@ export { appIds, stateKeys } from "./catalog.js";
 export { createAppState } from "./initial-state.js";
 export type { CreateAppStateOptions } from "./initial-state.js";
 export { createAppRuntime } from "./runtime.js";
+export { createExamDeadlineTimer } from "../../platform/exam-deadline.js";
 export { UkladProvider, useRuntime, useSubscription } from "./bindings.js";
 export { registerAppModules } from "./register.js";
 export { registerSharedModules, sharedAppModules } from "./modules.js";
@@ -38,6 +39,7 @@ export type {
   FederalLand,
   HttpMethod,
   NavigationScreen,
+  NavigationRoute,
   PracticeOverview,
   PracticeMistakes,
   PracticeMistakeSummary,

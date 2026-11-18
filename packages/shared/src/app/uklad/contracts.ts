@@ -18,6 +18,20 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 export type DataKind = "questions";
 export type CategorySelection = string | null;
 export type NavigationScreen = "settings" | "home" | "questions";
+export interface NavigationRoute {
+  screen:
+    | "home"
+    | "settings"
+    | "learn"
+    | "practice"
+    | "favorites"
+    | "mistakes"
+    | "exam";
+  category?: string;
+  /** Stable, one-based catalogue number, not an index in a filtered list. */
+  question?: number;
+  language?: AppLanguage;
+}
 export type AppError = string | null;
 
 export const FEDERAL_LANDS = [
@@ -192,6 +206,7 @@ export interface AppContracts extends UkladContracts {
     [stateKeys.navigationSelectedCategory]: CategorySelection;
     [stateKeys.navigationCurrentQuestionIndex]: number;
     [stateKeys.navigationQuestionPickerVisible]: boolean;
+    [stateKeys.navigationExamSetupVisible]: boolean;
     [stateKeys.navigationActiveScreen]: NavigationScreen;
     [stateKeys.navigationIsLearnMode]: boolean;
   };
@@ -205,6 +220,11 @@ export interface AppContracts extends UkladContracts {
     [appIds.events.navigationHomeOpened]: [];
     [appIds.events.navigationSettingsOpened]: [];
     [appIds.events.navigationPracticeResumed]: [];
+    [appIds.events.navigationExamClosed]: [];
+    [appIds.events.navigationRouteOpened]: [
+      route: NavigationRoute,
+      replace?: boolean,
+    ];
     [appIds.events.preferencesLanguageSelected]: [language: AppLanguage];
     [appIds.events.preferencesLandSelected]: [land: FederalLand];
     [appIds.events.preferencesThemeSelected]: [theme: ThemePreference];
@@ -233,7 +253,10 @@ export interface AppContracts extends UkladContracts {
       questionIndex: number,
       answerIndex: number,
     ];
-    [appIds.events.testSessionFinished]: [reason: TestSessionFinishReason];
+    [appIds.events.testSessionFinished]: [
+      reason: TestSessionFinishReason,
+      expectedDeadline?: number,
+    ];
     [appIds.events.testSessionReviewOpened]: [filter?: TestSessionReviewFilter];
     [appIds.events.testSessionReviewClosed]: [];
     [appIds.events.testSessionReviewFilterSelected]: [
@@ -249,6 +272,11 @@ export interface AppContracts extends UkladContracts {
   };
 
   readonly effects: {
+    [appIds.effects.navigationRouteChanged]: {
+      route: NavigationRoute;
+      history: "push" | "replace" | "restore" | "dismiss";
+    };
+    [appIds.effects.testSessionSetDeadline]: number | null;
     [appIds.effects.dataFetch]: {
       dataType: DataKind;
       url?: string;
@@ -279,6 +307,10 @@ export interface AppContracts extends UkladContracts {
       result: number;
     };
     [appIds.subscriptions.navigationQuestionPickerVisible]: {
+      params: [];
+      result: boolean;
+    };
+    [appIds.subscriptions.navigationExamSetupVisible]: {
       params: [];
       result: boolean;
     };

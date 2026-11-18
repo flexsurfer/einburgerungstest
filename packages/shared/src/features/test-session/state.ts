@@ -6,11 +6,10 @@ import type {
   UserAnswers,
 } from "../../app/uklad/contracts.js";
 
-export function createTestSessionState() {
+export function createExamAttemptState() {
   return {
     [stateKeys.testSessionQuestions]: [] as Question[],
     [stateKeys.testSessionAnswers]: {} as UserAnswers,
-    [stateKeys.testSessionUsedQuestions]: {} as TestUsedQuestions,
     [stateKeys.testSessionStatus]: "idle" as const,
     [stateKeys.testSessionEndsAt]: null as number | null,
     [stateKeys.testSessionFinishReason]: null,
@@ -18,4 +17,11 @@ export function createTestSessionState() {
     [stateKeys.testSessionReviewFilter]: "all" as TestSessionReviewFilter,
     [stateKeys.testSessionReviewQuestionIndex]: 0,
   } as const;
+}
+
+export function createTestSessionState() {
+  return {
+    ...createExamAttemptState(),
+    [stateKeys.testSessionUsedQuestions]: {} as TestUsedQuestions,
+  };
 }

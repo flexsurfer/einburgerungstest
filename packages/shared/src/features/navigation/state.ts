@@ -9,6 +9,7 @@ export function createNavigationState() {
     [stateKeys.navigationSelectedCategory]: null as CategorySelection,
     [stateKeys.navigationCurrentQuestionIndex]: 0,
     [stateKeys.navigationQuestionPickerVisible]: false,
+    [stateKeys.navigationExamSetupVisible]: false,
     [stateKeys.navigationActiveScreen]: "home" as NavigationScreen,
     [stateKeys.navigationIsLearnMode]: false,
   } as const;

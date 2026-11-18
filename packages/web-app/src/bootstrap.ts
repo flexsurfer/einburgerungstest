@@ -13,6 +13,7 @@ import {
   watchWebSystemTheme,
   type WebPlatformOptions,
 } from "./platform";
+import { createBrowserNavigation } from "./navigation";
 
 export interface WebBootstrapOptions extends WebPlatformOptions {
   readonly runtime?: AppRuntime;
@@ -48,7 +49,8 @@ export function createWebApp(options: WebBootstrapOptions = {}): WebApp {
     });
 
   registerSharedModules(runtime);
-  registerWebPlatform(runtime, options);
+  const navigation = createBrowserNavigation(runtime);
+  registerWebPlatform(runtime, options, navigation);
 
   const persistence =
     options.persistence ||
@@ -111,6 +113,7 @@ export function createWebApp(options: WebBootstrapOptions = {}): WebApp {
     hydration,
     retryHydration: runHydration,
     async dispose() {
+      navigation.dispose();
       stopSystemThemeWatch();
       await persistence.dispose();
       runtime.dispose();

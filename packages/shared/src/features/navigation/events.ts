@@ -1,6 +1,7 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
 import type {
+  AppContracts,
   CategorySelection,
   FederalLand,
   Favorites,
@@ -10,6 +11,8 @@ import type {
 import { generateTest } from "../test-session/generate.js";
 import { selectPracticeQuestions } from "../practice/selection.js";
 import { EINBUERGERUNGSTEST_RULES } from "../test-session/rules.js";
+import { navigationEffect } from "./route.js";
+import { createExamAttemptState } from "../test-session/state.js";
 
 interface NavigationDraftState {
   [stateKeys.questionsItems]: Question[];
@@ -90,10 +93,109 @@ function activePracticeCursorKey(
     : stateKeys.practiceGlobalIndex;
 }
 
+function selectQuestionIndex(state: AppContracts["state"], index: number) {
+  state.navigationCurrentQuestionIndex = index;
+  if (state.navigationSelectedCategory === "test") return;
+  syncPracticeGlobalIndex(state, index, activePracticeCursorKey(state));
+  return [navigationEffect(state, "replace")];
+}
+
+/** An attempt belongs to the open exam. Leaving discards it without grading. */
+function leaveExam(
+  state: AppContracts["state"],
+): [] | [[typeof appIds.effects.testSessionSetDeadline, null]] {
+  state.navigationExamSetupVisible = false;
+  if (state.navigationSelectedCategory !== "test") return [];
+  state.navigationSelectedCategory = null;
+  state.navigationCurrentQuestionIndex = 0;
+  state.navigationQuestionPickerVisible = false;
+  if (state.navigationActiveScreen === "questions")
+    state.navigationActiveScreen = "home";
+  Object.assign(state, createExamAttemptState());
+  return [[appIds.effects.testSessionSetDeadline, null]];
+}
+
 export const registerNavigationEvents: AppModule = (registrar) => {
+  registrar.regEvent(
+    appIds.events.navigationRouteOpened,
+    ({ draftState }, route, replace = true) => {
+      const effects = leaveExam(draftState);
+      if (route.language)
+        draftState.preferencesSelectedLanguage = route.language;
+      draftState.navigationQuestionPickerVisible = false;
+      const history = replace ? "restore" : "push";
+      if (route.screen === "exam") {
+        draftState.navigationExamSetupVisible = true;
+        return [...effects, navigationEffect(draftState, history)];
+      }
+      draftState.navigationIsLearnMode = route.screen === "learn";
+      draftState.uiShowAnswers = route.screen === "learn";
+
+      if (route.screen === "home" || route.screen === "settings") {
+        draftState.navigationActiveScreen = route.screen;
+      } else {
+        const category =
+          route.screen === "favorites"
+            ? "favorites"
+            : route.screen === "mistakes"
+              ? "wrong"
+              : draftState.questionsItems.some(
+                    (question) => question.category === route.category,
+                  )
+                ? route.category!
+                : null;
+        draftState.navigationSelectedCategory = category;
+        draftState.navigationActiveScreen = "questions";
+        const cursorKey = activePracticeCursorKey(draftState);
+        if (category === null) resumePracticePosition(draftState, cursorKey);
+        else draftState.navigationCurrentQuestionIndex = 0;
+        let questions = selectedQuestions(draftState);
+        // Regional question links also work without a previously selected Land.
+        if (
+          route.question &&
+          category === null &&
+          !questions.some((question) => question.globalIndex === route.question)
+        ) {
+          const question = draftState.questionsItems.find(
+            (item) => item.globalIndex === route.question,
+          );
+          if (question) {
+            draftState.navigationSelectedCategory = question.category;
+            questions = selectedQuestions(draftState);
+          }
+        }
+        const index = questions.findIndex(
+          (question) => question.globalIndex === route.question,
+        );
+        if (index >= 0) draftState.navigationCurrentQuestionIndex = index;
+        syncPracticeGlobalIndex(
+          draftState,
+          draftState.navigationCurrentQuestionIndex,
+          cursorKey,
+        );
+      }
+      return [
+        ...effects,
+        navigationEffect(draftState, history),
+        [appIds.effects.uiScrollToTop, { behavior: "auto" }],
+      ];
+    },
+  );
+
+  registrar.regEvent(appIds.events.navigationExamClosed, ({ draftState }) => {
+    if (
+      !draftState.navigationExamSetupVisible &&
+      draftState.navigationSelectedCategory !== "test"
+    )
+      return;
+    const effects = leaveExam(draftState);
+    return [...effects, navigationEffect(draftState, "dismiss")];
+  });
+
   registrar.regEvent(
     appIds.events.navigationCategorySelected,
     ({ draftState, coeffects: { random } }, category) => {
+      const effects = leaveExam(draftState);
       if (draftState[stateKeys.navigationIsLearnMode]) {
         draftState[stateKeys.uiShowAnswers] = false;
       }
@@ -107,57 +209,71 @@ export const registerNavigationEvents: AppModule = (registrar) => {
         );
       }
 
-      draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
-      if (category === null) {
+      draftState.navigationCurrentQuestionIndex = 0;
+      if (category === null)
         syncPracticeGlobalIndex(draftState, 0, stateKeys.practiceGlobalIndex);
-      }
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
       draftState[stateKeys.navigationActiveScreen] = "questions";
-      return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
+      return [
+        ...effects,
+        navigationEffect(draftState),
+        [appIds.effects.uiScrollToTop, { behavior: "auto" }],
+      ];
     },
     { coeffects: { random: appIds.coeffects.systemRandom } },
   );
 
   registrar.regEvent(appIds.events.navigationLearnOpened, ({ draftState }) => {
+    const effects = leaveExam(draftState);
     draftState[stateKeys.navigationIsLearnMode] = true;
     draftState[stateKeys.uiShowAnswers] = true;
     resumePracticePosition(draftState, stateKeys.practiceLearnGlobalIndex);
     draftState[stateKeys.navigationQuestionPickerVisible] = false;
     draftState[stateKeys.navigationActiveScreen] = "questions";
-    return [[appIds.effects.uiScrollToTop, { behavior: "auto" }]];
+    return [
+      ...effects,
+      navigationEffect(draftState),
+      [appIds.effects.uiScrollToTop, { behavior: "auto" }],
+    ];
   });
 
   registrar.regEvent(appIds.events.navigationHomeOpened, ({ draftState }) => {
-    if (
-      draftState[stateKeys.navigationSelectedCategory] === "test" &&
-      draftState[stateKeys.testSessionStatus] === "in-progress"
-    ) {
-      draftState[stateKeys.testSessionStatus] = "idle";
-      draftState[stateKeys.testSessionEndsAt] = null;
-      draftState[stateKeys.testSessionFinishReason] = null;
+    if (draftState.testSessionStatus === "in-progress") {
+      draftState.testSessionStatus = "idle";
+      draftState.testSessionEndsAt = null;
+      draftState.testSessionFinishReason = null;
     }
+    draftState.navigationExamSetupVisible = false;
     draftState[stateKeys.navigationActiveScreen] = "home";
     draftState[stateKeys.navigationIsLearnMode] = false;
     draftState[stateKeys.uiShowAnswers] = false;
     draftState[stateKeys.navigationQuestionPickerVisible] = false;
+    return [
+      [appIds.effects.testSessionSetDeadline, null],
+      navigationEffect(draftState),
+    ];
   });
 
   registrar.regEvent(
     appIds.events.navigationSettingsOpened,
     ({ draftState }) => {
+      const effects = leaveExam(draftState);
       draftState[stateKeys.navigationActiveScreen] = "settings";
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
+      return [...effects, navigationEffect(draftState)];
     },
   );
 
   registrar.regEvent(
     appIds.events.navigationPracticeResumed,
     ({ draftState }) => {
+      const effects = leaveExam(draftState);
       draftState[stateKeys.navigationIsLearnMode] = false;
       draftState[stateKeys.uiShowAnswers] = false;
       resumePracticePosition(draftState, stateKeys.practiceGlobalIndex);
       draftState[stateKeys.navigationActiveScreen] = "questions";
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
+      return [...effects, navigationEffect(draftState)];
     },
   );
 
@@ -169,13 +285,8 @@ export const registerNavigationEvents: AppModule = (registrar) => {
         0,
         Math.min(questionIndex, Math.max(questions.length - 1, 0)),
       );
-      draftState[stateKeys.navigationCurrentQuestionIndex] = safeIndex;
-      syncPracticeGlobalIndex(
-        draftState,
-        safeIndex,
-        activePracticeCursorKey(draftState),
-      );
       draftState[stateKeys.navigationQuestionPickerVisible] = false;
+      return selectQuestionIndex(draftState, safeIndex);
     },
   );
 
@@ -184,26 +295,13 @@ export const registerNavigationEvents: AppModule = (registrar) => {
       draftState[stateKeys.navigationCurrentQuestionIndex] || 0;
     const maxIndex = Math.max(selectedQuestions(draftState).length - 1, 0);
     const nextIndex = Math.min(currentIndex + 1, maxIndex);
-    draftState[stateKeys.navigationCurrentQuestionIndex] = nextIndex;
-    syncPracticeGlobalIndex(
-      draftState,
-      nextIndex,
-      activePracticeCursorKey(draftState),
-    );
+    return selectQuestionIndex(draftState, nextIndex);
   });
 
   registrar.regEvent(appIds.events.navigationPrevious, ({ draftState }) => {
     const currentIndex =
       draftState[stateKeys.navigationCurrentQuestionIndex] || 0;
-    draftState[stateKeys.navigationCurrentQuestionIndex] = Math.max(
-      currentIndex - 1,
-      0,
-    );
-    syncPracticeGlobalIndex(
-      draftState,
-      draftState[stateKeys.navigationCurrentQuestionIndex],
-      activePracticeCursorKey(draftState),
-    );
+    return selectQuestionIndex(draftState, Math.max(currentIndex - 1, 0));
   });
 
   registrar.regEvent(

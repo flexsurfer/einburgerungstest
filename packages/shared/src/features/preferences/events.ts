@@ -1,11 +1,13 @@
 import type { AppModule } from "../../app/uklad/register.js";
 import { appIds, stateKeys } from "../../app/uklad/catalog.js";
+import { navigationEffect } from "../navigation/route.js";
 
 export const registerPreferencesEvents: AppModule = (registrar) => {
   registrar.regEvent(
     appIds.events.preferencesLanguageSelected,
     ({ draftState }, language) => {
       draftState[stateKeys.preferencesSelectedLanguage] = language;
+      return [navigationEffect(draftState, "replace")];
     },
   );
 

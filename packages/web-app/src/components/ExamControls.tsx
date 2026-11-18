@@ -1,11 +1,10 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { appIds, useRuntime, useSubscription } from "@ebtest/shared/uklad";
 import { examSecondsRemaining, formatExamTime } from "../exam-time";
 import "../styles/ExamControls.css";
 import { useI18n } from "@ebtest/shared/i18n";
 
 function useExamCountdown() {
-  const runtime = useRuntime();
   const status = useSubscription(
     [appIds.subscriptions.testSessionStatus],
     "ExamTimer",
@@ -17,25 +16,17 @@ function useExamCountdown() {
   const [remainingSeconds, setRemainingSeconds] = useState(() =>
     endsAt === null ? 0 : examSecondsRemaining(endsAt, Date.now()),
   );
-  const expiryDispatched = useRef(false);
-
   useEffect(() => {
-    expiryDispatched.current = false;
     if (status !== "in-progress" || endsAt === null) return undefined;
 
     const update = () => {
-      const nextRemaining = examSecondsRemaining(endsAt, Date.now());
-      setRemainingSeconds(nextRemaining);
-      if (nextRemaining === 0 && !expiryDispatched.current) {
-        expiryDispatched.current = true;
-        runtime.dispatch([appIds.events.testSessionFinished, "time-expired"]);
-      }
+      setRemainingSeconds(examSecondsRemaining(endsAt, Date.now()));
     };
 
     update();
     const interval = globalThis.setInterval(update, 250);
     return () => globalThis.clearInterval(interval);
-  }, [endsAt, runtime, status]);
+  }, [endsAt, status]);
 
   return remainingSeconds;
 }

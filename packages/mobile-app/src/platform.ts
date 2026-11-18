@@ -1,6 +1,7 @@
-import { Alert, Appearance } from "react-native";
+import { Alert, Appearance, AppState } from "react-native";
 import {
   appIds,
+  createExamDeadlineTimer,
   registerAppModules,
   stateKeys,
   type AppRuntime,
@@ -146,6 +147,23 @@ export function registerMobilePlatform(
       // There is no document body in React Native. The event remains
       // registered because shared UI/navigation modules are reused.
       registrar.regEffect(appIds.effects.uiSetBodyOverflow, () => undefined);
+      // Native navigation has no browser history to synchronize.
+      registrar.regEffect(
+        appIds.effects.navigationRouteChanged,
+        () => undefined,
+      );
+      const deadline = createExamDeadlineTimer(runtime);
+      registrar.regEffect(
+        appIds.effects.testSessionSetDeadline,
+        deadline.setDeadline,
+      );
+      const subscription = AppState.addEventListener("change", (state) => {
+        if (state === "active") deadline.reconcile();
+      });
+      return () => {
+        deadline.setDeadline(null);
+        subscription.remove();
+      };
     },
   ]);
 }
