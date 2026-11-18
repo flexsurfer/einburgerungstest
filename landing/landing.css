@@ -266,14 +266,14 @@ svg {
   transform: translateY(-2px);
   background: var(--deep);
 }
-.button.small {
-  font-size: 11px;
-  padding: 11px 16px;
-  gap: 16px;
+.button-secondary {
+  background: transparent;
+  color: var(--green);
+  border-color: var(--green);
+  gap: 10px;
 }
-.button.small svg {
-  width: 17px;
-  height: 17px;
+.button-secondary:hover {
+  background: var(--soft);
 }
 .hero {
   display: grid;
@@ -334,8 +334,12 @@ h2 em {
 }
 .hero-actions {
   display: flex;
-  align-items: center;
-  gap: 23px;
+  gap: 12px;
+}
+.hero-actions .button {
+  min-height: 54px;
+  max-width: 100%;
+  text-align: center;
 }
 .handwritten {
   font-family: "Lora", Georgia, serif;
@@ -939,6 +943,7 @@ h2 em {
 }
 .footer-top > div {
   display: flex;
+  flex-wrap: wrap;
   gap: 25px;
   font-size: 11px;
 }
@@ -1053,6 +1058,7 @@ h2 em {
     font-size: 12px;
   }
   .hero-actions {
+    flex-direction: column;
     gap: 10px;
   }
   .button {
@@ -1201,13 +1207,6 @@ h2 em {
   .header-actions {
     gap: 11px;
   }
-  .header-actions .button {
-    padding: 9px 12px;
-    font-size: 10px;
-  }
-  .header-actions .button svg {
-    display: none;
-  }
   .theme-toggle {
     font-size: 21px;
   }
@@ -1229,9 +1228,6 @@ h2 em {
     max-width: 390px;
     font-size: 13px;
     margin: 21px 0 24px;
-  }
-  .hero-actions {
-    gap: 22px;
   }
   .handwritten {
     display: block;
@@ -1495,14 +1491,5 @@ h2 em {
   }
   .question-sources {
     padding: 20px;
-  }
-}
-.hero-actions > .button {
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-@media (max-width: 360px) {
-  .header-actions > .button {
-    display: none;
   }
 }

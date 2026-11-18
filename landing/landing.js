@@ -18,6 +18,7 @@ function applyTheme() {
     "aria-label",
     window.i18n?.getNestedTranslation(key) || "Toggle color theme",
   );
+  themeButton.title = themeButton.getAttribute("aria-label");
 }
 applyTheme();
 themeButton.addEventListener("click", () => {
@@ -93,10 +94,10 @@ fetch("/landing/sample-questions.json")
     renderDemo();
   })
   .catch(() => {
-    feedback.textContent = text("hero.ctaPrimary", "Start practicing");
+    feedback.textContent = text("hero.ctaPrimary", "Start practice online");
     next.hidden = true;
     const link = document.createElement("a");
-    link.href = "/app/";
+    link.href = `/app/practice/?lang=${encodeURIComponent(document.documentElement.lang)}`;
     link.className = "text-button";
     link.textContent = text("navigation.webApp", "Open web app");
     answers.append(link);

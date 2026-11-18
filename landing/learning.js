@@ -29,7 +29,13 @@ if (search) {
   const count = document.getElementById("search-count");
   const groups = [...document.querySelectorAll(".question-group")];
   const normalise = (value) =>
-    value.toLowerCase().normalize("NFKD").replace(/\p{M}/gu, "");
+    value
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/\p{M}/gu, "")
+      .replace(/ı/g, "i")
+      .replace(/ـ/g, "")
+      .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660));
   const entries = groups.map((group) => ({
     group,
     open: false,
@@ -55,6 +61,6 @@ if (search) {
       matches += visible;
     }
     searching = words.length > 0;
-    count.textContent = `${matches} ${count.dataset.label}`;
+    count.textContent = count.dataset.label.replace("{count}", String(matches));
   });
 }

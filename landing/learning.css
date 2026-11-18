@@ -43,9 +43,15 @@
 .learning-page {
   font-size: 16px;
 }
+.learning-page .site-header {
+  flex-wrap: wrap;
+}
 .learning-page .site-header nav {
   display: flex;
   font-size: 14px;
+}
+.learning-page .site-header > nav {
+  flex-wrap: wrap;
 }
 .learning-page .resource-languages {
   gap: 16px;
@@ -81,7 +87,7 @@
 }
 .breadcrumbs li + li::before {
   content: "/";
-  margin-right: 12px;
+  margin-inline-end: 12px;
   color: var(--muted);
 }
 .learning-main a:not(.button):not(.resource-card) {
@@ -117,6 +123,11 @@
   gap: 20px;
   margin-top: 28px;
   font-size: 14px;
+}
+.resource-actions .button {
+  min-height: 54px;
+  max-width: 100%;
+  text-align: center;
 }
 .learning-main > section,
 .learning-main > aside {
@@ -190,7 +201,8 @@
   font-size: 13px;
 }
 .study-answers {
-  padding-left: 28px;
+  padding-inline-start: 28px;
+  padding-inline-end: 0;
   margin-block: 24px;
 }
 .study-answers li {
@@ -267,6 +279,9 @@
 .question-number {
   color: var(--muted);
 }
+.question-original {
+  display: block;
+}
 .catalogue-search {
   margin-block: 24px;
 }
@@ -295,7 +310,7 @@
   border-radius: 16px;
   background: var(--soft);
 }
-.practice-callout .button {
+.practice-callout .resource-actions {
   margin-top: 20px;
 }
 .practice-callout small {
@@ -317,6 +332,11 @@
 .learning-page .site-footer {
   padding-block: 32px;
   font-size: 14px;
+}
+.learning-page:lang(ar) .resource-intro h1,
+.learning-page:lang(ar) .eyebrow,
+.learning-resources:lang(ar) .eyebrow {
+  letter-spacing: normal;
 }
 summary:focus-visible,
 input:focus-visible {
@@ -352,6 +372,12 @@ input:focus-visible {
   }
   .resource-intro {
     padding-block: 16px 32px;
+  }
+  .resource-actions {
+    gap: 12px;
+  }
+  .resource-actions .button {
+    flex: 1 1 100%;
   }
   .learning-resources {
     padding-block: 40px;
