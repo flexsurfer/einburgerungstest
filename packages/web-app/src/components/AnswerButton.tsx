@@ -1,9 +1,16 @@
 import { useCallback } from "react";
+import {
+  DEFAULT_LANGUAGE,
+  formatMistakeCount,
+  translate,
+} from "@ebtest/shared/i18n";
+import type { AppLanguage } from "@ebtest/shared/uklad";
 import "../styles/AnswerButton.css";
 
 interface AnswerButtonProps {
   answer: string;
   translation?: string;
+  language?: AppLanguage;
   index: number;
   isCorrect: boolean;
   isSelected: boolean;
@@ -19,6 +26,7 @@ interface AnswerButtonProps {
 export const AnswerButton = ({
   answer,
   translation,
+  language = DEFAULT_LANGUAGE,
   index,
   isCorrect,
   isSelected,
@@ -76,6 +84,12 @@ export const AnswerButton = ({
     }
   }, [disabled, isExamMode, showAnswers, userAnswer, onClick, index]);
 
+  const showSelection = isSelected && (isExamMode || !showAnswers);
+  const showCorrect =
+    !isExamMode &&
+    isCorrect &&
+    (showAnswers || revealCorrectAnswer || userAnswer !== undefined);
+
   return (
     <button
       className={getClassName()}
@@ -89,19 +103,24 @@ export const AnswerButton = ({
         </span>
         {translation && <small>{translation}</small>}
       </span>
-      {((isSelected && (isExamMode || !showAnswers)) ||
-        (!isExamMode &&
-          isCorrect &&
-          (showAnswers ||
-            revealCorrectAnswer ||
-            userAnswer !== undefined))) && (
-        <span className="answer-feedback" aria-hidden="true">
-          {isExamMode ? "●" : isCorrect ? "✓" : "×"}
+      {(showSelection || showCorrect) && (
+        <span className="answer-feedback">
+          <span aria-hidden="true">
+            {isExamMode ? "●" : isCorrect ? "✓" : "×"}
+          </span>
+          {!isExamMode && (
+            <span className="visually-hidden">
+              {translate(
+                language,
+                isCorrect ? "correctAnswer" : "yourIncorrectAnswer",
+              )}
+            </span>
+          )}
         </span>
       )}
       {mistakeCount > 0 && (
         <span className="mistake-count">
-          {mistakeCount} {mistakeCount === 1 ? "mistake" : "mistakes"}
+          {formatMistakeCount(language, mistakeCount)}
         </span>
       )}
     </button>

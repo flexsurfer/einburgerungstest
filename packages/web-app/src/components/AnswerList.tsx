@@ -18,7 +18,7 @@ export const AnswerList = ({
   translatedAnswers,
 }: AnswerListProps) => {
   const runtime = useRuntime();
-  const { t } = useI18n("AnswerList");
+  const { language, t } = useI18n("AnswerList");
   const showAnswers = useSubscription(
     [appIds.subscriptions.uiShowAnswers],
     "AnswerList",
@@ -112,6 +112,7 @@ export const AnswerList = ({
           key={index}
           answer={answer}
           translation={translatedAnswers?.[index]}
+          language={language}
           index={index}
           isCorrect={question.correct === index}
           isSelected={userAnswer === index}
@@ -130,6 +131,21 @@ export const AnswerList = ({
           }
         />
       ))}
+      {!isTestMode && !showAnswers && !wrongAnswersMode && (
+        <div className="visually-hidden" role="status">
+          {userAnswer !== undefined &&
+            (userAnswer === question.correct ? (
+              t("yourCorrectAnswer")
+            ) : (
+              <>
+                {t("yourIncorrectAnswer")}. {t("correctAnswer")}{" "}
+                <span lang="de" dir="ltr">
+                  {question.answers[question.correct]}
+                </span>
+              </>
+            ))}
+        </div>
+      )}
       {showAnswerAction && (
         <button
           className={`answer-action-button ${

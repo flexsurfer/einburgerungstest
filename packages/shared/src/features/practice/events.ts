@@ -79,6 +79,11 @@ export const registerPracticeEvents: AppModule = (registrar) => {
   registrar.regEvent(appIds.events.practiceAnswersCleared, ({ draftState }) => {
     draftState[stateKeys.practiceUserAnswers] = {};
     draftState[stateKeys.practiceMistakes] = {};
+    draftState[stateKeys.practiceGlobalIndex] = null;
+    draftState[stateKeys.practiceLearnGlobalIndex] = null;
+    if (draftState[stateKeys.navigationSelectedCategory] === null) {
+      draftState[stateKeys.navigationCurrentQuestionIndex] = 0;
+    }
     return [navigationEffect(draftState, "replace")];
   });
 

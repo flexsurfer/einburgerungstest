@@ -144,6 +144,7 @@ const en = {
   yourAnswer: "Your answer",
   correctAnswer: "Correct answer",
   yourCorrectAnswer: "Your answer · Correct",
+  yourIncorrectAnswer: "Your answer is incorrect",
   noAnswerSelected: "You didn’t answer this question.",
   noIncorrectAnswers: "No incorrect answers",
   noUnansweredAnswers: "No unanswered questions",
@@ -296,6 +297,7 @@ const de: TranslationDictionary = {
   yourAnswer: "Deine Antwort",
   correctAnswer: "Richtige Antwort",
   yourCorrectAnswer: "Deine Antwort · Richtig",
+  yourIncorrectAnswer: "Deine Antwort ist falsch",
   noAnswerSelected: "Du hast diese Frage nicht beantwortet.",
   noIncorrectAnswers: "Keine falschen Antworten",
   noUnansweredAnswers: "Keine unbeantworteten Fragen",
@@ -442,6 +444,7 @@ const ru: TranslationDictionary = {
   yourAnswer: "Ваш ответ",
   correctAnswer: "Правильный ответ",
   yourCorrectAnswer: "Ваш ответ · Верно",
+  yourIncorrectAnswer: "Ваш ответ неверен",
   noAnswerSelected: "Вы не ответили на этот вопрос.",
   noIncorrectAnswers: "Нет неправильных ответов",
   noUnansweredAnswers: "Нет вопросов без ответа",
@@ -589,6 +592,7 @@ const uk: TranslationDictionary = {
   yourAnswer: "Ваша відповідь",
   correctAnswer: "Правильна відповідь",
   yourCorrectAnswer: "Ваша відповідь · Правильно",
+  yourIncorrectAnswer: "Ваша відповідь неправильна",
   noAnswerSelected: "Ви не відповіли на це запитання.",
   noIncorrectAnswers: "Немає неправильних відповідей",
   noUnansweredAnswers: "Немає запитань без відповіді",
@@ -734,6 +738,7 @@ const tr: TranslationDictionary = {
   yourAnswer: "Yanıtın",
   correctAnswer: "Doğru yanıt",
   yourCorrectAnswer: "Yanıtın · Doğru",
+  yourIncorrectAnswer: "Yanıtın yanlış",
   noAnswerSelected: "Bu soruyu yanıtlamadın.",
   noIncorrectAnswers: "Yanlış yanıt yok",
   noUnansweredAnswers: "Yanıtlanmamış soru yok",
@@ -878,6 +883,7 @@ const ar: TranslationDictionary = {
   yourAnswer: "إجابتك",
   correctAnswer: "الإجابة الصحيحة",
   yourCorrectAnswer: "إجابتك · صحيحة",
+  yourIncorrectAnswer: "إجابتك غير صحيحة",
   noAnswerSelected: "لم تجب عن هذا السؤال.",
   noIncorrectAnswers: "لا توجد إجابات خاطئة",
   noUnansweredAnswers: "لا توجد أسئلة بلا إجابة",
@@ -930,6 +936,34 @@ export function translate(
       ? String(params[name])
       : match,
   );
+}
+
+const mistakeCountPatterns: Partial<
+  Record<AppLanguage, Partial<Record<Intl.LDMLPluralRule, string>>>
+> = {
+  ru: { many: "{count} ошибок" },
+  ar: {
+    one: "خطأ واحد",
+    two: "خطآن",
+    many: "{count} خطأً",
+    other: "{count} خطأ",
+  },
+};
+
+export function formatMistakeCount(
+  language: AppLanguage,
+  count: number,
+): string {
+  const form = new Intl.PluralRules(language).select(count);
+  const number = count.toLocaleString(language);
+  const pattern = mistakeCountPatterns[language]?.[form];
+  if (pattern) return pattern.replace("{count}", number);
+  const noun = translate(
+    language,
+    form === "one" ? "mistake" : "mistakesPlural",
+    { count },
+  );
+  return `${number} ${noun}`;
 }
 
 const CATEGORY_KEYS: Record<string, Record<AppLanguage, string>> = {
