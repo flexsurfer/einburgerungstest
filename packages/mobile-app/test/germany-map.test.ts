@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { FEDERAL_LANDS } from "@ebtest/shared/uklad";
-import { GERMANY_MAP_PATHS } from "../src/components/GermanyMap.paths";
+import { GERMANY_MAP_PATHS } from "@ebtest/shared/germany-map";
 
 describe("Germany Land map", () => {
   it("contains one SVG path for every selectable federal state", () => {

@@ -40,6 +40,8 @@ const en = {
   federalStateValue: "Selected Land",
   federalStateNotSelected: "not selected",
   chooseFederalState: "Choose a federal state",
+  landPromptDescription: "Add your state’s 10 questions to Practice and Study.",
+  later: "Later",
   appearance: "Appearance",
   appearanceDescription: "Choose how the app looks on this device.",
   system: "System",
@@ -190,6 +192,9 @@ const de: TranslationDictionary = {
   federalStateValue: "Ausgewähltes Bundesland",
   federalStateNotSelected: "nicht ausgewählt",
   chooseFederalState: "Bundesland auswählen",
+  landPromptDescription:
+    "Beim Üben und Lernen kommen die 10 Fragen zu deinem Bundesland hinzu.",
+  later: "Später",
   appearance: "Darstellung",
   appearanceDescription: "Wähle das Erscheinungsbild der App.",
   system: "System",
@@ -339,6 +344,9 @@ const ru: TranslationDictionary = {
   federalStateValue: "Выбранная земля",
   federalStateNotSelected: "не выбрана",
   chooseFederalState: "Выберите федеральную землю",
+  landPromptDescription:
+    "Добавьте 10 вопросов о вашей федеральной земле в режимы практики и обучения.",
+  later: "Позже",
   appearance: "Оформление",
   appearanceDescription: "Выберите внешний вид приложения.",
   system: "Системное",
@@ -486,6 +494,9 @@ const uk: TranslationDictionary = {
   federalStateValue: "Вибрана земля",
   federalStateNotSelected: "не вибрано",
   chooseFederalState: "Виберіть федеральну землю",
+  landPromptDescription:
+    "Додайте 10 запитань про вашу федеральну землю до режимів практики й навчання.",
+  later: "Пізніше",
   appearance: "Оформлення",
   appearanceDescription: "Виберіть вигляд застосунку на цьому пристрої.",
   system: "Системне",
@@ -634,6 +645,9 @@ const tr: TranslationDictionary = {
   federalStateValue: "Seçilen eyalet",
   federalStateNotSelected: "seçilmedi",
   chooseFederalState: "Federal eyalet seçin",
+  landPromptDescription:
+    "Alıştırma ve çalışma bölümlerine eyaletinizle ilgili 10 soruyu ekleyin.",
+  later: "Daha sonra",
   appearance: "Görünüm",
   appearanceDescription: "Uygulamanın bu cihazda nasıl görüneceğini seçin.",
   system: "Sistem",
@@ -779,6 +793,9 @@ const ar: TranslationDictionary = {
   federalStateValue: "الولاية المحددة",
   federalStateNotSelected: "غير محددة",
   chooseFederalState: "اختر ولاية اتحادية",
+  landPromptDescription:
+    "أضِف الأسئلة العشرة الخاصة بولايتك إلى التدريب والدراسة.",
+  later: "لاحقًا",
   appearance: "المظهر",
   appearanceDescription: "اختر مظهر التطبيق على هذا الجهاز.",
   system: "النظام",

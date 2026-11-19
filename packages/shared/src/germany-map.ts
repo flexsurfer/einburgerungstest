@@ -1,12 +1,27 @@
-// Generated from States_of_Germany_coded.svg by scripts/generate-germany-map.mjs.
-// Keep the source SVG in the repository and rerun the generator after editing it.
-import type { FederalLand } from "@ebtest/shared/uklad";
+import type { FederalLand } from "./app/uklad/contracts.js";
+
+export const GERMANY_MAP_VIEW_BOX = "0 0 591.504 800.504";
+export const SMALL_LAND_BUTTON_HEIGHT = 58;
+export const SMALL_LAND_CALLOUTS = [
+  { land: "Bremen", x: 8, y: 76, width: 154, targetX: 179, targetY: 177 },
+  { land: "Hamburg", x: 320, y: 6, width: 154, targetX: 278, targetY: 154 },
+  { land: "Berlin", x: 430, y: 190, width: 144, targetX: 483, targetY: 263 },
+  { land: "Saarland", x: 2, y: 620, width: 150, targetX: 60, targetY: 579 },
+] as const satisfies ReadonlyArray<{
+  land: FederalLand;
+  x: number;
+  y: number;
+  width: number;
+  targetX: number;
+  targetY: number;
+}>;
 
 export interface GermanyMapPath {
   readonly land: FederalLand;
   readonly d: string;
 }
 
+// Outlines generated from States_of_Germany_coded.svg by scripts/generate-germany-map.mjs.
 export const GERMANY_MAP_PATHS: readonly GermanyMapPath[] = [
   {
     land: "Thüringen",

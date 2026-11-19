@@ -67,7 +67,7 @@ export function createBrowserNavigation(runtime: AppRuntime) {
         (route.screen === "exam" && current.pathname === appPaths.exam)
       )
         destination.hash = current.hash;
-      // Preserve install prompts and referral parameters through startup.
+      // Carry non-routing parameters such as referrals across app navigation.
       for (const [key, value] of current.searchParams) {
         if (!["lang", "category", "question", "filter"].includes(key))
           destination.searchParams.append(key, value);

@@ -1,6 +1,7 @@
 import {
   appIds,
   FEDERAL_LANDS,
+  type FederalLand,
   useRuntime,
   useSubscription,
 } from "@ebtest/shared/uklad";
@@ -15,18 +16,34 @@ export function LandSelect({ id }: LandSelectProps) {
     [appIds.subscriptions.preferencesSelectedLand],
     "LandSelect",
   );
-  const { t } = useI18n("LandSelect");
+  return (
+    <LandSelectField
+      id={id}
+      value={land}
+      onChange={(selected) =>
+        runtime.dispatch([appIds.events.preferencesLandSelected, selected])
+      }
+    />
+  );
+}
+
+interface LandSelectFieldProps extends LandSelectProps {
+  value: FederalLand | null;
+  onChange: (land: FederalLand) => void;
+}
+
+export function LandSelectField({ id, value, onChange }: LandSelectFieldProps) {
+  const { t } = useI18n("LandSelectField");
   return (
     <select
       id={id}
       aria-label={t("chooseFederalState")}
-      value={land || ""}
+      value={value ?? ""}
       onChange={(e) => {
         const selected = FEDERAL_LANDS.find(
           (value) => value === e.target.value,
         );
-        if (selected)
-          runtime.dispatch([appIds.events.preferencesLandSelected, selected]);
+        if (selected) onChange(selected);
       }}
     >
       <option value="" disabled>

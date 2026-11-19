@@ -17,7 +17,12 @@ import Svg, {
 import { FEDERAL_LANDS, type FederalLand } from "@ebtest/shared/uklad";
 import { useColors, type Colors } from "../theme";
 import { useI18n } from "../i18n";
-import { GERMANY_MAP_PATHS } from "./GermanyMap.paths";
+import {
+  GERMANY_MAP_PATHS,
+  GERMANY_MAP_VIEW_BOX,
+  SMALL_LAND_BUTTON_HEIGHT,
+  SMALL_LAND_CALLOUTS,
+} from "@ebtest/shared/germany-map";
 import { CheckIcon } from "./Icons";
 import { MAP_ASPECT_RATIO, TABLET_BREAKPOINT, tabletMapWidth } from "../layout";
 
@@ -46,50 +51,6 @@ export interface LandSelectionProps {
 }
 
 type SelectionMode = "list" | "map";
-
-const SMALL_LAND_BUTTON_HEIGHT = 58;
-
-const SMALL_LAND_CALLOUTS: readonly {
-  land: FederalLand;
-  x: number;
-  y: number;
-  width: number;
-  targetX: number;
-  targetY: number;
-}[] = [
-  {
-    land: "Bremen",
-    x: 8,
-    y: 76,
-    width: 154,
-    targetX: 179,
-    targetY: 177,
-  },
-  {
-    land: "Hamburg",
-    x: 320,
-    y: 6,
-    width: 154,
-    targetX: 278,
-    targetY: 154,
-  },
-  {
-    land: "Berlin",
-    x: 430,
-    y: 190,
-    width: 144,
-    targetX: 483,
-    targetY: 263,
-  },
-  {
-    land: "Saarland",
-    x: 2,
-    y: 620,
-    width: 150,
-    targetX: 60,
-    targetY: 579,
-  },
-];
 
 function ModeIcon({
   mode,
@@ -215,7 +176,7 @@ export const LandSelection = memo(
               height={mapHeight}
               preserveAspectRatio="xMidYMid meet"
               style={styleSheet.map}
-              viewBox="0 0 591.504 800.504"
+              viewBox={GERMANY_MAP_VIEW_BOX}
               width={mapWidth}
             >
               {GERMANY_MAP_PATHS.filter(

@@ -11,6 +11,10 @@ export const registerPreferencesSubscriptions: AppModule = (registrar) => {
     stateKeys.preferencesSelectedLand,
   );
   registrar.regRootSub(
+    appIds.subscriptions.preferencesLandPromptDismissed,
+    stateKeys.preferencesLandPromptDismissed,
+  );
+  registrar.regRootSub(
     appIds.subscriptions.preferencesTheme,
     stateKeys.preferencesTheme,
   );

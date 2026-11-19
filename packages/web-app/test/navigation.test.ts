@@ -308,13 +308,15 @@ describe("browser destinations", () => {
     });
   });
 
-  it("falls back from invalid filters and preserves install parameters until consumed", async () => {
+  it("falls back from invalid filters and preserves referral parameters", async () => {
     const { harness } = await boot(
-      "/app/practice/?category=missing&question=99999&lang=invalid&install=ios&install-language=ru",
+      "/app/practice/?category=missing&question=99999&lang=invalid&utm_source=catalogue",
     );
     expect(harness.getState().navigationSelectedCategory).toBeNull();
     expect(harness.getState().navigationCurrentQuestionIndex).toBe(0);
-    expect(window.location.search).toContain("install=ios");
+    expect(new URLSearchParams(window.location.search).get("utm_source")).toBe(
+      "catalogue",
+    );
     expect(window.location.search).not.toContain("missing");
     expect(window.location.search).not.toContain("99999");
   });

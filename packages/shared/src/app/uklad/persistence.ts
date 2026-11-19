@@ -219,6 +219,16 @@ const selectedLandKey: PersistedKey<typeof stateKeys.preferencesSelectedLand> =
     deserialize: deserializeSelectedLand,
   };
 
+const landPromptDismissedKey: PersistedKey<
+  typeof stateKeys.preferencesLandPromptDismissed
+> = {
+  key: stateKeys.preferencesLandPromptDismissed,
+  deserialize(data) {
+    if (typeof data === "boolean") return data;
+    throw new Error("landPromptDismissed must be a boolean");
+  },
+};
+
 const practiceGlobalIndexKey: PersistedKey<
   typeof stateKeys.practiceGlobalIndex
 > = {
@@ -244,11 +254,12 @@ export const appPersistenceKeys = Object.freeze({
   preferencesSelectedLanguage: languageKey,
   preferencesUseSystemTheme: useSystemThemeKey,
   preferencesSelectedLand: selectedLandKey,
+  preferencesLandPromptDismissed: landPromptDismissedKey,
 });
 
-/** Return the domain roots that are durable on every execution platform. */
+/** Return the domain roots that are durable on the given platform. */
 export function getAppPersistenceKeys(
-  _target: AppPersistenceTarget,
+  target: AppPersistenceTarget,
 ): readonly PersistKey<AppState>[] {
   return [
     appPersistenceKeys.practiceUserAnswers,
@@ -260,6 +271,9 @@ export function getAppPersistenceKeys(
     appPersistenceKeys.preferencesSelectedLanguage,
     appPersistenceKeys.preferencesUseSystemTheme,
     appPersistenceKeys.preferencesSelectedLand,
+    ...(target === "web"
+      ? [appPersistenceKeys.preferencesLandPromptDismissed]
+      : []),
   ];
 }
 

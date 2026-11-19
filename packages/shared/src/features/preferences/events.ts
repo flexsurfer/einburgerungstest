@@ -19,6 +19,13 @@ export const registerPreferencesEvents: AppModule = (registrar) => {
   );
 
   registrar.regEvent(
+    appIds.events.preferencesLandPromptDismissed,
+    ({ draftState }) => {
+      draftState[stateKeys.preferencesLandPromptDismissed] = true;
+    },
+  );
+
+  registrar.regEvent(
     appIds.events.preferencesThemeSelected,
     ({ draftState, coeffects: { system } }, selection) => {
       const followsSystem = selection === "system";

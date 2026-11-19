@@ -178,6 +178,7 @@ export interface AppContracts extends UkladContracts {
 
     [stateKeys.preferencesSelectedLanguage]: AppLanguage;
     [stateKeys.preferencesSelectedLand]: FederalLand | null;
+    [stateKeys.preferencesLandPromptDismissed]: boolean;
     [stateKeys.preferencesTheme]: Theme;
     [stateKeys.preferencesUseSystemTheme]: boolean;
 
@@ -227,6 +228,7 @@ export interface AppContracts extends UkladContracts {
     ];
     [appIds.events.preferencesLanguageSelected]: [language: AppLanguage];
     [appIds.events.preferencesLandSelected]: [land: FederalLand];
+    [appIds.events.preferencesLandPromptDismissed]: [];
     [appIds.events.preferencesThemeSelected]: [theme: ThemePreference];
     [appIds.events.preferencesThemeToggled]: [];
     [appIds.events.uiScrollToTop]: [behavior?: ScrollMode];
@@ -335,6 +337,10 @@ export interface AppContracts extends UkladContracts {
     [appIds.subscriptions.preferencesSelectedLand]: {
       params: [];
       result: FederalLand | null;
+    };
+    [appIds.subscriptions.preferencesLandPromptDismissed]: {
+      params: [];
+      result: boolean;
     };
     [appIds.subscriptions.preferencesTheme]: { params: []; result: Theme };
     [appIds.subscriptions.preferencesUseSystemTheme]: {
