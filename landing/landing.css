@@ -11,6 +11,9 @@
   --lime: #c2d998;
   --button-ink: #fff;
 }
+html[data-ios] [data-android-app] {
+  display: none;
+}
 html.dark {
   /* Matches darkColors in packages/mobile-app/src/theme.ts (Expo). */
   color-scheme: dark;
